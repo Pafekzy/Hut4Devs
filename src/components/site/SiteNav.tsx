@@ -16,7 +16,7 @@ export function SiteNav() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const inApp = pathname.startsWith("/chamber");
+  const inApp = pathname.startsWith("/chamber") || pathname.startsWith("/pitch");
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
