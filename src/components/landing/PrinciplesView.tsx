@@ -30,7 +30,7 @@ const sections = [
 
 export function PrinciplesView() {
   return (
-    <article className="mx-auto max-w-3xl px-5 py-14 sm:px-8">
+    <article className="mx-auto max-w-3xl px-4 py-14 sm:px-8">
       <p className="text-[11px] uppercase tracking-[0.22em] text-laterite">Holding the line</p>
       <h1 className="serif mt-4 text-4xl leading-[1.05] tracking-tight sm:text-5xl">
         Principles before features.
@@ -41,10 +41,10 @@ export function PrinciplesView() {
         registry, or a marketplace for other people&apos;s need.
       </p>
 
-      <div className="mt-12 space-y-12">
+      <div className="mt-12 space-y-4">
         {sections.map((section) => (
-          <section key={section.kicker} className="border-t border-line pt-8">
-            <p className="text-[11px] uppercase tracking-[0.18em] text-ink-3">
+          <section key={section.kicker} className="desk desk-interactive p-6 sm:p-7">
+            <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-ink-3">
               {section.kicker}
             </p>
             <h2 className="serif mt-3 text-2xl leading-snug tracking-tight">
@@ -61,10 +61,7 @@ export function PrinciplesView() {
         evidence, repair, and grow.
       </p>
 
-      <Link
-        href="/chamber"
-        className="mt-10 inline-flex bg-ink px-5 py-3 text-[13px] text-paper hover:bg-laterite"
-      >
+      <Link href="/chamber" className="btn btn-primary mt-10">
         Return to Chamber 4
       </Link>
     </article>

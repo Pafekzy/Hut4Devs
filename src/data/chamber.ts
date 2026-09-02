@@ -95,7 +95,27 @@ export const dayLabel = (iso: string) =>
     day: "numeric",
     month: "short",
     year: "numeric",
-  }).format(new Date(iso));
+  }).format(new Date(iso.includes("T") ? iso : `${iso}T12:00:00+01:00`));
+
+export function dueFrom(iso: string) {
+  const lagosToday = new Date().toLocaleDateString("en-CA", { timeZone: "Africa/Lagos" });
+  const todayStart = Date.parse(`${lagosToday}T00:00:00+01:00`);
+  const dueStart = Date.parse(`${iso}T00:00:00+01:00`);
+  const days = Math.round((dueStart - todayStart) / 86_400_000);
+  if (days < 0) return { days, label: "Past due", tone: "open" as const };
+  if (days === 0) return { days, label: "Due today", tone: "warn" as const };
+  if (days === 1) return { days, label: "Due tomorrow", tone: "warn" as const };
+  return { days, label: `Due in ${days} days`, tone: "ink" as const };
+}
+
+export const STORAGE_KEY = "hut4dev.chamber.v1";
+
+export const avatarTone: Record<string, string> = {
+  ada: "bg-laterite text-paper",
+  zainab: "bg-moss text-paper",
+  kofi: "bg-brass text-ink",
+  tunde: "bg-ink-2 text-paper",
+};
 
 let seq = 80;
 
@@ -162,7 +182,17 @@ export const initialChamber = (): ChamberState => ({
       terms: "Repayment expected. Not a gift.",
     },
   ],
-  vouches: [],
+  vouches: [
+    {
+      id: "v-hist",
+      fromId: "zainab",
+      forId: "ada",
+      context: "Chamber 4 · August rent",
+      confidence: "high",
+      commitment: "August share, settled on time",
+      note: "She closed August before the due date. This speaks only to that cycle.",
+    },
+  ],
   trail: [
     {
       id: "t1",
@@ -195,6 +225,24 @@ export const initialChamber = (): ChamberState => ({
       detail: "Verified against the chamber account. Evidence is purpose-bound.",
       actorId: "ada",
       private: true,
+    },
+    {
+      id: "t4b",
+      at: "2026-08-28T11:08:00+01:00",
+      kind: "statement",
+      title: "Recognition issued for Adaeze",
+      detail:
+        "“Adaeze fulfilled Chamber 4 September rent on time. Evidence retained. Details private.” Not a score.",
+      actorId: "ada",
+    },
+    {
+      id: "t4c",
+      at: "2026-08-16T19:04:00+01:00",
+      kind: "vouch",
+      title: "Zainab vouched for Adaeze",
+      detail:
+        "In Chamber 4 · August rent, at high confidence. Contextual. Time-bound. Not a universal trust score.",
+      actorId: "zainab",
     },
     {
       id: "t5",

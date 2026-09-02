@@ -11,8 +11,8 @@ export function HutMark({ className = "h-7 w-7" }: { className?: string }) {
       <path
         d="M16 7v19"
         stroke="currentColor"
-        className="text-paper"
-        strokeWidth="1.4"
+        className="text-cream"
+        strokeWidth="2"
         strokeLinecap="round"
       />
     </svg>
@@ -21,12 +21,12 @@ export function HutMark({ className = "h-7 w-7" }: { className?: string }) {
 
 export function Wordmark({ compact = false }: { compact?: boolean }) {
   return (
-    <span className="inline-flex items-center gap-2.5">
+    <span className="inline-flex min-w-0 items-center gap-2.5">
       <HutMark />
-      <span className="leading-none">
-        <span className="block text-[15px] font-semibold tracking-[-0.03em]">Hut4Devs</span>
+      <span className={`leading-none ${compact ? "max-[380px]:hidden" : ""}`}>
+        <span className="block text-[15px] font-bold tracking-[-0.03em]">Hut4Devs</span>
         {!compact && (
-          <span className="mt-0.5 block text-[10px] uppercase tracking-[0.22em] text-ink-3">
+          <span className="mt-0.5 block text-[10px] font-bold uppercase tracking-[0.22em] text-ink-3">
             Built by us
           </span>
         )}

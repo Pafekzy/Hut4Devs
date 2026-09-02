@@ -9,7 +9,9 @@ export const metadata: Metadata = {
 export default function PrinciplesPage() {
   return (
     <>
-      <PrinciplesView />
+      <main id="main">
+        <PrinciplesView />
+      </main>
       <SiteFooter />
     </>
   );

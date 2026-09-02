@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Bricolage_Grotesque, IBM_Plex_Mono, Source_Serif_4 } from "next/font/google";
 import { SiteNav } from "@/components/site/SiteNav";
 import { ChamberProvider } from "@/context/ChamberContext";
+import { ThemeProvider } from "@/context/ThemeContext";
 import "./globals.css";
 
 const display = Bricolage_Grotesque({
@@ -18,7 +19,7 @@ const serif = Source_Serif_4({
 
 const mono = IBM_Plex_Mono({
   subsets: ["latin"],
-  weight: ["400", "500"],
+  weight: ["400", "500", "600", "700"],
   variable: "--font-mono",
   display: "swap",
 });
@@ -34,19 +35,30 @@ export const metadata: Metadata = {
 };
 
 export const viewport = {
-  themeColor: "#f3ede3",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f3ede3" },
+    { media: "(prefers-color-scheme: dark)", color: "#12100e" },
+  ],
   width: "device-width",
   initialScale: 1,
+  viewportFit: "cover",
 };
+
+const themeBoot = `(function(){try{var t=localStorage.getItem("hut4dev.theme");if(t==="dark"||(t!=="light"&&window.matchMedia("(prefers-color-scheme: dark)").matches)){document.documentElement.classList.add("dark");document.documentElement.style.colorScheme="dark"}}catch(e){}})();`;
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeBoot }} />
+      </head>
       <body className={`${display.variable} ${serif.variable} ${mono.variable} grain`}>
-        <ChamberProvider>
-          <SiteNav />
-          {children}
-        </ChamberProvider>
+        <ThemeProvider>
+          <ChamberProvider>
+            <SiteNav />
+            {children}
+          </ChamberProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

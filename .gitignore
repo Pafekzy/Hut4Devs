@@ -33,6 +33,9 @@ yarn-error.log*
 .env*
 !.env.example
 
+# local BMONI sandbox session
+/.bmoni/
+
 # typescript
 next-env.d.ts
 *.tsbuildinfo

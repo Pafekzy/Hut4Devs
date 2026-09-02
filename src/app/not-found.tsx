@@ -9,10 +9,10 @@ export default function NotFound() {
         <h1 className="serif mt-4 text-4xl tracking-tight">This path is not on the map.</h1>
         <p className="mt-4 text-ink-2">Return to the hut, or enter Chamber 4.</p>
         <div className="mt-8 flex gap-3">
-          <Link href="/" className="bg-ink px-4 py-2.5 text-[13px] text-paper">
+          <Link href="/" className="btn btn-primary">
             Home
           </Link>
-          <Link href="/chamber" className="border border-line px-4 py-2.5 text-[13px]">
+          <Link href="/chamber" className="btn btn-ghost">
             Chamber 4
           </Link>
         </div>

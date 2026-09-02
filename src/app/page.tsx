@@ -4,7 +4,9 @@ import { SiteFooter } from "@/components/site/SiteFooter";
 export default function HomePage() {
   return (
     <>
-      <LandingView />
+      <main id="main">
+        <LandingView />
+      </main>
       <SiteFooter />
     </>
   );
