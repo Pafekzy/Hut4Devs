@@ -17,13 +17,13 @@ import { createDeployableServer } from '../../server';
 import http from 'node:http';
 import { FakePaymentProvider } from '../server/payments/fakeProvider';
 
-describe('H4D-FUNC-008: PostgreSQL Persistence Foundation for Accommodation Payments', () => {
+describe('H4D-FUNC-008: PostgreSQL Persistence Foundation for Accommodation Payments (pg-mem emulator)', () => {
   let memDb: any;
   let pool: any;
   let repos: PostgresRepositories;
 
   beforeEach(async () => {
-    // Isolated PostgreSQL database strategy (pg-mem in-memory PostgreSQL engine)
+    // Isolated PostgreSQL emulator strategy (pg-mem in-memory emulator, NOT actual PostgreSQL server)
     memDb = newDb({ autoCreateForeignKeyIndices: true });
     const adapter = memDb.adapters.createPg();
     pool = new adapter.Pool();
