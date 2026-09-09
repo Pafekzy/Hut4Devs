@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { LandingView } from './components/LandingView';
 import { MemberHomeView } from './components/MemberHomeView';
 import { ResponsibilityDetailView } from './components/ResponsibilityDetailView';
+import { AccommodationAdminView } from './components/AccommodationAdminView';
 import { DEMO_ACCOMMODATION_RESPONSIBILITY } from './data/demoAccommodation';
 
-type AppView = 'landing' | 'member-home' | 'responsibility-detail';
+type AppView = 'landing' | 'member-home' | 'responsibility-detail' | 'accommodation-admin';
 type AppTheme = 'light' | 'dark';
 
 export default function App() {
@@ -66,6 +67,7 @@ export default function App() {
           onToggleTheme={toggleTheme}
           onExitToLanding={() => setView('landing')}
           onViewResponsibilityDetails={() => setView('responsibility-detail')}
+          onSwitchToAdmin={() => setView('accommodation-admin')}
         />
       )}
 
@@ -75,6 +77,16 @@ export default function App() {
           isDark={isDark}
           onToggleTheme={toggleTheme}
           onBackToHome={() => setView('member-home')}
+        />
+      )}
+
+      {view === 'accommodation-admin' && (
+        <AccommodationAdminView
+          isDark={isDark}
+          responsibilities={[DEMO_ACCOMMODATION_RESPONSIBILITY]}
+          onToggleTheme={toggleTheme}
+          onSwitchToFellow={() => setView('member-home')}
+          onExitToLanding={() => setView('landing')}
         />
       )}
     </div>

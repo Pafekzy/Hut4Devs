@@ -95,3 +95,47 @@ export function getStatusLabel(status: ResponsibilityStatus): string {
       return status;
   }
 }
+
+/**
+ * Derived Operational Summary for Accommodation Administration
+ */
+export interface AccommodationOperationalSummary {
+  propertiesCount: number;
+  roomsRepresentedCount: number;
+  fellowsRepresentedCount: number;
+  outstandingResponsibilitiesCount: number;
+}
+
+/**
+ * Derives operational statistics from a list of accommodation responsibilities
+ */
+export function deriveAccommodationOperationalSummary(
+  responsibilities: AccommodationResponsibility[]
+): AccommodationOperationalSummary {
+  const propertyIds = new Set<string>();
+  const roomIds = new Set<string>();
+  const fellowIds = new Set<string>();
+  let outstandingResponsibilitiesCount = 0;
+
+  for (const resp of responsibilities) {
+    if (resp.accommodationContext?.property?.id) {
+      propertyIds.add(resp.accommodationContext.property.id);
+    }
+    if (resp.accommodationContext?.room?.id) {
+      roomIds.add(resp.accommodationContext.room.id);
+    }
+    if (resp.fellow?.id || resp.fellowId) {
+      fellowIds.add(resp.fellow?.id || resp.fellowId);
+    }
+    if (resp.status === ResponsibilityStatus.OUTSTANDING) {
+      outstandingResponsibilitiesCount++;
+    }
+  }
+
+  return {
+    propertiesCount: propertyIds.size,
+    roomsRepresentedCount: roomIds.size,
+    fellowsRepresentedCount: fellowIds.size,
+    outstandingResponsibilitiesCount,
+  };
+}

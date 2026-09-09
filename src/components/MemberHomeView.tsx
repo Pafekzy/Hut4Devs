@@ -3,7 +3,7 @@ import { Hut4DevsLogo } from './Hut4DevsLogo';
 import { ThemeToggle } from './ThemeToggle';
 import { AccommodationResponsibilityCard } from './AccommodationResponsibilityCard';
 import { AccommodationResponsibility } from '../domain/accommodation';
-import { LogOut, Home } from 'lucide-react';
+import { LogOut, Home, ShieldAlert } from 'lucide-react';
 
 interface MemberHomeViewProps {
   isDark: boolean;
@@ -11,6 +11,7 @@ interface MemberHomeViewProps {
   onToggleTheme: () => void;
   onExitToLanding: () => void;
   onViewResponsibilityDetails: (responsibilityId: string) => void;
+  onSwitchToAdmin: () => void;
 }
 
 export const MemberHomeView: React.FC<MemberHomeViewProps> = ({
@@ -19,6 +20,7 @@ export const MemberHomeView: React.FC<MemberHomeViewProps> = ({
   onToggleTheme,
   onExitToLanding,
   onViewResponsibilityDetails,
+  onSwitchToAdmin,
 }) => {
   return (
     <div
@@ -26,6 +28,42 @@ export const MemberHomeView: React.FC<MemberHomeViewProps> = ({
         isDark ? 'bg-[#2F1707] text-[#FFF9EE]' : 'bg-[#F7F1E7] text-[#5A2D0C]'
       }`}
     >
+      {/* Dev Preview Banner */}
+      <aside
+        aria-label="Development Preview Notice"
+        className="w-full border-b px-4 py-2.5 text-xs transition-colors duration-200"
+        style={{
+          backgroundColor: isDark ? '#3A1E0B' : '#F2E8D8',
+          borderColor: isDark ? '#4B2710' : '#E7D6C1',
+          color: isDark ? '#E2AB5D' : '#8A5D3B',
+        }}
+      >
+        <div className="max-w-5xl mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div className="flex items-center gap-2 font-mono text-[11px] sm:text-xs">
+            <span
+              className="px-2 py-0.5 rounded font-semibold uppercase tracking-wider text-[10px]"
+              style={{
+                backgroundColor: isDark ? '#4B2710' : '#EAE0D0',
+                color: isDark ? '#C88D3A' : '#5A2D0C',
+              }}
+            >
+              Development Preview
+            </span>
+            <span>Fellow Workspace &bull; No authentication or authorization claimed</span>
+          </div>
+          <button
+            type="button"
+            id="dev-switch-to-admin-banner-btn"
+            onClick={onSwitchToAdmin}
+            className={`self-start sm:self-auto font-medium underline underline-offset-2 cursor-pointer hover:opacity-80 transition-opacity text-xs ${
+              isDark ? 'text-[#C88D3A]' : 'text-[#B77620]'
+            }`}
+          >
+            Switch to Accommodation Admin →
+          </button>
+        </div>
+      </aside>
+
       {/* Application Shell Header */}
       <header
         className="sticky top-0 z-30 w-full border-b transition-colors duration-200"
@@ -62,8 +100,23 @@ export const MemberHomeView: React.FC<MemberHomeViewProps> = ({
             </nav>
           </div>
 
-          {/* Controls: Theme & Exit */}
+          {/* Controls: Theme & Exit & Admin Switcher */}
           <div className="flex items-center gap-2 sm:gap-3">
+            <button
+              type="button"
+              id="switch-to-admin-header-btn"
+              onClick={onSwitchToAdmin}
+              aria-label="Switch to Accommodation Admin"
+              className={`inline-flex items-center gap-1.5 px-3 py-2 min-h-[44px] rounded-lg text-xs sm:text-sm font-medium transition-all duration-150 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C88D3A] ${
+                isDark
+                  ? 'bg-[#3E200C] text-[#C88D3A] hover:bg-[#4B2710] border border-[#623416]'
+                  : 'bg-[#FFF9EE] text-[#5A2D0C] hover:bg-[#F2E8D8] border border-[#EAE0D0]'
+              }`}
+            >
+              <ShieldAlert className="w-4 h-4 shrink-0" aria-hidden="true" />
+              <span className="hidden sm:inline">Accommodation Admin</span>
+            </button>
+
             <ThemeToggle isDark={isDark} onToggle={onToggleTheme} />
             <button
               type="button"
