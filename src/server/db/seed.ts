@@ -76,4 +76,70 @@ export async function seedDevelopmentDatabase(client: SqlQueryable): Promise<voi
       JSON.stringify(ctx),
     ]
   );
+
+  // Deterministic Members and Roles (H4D-FUNC-011)
+  // 1. Current Fellow
+  await client.query(
+    `
+    INSERT INTO members (id, display_name, email)
+    VALUES ($1, $2, $3)
+    ON CONFLICT (id) DO UPDATE SET
+      display_name = EXCLUDED.display_name,
+      email = EXCLUDED.email
+    `,
+    ['member-fellow-current', 'Current Fellow', 'fellow@infinitegrace.local']
+  );
+
+  await client.query(
+    `
+    INSERT INTO member_roles (id, member_id, role)
+    VALUES ($1, $2, $3)
+    ON CONFLICT (member_id, role) DO NOTHING
+    `,
+    ['role-fellow-current', 'member-fellow-current', 'FELLOW']
+  );
+
+  // 2. Accommodation Admin
+  await client.query(
+    `
+    INSERT INTO members (id, display_name, email)
+    VALUES ($1, $2, $3)
+    ON CONFLICT (id) DO UPDATE SET
+      display_name = EXCLUDED.display_name,
+      email = EXCLUDED.email
+    `,
+    ['member-admin-current', 'Accommodation Admin', 'admin@infinitegrace.local']
+  );
+
+  await client.query(
+    `
+    INSERT INTO member_roles (id, member_id, role)
+    VALUES ($1, $2, $3)
+    ON CONFLICT (member_id, role) DO NOTHING
+    `,
+    ['role-admin-current', 'member-admin-current', 'ACCOMMODATION_ADMIN']
+  );
+
+  // 3. Deterministic Development Sessions (valid for 1 year)
+  const oneYearExpiry = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString();
+
+  await client.query(
+    `
+    INSERT INTO sessions (id, token, member_id, expires_at)
+    VALUES ($1, $2, $3, $4)
+    ON CONFLICT (token) DO UPDATE SET
+      expires_at = EXCLUDED.expires_at
+    `,
+    ['session-dev-fellow', 'dev-session-token-fellow', 'member-fellow-current', oneYearExpiry]
+  );
+
+  await client.query(
+    `
+    INSERT INTO sessions (id, token, member_id, expires_at)
+    VALUES ($1, $2, $3, $4)
+    ON CONFLICT (token) DO UPDATE SET
+      expires_at = EXCLUDED.expires_at
+    `,
+    ['session-dev-admin', 'dev-session-token-admin', 'member-admin-current', oneYearExpiry]
+  );
 }

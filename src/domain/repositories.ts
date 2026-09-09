@@ -3,6 +3,7 @@ import {
   AccommodationPaymentIntent,
 } from './accommodation';
 import { ExternalPaymentProposal } from './payments';
+import { IMemberRepository, ISessionRepository } from './auth';
 
 /**
  * Accommodation Responsibility Repository Interface (H4D-FUNC-008)
@@ -68,5 +69,7 @@ export interface IHut4DevsRepositories {
   intents: IPaymentIntentRepository;
   proposals: IExternalProposalRepository;
   outbox: IOutboxRepository;
+  members: IMemberRepository;
+  sessions: ISessionRepository;
   runInTransaction<T>(fn: (repos: IHut4DevsRepositories) => Promise<T>): Promise<T>;
 }

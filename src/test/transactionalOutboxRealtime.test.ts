@@ -157,8 +157,8 @@ describe('H4D-FUNC-010: Transactional Outbox + Real-Time Accommodation Admin Del
   it('4. real-time delivery: SSE subscriber receives live payment preparation event', async () => {
     const receivedEvents: Array<{ eventType: string; data: any }> = [];
 
-    // Open real-time SSE stream to /api/accommodation/admin/stream
-    const sseReq = http.request(`${baseUrl}/api/accommodation/admin/stream`, (sseRes) => {
+    // Open real-time SSE stream to /api/accommodation/admin/stream as authenticated Accommodation Admin
+    const sseReq = http.request(`${baseUrl}/api/accommodation/admin/stream?token=dev-session-token-admin`, (sseRes) => {
       expect(sseRes.statusCode).toBe(200);
       expect(sseRes.headers['content-type']).toBe('text/event-stream; charset=utf-8');
 
@@ -301,8 +301,10 @@ describe('H4D-FUNC-010: Transactional Outbox + Real-Time Accommodation Admin Del
       }),
     });
 
-    // 2. Audit GET /api/accommodation/outbox
-    const outboxRes = await fetch(`${baseUrl}/api/accommodation/outbox`);
+    // 2. Audit GET /api/accommodation/outbox as authenticated Accommodation Admin
+    const outboxRes = await fetch(`${baseUrl}/api/accommodation/outbox`, {
+      headers: { Authorization: 'Bearer dev-session-token-admin' },
+    });
     expect(outboxRes.status).toBe(200);
     const outboxJson = await outboxRes.json();
     expect(outboxJson.success).toBe(true);

@@ -8,7 +8,12 @@ import {
   handleAccommodationRequest,
   handleSaveIntentRequest,
   handleOutboxListRequest,
-  globalOutboxPublisher,
+  handleAdminStreamRequest,
+  handleAdminOverviewRequest,
+  handleGetSessionRequest,
+  handleDevSessionRequest,
+  handleDevIdentitiesRequest,
+  handleLogoutRequest,
 } from './server';
 
 function bmoniDevPlugin(): Plugin {
@@ -24,9 +29,19 @@ function bmoniDevPlugin(): Plugin {
         } else if (url === '/api/payments/intents' && req.method === 'POST') {
           handleSaveIntentRequest(req, res);
         } else if (url === '/api/accommodation/admin/stream' && req.method === 'GET') {
-          globalOutboxPublisher.handleSseConnection(req, res);
+          handleAdminStreamRequest(req, res);
+        } else if (url === '/api/accommodation/admin/overview' && req.method === 'GET') {
+          handleAdminOverviewRequest(req, res);
         } else if (url === '/api/accommodation/outbox' && req.method === 'GET') {
           handleOutboxListRequest(req, res);
+        } else if (url === '/api/auth/session' && req.method === 'GET') {
+          handleGetSessionRequest(req, res);
+        } else if (url === '/api/auth/dev-session' && req.method === 'POST') {
+          handleDevSessionRequest(req, res);
+        } else if (url === '/api/auth/dev-identities' && req.method === 'GET') {
+          handleDevIdentitiesRequest(req, res);
+        } else if (url === '/api/auth/logout' && req.method === 'POST') {
+          handleLogoutRequest(req, res);
         } else {
           next();
         }
