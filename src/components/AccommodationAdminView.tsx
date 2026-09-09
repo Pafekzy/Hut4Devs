@@ -6,6 +6,7 @@ import {
   formatNaira,
   getStatusLabel,
 } from '../domain/accommodation';
+import { ExternalPaymentProposal } from '../domain/payments';
 import { Hut4DevsLogo } from './Hut4DevsLogo';
 import { ThemeToggle } from './ThemeToggle';
 import {
@@ -26,6 +27,7 @@ interface AccommodationAdminViewProps {
   onToggleTheme: () => void;
   onSwitchToFellow: () => void;
   onExitToLanding: () => void;
+  paymentProposals?: ExternalPaymentProposal[];
 }
 
 export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
@@ -34,6 +36,7 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
   onToggleTheme,
   onSwitchToFellow,
   onExitToLanding,
+  paymentProposals = [],
 }) => {
   const summary = deriveAccommodationOperationalSummary(responsibilities);
 
@@ -469,6 +472,37 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
                     </span>
                   </div>
                 </div>
+
+                {/* Visually Separate Payment Preparation Status (if proposal exists) */}
+                {paymentProposals.some((p) => p.responsibilityId === resp.id) && (
+                  <div
+                    id={`admin-payment-prep-${resp.id}`}
+                    className="mb-4 p-3 rounded-xl border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-xs"
+                    style={{
+                      backgroundColor: isDark ? '#2A170A' : '#F9F5EE',
+                      borderColor: isDark ? '#4B2710' : '#E7D6C1',
+                    }}
+                  >
+                    <div className="flex items-center gap-2">
+                      <span className="font-semibold uppercase tracking-wider text-[11px]" style={{ color: isDark ? '#C88D3A' : '#B77620' }}>
+                        Payment preparation:
+                      </span>
+                      <span
+                        className="px-2 py-0.5 rounded font-mono font-semibold text-[11px] border"
+                        style={{
+                          backgroundColor: isDark ? '#3A2810' : '#FEF3C7',
+                          borderColor: isDark ? '#6B4C1B' : '#FCD34D',
+                          color: isDark ? '#F59E0B' : '#B45309',
+                        }}
+                      >
+                        Pending Approval
+                      </span>
+                    </div>
+                    <span className="text-stone-500 italic text-[11px]">
+                      * Unverified. Verified remains {formatNaira(resp.verifiedAmount)}.
+                    </span>
+                  </div>
+                )}
 
                 {/* Explicit Read-Only Notice */}
                 <div

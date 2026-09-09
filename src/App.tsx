@@ -5,6 +5,7 @@ import { ResponsibilityDetailView } from './components/ResponsibilityDetailView'
 import { AccommodationAdminView } from './components/AccommodationAdminView';
 import { DEMO_ACCOMMODATION_RESPONSIBILITY } from './data/demoAccommodation';
 import { AccommodationPaymentIntent } from './domain/accommodation';
+import { ExternalPaymentProposal } from './domain/payments';
 
 type AppView = 'landing' | 'member-home' | 'responsibility-detail' | 'accommodation-admin';
 type AppTheme = 'light' | 'dark';
@@ -23,14 +24,21 @@ export default function App() {
     return 'light';
   });
 
-  // Active view: 'landing' | 'member-home' | 'responsibility-detail'
+  // Active view: 'landing' | 'member-home' | 'responsibility-detail' | 'accommodation-admin'
   const [view, setView] = useState<AppView>('landing');
 
   // Prepared payment intents (H4D-FUNC-004) - Invariant: does not modify responsibility
   const [preparedIntents, setPreparedIntents] = useState<AccommodationPaymentIntent[]>([]);
 
+  // Created payment proposals (H4D-FUNC-005) - Invariant: does not modify responsibility
+  const [paymentProposals, setPaymentProposals] = useState<ExternalPaymentProposal[]>([]);
+
   const handleIntentPrepared = (newIntent: AccommodationPaymentIntent) => {
     setPreparedIntents((prev) => [...prev, newIntent]);
+  };
+
+  const handleProposalCreated = (newProposal: ExternalPaymentProposal) => {
+    setPaymentProposals((prev) => [...prev, newProposal]);
   };
 
   // Synchronize document theme class and body background
@@ -87,6 +95,8 @@ export default function App() {
           onBackToHome={() => setView('member-home')}
           preparedIntents={preparedIntents}
           onIntentPrepared={handleIntentPrepared}
+          paymentProposals={paymentProposals}
+          onProposalCreated={handleProposalCreated}
         />
       )}
 
@@ -97,6 +107,7 @@ export default function App() {
           onToggleTheme={toggleTheme}
           onSwitchToFellow={() => setView('member-home')}
           onExitToLanding={() => setView('landing')}
+          paymentProposals={paymentProposals}
         />
       )}
     </div>

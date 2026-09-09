@@ -8,22 +8,35 @@ import {
   formatNaira,
   validateFulfilmentAmount,
 } from '../domain/accommodation';
-import { CheckCircle2, AlertCircle, ArrowLeft, ArrowRight, ShieldAlert, Sparkles } from 'lucide-react';
+import { ExternalPaymentProposal } from '../domain/payments';
+import { requestBmoniProposal } from '../services/paymentClient';
+import {
+  CheckCircle2,
+  AlertCircle,
+  ArrowLeft,
+  ArrowRight,
+  ShieldAlert,
+  Sparkles,
+  Loader2,
+  ExternalLink,
+} from 'lucide-react';
 
 interface FulfilmentFlowProps {
   responsibility: AccommodationResponsibility;
   isDark: boolean;
   onClose: () => void;
   onIntentPrepared: (intent: AccommodationPaymentIntent) => void;
+  onProposalCreated?: (proposal: ExternalPaymentProposal) => void;
 }
 
-type FlowStep = 'select' | 'review' | 'prepared';
+type FlowStep = 'select' | 'review' | 'prepared' | 'bmoni-proposal-created';
 
 export const FulfilmentFlow: React.FC<FulfilmentFlowProps> = ({
   responsibility,
   isDark,
   onClose,
   onIntentPrepared,
+  onProposalCreated,
 }) => {
   const currentRemaining = calculateRemainingAmount(responsibility);
   const [step, setStep] = useState<FlowStep>('select');
@@ -31,6 +44,12 @@ export const FulfilmentFlow: React.FC<FulfilmentFlowProps> = ({
   const [partialAmountInput, setPartialAmountInput] = useState<string>('');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [preparedIntent, setPreparedIntent] = useState<AccommodationPaymentIntent | null>(null);
+
+  // BMONI proposal state
+  const [isBmoniLoading, setIsBmoniLoading] = useState(false);
+  const [bmoniError, setBmoniError] = useState<string | null>(null);
+  const [requiresCredentialsNotice, setRequiresCredentialsNotice] = useState<string | null>(null);
+  const [createdProposal, setCreatedProposal] = useState<ExternalPaymentProposal | null>(null);
 
   // Selected amount based on current type
   const targetAmount =
@@ -78,7 +97,10 @@ export const FulfilmentFlow: React.FC<FulfilmentFlowProps> = ({
     const validation = validateFulfilmentAmount(parsed, currentRemaining);
 
     if (!validation.valid) {
-      setErrorMessage(validation.error || `Enter an amount up to your remaining responsibility of ${formatNaira(currentRemaining)}.`);
+      setErrorMessage(
+        validation.error ||
+          `Enter an amount up to your remaining responsibility of ${formatNaira(currentRemaining)}.`
+      );
       return;
     }
 
@@ -102,9 +124,49 @@ export const FulfilmentFlow: React.FC<FulfilmentFlowProps> = ({
     };
 
     setPreparedIntent(newIntent);
-    onIntentPrepared(newIntent);
+    onIntentPrepared?.(newIntent);
     setStep('prepared');
   };
+
+  const handleContinueWithBmoni = async (allowPreview = false) => {
+    if (!preparedIntent) return;
+
+    setIsBmoniLoading(true);
+    setBmoniError(null);
+    setRequiresCredentialsNotice(null);
+
+    try {
+      const res = await requestBmoniProposal(preparedIntent, {
+        allowPreviewMode: allowPreview,
+      });
+
+      if (res.requiresCredentials) {
+        setRequiresCredentialsNotice(
+          'BMONI LIVE SANDBOX VALIDATION: REQUIRES EXTERNAL SERVICE / CREDENTIALS'
+        );
+        setIsBmoniLoading(false);
+        return;
+      }
+
+      if (res.success && res.proposal) {
+        setCreatedProposal(res.proposal);
+        onProposalCreated?.(res.proposal);
+        setStep('bmoni-proposal-created');
+      } else {
+        setBmoniError(
+          res.error ||
+            "We couldn't prepare this payment with BMONI yet. Your accommodation balance has not changed."
+        );
+      }
+    } catch {
+      setBmoniError(
+        "We couldn't prepare this payment with BMONI yet. Your accommodation balance has not changed."
+      );
+    } finally {
+      setIsBmoniLoading(false);
+    }
+  };
+
 
   return (
     <div
@@ -530,7 +592,7 @@ export const FulfilmentFlow: React.FC<FulfilmentFlowProps> = ({
 
             {/* Supporting Text */}
             <div
-              className="mb-8 text-xs sm:text-sm leading-relaxed max-w-md mx-auto space-y-2"
+              className="mb-6 text-xs sm:text-sm leading-relaxed max-w-md mx-auto space-y-2"
               style={{ color: isDark ? '#D9C4AC' : '#704728' }}
             >
               <p className="font-medium">
@@ -541,10 +603,209 @@ export const FulfilmentFlow: React.FC<FulfilmentFlowProps> = ({
               </p>
             </div>
 
+            {/* Error or Credentials Notice if any */}
+            {requiresCredentialsNotice && (
+              <div
+                role="alert"
+                id="bmoni-credentials-notice"
+                className="p-4 rounded-xl border mb-6 text-left text-xs max-w-md mx-auto space-y-2"
+                style={{
+                  backgroundColor: isDark ? '#3A1E0B' : '#FFF3E0',
+                  borderColor: isDark ? '#623416' : '#FFCC80',
+                  color: isDark ? '#FFE082' : '#E65100',
+                }}
+              >
+                <div className="flex items-center gap-2 font-semibold">
+                  <ShieldAlert className="w-4 h-4 shrink-0" aria-hidden="true" />
+                  <span>{requiresCredentialsNotice}</span>
+                </div>
+                <p className="leading-relaxed text-[11px]" style={{ color: isDark ? '#D9C4AC' : '#704728' }}>
+                  Real BMONI proposal creation requires partner API credentials in the environment. You may preview the proposal flow in sandbox preview mode.
+                </p>
+                <button
+                  type="button"
+                  id="bmoni-preview-mode-btn"
+                  onClick={() => handleContinueWithBmoni(true)}
+                  className="mt-1 px-3 py-1.5 rounded-lg text-xs font-semibold border transition-colors cursor-pointer"
+                  style={{
+                    backgroundColor: isDark ? '#4B2710' : '#FFF9EE',
+                    borderColor: isDark ? '#C88D3A' : '#B77620',
+                    color: isDark ? '#C88D3A' : '#B77620',
+                  }}
+                >
+                  Continue with Sandbox Preview
+                </button>
+              </div>
+            )}
+
+            {bmoniError && (
+              <div
+                role="alert"
+                id="bmoni-error-notice"
+                className="p-3 rounded-xl border mb-6 text-left text-xs max-w-md mx-auto flex items-center gap-2 text-red-500"
+                style={{
+                  backgroundColor: isDark ? '#3A1515' : '#FEE2E2',
+                  borderColor: isDark ? '#7F1D1D' : '#FCA5A5',
+                }}
+              >
+                <AlertCircle className="w-4 h-4 shrink-0" aria-hidden="true" />
+                <span>{bmoniError}</span>
+              </div>
+            )}
+
+            {/* Actions: [ Continue with BMONI ] and [ Back to Responsibility ] */}
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 max-w-md mx-auto">
+              <button
+                type="button"
+                id="continue-with-bmoni-btn"
+                disabled={isBmoniLoading}
+                onClick={() => handleContinueWithBmoni(false)}
+                className={`w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 min-h-[44px] rounded-xl text-sm font-semibold transition-all cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 ${
+                  isDark
+                    ? 'bg-[#C88D3A] text-[#2F1707] hover:bg-[#DDA250] focus-visible:ring-[#C88D3A]'
+                    : 'bg-[#5A2D0C] text-[#FFF9EE] hover:bg-[#432108] focus-visible:ring-[#5A2D0C]'
+                } ${isBmoniLoading ? 'opacity-60 cursor-not-allowed' : ''}`}
+              >
+                {isBmoniLoading ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin shrink-0" aria-hidden="true" />
+                    <span>Connecting to BMONI...</span>
+                  </>
+                ) : (
+                  <>
+                    <span>Continue with BMONI</span>
+                    <ArrowRight className="w-4 h-4 shrink-0" aria-hidden="true" />
+                  </>
+                )}
+              </button>
+
+              <button
+                type="button"
+                id="back-to-responsibility-btn"
+                onClick={onClose}
+                className={`w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3 min-h-[44px] rounded-xl text-sm font-medium transition-all cursor-pointer border ${
+                  isDark
+                    ? 'border-[#623416] text-[#E5D3BA] hover:bg-[#2F1707]'
+                    : 'border-[#EAE0D0] text-[#6D4223] hover:bg-[#F2E8D8]'
+                }`}
+              >
+                <ArrowLeft className="w-4 h-4 shrink-0" aria-hidden="true" />
+                <span>Back to Responsibility</span>
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* STEP 4: BMONI TRANSFER PROPOSAL CREATED (PAYMENT PREPARATION) */}
+        {step === 'bmoni-proposal-created' && preparedIntent && (
+          <div className="text-center py-2">
+            <div
+              className="w-14 h-14 mx-auto mb-4 rounded-full flex items-center justify-center border"
+              style={{
+                backgroundColor: isDark ? '#2F1707' : '#F7F1E7',
+                borderColor: isDark ? '#C88D3A' : '#B77620',
+                color: isDark ? '#C88D3A' : '#B77620',
+              }}
+            >
+              <Sparkles className="w-7 h-7" aria-hidden="true" />
+            </div>
+
+            <h2
+              id="payment-preparation-title"
+              className="font-serif text-2xl sm:text-3xl font-semibold tracking-tight mb-6"
+              style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+            >
+              PAYMENT PREPARATION
+            </h2>
+
+            {/* Preparation Details Table */}
+            <div
+              className="p-5 rounded-xl border mb-6 max-w-md mx-auto text-left space-y-3.5 text-sm"
+              style={{
+                backgroundColor: isDark ? '#2F1707' : '#F7F1E7',
+                borderColor: isDark ? '#4B2710' : '#E7D6C1',
+              }}
+            >
+              {/* Amount */}
+              <div className="flex justify-between items-center">
+                <span style={{ color: isDark ? '#A67B54' : '#8A5D3B' }}>Amount:</span>
+                <span className="font-mono font-bold text-lg" style={{ color: isDark ? '#E2AB5D' : '#B77620' }}>
+                  {formatNaira(preparedIntent.amount)}
+                </span>
+              </div>
+
+              {/* Hut4Devs Intent */}
+              <div className="flex justify-between items-center">
+                <span style={{ color: isDark ? '#A67B54' : '#8A5D3B' }}>Hut4Devs Intent:</span>
+                <span
+                  className="px-2.5 py-0.5 rounded-full text-xs font-semibold uppercase tracking-wider font-mono border"
+                  style={{
+                    backgroundColor: isDark ? '#4B2710' : '#FFF9EE',
+                    borderColor: isDark ? '#623416' : '#EAE0D0',
+                    color: isDark ? '#C88D3A' : '#B77620',
+                  }}
+                >
+                  Prepared
+                </span>
+              </div>
+
+              {/* BMONI Proposal */}
+              <div className="flex justify-between items-center">
+                <span style={{ color: isDark ? '#A67B54' : '#8A5D3B' }}>BMONI Proposal:</span>
+                <span
+                  className="px-2.5 py-0.5 rounded-full text-xs font-semibold uppercase tracking-wider font-mono border"
+                  style={{
+                    backgroundColor: isDark ? '#382210' : '#EFF6FF',
+                    borderColor: isDark ? '#5C381A' : '#BFDBFE',
+                    color: isDark ? '#E2AB5D' : '#1D4ED8',
+                  }}
+                >
+                  Created
+                </span>
+              </div>
+
+              {/* Provider Status */}
+              <div className="flex justify-between items-center border-t pt-3" style={{ borderColor: isDark ? '#4B2710' : '#EAE0D0' }}>
+                <span style={{ color: isDark ? '#A67B54' : '#8A5D3B' }}>Provider Status:</span>
+                <span
+                  className="px-2.5 py-0.5 rounded-full text-xs font-semibold font-mono border"
+                  style={{
+                    backgroundColor: isDark ? '#3A2810' : '#FEF3C7',
+                    borderColor: isDark ? '#6B4C1B' : '#FCD34D',
+                    color: isDark ? '#F59E0B' : '#B45309',
+                  }}
+                >
+                  Pending Approval
+                </span>
+              </div>
+
+              {createdProposal?.providerProposalId && (
+                <div className="flex justify-between items-center text-xs pt-1">
+                  <span style={{ color: isDark ? '#A67B54' : '#8A5D3B' }}>Proposal ID:</span>
+                  <span className="font-mono text-[11px] opacity-80" style={{ color: isDark ? '#E5D3BA' : '#5A2D0C' }}>
+                    {createdProposal.providerProposalId}
+                  </span>
+                </div>
+              )}
+            </div>
+
+            {/* Supporting Messages */}
+            <div
+              className="mb-8 text-xs sm:text-sm leading-relaxed max-w-md mx-auto space-y-2"
+              style={{ color: isDark ? '#D9C4AC' : '#704728' }}
+            >
+              <p className="font-medium">
+                No money has moved yet.
+              </p>
+              <p>
+                Your accommodation responsibility remains unverified.
+              </p>
+            </div>
+
             {/* Return Action */}
             <button
               type="button"
-              id="back-to-responsibility-btn"
+              id="back-to-responsibility-after-bmoni-btn"
               onClick={onClose}
               className={`w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3 min-h-[44px] rounded-xl text-sm font-semibold transition-all cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 ${
                 isDark

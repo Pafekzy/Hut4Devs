@@ -7,6 +7,7 @@ import {
   formatNaira,
   getStatusLabel,
 } from '../domain/accommodation';
+import { ExternalPaymentProposal } from '../domain/payments';
 import { Hut4DevsLogo } from './Hut4DevsLogo';
 import { ThemeToggle } from './ThemeToggle';
 import { ArrowLeft, Building2, MapPin, Layers, DoorClosed, Sparkles } from 'lucide-react';
@@ -19,6 +20,8 @@ interface ResponsibilityDetailViewProps {
   onBackToHome: () => void;
   preparedIntents?: AccommodationPaymentIntent[];
   onIntentPrepared?: (intent: AccommodationPaymentIntent) => void;
+  paymentProposals?: ExternalPaymentProposal[];
+  onProposalCreated?: (proposal: ExternalPaymentProposal) => void;
 }
 
 export const ResponsibilityDetailView: React.FC<ResponsibilityDetailViewProps> = ({
@@ -28,6 +31,8 @@ export const ResponsibilityDetailView: React.FC<ResponsibilityDetailViewProps> =
   onBackToHome,
   preparedIntents = [],
   onIntentPrepared,
+  paymentProposals = [],
+  onProposalCreated,
 }) => {
   const [isFulfilmentOpen, setIsFulfilmentOpen] = useState(false);
   const remainingAmount = calculateRemainingAmount(responsibility);
@@ -36,6 +41,12 @@ export const ResponsibilityDetailView: React.FC<ResponsibilityDetailViewProps> =
   const handleIntentPrepared = (intent: AccommodationPaymentIntent) => {
     onIntentPrepared?.(intent);
   };
+
+  const latestProposal =
+    paymentProposals && paymentProposals.length > 0
+      ? paymentProposals[paymentProposals.length - 1]
+      : null;
+
 
   return (
     <div
@@ -283,7 +294,7 @@ export const ResponsibilityDetailView: React.FC<ResponsibilityDetailViewProps> =
           {preparedIntents && preparedIntents.length > 0 && (
             <div
               id="prepared-intent-summary"
-              className="mb-8 p-5 rounded-xl border space-y-2.5 transition-colors"
+              className="mb-6 p-5 rounded-xl border space-y-2.5 transition-colors"
               style={{
                 backgroundColor: isDark ? '#2F1707' : '#F7F1E7',
                 borderColor: isDark ? '#4B2710' : '#E7D6C1',
@@ -318,6 +329,37 @@ export const ResponsibilityDetailView: React.FC<ResponsibilityDetailViewProps> =
               </p>
               <p className="text-xs text-stone-500 leading-relaxed">
                 Payment execution is not connected in this build. Verified accommodation balance remains unchanged until execution and verification.
+              </p>
+            </div>
+          )}
+
+          {/* BMONI Proposal Created Card (if exists) */}
+          {latestProposal && (
+            <div
+              id="bmoni-proposal-summary"
+              className="mb-8 p-5 rounded-xl border space-y-2.5 transition-colors"
+              style={{
+                backgroundColor: isDark ? '#2A170A' : '#F9F5EE',
+                borderColor: isDark ? '#4B2710' : '#E7D6C1',
+              }}
+            >
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: isDark ? '#C88D3A' : '#B77620' }}>
+                  BMONI Transfer Proposal
+                </span>
+                <span
+                  className="px-2.5 py-0.5 rounded-full text-xs font-semibold font-mono border"
+                  style={{
+                    backgroundColor: isDark ? '#3A2810' : '#FEF3C7',
+                    borderColor: isDark ? '#6B4C1B' : '#FCD34D',
+                    color: isDark ? '#F59E0B' : '#B45309',
+                  }}
+                >
+                  Pending Approval
+                </span>
+              </div>
+              <p className="text-xs text-stone-500 leading-relaxed">
+                BMONI proposal recorded ({latestProposal.providerProposalId}). No money has moved yet. Your accommodation responsibility remains unverified.
               </p>
             </div>
           )}
@@ -368,6 +410,7 @@ export const ResponsibilityDetailView: React.FC<ResponsibilityDetailViewProps> =
             isDark={isDark}
             onClose={() => setIsFulfilmentOpen(false)}
             onIntentPrepared={handleIntentPrepared}
+            onProposalCreated={onProposalCreated}
           />
         )}
       </main>
