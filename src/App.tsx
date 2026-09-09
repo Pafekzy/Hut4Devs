@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { LandingView } from './components/LandingView';
 import { MemberHomeView } from './components/MemberHomeView';
+import { ResponsibilityDetailView } from './components/ResponsibilityDetailView';
+import { DEMO_ACCOMMODATION_RESPONSIBILITY } from './data/demoAccommodation';
 
-type AppView = 'landing' | 'member-home';
+type AppView = 'landing' | 'member-home' | 'responsibility-detail';
 type AppTheme = 'light' | 'dark';
 
 export default function App() {
@@ -19,7 +21,7 @@ export default function App() {
     return 'light';
   });
 
-  // Active view: 'landing' | 'member-home'
+  // Active view: 'landing' | 'member-home' | 'responsibility-detail'
   const [view, setView] = useState<AppView>('landing');
 
   // Synchronize document theme class and body background
@@ -49,17 +51,30 @@ export default function App() {
 
   return (
     <div className="min-h-screen">
-      {view === 'landing' ? (
+      {view === 'landing' && (
         <LandingView
           isDark={isDark}
           onToggleTheme={toggleTheme}
           onEnter={() => setView('member-home')}
         />
-      ) : (
+      )}
+
+      {view === 'member-home' && (
         <MemberHomeView
           isDark={isDark}
+          responsibility={DEMO_ACCOMMODATION_RESPONSIBILITY}
           onToggleTheme={toggleTheme}
           onExitToLanding={() => setView('landing')}
+          onViewResponsibilityDetails={() => setView('responsibility-detail')}
+        />
+      )}
+
+      {view === 'responsibility-detail' && (
+        <ResponsibilityDetailView
+          responsibility={DEMO_ACCOMMODATION_RESPONSIBILITY}
+          isDark={isDark}
+          onToggleTheme={toggleTheme}
+          onBackToHome={() => setView('member-home')}
         />
       )}
     </div>

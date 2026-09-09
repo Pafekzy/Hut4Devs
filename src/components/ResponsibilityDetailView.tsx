@@ -1,0 +1,306 @@
+import React from 'react';
+import {
+  AccommodationResponsibility,
+  calculateRemainingAmount,
+  formatNaira,
+  getStatusLabel,
+} from '../domain/accommodation';
+import { Hut4DevsLogo } from './Hut4DevsLogo';
+import { ThemeToggle } from './ThemeToggle';
+import { ArrowLeft, Building2, MapPin, Layers, DoorClosed } from 'lucide-react';
+
+interface ResponsibilityDetailViewProps {
+  responsibility: AccommodationResponsibility;
+  isDark: boolean;
+  onToggleTheme: () => void;
+  onBackToHome: () => void;
+}
+
+export const ResponsibilityDetailView: React.FC<ResponsibilityDetailViewProps> = ({
+  responsibility,
+  isDark,
+  onToggleTheme,
+  onBackToHome,
+}) => {
+  const remainingAmount = calculateRemainingAmount(responsibility);
+  const statusLabel = getStatusLabel(responsibility.status);
+
+  return (
+    <div
+      className={`min-h-screen flex flex-col transition-colors duration-200 ${
+        isDark ? 'bg-[#2F1707] text-[#FFF9EE]' : 'bg-[#F7F1E7] text-[#5A2D0C]'
+      }`}
+    >
+      {/* Shell Header */}
+      <header
+        className="sticky top-0 z-30 w-full border-b transition-colors duration-200"
+        style={{
+          borderColor: isDark ? '#3E200C' : '#EAE0D0',
+          backgroundColor: isDark ? 'rgba(47, 23, 7, 0.92)' : 'rgba(247, 241, 231, 0.92)',
+          backdropFilter: 'blur(8px)',
+        }}
+      >
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 h-16 sm:h-18 flex items-center justify-between">
+          <button
+            type="button"
+            onClick={onBackToHome}
+            className="inline-flex items-center text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C88D3A] rounded-lg cursor-pointer"
+            title="Back to Home"
+          >
+            <Hut4DevsLogo isDark={isDark} size="sm" showWordmark={true} />
+          </button>
+
+          <div className="flex items-center gap-3">
+            <ThemeToggle isDark={isDark} onToggle={onToggleTheme} />
+            <button
+              type="button"
+              id="back-to-home-header-btn"
+              onClick={onBackToHome}
+              aria-label="Back to Home"
+              className={`inline-flex items-center gap-1.5 px-3 py-2 min-h-[44px] rounded-lg text-xs sm:text-sm font-medium transition-all duration-150 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C88D3A] ${
+                isDark
+                  ? 'text-[#E5D3BA] hover:text-[#FFF9EE] hover:bg-[#3E200C]'
+                  : 'text-[#6D4223] hover:text-[#5A2D0C] hover:bg-[#EFE5D5]'
+              }`}
+            >
+              <ArrowLeft className="w-4 h-4 shrink-0" aria-hidden="true" />
+              <span>Back to Home</span>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      {/* Main Container */}
+      <main className="flex-1 max-w-3xl w-full mx-auto px-4 sm:px-6 py-8 sm:py-12">
+        {/* Navigation Breadcrumb / Action */}
+        <div className="mb-6">
+          <button
+            type="button"
+            id="back-to-home-nav-btn"
+            onClick={onBackToHome}
+            className={`inline-flex items-center gap-2 px-3.5 py-2 min-h-[44px] rounded-lg text-sm font-medium transition-colors cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C88D3A] ${
+              isDark
+                ? 'text-[#C88D3A] hover:bg-[#3E200C] hover:text-[#E2AB5D]'
+                : 'text-[#B77620] hover:bg-[#FFF9EE] hover:text-[#5A2D0C]'
+            }`}
+          >
+            <ArrowLeft className="w-4 h-4" aria-hidden="true" />
+            <span>Back to Home</span>
+          </button>
+        </div>
+
+        {/* Detail Article Card */}
+        <article
+          id="responsibility-detail-card"
+          className="rounded-2xl p-6 sm:p-10 border transition-colors duration-200 shadow-sm"
+          style={{
+            backgroundColor: isDark ? '#3E200C' : '#FFF9EE',
+            borderColor: isDark ? '#623416' : '#EAE0D0',
+          }}
+        >
+          {/* Section Header */}
+          <div className="border-b pb-6 mb-8" style={{ borderColor: isDark ? '#4B2710' : '#EAE0D0' }}>
+            <span
+              className="text-xs sm:text-sm font-semibold uppercase tracking-wider block mb-2"
+              style={{ color: isDark ? '#C88D3A' : '#B77620' }}
+            >
+              Accommodation Responsibility
+            </span>
+            <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-3">
+              <div>
+                <span className="text-xs block text-stone-500 mb-0.5">Responsibility:</span>
+                <h1
+                  className="font-serif text-2xl sm:text-3xl font-semibold tracking-tight"
+                  style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+                >
+                  {responsibility.title}
+                </h1>
+              </div>
+
+              {/* Status Badge */}
+              <div className="self-start sm:self-auto">
+                <span className="text-xs block text-stone-500 mb-0.5">Status:</span>
+                <span
+                  className="inline-flex items-center px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wide uppercase"
+                  style={{
+                    backgroundColor: isDark ? '#4B2710' : '#F7F1E7',
+                    color: isDark ? '#E2AB5D' : '#B77620',
+                    border: `1px solid ${isDark ? '#623416' : '#E7D6C1'}`,
+                  }}
+                >
+                  <span
+                    className="w-2 h-2 rounded-full mr-2"
+                    style={{ backgroundColor: isDark ? '#C88D3A' : '#B77620' }}
+                    aria-hidden="true"
+                  />
+                  {statusLabel}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* Location Structure Grid */}
+          <div className="mb-8">
+            <h2
+              className="text-xs font-semibold uppercase tracking-wider mb-4"
+              style={{ color: isDark ? '#A67B54' : '#8A5D3B' }}
+            >
+              Accommodation Context
+            </h2>
+            <div
+              className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 p-4 rounded-xl border"
+              style={{
+                backgroundColor: isDark ? '#2F1707' : '#F7F1E7',
+                borderColor: isDark ? '#4B2710' : '#E7D6C1',
+              }}
+            >
+              {/* Property */}
+              <div className="flex items-start gap-3">
+                <Building2
+                  className="w-5 h-5 shrink-0 mt-0.5"
+                  style={{ color: isDark ? '#C88D3A' : '#B77620' }}
+                  aria-hidden="true"
+                />
+                <div>
+                  <span className="text-xs block" style={{ color: isDark ? '#A67B54' : '#8A5D3B' }}>
+                    Property:
+                  </span>
+                  <span className="text-sm font-semibold" style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}>
+                    {responsibility.accommodationContext.property.name}
+                  </span>
+                </div>
+              </div>
+
+              {/* Floor */}
+              <div className="flex items-start gap-3">
+                <Layers
+                  className="w-5 h-5 shrink-0 mt-0.5"
+                  style={{ color: isDark ? '#C88D3A' : '#B77620' }}
+                  aria-hidden="true"
+                />
+                <div>
+                  <span className="text-xs block" style={{ color: isDark ? '#A67B54' : '#8A5D3B' }}>
+                    Floor:
+                  </span>
+                  <span className="text-sm font-semibold" style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}>
+                    {responsibility.accommodationContext.floor.name}
+                  </span>
+                </div>
+              </div>
+
+              {/* Room */}
+              <div className="flex items-start gap-3">
+                <DoorClosed
+                  className="w-5 h-5 shrink-0 mt-0.5"
+                  style={{ color: isDark ? '#C88D3A' : '#B77620' }}
+                  aria-hidden="true"
+                />
+                <div>
+                  <span className="text-xs block" style={{ color: isDark ? '#A67B54' : '#8A5D3B' }}>
+                    Room:
+                  </span>
+                  <span className="text-sm font-semibold" style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}>
+                    {responsibility.accommodationContext.room.name}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Financial Breakdown Section */}
+          <div className="mb-10">
+            <h2
+              className="text-xs font-semibold uppercase tracking-wider mb-4"
+              style={{ color: isDark ? '#A67B54' : '#8A5D3B' }}
+            >
+              Responsibility Breakdown
+            </h2>
+            <div
+              className="grid grid-cols-1 sm:grid-cols-3 gap-4 p-5 rounded-xl border"
+              style={{
+                backgroundColor: isDark ? '#2F1707' : '#F7F1E7',
+                borderColor: isDark ? '#4B2710' : '#E7D6C1',
+              }}
+            >
+              {/* Required */}
+              <div className="border-b sm:border-b-0 sm:border-r pb-3 sm:pb-0 sm:pr-4"
+                style={{ borderColor: isDark ? '#4B2710' : '#EAE0D0' }}
+              >
+                <span className="text-xs block mb-1" style={{ color: isDark ? '#A67B54' : '#8A5D3B' }}>
+                  Required:
+                </span>
+                <p
+                  className="text-xl sm:text-2xl font-semibold"
+                  style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+                >
+                  {formatNaira(responsibility.requiredAmount)}
+                </p>
+              </div>
+
+              {/* Verified */}
+              <div className="border-b sm:border-b-0 sm:border-r pb-3 sm:pb-0 sm:pr-4"
+                style={{ borderColor: isDark ? '#4B2710' : '#EAE0D0' }}
+              >
+                <span className="text-xs block mb-1" style={{ color: isDark ? '#A67B54' : '#8A5D3B' }}>
+                  Verified:
+                </span>
+                <p
+                  className="text-xl sm:text-2xl font-medium"
+                  style={{ color: isDark ? '#D9C4AC' : '#704728' }}
+                >
+                  {formatNaira(responsibility.verifiedAmount)}
+                </p>
+              </div>
+
+              {/* Remaining */}
+              <div>
+                <span className="text-xs block mb-1 font-medium" style={{ color: isDark ? '#C88D3A' : '#B77620' }}>
+                  Remaining:
+                </span>
+                <p
+                  className="text-xl sm:text-2xl font-bold"
+                  style={{ color: isDark ? '#E2AB5D' : '#B77620' }}
+                >
+                  {formatNaira(remainingAmount)}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Action Footer: [ Back to Home ] */}
+          <div className="pt-6 border-t flex items-center justify-between"
+            style={{ borderColor: isDark ? '#4B2710' : '#EAE0D0' }}
+          >
+            <p className="text-xs text-stone-500 italic">
+              * Payment tracking and verification will be enabled in subsequent functional sequences.
+            </p>
+            <button
+              type="button"
+              id="back-to-home-main-btn"
+              onClick={onBackToHome}
+              className={`inline-flex items-center gap-2 px-6 py-3 min-h-[44px] rounded-xl text-sm font-medium transition-all duration-150 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 ${
+                isDark
+                  ? 'bg-[#C88D3A] text-[#2F1707] hover:bg-[#DDA250] focus-visible:ring-[#C88D3A] focus-visible:ring-offset-[#3E200C]'
+                  : 'bg-[#5A2D0C] text-[#FFF9EE] hover:bg-[#432108] focus-visible:ring-[#5A2D0C] focus-visible:ring-offset-[#FFF9EE]'
+              }`}
+            >
+              <ArrowLeft className="w-4 h-4 shrink-0" aria-hidden="true" />
+              <span>Back to Home</span>
+            </button>
+          </div>
+        </article>
+      </main>
+
+      {/* Footer */}
+      <footer
+        className="w-full py-5 text-center text-xs tracking-wider uppercase border-t transition-colors duration-200 mt-auto"
+        style={{
+          borderColor: isDark ? '#3E200C' : '#EAE0D0',
+          color: isDark ? '#A67B54' : '#8A5D3B',
+        }}
+      >
+        <p>Hut4Devs Accommodation Structure &bull; Canonical Foundation</p>
+      </footer>
+    </div>
+  );
+};

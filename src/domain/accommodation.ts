@@ -1,0 +1,97 @@
+/**
+ * Accommodation Domain Models
+ * 
+ * Relationships:
+ * Property has Floors
+ * Floor belongs to Property, has Rooms
+ * Room belongs to Floor
+ * Fellow may be allocated to Room
+ * AccommodationResponsibility belongs to Fellow and has accommodation context
+ */
+
+export enum ResponsibilityStatus {
+  OUTSTANDING = 'OUTSTANDING',
+  PARTIALLY_FULFILLED = 'PARTIALLY_FULFILLED',
+  FULFILLED = 'FULFILLED',
+}
+
+export interface Property {
+  id: string;
+  name: string;
+  address?: string;
+  floors?: Floor[];
+}
+
+export interface Floor {
+  id: string;
+  propertyId: string;
+  name: string; // e.g. "Floor 3"
+  levelNumber?: number;
+  rooms?: Room[];
+}
+
+export interface Room {
+  id: string;
+  floorId: string;
+  name: string; // e.g. "Room 3B"
+  code?: string;
+}
+
+export interface Fellow {
+  id: string;
+  name: string; // e.g. "Current Fellow"
+  email?: string;
+  roomId?: string;
+}
+
+export interface AccommodationContext {
+  property: Property;
+  floor: Floor;
+  room: Room;
+}
+
+export interface AccommodationResponsibility {
+  id: string;
+  fellowId: string;
+  fellow: Fellow;
+  title: string; // e.g. "September Accommodation"
+  accommodationContext: AccommodationContext;
+  requiredAmount: number;
+  verifiedAmount: number;
+  status: ResponsibilityStatus;
+  period?: string;
+  currency?: string;
+}
+
+/**
+ * Derives the remaining amount from required and verified amounts.
+ * remainingAmount = requiredAmount - verifiedAmount
+ */
+export function calculateRemainingAmount(
+  responsibility: Pick<AccommodationResponsibility, 'requiredAmount' | 'verifiedAmount'>
+): number {
+  return Math.max(0, responsibility.requiredAmount - responsibility.verifiedAmount);
+}
+
+/**
+ * Format currency in Nigerian Naira (₦)
+ */
+export function formatNaira(amount: number): string {
+  return `₦${amount.toLocaleString('en-NG')}`;
+}
+
+/**
+ * Human-readable status label
+ */
+export function getStatusLabel(status: ResponsibilityStatus): string {
+  switch (status) {
+    case ResponsibilityStatus.OUTSTANDING:
+      return 'Outstanding';
+    case ResponsibilityStatus.PARTIALLY_FULFILLED:
+      return 'Partially Fulfilled';
+    case ResponsibilityStatus.FULFILLED:
+      return 'Fulfilled';
+    default:
+      return status;
+  }
+}

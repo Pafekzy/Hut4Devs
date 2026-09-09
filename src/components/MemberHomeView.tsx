@@ -1,18 +1,24 @@
 import React from 'react';
 import { Hut4DevsLogo } from './Hut4DevsLogo';
 import { ThemeToggle } from './ThemeToggle';
-import { LogOut, Home, Inbox } from 'lucide-react';
+import { AccommodationResponsibilityCard } from './AccommodationResponsibilityCard';
+import { AccommodationResponsibility } from '../domain/accommodation';
+import { LogOut, Home } from 'lucide-react';
 
 interface MemberHomeViewProps {
   isDark: boolean;
+  responsibility: AccommodationResponsibility;
   onToggleTheme: () => void;
   onExitToLanding: () => void;
+  onViewResponsibilityDetails: (responsibilityId: string) => void;
 }
 
 export const MemberHomeView: React.FC<MemberHomeViewProps> = ({
   isDark,
+  responsibility,
   onToggleTheme,
   onExitToLanding,
+  onViewResponsibilityDetails,
 }) => {
   return (
     <div
@@ -97,41 +103,16 @@ export const MemberHomeView: React.FC<MemberHomeViewProps> = ({
           What needs your attention?
         </h1>
 
-        {/* Empty-state Container */}
+        {/* Accommodation Responsibility Card */}
         <section
-          aria-label="Active responsibilities and community actions"
-          className="rounded-2xl p-8 sm:p-12 text-center border transition-colors duration-200"
-          style={{
-            backgroundColor: isDark ? '#3E200C' : '#FFF9EE',
-            borderColor: isDark ? '#623416' : '#EAE0D0',
-          }}
+          aria-label="Active Accommodation Responsibilities"
+          className="space-y-4"
         >
-          <div className="max-w-md mx-auto flex flex-col items-center">
-            {/* Minimal quietly confident icon badge */}
-            <div
-              className="w-12 h-12 rounded-full flex items-center justify-center mb-4 transition-colors duration-200"
-              style={{
-                backgroundColor: isDark ? '#4B2710' : '#F7F1E7',
-                color: isDark ? '#C88D3A' : '#B77620',
-              }}
-            >
-              <Inbox className="w-6 h-6" aria-hidden="true" />
-            </div>
-
-            <h2
-              className="font-serif text-lg sm:text-xl font-medium mb-2 transition-colors duration-200"
-              style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
-            >
-              Nothing currently pending
-            </h2>
-
-            <p
-              className="text-sm sm:text-base leading-relaxed transition-colors duration-200"
-              style={{ color: isDark ? '#D9C4AC' : '#6B4527' }}
-            >
-              Active responsibilities and community actions will appear here as you participate in your chamber and community.
-            </p>
-          </div>
+          <AccommodationResponsibilityCard
+            responsibility={responsibility}
+            isDark={isDark}
+            onViewDetails={onViewResponsibilityDetails}
+          />
         </section>
       </main>
 
