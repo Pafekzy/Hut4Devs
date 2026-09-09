@@ -474,35 +474,39 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
                 </div>
 
                 {/* Visually Separate Payment Preparation Status (if proposal exists) */}
-                {paymentProposals.some((p) => p.responsibilityId === resp.id) && (
-                  <div
-                    id={`admin-payment-prep-${resp.id}`}
-                    className="mb-4 p-3 rounded-xl border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-xs"
-                    style={{
-                      backgroundColor: isDark ? '#2A170A' : '#F9F5EE',
-                      borderColor: isDark ? '#4B2710' : '#E7D6C1',
-                    }}
-                  >
-                    <div className="flex items-center gap-2">
-                      <span className="font-semibold uppercase tracking-wider text-[11px]" style={{ color: isDark ? '#C88D3A' : '#B77620' }}>
-                        Payment preparation:
-                      </span>
-                      <span
-                        className="px-2 py-0.5 rounded font-mono font-semibold text-[11px] border"
-                        style={{
-                          backgroundColor: isDark ? '#3A2810' : '#FEF3C7',
-                          borderColor: isDark ? '#6B4C1B' : '#FCD34D',
-                          color: isDark ? '#F59E0B' : '#B45309',
-                        }}
-                      >
-                        Pending Approval
+                {paymentProposals.some((p) => p.responsibilityId === resp.id) && (() => {
+                  const proposal = paymentProposals.find((p) => p.responsibilityId === resp.id);
+                  const isSim = proposal?.isSimulated || proposal?.provider === 'SIMULATED';
+                  return (
+                    <div
+                      id={`admin-payment-prep-${resp.id}`}
+                      className="mb-4 p-3 rounded-xl border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-xs"
+                      style={{
+                        backgroundColor: isDark ? '#2A170A' : '#F9F5EE',
+                        borderColor: isDark ? '#4B2710' : '#E7D6C1',
+                      }}
+                    >
+                      <div className="flex items-center gap-2">
+                        <span className="font-semibold uppercase tracking-wider text-[11px]" style={{ color: isDark ? '#C88D3A' : '#B77620' }}>
+                          {isSim ? 'SIMULATED PROVIDER:' : 'BMONI Proposal:'}
+                        </span>
+                        <span
+                          className="px-2 py-0.5 rounded font-mono font-semibold text-[11px] border"
+                          style={{
+                            backgroundColor: isDark ? '#3A2810' : '#FEF3C7',
+                            borderColor: isDark ? '#6B4C1B' : '#FCD34D',
+                            color: isDark ? '#F59E0B' : '#B45309',
+                          }}
+                        >
+                          {isSim ? 'Proposal: Simulated' : (proposal?.providerStatus || 'Pending Approval')}
+                        </span>
+                      </div>
+                      <span className="text-stone-500 italic text-[11px]">
+                        {isSim ? 'No request was sent to BMONI. * Unverified.' : `* Unverified. Verified remains ${formatNaira(resp.verifiedAmount)}.`}
                       </span>
                     </div>
-                    <span className="text-stone-500 italic text-[11px]">
-                      * Unverified. Verified remains {formatNaira(resp.verifiedAmount)}.
-                    </span>
-                  </div>
-                )}
+                  );
+                })()}
 
                 {/* Explicit Read-Only Notice */}
                 <div

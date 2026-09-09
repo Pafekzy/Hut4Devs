@@ -5,7 +5,11 @@ import {
   PaymentProvider,
   ExternalPaymentProposal,
 } from '../domain/payments';
-import { BmoniPaymentProvider } from '../server/payments/bmoniProvider';
+import {
+  BmoniPaymentProvider,
+  mapBmoniProposalResponse,
+  mapIntentToBmoniRequest,
+} from '../server/payments/bmoniProvider';
 import { FakePaymentProvider } from '../server/payments/fakeProvider';
 import { handleCreateProposal } from '../server/payments/serverHandler';
 import {
@@ -31,10 +35,10 @@ describe('H4D-FUNC-005: BMONI Payment Provider Boundary & Real Proposal Creation
     createdAt: new Date().toISOString(),
   };
 
-  // 1. PaymentProvider Abstraction & Contract
-  it('1. adheres to the provider-independent PaymentProvider interface', async () => {
+  // 1. PaymentProvider Abstraction & Contract (FakePaymentProvider)
+  it('1. adheres to the provider-independent PaymentProvider interface and explicitly marks simulation', async () => {
     const fakeProvider: PaymentProvider = new FakePaymentProvider();
-    expect(fakeProvider.name).toBe('BMONI');
+    expect(fakeProvider.name).toBe('SIMULATED');
 
     const result = await fakeProvider.createProposal({
       intentId: sampleIntent.id,
@@ -45,10 +49,11 @@ describe('H4D-FUNC-005: BMONI Payment Provider Boundary & Real Proposal Creation
 
     expect(result.success).toBe(true);
     expect(result.proposal).toBeDefined();
-    expect(result.proposal?.provider).toBe('BMONI');
-    expect(result.proposal?.providerStatus).toBe('Pending Approval');
+    expect(result.proposal?.provider).toBe('SIMULATED');
+    expect(result.proposal?.providerStatus).toBe('Simulated');
+    expect(result.proposal?.isSimulated).toBe(true);
     expect(result.proposal?.paymentIntentId).toBe(sampleIntent.id);
-    expect(result.proposal?.providerProposalId).toContain('bmoni-prop-');
+    expect(result.proposal?.providerProposalId).toContain('sim-prop-');
   });
 
   // 2. Server Handler Validation & Security Boundary
@@ -99,8 +104,9 @@ describe('H4D-FUNC-005: BMONI Payment Provider Boundary & Real Proposal Creation
     expect(res.body.success).toBe(true);
     expect(res.body.proposal).toBeDefined();
     expect(res.body.proposal?.paymentIntentId).toBe(sampleIntent.id);
-    expect(res.body.proposal?.provider).toBe('BMONI');
-    expect(res.body.proposal?.providerStatus).toBe('Pending Approval');
+    expect(res.body.proposal?.provider).toBe('SIMULATED');
+    expect(res.body.proposal?.providerStatus).toBe('Simulated');
+    expect(res.body.proposal?.isSimulated).toBe(true);
   });
 
   // 5. Invariant: Creating proposal MUST NOT change responsibility balances or status
@@ -135,10 +141,9 @@ describe('H4D-FUNC-005: BMONI Payment Provider Boundary & Real Proposal Creation
     expect(original.status).toBe(ResponsibilityStatus.OUTSTANDING);
   });
 
-  // 6. UI: FulfilmentFlow displays "Continue with BMONI" and reaches "PAYMENT PREPARATION"
-  it('6. displays "Continue with BMONI" on prepared step and shows PAYMENT PREPARATION proposal view', async () => {
-    // Mock global fetch for the client service
-    const mockProposal: ExternalPaymentProposal = {
+  // 6. UI: FulfilmentFlow displays "Continue with BMONI" and reaches "PAYMENT PREPARATION" (REAL BMONI)
+  it('6. displays real BMONI proposal created UI when actual BMONI response confirms creation', async () => {
+    const realBmoniProposal: ExternalPaymentProposal = {
       id: 'prop-mock-001',
       paymentIntentId: sampleIntent.id,
       responsibilityId: DEMO_ACCOMMODATION_RESPONSIBILITY.id,
@@ -148,14 +153,15 @@ describe('H4D-FUNC-005: BMONI Payment Provider Boundary & Real Proposal Creation
       currency: 'NGN',
       providerStatus: 'Pending Approval',
       createdAt: new Date().toISOString(),
+      isSimulated: false,
     };
 
     const fetchSpy = vi.spyOn(globalThis, 'fetch').mockResolvedValueOnce({
       ok: true,
-      status: 201,
+      status: 200,
       json: async () => ({
         success: true,
-        proposal: mockProposal,
+        proposal: realBmoniProposal,
       }),
     } as Response);
 
@@ -188,8 +194,7 @@ describe('H4D-FUNC-005: BMONI Payment Provider Boundary & Real Proposal Creation
       expect(screen.getByRole('heading', { name: /payment preparation/i })).toBeInTheDocument();
     });
 
-    // Verify details on the proposal screen
-    expect(screen.getByText(/hut4devs intent:/i)).toBeInTheDocument();
+    // Real BMONI UI assertions
     expect(screen.getByText(/bmoni proposal:/i)).toBeInTheDocument();
     expect(screen.getByText(/provider status:/i)).toBeInTheDocument();
     expect(screen.getByText('Pending Approval')).toBeInTheDocument();
@@ -197,12 +202,72 @@ describe('H4D-FUNC-005: BMONI Payment Provider Boundary & Real Proposal Creation
     expect(screen.getByText(/your accommodation responsibility remains unverified\./i)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /back to responsibility/i })).toBeInTheDocument();
 
-    expect(onProposalCreated).toHaveBeenCalledWith(mockProposal);
+    // Must NOT show simulated text
+    expect(screen.queryByText(/no request was sent to bmoni/i)).not.toBeInTheDocument();
+
+    expect(onProposalCreated).toHaveBeenCalledWith(realBmoniProposal);
     fetchSpy.mockRestore();
   });
 
-  // 7. UI: Displays credentials notice if real BMONI credentials are not provided
-  it('7. displays BMONI credentials notice when external API credentials are required', async () => {
+  // 7. UI: FakePaymentProvider MUST visibly show SIMULATED PROVIDER and never appear as real BMONI
+  it('7. FakePaymentProvider visibly shows SIMULATED PROVIDER and "No request was sent to BMONI"', async () => {
+    const fakeProposal: ExternalPaymentProposal = {
+      id: 'sim-mock-001',
+      paymentIntentId: sampleIntent.id,
+      responsibilityId: DEMO_ACCOMMODATION_RESPONSIBILITY.id,
+      provider: 'SIMULATED',
+      providerProposalId: 'sim-prop-888',
+      amount: 66000,
+      currency: 'NGN',
+      providerStatus: 'Simulated',
+      createdAt: new Date().toISOString(),
+      isSimulated: true,
+    };
+
+    const fetchSpy = vi.spyOn(globalThis, 'fetch').mockResolvedValueOnce({
+      ok: true,
+      status: 200,
+      json: async () => ({
+        success: true,
+        proposal: fakeProposal,
+      }),
+    } as Response);
+
+    render(
+      <FulfilmentFlow
+        responsibility={DEMO_ACCOMMODATION_RESPONSIBILITY}
+        isDark={false}
+        onClose={() => {}}
+        onIntentPrepared={() => {}}
+      />
+    );
+
+    // Advance to prepared step
+    fireEvent.click(screen.getByRole('button', { name: /continue to review/i }));
+    fireEvent.click(screen.getByRole('button', { name: /confirm preparation/i }));
+
+    // Click Continue with BMONI
+    fireEvent.click(screen.getByRole('button', { name: /continue with bmoni/i }));
+
+    // Wait for "PAYMENT PREPARATION" screen
+    await waitFor(() => {
+      expect(screen.getByRole('heading', { name: /payment preparation/i })).toBeInTheDocument();
+    });
+
+    // Required simulation markers
+    expect(screen.getByText('SIMULATED PROVIDER')).toBeInTheDocument();
+    expect(screen.getByText('Proposal:')).toBeInTheDocument();
+    expect(screen.getAllByText('Simulated').length).toBeGreaterThanOrEqual(1);
+    expect(screen.getByText('No request was sent to BMONI.')).toBeInTheDocument();
+
+    // Must NOT claim BMONI Proposal: Created
+    expect(screen.queryByText(/bmoni proposal:/i)).not.toBeInTheDocument();
+
+    fetchSpy.mockRestore();
+  });
+
+  // 8. UI: Displays credentials notice if real BMONI credentials are not provided
+  it('8. displays BMONI credentials notice when external API credentials are required', async () => {
     const fetchSpy = vi.spyOn(globalThis, 'fetch').mockResolvedValueOnce({
       ok: false,
       status: 503,
@@ -237,8 +302,8 @@ describe('H4D-FUNC-005: BMONI Payment Provider Boundary & Real Proposal Creation
     fetchSpy.mockRestore();
   });
 
-  // 8. Admin View: Shows proposal status visually separate from Verified: ₦0
-  it('8. Accommodation Admin View displays pending proposal visually separate from verified balance', () => {
+  // 9. Admin View: Shows proposal status visually separate from Verified: ₦0
+  it('9. Accommodation Admin View displays pending proposal visually separate from verified balance', () => {
     const proposal: ExternalPaymentProposal = {
       id: 'prop-admin-01',
       paymentIntentId: sampleIntent.id,
@@ -249,6 +314,7 @@ describe('H4D-FUNC-005: BMONI Payment Provider Boundary & Real Proposal Creation
       currency: 'NGN',
       providerStatus: 'Pending Approval',
       createdAt: new Date().toISOString(),
+      isSimulated: false,
     };
 
     render(
@@ -269,8 +335,38 @@ describe('H4D-FUNC-005: BMONI Payment Provider Boundary & Real Proposal Creation
     expect(screen.getByText('₦66,000', { selector: 'p.font-bold' })).toBeInTheDocument();
 
     // Visually separate proposal status
-    expect(screen.getByText(/payment preparation:/i)).toBeInTheDocument();
+    expect(screen.getByText(/bmoni proposal:/i)).toBeInTheDocument();
     expect(screen.getByText('Pending Approval')).toBeInTheDocument();
     expect(screen.getByText(/\* unverified\. verified remains ₦0\./i)).toBeInTheDocument();
+  });
+
+  // 10. Status Mapping Fidelity: BMONI adapter preserves provider's actual status without inventing names
+  it('10. BMONI adapter preserves provider actual proposal status directly without inventing names', () => {
+    const req = {
+      intentId: 'intent-999',
+      responsibilityId: 'resp-999',
+      amount: 66000,
+      currency: 'NGN',
+    };
+
+    // Test with raw status from provider
+    const mapped1 = mapBmoniProposalResponse(
+      { status: 'pending_approval', id: 'bmoni-001' },
+      req
+    );
+    expect(mapped1.providerStatus).toBe('pending_approval');
+    expect(mapped1.providerProposalId).toBe('bmoni-001');
+
+    const mapped2 = mapBmoniProposalResponse(
+      { providerStatus: 'AWAITING_AUTHORIZATION', id: 'bmoni-002' },
+      req
+    );
+    expect(mapped2.providerStatus).toBe('AWAITING_AUTHORIZATION');
+
+    const mapped3 = mapBmoniProposalResponse(
+      { status: 'Pending Approval', id: 'bmoni-003' },
+      req
+    );
+    expect(mapped3.providerStatus).toBe('Pending Approval');
   });
 });

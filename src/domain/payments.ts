@@ -6,7 +6,7 @@
  * accommodation amounts or responsibility status.
  */
 
-export type PaymentProviderType = 'BMONI';
+export type PaymentProviderType = 'BMONI' | 'SIMULATED';
 
 export interface ExternalPaymentProposal {
   id: string;
@@ -16,8 +16,9 @@ export interface ExternalPaymentProposal {
   currency?: string;
   provider: PaymentProviderType;
   providerProposalId: string;
-  providerStatus: string; // e.g. 'Pending Approval'
+  providerStatus: string; // e.g. 'Pending Approval' or 'Simulated'
   createdAt: string;
+  isSimulated?: boolean;
 }
 
 export interface CreateProposalRequest {

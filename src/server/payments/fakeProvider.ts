@@ -6,11 +6,12 @@ import {
 } from '../../domain/payments';
 
 /**
- * Fake/Mock Payment Provider for automated testing and fallback preview.
- * Simulates a successful BMONI proposal creation without network calls.
+ * Fake/Mock Payment Provider for automated testing and development preview.
+ * Simulates a proposal creation without network calls or real BMONI requests.
+ * Visibly distinguishes simulated outcomes from real BMONI provider responses.
  */
 export class FakePaymentProvider implements PaymentProvider {
-  public readonly name = 'BMONI';
+  public readonly name = 'SIMULATED';
   public shouldFail: boolean = false;
   public lastRequest?: CreateProposalRequest;
 
@@ -24,20 +25,21 @@ export class FakePaymentProvider implements PaymentProvider {
     if (this.shouldFail) {
       return {
         success: false,
-        error: "We couldn't prepare this payment with BMONI yet. Your accommodation balance has not changed.",
+        error: "We couldn't prepare this simulated payment. Your accommodation balance has not changed.",
       };
     }
 
     const proposal: ExternalPaymentProposal = {
-      id: `ext-prop-${Date.now()}`,
+      id: `sim-prop-${Date.now()}`,
       paymentIntentId: request.intentId,
       responsibilityId: request.responsibilityId,
       amount: request.amount,
       currency: request.currency || 'NGN',
-      provider: 'BMONI',
-      providerProposalId: `bmoni-prop-${Math.floor(100000 + Math.random() * 900000)}`,
-      providerStatus: 'Pending Approval',
+      provider: 'SIMULATED',
+      providerProposalId: `sim-prop-${Math.floor(100000 + Math.random() * 900000)}`,
+      providerStatus: 'Simulated',
       createdAt: new Date().toISOString(),
+      isSimulated: true,
     };
 
     return {

@@ -12,9 +12,15 @@ export interface ServerHandlerResponse {
 }
 
 /**
- * Server-side API handler for /api/payments/proposal
+ * Isolated Server-Side Boundary Handler for /api/payments/proposal
  *
- * Enforces server boundary: browser client never sees BMONI API keys.
+ * RUNTIME EXECUTION NOTE:
+ * Current external execution capability is DEVELOPMENT ONLY (mounted via Vite dev server plugin).
+ * Production build (`vite build`) produces static client bundles without a standalone Node backend.
+ * This handler is decoupled from any specific web framework (Express, Fastify, AWS Lambda, Cloud Run)
+ * so it can be mounted into a production backend runtime when provisioned.
+ *
+ * Invariant: Never alters accommodation balances or status. Browser client never sees BMONI credentials.
  */
 export async function handleCreateProposal(
   body: any,

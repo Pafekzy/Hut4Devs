@@ -749,35 +749,79 @@ export const FulfilmentFlow: React.FC<FulfilmentFlowProps> = ({
                 </span>
               </div>
 
-              {/* BMONI Proposal */}
-              <div className="flex justify-between items-center">
-                <span style={{ color: isDark ? '#A67B54' : '#8A5D3B' }}>BMONI Proposal:</span>
-                <span
-                  className="px-2.5 py-0.5 rounded-full text-xs font-semibold uppercase tracking-wider font-mono border"
-                  style={{
-                    backgroundColor: isDark ? '#382210' : '#EFF6FF',
-                    borderColor: isDark ? '#5C381A' : '#BFDBFE',
-                    color: isDark ? '#E2AB5D' : '#1D4ED8',
-                  }}
-                >
-                  Created
-                </span>
-              </div>
+              {/* Conditional Provider Proposal Section */}
+              {createdProposal?.isSimulated || createdProposal?.provider === 'SIMULATED' ? (
+                <>
+                  {/* SIMULATED PROVIDER Header */}
+                  <div className="flex justify-between items-center border-t pt-3" style={{ borderColor: isDark ? '#4B2710' : '#EAE0D0' }}>
+                    <span className="font-bold text-xs uppercase tracking-wider" style={{ color: isDark ? '#E2AB5D' : '#B77620' }}>
+                      SIMULATED PROVIDER
+                    </span>
+                    <span
+                      className="px-2.5 py-0.5 rounded-full text-xs font-semibold uppercase tracking-wider font-mono border"
+                      style={{
+                        backgroundColor: isDark ? '#3A2810' : '#FEF3C7',
+                        borderColor: isDark ? '#6B4C1B' : '#FCD34D',
+                        color: isDark ? '#F59E0B' : '#B45309',
+                      }}
+                    >
+                      Simulated
+                    </span>
+                  </div>
 
-              {/* Provider Status */}
-              <div className="flex justify-between items-center border-t pt-3" style={{ borderColor: isDark ? '#4B2710' : '#EAE0D0' }}>
-                <span style={{ color: isDark ? '#A67B54' : '#8A5D3B' }}>Provider Status:</span>
-                <span
-                  className="px-2.5 py-0.5 rounded-full text-xs font-semibold font-mono border"
-                  style={{
-                    backgroundColor: isDark ? '#3A2810' : '#FEF3C7',
-                    borderColor: isDark ? '#6B4C1B' : '#FCD34D',
-                    color: isDark ? '#F59E0B' : '#B45309',
-                  }}
-                >
-                  Pending Approval
-                </span>
-              </div>
+                  {/* Proposal: Simulated */}
+                  <div className="flex justify-between items-center">
+                    <span style={{ color: isDark ? '#A67B54' : '#8A5D3B' }}>Proposal:</span>
+                    <span className="font-semibold text-xs font-mono" style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}>
+                      Simulated
+                    </span>
+                  </div>
+
+                  {/* Visibly state: No request was sent to BMONI. */}
+                  <div
+                    className="p-3 rounded-lg text-xs font-medium border"
+                    style={{
+                      backgroundColor: isDark ? '#261407' : '#FFF9EE',
+                      borderColor: isDark ? '#4B2710' : '#E7D6C1',
+                      color: isDark ? '#D9C4AC' : '#704728',
+                    }}
+                  >
+                    No request was sent to BMONI.
+                  </div>
+                </>
+              ) : (
+                <>
+                  {/* BMONI Proposal: Created */}
+                  <div className="flex justify-between items-center">
+                    <span style={{ color: isDark ? '#A67B54' : '#8A5D3B' }}>BMONI Proposal:</span>
+                    <span
+                      className="px-2.5 py-0.5 rounded-full text-xs font-semibold uppercase tracking-wider font-mono border"
+                      style={{
+                        backgroundColor: isDark ? '#382210' : '#EFF6FF',
+                        borderColor: isDark ? '#5C381A' : '#BFDBFE',
+                        color: isDark ? '#E2AB5D' : '#1D4ED8',
+                      }}
+                    >
+                      Created
+                    </span>
+                  </div>
+
+                  {/* Provider Status: Pending Approval */}
+                  <div className="flex justify-between items-center border-t pt-3" style={{ borderColor: isDark ? '#4B2710' : '#EAE0D0' }}>
+                    <span style={{ color: isDark ? '#A67B54' : '#8A5D3B' }}>Provider Status:</span>
+                    <span
+                      className="px-2.5 py-0.5 rounded-full text-xs font-semibold font-mono border"
+                      style={{
+                        backgroundColor: isDark ? '#3A2810' : '#FEF3C7',
+                        borderColor: isDark ? '#6B4C1B' : '#FCD34D',
+                        color: isDark ? '#F59E0B' : '#B45309',
+                      }}
+                    >
+                      {createdProposal?.providerStatus || 'Pending Approval'}
+                    </span>
+                  </div>
+                </>
+              )}
 
               {createdProposal?.providerProposalId && (
                 <div className="flex justify-between items-center text-xs pt-1">

@@ -33,25 +33,27 @@ export function mapIntentToBmoniRequest(request: CreateProposalRequest): {
 
 /**
  * Pure mapping function from raw BMONI provider response to Hut4Devs ExternalPaymentProposal.
+ * Preserves the provider's actual proposal status into Hut4Devs without inventing status names.
  */
 export function mapBmoniProposalResponse(
   rawResponse: Record<string, any>,
   request: CreateProposalRequest
 ): ExternalPaymentProposal {
-  // Provider status normalization
-  const rawStatus = rawResponse.status || rawResponse.providerStatus || 'PENDING_APPROVAL';
-  let normalizedStatus = 'Pending Approval';
-  if (typeof rawStatus === 'string') {
-    const upper = rawStatus.toUpperCase();
-    if (upper.includes('PENDING') || upper.includes('APPROVAL')) {
-      normalizedStatus = 'Pending Approval';
-    } else {
-      normalizedStatus = rawStatus;
-    }
-  }
+  // Directly preserve the provider's actual proposal status without inventing status names
+  const actualProviderStatus = String(
+    rawResponse.status ??
+    rawResponse.providerStatus ??
+    rawResponse.proposalStatus ??
+    rawResponse.state ??
+    'Pending Approval'
+  );
 
   const providerProposalId =
-    rawResponse.id || rawResponse.proposalId || rawResponse.proposal_id || `bmoni-prop-${Date.now()}`;
+    rawResponse.proposalId ||
+    rawResponse.providerProposalId ||
+    rawResponse.id ||
+    rawResponse.proposal_id ||
+    `bmoni-prop-${Date.now()}`;
 
   return {
     id: `ext-prop-${Date.now()}`,
@@ -61,8 +63,9 @@ export function mapBmoniProposalResponse(
     currency: request.currency || 'NGN',
     provider: 'BMONI',
     providerProposalId: String(providerProposalId),
-    providerStatus: normalizedStatus,
+    providerStatus: actualProviderStatus,
     createdAt: new Date().toISOString(),
+    isSimulated: false,
   };
 }
 

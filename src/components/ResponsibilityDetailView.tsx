@@ -333,7 +333,7 @@ export const ResponsibilityDetailView: React.FC<ResponsibilityDetailViewProps> =
             </div>
           )}
 
-          {/* BMONI Proposal Created Card (if exists) */}
+          {/* Proposal Summary Card (if exists) */}
           {latestProposal && (
             <div
               id="bmoni-proposal-summary"
@@ -343,24 +343,52 @@ export const ResponsibilityDetailView: React.FC<ResponsibilityDetailViewProps> =
                 borderColor: isDark ? '#4B2710' : '#E7D6C1',
               }}
             >
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: isDark ? '#C88D3A' : '#B77620' }}>
-                  BMONI Transfer Proposal
-                </span>
-                <span
-                  className="px-2.5 py-0.5 rounded-full text-xs font-semibold font-mono border"
-                  style={{
-                    backgroundColor: isDark ? '#3A2810' : '#FEF3C7',
-                    borderColor: isDark ? '#6B4C1B' : '#FCD34D',
-                    color: isDark ? '#F59E0B' : '#B45309',
-                  }}
-                >
-                  Pending Approval
-                </span>
-              </div>
-              <p className="text-xs text-stone-500 leading-relaxed">
-                BMONI proposal recorded ({latestProposal.providerProposalId}). No money has moved yet. Your accommodation responsibility remains unverified.
-              </p>
+              {latestProposal.isSimulated || latestProposal.provider === 'SIMULATED' ? (
+                <>
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold uppercase tracking-wider" style={{ color: isDark ? '#E2AB5D' : '#B77620' }}>
+                      SIMULATED PROVIDER
+                    </span>
+                    <span
+                      className="px-2.5 py-0.5 rounded-full text-xs font-semibold font-mono border"
+                      style={{
+                        backgroundColor: isDark ? '#3A2810' : '#FEF3C7',
+                        borderColor: isDark ? '#6B4C1B' : '#FCD34D',
+                        color: isDark ? '#F59E0B' : '#B45309',
+                      }}
+                    >
+                      Proposal: Simulated
+                    </span>
+                  </div>
+                  <p className="text-xs font-medium" style={{ color: isDark ? '#E5D3BA' : '#5A2D0C' }}>
+                    No request was sent to BMONI.
+                  </p>
+                  <p className="text-xs text-stone-500 leading-relaxed">
+                    No money has moved yet. Your accommodation responsibility remains unverified.
+                  </p>
+                </>
+              ) : (
+                <>
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: isDark ? '#C88D3A' : '#B77620' }}>
+                      BMONI Proposal: Created
+                    </span>
+                    <span
+                      className="px-2.5 py-0.5 rounded-full text-xs font-semibold font-mono border"
+                      style={{
+                        backgroundColor: isDark ? '#3A2810' : '#FEF3C7',
+                        borderColor: isDark ? '#6B4C1B' : '#FCD34D',
+                        color: isDark ? '#F59E0B' : '#B45309',
+                      }}
+                    >
+                      Provider Status: {latestProposal.providerStatus || 'Pending Approval'}
+                    </span>
+                  </div>
+                  <p className="text-xs text-stone-500 leading-relaxed">
+                    BMONI proposal recorded ({latestProposal.providerProposalId}). No money has moved yet. Your accommodation responsibility remains unverified.
+                  </p>
+                </>
+              )}
             </div>
           )}
 
