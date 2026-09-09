@@ -4,6 +4,7 @@ import { MemberHomeView } from './components/MemberHomeView';
 import { ResponsibilityDetailView } from './components/ResponsibilityDetailView';
 import { AccommodationAdminView } from './components/AccommodationAdminView';
 import { DEMO_ACCOMMODATION_RESPONSIBILITY } from './data/demoAccommodation';
+import { AccommodationPaymentIntent } from './domain/accommodation';
 
 type AppView = 'landing' | 'member-home' | 'responsibility-detail' | 'accommodation-admin';
 type AppTheme = 'light' | 'dark';
@@ -24,6 +25,13 @@ export default function App() {
 
   // Active view: 'landing' | 'member-home' | 'responsibility-detail'
   const [view, setView] = useState<AppView>('landing');
+
+  // Prepared payment intents (H4D-FUNC-004) - Invariant: does not modify responsibility
+  const [preparedIntents, setPreparedIntents] = useState<AccommodationPaymentIntent[]>([]);
+
+  const handleIntentPrepared = (newIntent: AccommodationPaymentIntent) => {
+    setPreparedIntents((prev) => [...prev, newIntent]);
+  };
 
   // Synchronize document theme class and body background
   useEffect(() => {
@@ -77,6 +85,8 @@ export default function App() {
           isDark={isDark}
           onToggleTheme={toggleTheme}
           onBackToHome={() => setView('member-home')}
+          preparedIntents={preparedIntents}
+          onIntentPrepared={handleIntentPrepared}
         />
       )}
 

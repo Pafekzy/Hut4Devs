@@ -1,19 +1,24 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   AccommodationResponsibility,
+  AccommodationPaymentIntent,
+  FulfilmentType,
   calculateRemainingAmount,
   formatNaira,
   getStatusLabel,
 } from '../domain/accommodation';
 import { Hut4DevsLogo } from './Hut4DevsLogo';
 import { ThemeToggle } from './ThemeToggle';
-import { ArrowLeft, Building2, MapPin, Layers, DoorClosed } from 'lucide-react';
+import { ArrowLeft, Building2, MapPin, Layers, DoorClosed, Sparkles } from 'lucide-react';
+import { FulfilmentFlow } from './FulfilmentFlow';
 
 interface ResponsibilityDetailViewProps {
   responsibility: AccommodationResponsibility;
   isDark: boolean;
   onToggleTheme: () => void;
   onBackToHome: () => void;
+  preparedIntents?: AccommodationPaymentIntent[];
+  onIntentPrepared?: (intent: AccommodationPaymentIntent) => void;
 }
 
 export const ResponsibilityDetailView: React.FC<ResponsibilityDetailViewProps> = ({
@@ -21,9 +26,16 @@ export const ResponsibilityDetailView: React.FC<ResponsibilityDetailViewProps> =
   isDark,
   onToggleTheme,
   onBackToHome,
+  preparedIntents = [],
+  onIntentPrepared,
 }) => {
+  const [isFulfilmentOpen, setIsFulfilmentOpen] = useState(false);
   const remainingAmount = calculateRemainingAmount(responsibility);
   const statusLabel = getStatusLabel(responsibility.status);
+
+  const handleIntentPrepared = (intent: AccommodationPaymentIntent) => {
+    onIntentPrepared?.(intent);
+  };
 
   return (
     <div
@@ -267,28 +279,97 @@ export const ResponsibilityDetailView: React.FC<ResponsibilityDetailViewProps> =
             </div>
           </div>
 
-          {/* Action Footer: [ Back to Home ] */}
-          <div className="pt-6 border-t flex items-center justify-between"
+          {/* Prepared Fulfilment Intent Display (if exists) */}
+          {preparedIntents && preparedIntents.length > 0 && (
+            <div
+              id="prepared-intent-summary"
+              className="mb-8 p-5 rounded-xl border space-y-2.5 transition-colors"
+              style={{
+                backgroundColor: isDark ? '#2F1707' : '#F7F1E7',
+                borderColor: isDark ? '#4B2710' : '#E7D6C1',
+              }}
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Sparkles className="w-4 h-4 text-[#C88D3A]" aria-hidden="true" />
+                  <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: isDark ? '#C88D3A' : '#B77620' }}>
+                    Prepared Intent
+                  </span>
+                </div>
+                <span
+                  className="px-2.5 py-0.5 rounded-full text-xs font-semibold uppercase tracking-wider font-mono"
+                  style={{
+                    backgroundColor: isDark ? '#4B2710' : '#FFF9EE',
+                    color: isDark ? '#C88D3A' : '#B77620',
+                    border: `1px solid ${isDark ? '#623416' : '#EAE0D0'}`,
+                  }}
+                >
+                  Prepared — Not Verified
+                </span>
+              </div>
+              <p className="text-sm">
+                Amount:{' '}
+                <strong className="font-mono text-base font-bold" style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}>
+                  {formatNaira(preparedIntents[preparedIntents.length - 1].amount)}
+                </strong>{' '}
+                <span className="text-xs text-stone-500">
+                  ({preparedIntents[preparedIntents.length - 1].fulfilmentType === FulfilmentType.FULL ? 'Full' : 'Partial'})
+                </span>
+              </p>
+              <p className="text-xs text-stone-500 leading-relaxed">
+                Payment execution is not connected in this build. Verified accommodation balance remains unchanged until execution and verification.
+              </p>
+            </div>
+          )}
+
+          {/* Action Footer: [ Fulfil Responsibility ] and [ Back to Home ] */}
+          <div className="pt-6 border-t flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4"
             style={{ borderColor: isDark ? '#4B2710' : '#EAE0D0' }}
           >
+            <div className="flex items-center gap-3">
+              <button
+                type="button"
+                id="fulfil-responsibility-btn"
+                onClick={() => setIsFulfilmentOpen(true)}
+                className={`inline-flex items-center justify-center gap-2 px-6 py-3 min-h-[44px] rounded-xl text-sm font-semibold transition-all duration-150 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 ${
+                  isDark
+                    ? 'bg-[#C88D3A] text-[#2F1707] hover:bg-[#DDA250] focus-visible:ring-[#C88D3A] focus-visible:ring-offset-[#3E200C]'
+                    : 'bg-[#5A2D0C] text-[#FFF9EE] hover:bg-[#432108] focus-visible:ring-[#5A2D0C] focus-visible:ring-offset-[#FFF9EE]'
+                }`}
+              >
+                <span>Fulfil Responsibility</span>
+              </button>
+
+              <button
+                type="button"
+                id="back-to-home-main-btn"
+                onClick={onBackToHome}
+                className={`inline-flex items-center justify-center gap-2 px-5 py-3 min-h-[44px] rounded-xl text-sm font-medium transition-all duration-150 cursor-pointer border ${
+                  isDark
+                    ? 'border-[#623416] text-[#E5D3BA] hover:bg-[#2F1707]'
+                    : 'border-[#EAE0D0] text-[#6D4223] hover:bg-[#F2E8D8]'
+                }`}
+              >
+                <ArrowLeft className="w-4 h-4 shrink-0" aria-hidden="true" />
+                <span>Back to Home</span>
+              </button>
+            </div>
+
             <p className="text-xs text-stone-500 italic">
-              * Payment tracking and verification will be enabled in subsequent functional sequences.
+              * Payment intent preparation only. No money moves in this sequence.
             </p>
-            <button
-              type="button"
-              id="back-to-home-main-btn"
-              onClick={onBackToHome}
-              className={`inline-flex items-center gap-2 px-6 py-3 min-h-[44px] rounded-xl text-sm font-medium transition-all duration-150 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 ${
-                isDark
-                  ? 'bg-[#C88D3A] text-[#2F1707] hover:bg-[#DDA250] focus-visible:ring-[#C88D3A] focus-visible:ring-offset-[#3E200C]'
-                  : 'bg-[#5A2D0C] text-[#FFF9EE] hover:bg-[#432108] focus-visible:ring-[#5A2D0C] focus-visible:ring-offset-[#FFF9EE]'
-              }`}
-            >
-              <ArrowLeft className="w-4 h-4 shrink-0" aria-hidden="true" />
-              <span>Back to Home</span>
-            </button>
           </div>
         </article>
+
+        {/* Focused Fulfilment Flow Modal */}
+        {isFulfilmentOpen && (
+          <FulfilmentFlow
+            responsibility={responsibility}
+            isDark={isDark}
+            onClose={() => setIsFulfilmentOpen(false)}
+            onIntentPrepared={handleIntentPrepared}
+          />
+        )}
       </main>
 
       {/* Footer */}

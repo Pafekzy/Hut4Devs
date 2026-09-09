@@ -139,3 +139,57 @@ export function deriveAccommodationOperationalSummary(
     outstandingResponsibilitiesCount,
   };
 }
+
+/**
+ * Accommodation Fulfilment Intent Types
+ */
+export enum FulfilmentType {
+  FULL = 'FULL',
+  PARTIAL = 'PARTIAL',
+}
+
+export enum PaymentIntentStatus {
+  PREPARED = 'PREPARED',
+}
+
+export interface AccommodationPaymentIntent {
+  id: string;
+  responsibilityId: string;
+  amount: number;
+  fulfilmentType: FulfilmentType;
+  status: PaymentIntentStatus;
+  createdAt: string;
+}
+
+export interface ValidationResult {
+  valid: boolean;
+  error?: string;
+}
+
+/**
+ * Validates a proposed fulfilment amount against remaining responsibility
+ */
+export function validateFulfilmentAmount(
+  amount: number,
+  remainingAmount: number
+): ValidationResult {
+  if (typeof amount !== 'number' || isNaN(amount)) {
+    return {
+      valid: false,
+      error: `Enter an amount up to your remaining responsibility of ${formatNaira(remainingAmount)}.`,
+    };
+  }
+  if (amount <= 0) {
+    return {
+      valid: false,
+      error: `Enter an amount up to your remaining responsibility of ${formatNaira(remainingAmount)}.`,
+    };
+  }
+  if (amount > remainingAmount) {
+    return {
+      valid: false,
+      error: `Enter an amount up to your remaining responsibility of ${formatNaira(remainingAmount)}.`,
+    };
+  }
+  return { valid: true };
+}
