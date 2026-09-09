@@ -72,6 +72,35 @@ CREATE INDEX idx_outbox_events_published_at ON outbox_events(published_at);
 CREATE INDEX idx_outbox_events_aggregate ON outbox_events(aggregate_type, aggregate_id);
 `;
 
+export const AUTH_MEMBERS_ROLES_SQL = `
+-- 5. Members, Roles, and Sessions (H4D-FUNC-011)
+CREATE TABLE members (
+  id VARCHAR(255) PRIMARY KEY,
+  display_name VARCHAR(255) NOT NULL,
+  email VARCHAR(255),
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE member_roles (
+  id VARCHAR(255) PRIMARY KEY,
+  member_id VARCHAR(255) NOT NULL REFERENCES members(id) ON DELETE CASCADE,
+  role VARCHAR(50) NOT NULL,
+  granted_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  CONSTRAINT uq_member_role UNIQUE (member_id, role)
+);
+
+CREATE TABLE sessions (
+  id VARCHAR(255) PRIMARY KEY,
+  token VARCHAR(255) UNIQUE NOT NULL,
+  member_id VARCHAR(255) NOT NULL REFERENCES members(id) ON DELETE CASCADE,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  expires_at TIMESTAMPTZ NOT NULL
+);
+
+CREATE INDEX idx_sessions_token ON sessions(token);
+CREATE INDEX idx_member_roles_member ON member_roles(member_id);
+`;
+
 export const MIGRATIONS = [
   {
     version: '001_initial_schema',
@@ -81,6 +110,10 @@ export const MIGRATIONS = [
     version: '002_outbox_events',
     sql: OUTBOX_EVENTS_SQL,
   },
+  {
+    version: '003_auth_members_roles',
+    sql: AUTH_MEMBERS_ROLES_SQL,
+  },
 ];
 
 export const REQUIRED_TABLES = [
@@ -89,6 +122,9 @@ export const REQUIRED_TABLES = [
   'payment_intents',
   'external_payment_proposals',
   'outbox_events',
+  'members',
+  'member_roles',
+  'sessions',
 ];
 
 /**

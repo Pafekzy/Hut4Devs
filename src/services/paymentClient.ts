@@ -136,14 +136,16 @@ export interface AdminStreamEvent {
 
 /**
  * Subscribes to the real-time SSE stream for Accommodation Admin operational updates.
- * (H4D-FUNC-010)
+ * (H4D-FUNC-010 & H4D-FUNC-011)
  *
+ * Enforces server-side authorization: requires ACCOMMODATION_ADMIN session token.
  * Invariant: Real-time stream is a convenience notification layer;
  * PostgreSQL remains the sole authoritative source of truth.
  */
 export function subscribeToAdminStream(
   onEvent: (event: AdminStreamEvent) => void,
-  onStatusChange?: (status: 'connecting' | 'connected' | 'error' | 'disconnected') => void
+  onStatusChange?: (status: 'connecting' | 'connected' | 'error' | 'disconnected') => void,
+  sessionToken?: string | null
 ): () => void {
   if (typeof window === 'undefined' || typeof (window as any).EventSource === 'undefined') {
     onStatusChange?.('disconnected');
@@ -151,7 +153,12 @@ export function subscribeToAdminStream(
   }
 
   onStatusChange?.('connecting');
-  const eventSource = new window.EventSource('/api/accommodation/admin/stream');
+  const token = sessionToken || (typeof localStorage !== 'undefined' ? localStorage.getItem('h4d_session_token') : null);
+  const streamUrl = token
+    ? `/api/accommodation/admin/stream?token=${encodeURIComponent(token)}`
+    : '/api/accommodation/admin/stream';
+
+  const eventSource = new window.EventSource(streamUrl);
 
   eventSource.onopen = () => {
     onStatusChange?.('connected');

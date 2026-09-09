@@ -8,6 +8,14 @@ import { getAuthoritativeRepositories } from './src/server/db/connection';
 import { AccommodationPaymentIntent } from './src/domain/accommodation';
 import { DEMO_ACCOMMODATION_RESPONSIBILITY } from './src/data/demoAccommodation';
 import { OutboxPublisher, globalOutboxPublisher } from './src/server/realtime/outboxPublisher';
+import { MemberRole } from './src/domain/auth';
+import {
+  authenticateRequest,
+  requireRole,
+  createDevelopmentSession,
+  DEV_IDENTITIES,
+  extractSessionToken,
+} from './src/server/auth/authService';
 export { OutboxPublisher, globalOutboxPublisher };
 
 const MIME_TYPES: Record<string, string> = {
@@ -269,6 +277,7 @@ export async function handleSaveIntentRequest(
 /**
  * Request handler for GET /api/accommodation/outbox
  * Lists outbox records stored in PostgreSQL.
+ * Protected by ACCOMMODATION_ADMIN role authorization (H4D-FUNC-011).
  */
 export async function handleOutboxListRequest(
   req: http.IncomingMessage,
@@ -277,6 +286,16 @@ export async function handleOutboxListRequest(
 ): Promise<void> {
   try {
     const activeRepos = await resolveRepositories(repos);
+    const member = await authenticateRequest(req, activeRepos);
+    const auth = requireRole(member, MemberRole.ACCOMMODATION_ADMIN);
+    if (!auth.authorized) {
+      res.statusCode = auth.status;
+      res.setHeader('Content-Type', 'application/json; charset=utf-8');
+      res.setHeader('X-Content-Type-Options', 'nosniff');
+      res.end(JSON.stringify({ success: false, error: auth.error }));
+      return;
+    }
+
     const events = await activeRepos.outbox.listAll();
     res.statusCode = 200;
     res.setHeader('Content-Type', 'application/json; charset=utf-8');
@@ -292,6 +311,239 @@ export async function handleOutboxListRequest(
         error: err.message || 'Database error while reading outbox.',
       })
     );
+  }
+}
+
+/**
+ * Request handler for GET /api/accommodation/admin/stream (SSE)
+ * Protected by ACCOMMODATION_ADMIN role authorization (H4D-FUNC-011).
+ * Unauthenticated requests receive 401 Unauthorized.
+ * Unauthorized Fellow requests receive 403 Forbidden.
+ */
+export async function handleAdminStreamRequest(
+  req: http.IncomingMessage,
+  res: http.ServerResponse,
+  repos?: IHut4DevsRepositories,
+  publisher?: OutboxPublisher
+): Promise<void> {
+  try {
+    const activeRepos = await resolveRepositories(repos);
+    const member = await authenticateRequest(req, activeRepos);
+    const auth = requireRole(member, MemberRole.ACCOMMODATION_ADMIN);
+    if (!auth.authorized) {
+      res.statusCode = auth.status;
+      res.setHeader('Content-Type', 'application/json; charset=utf-8');
+      res.setHeader('X-Content-Type-Options', 'nosniff');
+      res.end(JSON.stringify({ success: false, error: auth.error }));
+      return;
+    }
+
+    const activePublisher = publisher || globalOutboxPublisher;
+    activePublisher.handleSseConnection(req, res);
+  } catch (err: any) {
+    res.statusCode = 500;
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.end(JSON.stringify({ success: false, error: err.message || 'Stream authorization error.' }));
+  }
+}
+
+/**
+ * Request handler for GET /api/accommodation/admin/overview
+ * Protected by ACCOMMODATION_ADMIN role authorization (H4D-FUNC-011).
+ */
+export async function handleAdminOverviewRequest(
+  req: http.IncomingMessage,
+  res: http.ServerResponse,
+  repos?: IHut4DevsRepositories
+): Promise<void> {
+  try {
+    const activeRepos = await resolveRepositories(repos);
+    const member = await authenticateRequest(req, activeRepos);
+    const auth = requireRole(member, MemberRole.ACCOMMODATION_ADMIN);
+    if (!auth.authorized) {
+      res.statusCode = auth.status;
+      res.setHeader('Content-Type', 'application/json; charset=utf-8');
+      res.setHeader('X-Content-Type-Options', 'nosniff');
+      res.end(JSON.stringify({ success: false, error: auth.error }));
+      return;
+    }
+
+    const responsibilities = await activeRepos.accommodation.listAll();
+    const preparedIntents = await activeRepos.intents.listAll();
+    const paymentProposals = await activeRepos.proposals.listAll();
+
+    res.statusCode = 200;
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.end(
+      JSON.stringify({
+        success: true,
+        responsibilities,
+        preparedIntents,
+        paymentProposals,
+      })
+    );
+  } catch (err: any) {
+    res.statusCode = 503;
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.end(
+      JSON.stringify({
+        success: false,
+        error: err.message || 'Database error while loading admin overview.',
+      })
+    );
+  }
+}
+
+/**
+ * Request handler for GET /api/auth/session
+ * Returns authenticated session member details, or 401 if unauthenticated.
+ */
+export async function handleGetSessionRequest(
+  req: http.IncomingMessage,
+  res: http.ServerResponse,
+  repos?: IHut4DevsRepositories
+): Promise<void> {
+  try {
+    const activeRepos = await resolveRepositories(repos);
+    const member = await authenticateRequest(req, activeRepos);
+    if (!member) {
+      res.statusCode = 401;
+      res.setHeader('Content-Type', 'application/json; charset=utf-8');
+      res.setHeader('X-Content-Type-Options', 'nosniff');
+      res.end(
+        JSON.stringify({
+          success: false,
+          error: 'Unauthenticated: No valid development session found.',
+          mode: 'DEVELOPMENT',
+        })
+      );
+      return;
+    }
+
+    res.statusCode = 200;
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.end(
+      JSON.stringify({
+        success: true,
+        member,
+        mode: 'DEVELOPMENT',
+      })
+    );
+  } catch (err: any) {
+    res.statusCode = 500;
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.end(JSON.stringify({ success: false, error: err.message || 'Session verification failed.' }));
+  }
+}
+
+/**
+ * Request handler for POST /api/auth/dev-session
+ * Establishes a server-recognized development session for Fellow or Admin.
+ */
+export async function handleDevSessionRequest(
+  req: http.IncomingMessage,
+  res: http.ServerResponse,
+  repos?: IHut4DevsRepositories
+): Promise<void> {
+  let bodyStr = '';
+  req.on('data', (chunk) => {
+    bodyStr += chunk;
+  });
+
+  req.on('end', async () => {
+    try {
+      const activeRepos = await resolveRepositories(repos);
+      let body: any = {};
+      try {
+        body = JSON.parse(bodyStr || '{}');
+      } catch {
+        // use default
+      }
+
+      const session = await createDevelopmentSession(activeRepos, body);
+      res.statusCode = 200;
+      res.setHeader('Content-Type', 'application/json; charset=utf-8');
+      res.setHeader('X-Content-Type-Options', 'nosniff');
+      res.setHeader(
+        'Set-Cookie',
+        `h4d_session=${encodeURIComponent(session.token)}; Path=/; HttpOnly; SameSite=Lax`
+      );
+      res.end(
+        JSON.stringify({
+          success: true,
+          token: session.token,
+          member: session.member,
+          mode: 'DEVELOPMENT',
+          notice:
+            'DEVELOPMENT AUTH: This session is strictly for local/preview development and does not represent production authentication.',
+        })
+      );
+    } catch (err: any) {
+      res.statusCode = 500;
+      res.setHeader('Content-Type', 'application/json; charset=utf-8');
+      res.setHeader('X-Content-Type-Options', 'nosniff');
+      res.end(
+        JSON.stringify({
+          success: false,
+          error: err.message || 'Could not establish development session.',
+        })
+      );
+    }
+  });
+}
+
+/**
+ * Request handler for GET /api/auth/dev-identities
+ */
+export function handleDevIdentitiesRequest(
+  req: http.IncomingMessage,
+  res: http.ServerResponse
+): void {
+  res.statusCode = 200;
+  res.setHeader('Content-Type', 'application/json; charset=utf-8');
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.end(
+    JSON.stringify({
+      success: true,
+      mode: 'DEVELOPMENT',
+      notice: 'DEVELOPMENT AUTH: Strictly for local/preview development.',
+      identities: DEV_IDENTITIES,
+    })
+  );
+}
+
+/**
+ * Request handler for POST /api/auth/logout
+ */
+export async function handleLogoutRequest(
+  req: http.IncomingMessage,
+  res: http.ServerResponse,
+  repos?: IHut4DevsRepositories
+): Promise<void> {
+  try {
+    const activeRepos = await resolveRepositories(repos);
+    const token = extractSessionToken(req);
+    if (token) {
+      await activeRepos.sessions.deleteByToken(token);
+    }
+    res.statusCode = 200;
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.setHeader(
+      'Set-Cookie',
+      'h4d_session=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT; HttpOnly; SameSite=Lax'
+    );
+    res.end(JSON.stringify({ success: true, message: 'Logged out successfully.' }));
+  } catch (err: any) {
+    res.statusCode = 500;
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.end(JSON.stringify({ success: false, error: err.message || 'Logout failed.' }));
   }
 }
 
@@ -330,16 +582,39 @@ export function createDeployableServer(options: ServerOptions = {}): http.Server
       return handleSaveIntentRequest(req, res, options.repos, options.publisher);
     }
 
-    // 4. API: GET /api/accommodation/admin/stream (SSE Real-Time Stream - H4D-FUNC-010)
+    // 4. API: GET /api/accommodation/admin/stream (SSE Real-Time Stream - H4D-FUNC-010 & H4D-FUNC-011)
     if (pathname === '/api/accommodation/admin/stream' && req.method === 'GET') {
-      const activePublisher = options.publisher || globalOutboxPublisher;
-      activePublisher.handleSseConnection(req, res);
-      return;
+      return handleAdminStreamRequest(req, res, options.repos, options.publisher);
     }
 
-    // 5. API: GET /api/accommodation/outbox (Outbox Audit - H4D-FUNC-010)
+    // 5. API: GET /api/accommodation/admin/overview (H4D-FUNC-011)
+    if (pathname === '/api/accommodation/admin/overview' && req.method === 'GET') {
+      return handleAdminOverviewRequest(req, res, options.repos);
+    }
+
+    // 6. API: GET /api/accommodation/outbox (Outbox Audit - H4D-FUNC-010 & H4D-FUNC-011)
     if (pathname === '/api/accommodation/outbox' && req.method === 'GET') {
       return handleOutboxListRequest(req, res, options.repos);
+    }
+
+    // 7. API: GET /api/auth/session (H4D-FUNC-011)
+    if (pathname === '/api/auth/session' && req.method === 'GET') {
+      return handleGetSessionRequest(req, res, options.repos);
+    }
+
+    // 8. API: POST /api/auth/dev-session (H4D-FUNC-011)
+    if (pathname === '/api/auth/dev-session' && req.method === 'POST') {
+      return handleDevSessionRequest(req, res, options.repos);
+    }
+
+    // 9. API: GET /api/auth/dev-identities (H4D-FUNC-011)
+    if (pathname === '/api/auth/dev-identities' && req.method === 'GET') {
+      return handleDevIdentitiesRequest(req, res);
+    }
+
+    // 10. API: POST /api/auth/logout (H4D-FUNC-011)
+    if (pathname === '/api/auth/logout' && req.method === 'POST') {
+      return handleLogoutRequest(req, res, options.repos);
     }
 
     // 6. API: GET /api/health

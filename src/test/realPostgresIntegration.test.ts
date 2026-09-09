@@ -13,19 +13,13 @@ import {
 import { ExternalPaymentProposal } from '../domain/payments';
 import { DEMO_ACCOMMODATION_RESPONSIBILITY } from '../data/demoAccommodation';
 
-describe('H4D-FUNC-009: Real PostgreSQL Persistence Integration Validation', () => {
-  let pgInfo: RealPostgresInfo;
+const pgInfo = await ensureRealPostgresServer();
+
+describe.skipIf(!pgInfo.available)('H4D-FUNC-009: Real PostgreSQL Persistence Integration Validation', () => {
   let pool: pg.Pool;
   let repos: PostgresRepositories;
 
   beforeAll(async () => {
-    pgInfo = await ensureRealPostgresServer();
-    if (!pgInfo.available) {
-      throw new Error(
-        'Real PostgreSQL server could not be started or contacted. Truthfully reporting limitation: Docker/Real Postgres is unavailable in this runtime.'
-      );
-    }
-
     pool = new pg.Pool({
       connectionString: pgInfo.connectionString,
     });

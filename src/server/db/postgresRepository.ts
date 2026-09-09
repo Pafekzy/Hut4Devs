@@ -7,6 +7,13 @@ import {
 } from '../../domain/accommodation';
 import { ExternalPaymentProposal } from '../../domain/payments';
 import {
+  Member,
+  MemberRole,
+  Session,
+  IMemberRepository,
+  ISessionRepository,
+} from '../../domain/auth';
+import {
   IAccommodationRepository,
   IPaymentIntentRepository,
   IExternalProposalRepository,
@@ -387,6 +394,178 @@ export class PostgresOutboxRepository implements IOutboxRepository {
 }
 
 /**
+ * PostgreSQL Member Repository Implementation (H4D-FUNC-011)
+ */
+export class PostgresMemberRepository implements IMemberRepository {
+  constructor(private client: SqlQueryable) {}
+
+  async findById(id: string): Promise<Member | null> {
+    const res = await this.client.query(
+      `
+      SELECT m.id, m.display_name, m.email, m.created_at, mr.role
+      FROM members m
+      LEFT JOIN member_roles mr ON mr.member_id = m.id
+      WHERE m.id = $1
+      `,
+      [id]
+    );
+
+    if (res.rows.length === 0) return null;
+
+    const first = res.rows[0];
+    const roles: MemberRole[] = [];
+    for (const r of res.rows) {
+      if (r.role && !roles.includes(r.role as MemberRole)) {
+        roles.push(r.role as MemberRole);
+      }
+    }
+
+    return {
+      id: first.id,
+      displayName: first.display_name,
+      email: first.email || undefined,
+      roles,
+      createdAt: first.created_at instanceof Date ? first.created_at.toISOString() : String(first.created_at),
+    };
+  }
+
+  async save(member: Member): Promise<void> {
+    await this.client.query(
+      `
+      INSERT INTO members (id, display_name, email, created_at)
+      VALUES ($1, $2, $3, $4)
+      ON CONFLICT (id) DO UPDATE SET
+        display_name = EXCLUDED.display_name,
+        email = EXCLUDED.email
+      `,
+      [
+        member.id,
+        member.displayName,
+        member.email || null,
+        member.createdAt || new Date().toISOString(),
+      ]
+    );
+
+    for (const role of member.roles) {
+      const roleId = `role-${member.id}-${role.toLowerCase()}`;
+      await this.client.query(
+        `
+        INSERT INTO member_roles (id, member_id, role)
+        VALUES ($1, $2, $3)
+        ON CONFLICT (member_id, role) DO NOTHING
+        `,
+        [roleId, member.id, role]
+      );
+    }
+  }
+
+  async listAll(): Promise<Member[]> {
+    const res = await this.client.query(
+      `
+      SELECT m.id, m.display_name, m.email, m.created_at, mr.role
+      FROM members m
+      LEFT JOIN member_roles mr ON mr.member_id = m.id
+      ORDER BY m.created_at ASC
+      `
+    );
+
+    const membersMap = new Map<string, Member>();
+    for (const row of res.rows) {
+      let m = membersMap.get(row.id);
+      if (!m) {
+        m = {
+          id: row.id,
+          displayName: row.display_name,
+          email: row.email || undefined,
+          roles: [],
+          createdAt: row.created_at instanceof Date ? row.created_at.toISOString() : String(row.created_at),
+        };
+        membersMap.set(row.id, m);
+      }
+      if (row.role && !m.roles.includes(row.role as MemberRole)) {
+        m.roles.push(row.role as MemberRole);
+      }
+    }
+
+    return Array.from(membersMap.values());
+  }
+}
+
+/**
+ * PostgreSQL Session Repository Implementation (H4D-FUNC-011)
+ */
+export class PostgresSessionRepository implements ISessionRepository {
+  constructor(private client: SqlQueryable) {}
+
+  async create(session: Session): Promise<void> {
+    await this.client.query(
+      `
+      INSERT INTO sessions (id, token, member_id, created_at, expires_at)
+      VALUES ($1, $2, $3, $4, $5)
+      ON CONFLICT (token) DO UPDATE SET
+        expires_at = EXCLUDED.expires_at
+      `,
+      [
+        session.id,
+        session.token,
+        session.memberId,
+        session.createdAt || new Date().toISOString(),
+        session.expiresAt,
+      ]
+    );
+  }
+
+  async findByToken(token: string): Promise<Session | null> {
+    const res = await this.client.query(
+      `
+      SELECT s.id, s.token, s.member_id, s.created_at, s.expires_at,
+             m.display_name, m.email, m.created_at as member_created_at, mr.role
+      FROM sessions s
+      JOIN members m ON m.id = s.member_id
+      LEFT JOIN member_roles mr ON mr.member_id = m.id
+      WHERE s.token = $1
+      `,
+      [token]
+    );
+
+    if (res.rows.length === 0) return null;
+
+    const first = res.rows[0];
+    const roles: MemberRole[] = [];
+    for (const r of res.rows) {
+      if (r.role && !roles.includes(r.role as MemberRole)) {
+        roles.push(r.role as MemberRole);
+      }
+    }
+
+    const member: Member = {
+      id: first.member_id,
+      displayName: first.display_name,
+      email: first.email || undefined,
+      roles,
+      createdAt: first.member_created_at instanceof Date ? first.member_created_at.toISOString() : String(first.member_created_at),
+    };
+
+    return {
+      id: first.id,
+      token: first.token,
+      memberId: first.member_id,
+      member,
+      createdAt: first.created_at instanceof Date ? first.created_at.toISOString() : String(first.created_at),
+      expiresAt: first.expires_at instanceof Date ? first.expires_at.toISOString() : String(first.expires_at),
+    };
+  }
+
+  async deleteByToken(token: string): Promise<void> {
+    await this.client.query('DELETE FROM sessions WHERE token = $1', [token]);
+  }
+
+  async deleteExpired(): Promise<void> {
+    await this.client.query('DELETE FROM sessions WHERE expires_at < NOW()');
+  }
+}
+
+/**
  * Top-level PostgreSQL Repositories Coordinator
  */
 export class PostgresRepositories implements IHut4DevsRepositories {
@@ -394,12 +573,16 @@ export class PostgresRepositories implements IHut4DevsRepositories {
   intents: IPaymentIntentRepository;
   proposals: IExternalProposalRepository;
   outbox: IOutboxRepository;
+  members: IMemberRepository;
+  sessions: ISessionRepository;
 
   constructor(private poolOrClient: Pool | PoolClient | SqlQueryable) {
     this.accommodation = new PostgresAccommodationRepository(this.poolOrClient);
     this.intents = new PostgresPaymentIntentRepository(this.poolOrClient);
     this.proposals = new PostgresExternalProposalRepository(this.poolOrClient);
     this.outbox = new PostgresOutboxRepository(this.poolOrClient);
+    this.members = new PostgresMemberRepository(this.poolOrClient);
+    this.sessions = new PostgresSessionRepository(this.poolOrClient);
   }
 
   async runInTransaction<T>(fn: (repos: IHut4DevsRepositories) => Promise<T>): Promise<T> {

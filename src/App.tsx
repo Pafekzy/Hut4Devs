@@ -10,11 +10,17 @@ import {
   PaymentIntentStatus,
 } from './domain/accommodation';
 import { ExternalPaymentProposal } from './domain/payments';
+import { Member, MemberRole } from './domain/auth';
 import {
   fetchAccommodationState,
   savePaymentIntent,
   subscribeToAdminStream,
 } from './services/paymentClient';
+import {
+  establishDevSession,
+  fetchCurrentSession,
+  logoutSession,
+} from './services/authClient';
 
 type AppView = 'landing' | 'member-home' | 'responsibility-detail' | 'accommodation-admin';
 type AppTheme = 'light' | 'dark';
@@ -36,6 +42,9 @@ export default function App() {
   // Active view: 'landing' | 'member-home' | 'responsibility-detail' | 'accommodation-admin'
   const [view, setView] = useState<AppView>('landing');
 
+  // Active authenticated member (H4D-FUNC-011)
+  const [member, setMember] = useState<Member | null>(null);
+
   // Authoritative accommodation responsibility from PostgreSQL
   const [responsibility, setResponsibility] = useState<AccommodationResponsibility>(
     DEMO_ACCOMMODATION_RESPONSIBILITY
@@ -50,15 +59,26 @@ export default function App() {
   // Truthful error state if database is unavailable
   const [dbError, setDbError] = useState<string | null>(null);
 
-  // Live stream connection state (H4D-FUNC-010)
+  // Live stream connection state (H4D-FUNC-010 & H4D-FUNC-011)
   const [streamStatus, setStreamStatus] = useState<
     'connecting' | 'connected' | 'error' | 'disconnected'
   >('disconnected');
 
-  // Initial load: Fetch authoritative persistence state from PostgreSQL
+  // Initial load: Fetch current session and authoritative persistence state from PostgreSQL
   useEffect(() => {
     let isMounted = true;
     if (typeof fetch === 'function') {
+      // Verify existing session if available
+      fetchCurrentSession()
+        .then((res) => {
+          if (!isMounted) return;
+          if (res.success && res.member) {
+            setMember(res.member);
+          }
+        })
+        .catch(() => {});
+
+      // Fetch accommodation state
       fetchAccommodationState()
         .then((state) => {
           if (!isMounted) return;
@@ -82,9 +102,15 @@ export default function App() {
     };
   }, []);
 
-  // Real-time operational stream for Accommodation Admin (H4D-FUNC-010)
+  // Real-time operational stream for Accommodation Admin (H4D-FUNC-010 & H4D-FUNC-011)
   // Receives outbox broadcast events when payment intents or proposals are created.
+  // Enforces role discipline: Subscribes only when Accommodation Admin view is active.
   useEffect(() => {
+    if (view !== 'accommodation-admin') {
+      setStreamStatus('disconnected');
+      return;
+    }
+
     const unsubscribe = subscribeToAdminStream(
       (event) => {
         if (event.eventType === 'accommodation.payment_intent.prepared') {
@@ -139,7 +165,56 @@ export default function App() {
     return () => {
       unsubscribe();
     };
-  }, []);
+  }, [view, member]);
+
+  const handleEnter = () => {
+    setView('member-home');
+    if (typeof fetch === 'function') {
+      establishDevSession(MemberRole.FELLOW)
+        .then((res) => {
+          if (res.success && res.member) {
+            setMember(res.member);
+          }
+        })
+        .catch(() => {});
+    }
+  };
+
+  const handleSwitchToAdmin = () => {
+    setView('accommodation-admin');
+    if (typeof fetch === 'function') {
+      establishDevSession(MemberRole.ACCOMMODATION_ADMIN)
+        .then((res) => {
+          if (res.success && res.member) {
+            setMember(res.member);
+          }
+        })
+        .catch(() => {});
+    }
+  };
+
+  const handleSwitchToFellow = () => {
+    setView('member-home');
+    if (typeof fetch === 'function') {
+      establishDevSession(MemberRole.FELLOW)
+        .then((res) => {
+          if (res.success && res.member) {
+            setMember(res.member);
+          }
+        })
+        .catch(() => {});
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      await logoutSession();
+    } catch {
+      // Ignore network errors in test environment
+    }
+    setMember(null);
+    setView('landing');
+  };
 
   const handleIntentPrepared = async (newIntent: AccommodationPaymentIntent) => {
     try {
@@ -204,7 +279,7 @@ export default function App() {
         <LandingView
           isDark={isDark}
           onToggleTheme={toggleTheme}
-          onEnter={() => setView('member-home')}
+          onEnter={handleEnter}
         />
       )}
 
@@ -212,10 +287,12 @@ export default function App() {
         <MemberHomeView
           isDark={isDark}
           responsibility={responsibility}
+          member={member || undefined}
           onToggleTheme={toggleTheme}
           onExitToLanding={() => setView('landing')}
           onViewResponsibilityDetails={() => setView('responsibility-detail')}
-          onSwitchToAdmin={() => setView('accommodation-admin')}
+          onSwitchToAdmin={handleSwitchToAdmin}
+          onLogout={handleLogout}
         />
       )}
 
@@ -237,7 +314,7 @@ export default function App() {
           isDark={isDark}
           responsibilities={[responsibility]}
           onToggleTheme={toggleTheme}
-          onSwitchToFellow={() => setView('member-home')}
+          onSwitchToFellow={handleSwitchToFellow}
           onExitToLanding={() => setView('landing')}
           paymentProposals={paymentProposals}
           preparedIntents={preparedIntents}

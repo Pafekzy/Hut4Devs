@@ -3,23 +3,28 @@ import { Hut4DevsLogo } from './Hut4DevsLogo';
 import { ThemeToggle } from './ThemeToggle';
 import { AccommodationResponsibilityCard } from './AccommodationResponsibilityCard';
 import { AccommodationResponsibility } from '../domain/accommodation';
-import { LogOut, Home, ShieldAlert } from 'lucide-react';
+import { Member } from '../domain/auth';
+import { LogOut, Home, User } from 'lucide-react';
 
 interface MemberHomeViewProps {
   isDark: boolean;
   responsibility: AccommodationResponsibility;
+  member?: Member;
   onToggleTheme: () => void;
   onExitToLanding: () => void;
-  onViewResponsibilityDetails: (responsibilityId: string) => void;
-  onSwitchToAdmin: () => void;
+  onViewResponsibilityDetails: (responsibilityId?: string) => void;
+  onLogout?: () => void;
+  onSwitchToAdmin?: () => void;
 }
 
 export const MemberHomeView: React.FC<MemberHomeViewProps> = ({
   isDark,
   responsibility,
+  member,
   onToggleTheme,
   onExitToLanding,
   onViewResponsibilityDetails,
+  onLogout,
   onSwitchToAdmin,
 }) => {
   return (
@@ -28,9 +33,9 @@ export const MemberHomeView: React.FC<MemberHomeViewProps> = ({
         isDark ? 'bg-[#2F1707] text-[#FFF9EE]' : 'bg-[#F7F1E7] text-[#5A2D0C]'
       }`}
     >
-      {/* Dev Preview Banner */}
+      {/* Dev Auth Session Banner */}
       <aside
-        aria-label="Development Preview Notice"
+        aria-label="Development Authentication Notice"
         className="w-full border-b px-4 py-2.5 text-xs transition-colors duration-200"
         style={{
           backgroundColor: isDark ? '#3A1E0B' : '#F2E8D8',
@@ -47,20 +52,38 @@ export const MemberHomeView: React.FC<MemberHomeViewProps> = ({
                 color: isDark ? '#C88D3A' : '#5A2D0C',
               }}
             >
-              Development Preview
+              DEVELOPMENT AUTH
             </span>
-            <span>Fellow Workspace &bull; No authentication or authorization claimed</span>
+            <span>
+              Authenticated as <strong>{member?.displayName || 'Current Fellow'}</strong> (Role: FELLOW) &bull; Development Verification Only &bull; Not Production Auth
+            </span>
           </div>
-          <button
-            type="button"
-            id="dev-switch-to-admin-banner-btn"
-            onClick={onSwitchToAdmin}
-            className={`self-start sm:self-auto font-medium underline underline-offset-2 cursor-pointer hover:opacity-80 transition-opacity text-xs ${
-              isDark ? 'text-[#C88D3A]' : 'text-[#B77620]'
-            }`}
-          >
-            Switch to Accommodation Admin →
-          </button>
+          <div className="flex items-center gap-3">
+            {onSwitchToAdmin && (
+              <button
+                type="button"
+                id="fellow-switch-to-admin-banner-btn"
+                onClick={onSwitchToAdmin}
+                className={`self-start sm:self-auto font-medium underline underline-offset-2 cursor-pointer hover:opacity-80 transition-opacity text-xs ${
+                  isDark ? 'text-[#C88D3A]' : 'text-[#B77620]'
+                }`}
+              >
+                Switch to Accommodation Admin →
+              </button>
+            )}
+            {onLogout && (
+              <button
+                type="button"
+                id="dev-auth-logout-banner-btn"
+                onClick={onLogout}
+                className={`self-start sm:self-auto font-medium underline underline-offset-2 cursor-pointer hover:opacity-80 transition-opacity text-xs ${
+                  isDark ? 'text-[#C88D3A]' : 'text-[#B77620]'
+                }`}
+              >
+                Log Out Session
+              </button>
+            )}
+          </div>
         </div>
       </aside>
 
@@ -95,43 +118,59 @@ export const MemberHomeView: React.FC<MemberHomeViewProps> = ({
                 }`}
               >
                 <Home className="w-3.5 h-3.5" aria-hidden="true" />
-                <span>Home</span>
+                <span>Fellow Workspace</span>
               </span>
             </nav>
           </div>
 
-          {/* Controls: Theme & Exit & Admin Switcher */}
+          {/* Controls: Member Badge, Theme & Logout */}
           <div className="flex items-center gap-2 sm:gap-3">
-            <button
-              type="button"
-              id="switch-to-admin-header-btn"
-              onClick={onSwitchToAdmin}
-              aria-label="Switch to Accommodation Admin"
-              className={`inline-flex items-center gap-1.5 px-3 py-2 min-h-[44px] rounded-lg text-xs sm:text-sm font-medium transition-all duration-150 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C88D3A] ${
+            <div
+              className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-mono ${
                 isDark
-                  ? 'bg-[#3E200C] text-[#C88D3A] hover:bg-[#4B2710] border border-[#623416]'
-                  : 'bg-[#FFF9EE] text-[#5A2D0C] hover:bg-[#F2E8D8] border border-[#EAE0D0]'
+                  ? 'bg-[#3E200C] text-[#E2AB5D] border border-[#4B2710]'
+                  : 'bg-[#FFF9EE] text-[#5A2D0C] border border-[#EAE0D0]'
               }`}
             >
-              <ShieldAlert className="w-4 h-4 shrink-0" aria-hidden="true" />
-              <span className="hidden sm:inline">Accommodation Admin</span>
-            </button>
+              <User className="w-3.5 h-3.5 text-[#C88D3A]" />
+              <span className="font-semibold">{member?.displayName || 'Current Fellow'}</span>
+              <span className="opacity-60 text-[10px]">FELLOW</span>
+            </div>
 
             <ThemeToggle isDark={isDark} onToggle={onToggleTheme} />
-            <button
-              type="button"
-              id="exit-landing-btn"
-              onClick={onExitToLanding}
-              aria-label="Exit to public landing"
-              className={`inline-flex items-center gap-1.5 px-3 py-2 min-h-[44px] rounded-lg text-xs sm:text-sm font-medium transition-all duration-150 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C88D3A] ${
-                isDark
-                  ? 'text-[#E5D3BA] hover:text-[#FFF9EE] hover:bg-[#3E200C]'
-                  : 'text-[#6D4223] hover:text-[#5A2D0C] hover:bg-[#EFE5D5]'
-              }`}
-            >
-              <LogOut className="w-4 h-4 shrink-0" aria-hidden="true" />
-              <span className="hidden sm:inline">Landing</span>
-            </button>
+
+            {onLogout ? (
+              <button
+                type="button"
+                id="header-logout-btn"
+                onClick={onLogout}
+                aria-label="Log Out"
+                title="Log Out Session"
+                className={`inline-flex items-center gap-1.5 px-3 py-2 min-h-[44px] rounded-lg text-xs sm:text-sm font-medium transition-all duration-150 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C88D3A] ${
+                  isDark
+                    ? 'text-[#E5D3BA] hover:text-[#FFF9EE] hover:bg-[#3E200C]'
+                    : 'text-[#6D4223] hover:text-[#5A2D0C] hover:bg-[#EFE5D5]'
+                }`}
+              >
+                <LogOut className="w-4 h-4 shrink-0" aria-hidden="true" />
+                <span className="hidden sm:inline">Log Out</span>
+              </button>
+            ) : (
+              <button
+                type="button"
+                id="exit-landing-btn"
+                onClick={onExitToLanding}
+                aria-label="Exit to public landing"
+                className={`inline-flex items-center gap-1.5 px-3 py-2 min-h-[44px] rounded-lg text-xs sm:text-sm font-medium transition-all duration-150 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C88D3A] ${
+                  isDark
+                    ? 'text-[#E5D3BA] hover:text-[#FFF9EE] hover:bg-[#3E200C]'
+                    : 'text-[#6D4223] hover:text-[#5A2D0C] hover:bg-[#EFE5D5]'
+                }`}
+              >
+                <LogOut className="w-4 h-4 shrink-0" aria-hidden="true" />
+                <span className="hidden sm:inline">Landing</span>
+              </button>
+            )}
           </div>
         </div>
       </header>
