@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { LandingView } from './components/LandingView';
 import { MemberHomeView } from './components/MemberHomeView';
 import { ResponsibilityDetailView } from './components/ResponsibilityDetailView';
-import { AccommodationAdminView } from './components/AccommodationAdminView';
+import { AccommodationAdminView, AdminProviderEventDisplay } from './components/AccommodationAdminView';
 import { DEMO_ACCOMMODATION_RESPONSIBILITY } from './data/demoAccommodation';
 import {
   AccommodationResponsibility,
@@ -15,6 +15,7 @@ import {
   fetchAccommodationState,
   savePaymentIntent,
   subscribeToAdminStream,
+  fetchAdminProviderEvents,
 } from './services/paymentClient';
 import {
   establishDevSession,
@@ -55,6 +56,9 @@ export default function App() {
 
   // Created payment proposals (H4D-FUNC-005 & H4D-FUNC-008) - Authoritative PostgreSQL persistence
   const [paymentProposals, setPaymentProposals] = useState<ExternalPaymentProposal[]>([]);
+
+  // Ingested provider events (H4D-FUNC-012) - Authoritative PostgreSQL store
+  const [providerEvents, setProviderEvents] = useState<AdminProviderEventDisplay[]>([]);
 
   // Truthful error state if database is unavailable
   const [dbError, setDbError] = useState<string | null>(null);
@@ -155,6 +159,30 @@ export default function App() {
               return [...prev, incomingProposal];
             });
           }
+        } else if (event.eventType === 'accommodation.provider_event.received') {
+          const payload = event.data?.payload || event.data;
+          if (payload) {
+            const incomingEvt: AdminProviderEventDisplay = {
+              id: payload.id,
+              provider: payload.provider || 'BMONI',
+              providerEventId: payload.providerEventId || '',
+              eventType: payload.eventType || '',
+              providerStatus: payload.providerStatus || '',
+              providerProposalId: payload.providerProposalId || null,
+              statusLabel: payload.statusLabel || 'Received — Awaiting Reconciliation',
+              notice: payload.notice,
+              receivedAt: payload.receivedAt || new Date().toISOString(),
+            };
+            setProviderEvents((prev) => {
+              const exists = prev.some((e) => e.providerEventId === incomingEvt.providerEventId);
+              if (exists) {
+                return prev.map((e) =>
+                  e.providerEventId === incomingEvt.providerEventId ? incomingEvt : e
+                );
+              }
+              return [incomingEvt, ...prev];
+            });
+          }
         }
       },
       (status) => {
@@ -187,6 +215,13 @@ export default function App() {
         .then((res) => {
           if (res.success && res.member) {
             setMember(res.member);
+            fetchAdminProviderEvents()
+              .then((peRes) => {
+                if (peRes.success && Array.isArray(peRes.providerEvents)) {
+                  setProviderEvents(peRes.providerEvents);
+                }
+              })
+              .catch(() => {});
           }
         })
         .catch(() => {});
@@ -318,6 +353,7 @@ export default function App() {
           onExitToLanding={() => setView('landing')}
           paymentProposals={paymentProposals}
           preparedIntents={preparedIntents}
+          providerEvents={providerEvents}
           streamStatus={streamStatus}
         />
       )}

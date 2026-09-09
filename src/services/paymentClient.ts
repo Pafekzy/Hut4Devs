@@ -191,6 +191,15 @@ export function subscribeToAdminStream(
     }
   });
 
+  eventSource.addEventListener('accommodation.provider_event.received', (e: MessageEvent) => {
+    try {
+      const data = JSON.parse(e.data);
+      onEvent({ eventType: 'accommodation.provider_event.received', data });
+    } catch {
+      onEvent({ eventType: 'accommodation.provider_event.received', data: e.data });
+    }
+  });
+
   eventSource.onerror = () => {
     onStatusChange?.('error');
   };
@@ -199,4 +208,30 @@ export function subscribeToAdminStream(
     eventSource.close();
     onStatusChange?.('disconnected');
   };
+}
+
+/**
+ * Fetches received provider events for Accommodation Admin audit.
+ * (H4D-FUNC-012)
+ */
+export async function fetchAdminProviderEvents(sessionToken?: string | null): Promise<{
+  success: boolean;
+  providerEvents?: any[];
+  error?: string;
+}> {
+  try {
+    const token = sessionToken || (typeof localStorage !== 'undefined' ? localStorage.getItem('h4d_session_token') : null);
+    const headers: Record<string, string> = {};
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+    const res = await fetch('/api/accommodation/admin/provider-events', { headers });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      return { success: false, error: data.error || 'Failed to fetch provider events.' };
+    }
+    return data;
+  } catch (err: any) {
+    return { success: false, error: 'Network error fetching provider events.' };
+  }
 }

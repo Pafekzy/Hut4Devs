@@ -101,6 +101,28 @@ CREATE INDEX idx_sessions_token ON sessions(token);
 CREATE INDEX idx_member_roles_member ON member_roles(member_id);
 `;
 
+export const PROVIDER_EVENTS_SQL = `
+-- 6. Provider Events Store (H4D-FUNC-012)
+CREATE TABLE provider_events (
+  id VARCHAR(255) PRIMARY KEY,
+  provider VARCHAR(50) NOT NULL,
+  provider_event_id VARCHAR(255) NOT NULL,
+  source_event_id VARCHAR(255),
+  event_type VARCHAR(100) NOT NULL,
+  provider_status VARCHAR(100) NOT NULL,
+  provider_proposal_id VARCHAR(255),
+  payload JSONB NOT NULL,
+  received_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  processed_at TIMESTAMPTZ,
+  processing_status VARCHAR(50) NOT NULL DEFAULT 'RECEIVED',
+  CONSTRAINT uq_provider_event UNIQUE (provider, provider_event_id)
+);
+
+CREATE INDEX idx_provider_events_provider_event ON provider_events(provider, provider_event_id);
+CREATE INDEX idx_provider_events_proposal_id ON provider_events(provider_proposal_id);
+CREATE INDEX idx_provider_events_received_at ON provider_events(received_at);
+`;
+
 export const MIGRATIONS = [
   {
     version: '001_initial_schema',
@@ -114,6 +136,10 @@ export const MIGRATIONS = [
     version: '003_auth_members_roles',
     sql: AUTH_MEMBERS_ROLES_SQL,
   },
+  {
+    version: '004_provider_events',
+    sql: PROVIDER_EVENTS_SQL,
+  },
 ];
 
 export const REQUIRED_TABLES = [
@@ -125,6 +151,7 @@ export const REQUIRED_TABLES = [
   'members',
   'member_roles',
   'sessions',
+  'provider_events',
 ];
 
 /**

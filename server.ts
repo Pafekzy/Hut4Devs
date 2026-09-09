@@ -16,6 +16,7 @@ import {
   DEV_IDENTITIES,
   extractSessionToken,
 } from './src/server/auth/authService';
+import { handleBmoniWebhookRequest } from './src/server/payments/bmoniWebhook';
 export { OutboxPublisher, globalOutboxPublisher };
 
 const MIME_TYPES: Record<string, string> = {
@@ -37,6 +38,7 @@ export interface ServerOptions {
   customProvider?: PaymentProvider;
   repos?: IHut4DevsRepositories;
   publisher?: OutboxPublisher;
+  bmoniWebhookSecret?: string;
 }
 
 async function resolveRepositories(repos?: IHut4DevsRepositories): Promise<IHut4DevsRepositories> {
@@ -548,6 +550,41 @@ export async function handleLogoutRequest(
 }
 
 /**
+ * Request handler for GET /api/accommodation/admin/provider-events (H4D-FUNC-012)
+ *
+ * Restricts to authenticated ACCOMMODATION_ADMIN role.
+ * Read-only audit of provider event receipts.
+ */
+export async function handleAdminProviderEventsRequest(
+  req: http.IncomingMessage,
+  res: http.ServerResponse,
+  repos?: IHut4DevsRepositories
+): Promise<void> {
+  const activeRepos = await resolveRepositories(repos);
+  const session = await authenticateRequest(req, activeRepos);
+  const auth = requireRole(session, MemberRole.ACCOMMODATION_ADMIN);
+  if (!auth.authorized) {
+    res.statusCode = auth.status;
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.end(JSON.stringify({ success: false, error: auth.error }));
+    return;
+  }
+
+  const events = await activeRepos.providerEvents.listAll();
+  res.statusCode = 200;
+  res.setHeader('Content-Type', 'application/json; charset=utf-8');
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.end(
+    JSON.stringify({
+      success: true,
+      providerEvents: events,
+      notice: 'Provider events received. Awaiting future reconciliation. Not verified.',
+    })
+  );
+}
+
+/**
  * Creates the deployable Hut4Devs HTTP Server instance.
  * Exposes POST /api/payments/proposal, GET /api/accommodation/responsibility,
  * and POST /api/payments/intents outside of Vite.
@@ -615,6 +652,23 @@ export function createDeployableServer(options: ServerOptions = {}): http.Server
     // 10. API: POST /api/auth/logout (H4D-FUNC-011)
     if (pathname === '/api/auth/logout' && req.method === 'POST') {
       return handleLogoutRequest(req, res, options.repos);
+    }
+
+    // 11. API: POST /api/webhooks/bmoni (BMONI Webhook Ingestion - H4D-FUNC-012)
+    // Machine-to-machine endpoint: authenticated via raw-body HMAC-SHA256 signature, NOT browser session
+    if (pathname === '/api/webhooks/bmoni' && req.method === 'POST') {
+      return handleBmoniWebhookRequest(
+        req,
+        res,
+        options.repos,
+        options.publisher,
+        options.bmoniWebhookSecret
+      );
+    }
+
+    // 12. API: GET /api/accommodation/admin/provider-events (H4D-FUNC-012)
+    if (pathname === '/api/accommodation/admin/provider-events' && req.method === 'GET') {
+      return handleAdminProviderEventsRequest(req, res, options.repos);
     }
 
     // 6. API: GET /api/health
