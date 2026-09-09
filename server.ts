@@ -3,10 +3,12 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { handleCreateProposal, ServerHandlerResponse } from './src/server/payments/serverHandler';
 import { PaymentProvider } from './src/domain/payments';
-import { IHut4DevsRepositories } from './src/domain/repositories';
+import { IHut4DevsRepositories, OutboxEventRecord } from './src/domain/repositories';
 import { getAuthoritativeRepositories } from './src/server/db/connection';
 import { AccommodationPaymentIntent } from './src/domain/accommodation';
 import { DEMO_ACCOMMODATION_RESPONSIBILITY } from './src/data/demoAccommodation';
+import { OutboxPublisher, globalOutboxPublisher } from './src/server/realtime/outboxPublisher';
+export { OutboxPublisher, globalOutboxPublisher };
 
 const MIME_TYPES: Record<string, string> = {
   '.html': 'text/html; charset=utf-8',
@@ -26,6 +28,7 @@ export interface ServerOptions {
   distDir?: string;
   customProvider?: PaymentProvider;
   repos?: IHut4DevsRepositories;
+  publisher?: OutboxPublisher;
 }
 
 async function resolveRepositories(repos?: IHut4DevsRepositories): Promise<IHut4DevsRepositories> {
@@ -40,7 +43,8 @@ export async function handlePaymentProposalRequest(
   req: http.IncomingMessage,
   res: http.ServerResponse,
   customProvider?: PaymentProvider,
-  repos?: IHut4DevsRepositories
+  repos?: IHut4DevsRepositories,
+  publisher?: OutboxPublisher
 ): Promise<void> {
   let bodyStr = '';
   req.on('data', (chunk) => {
@@ -80,7 +84,8 @@ export async function handlePaymentProposalRequest(
         body,
         customProvider,
         undefined,
-        activeRepos
+        activeRepos,
+        publisher
       );
 
       res.statusCode = result.status;
@@ -149,11 +154,17 @@ export async function handleAccommodationRequest(
 
 /**
  * Request handler for POST /api/payments/intents
+ *
+ * Transaction + Outbox pattern (H4D-FUNC-010):
+ * Persists domain state (PaymentIntent) and inserts matching outbox event within
+ * a single database transaction.
+ * Real-time event is strictly published AFTER database commit succeeds.
  */
 export async function handleSaveIntentRequest(
   req: http.IncomingMessage,
   res: http.ServerResponse,
-  repos?: IHut4DevsRepositories
+  repos?: IHut4DevsRepositories,
+  publisher?: OutboxPublisher
 ): Promise<void> {
   let bodyStr = '';
   req.on('data', (chunk) => {
@@ -190,7 +201,51 @@ export async function handleSaveIntentRequest(
       }
 
       const activeRepos = await resolveRepositories(repos);
-      await activeRepos.intents.save(intentData);
+
+      let outboxEventToPublish: OutboxEventRecord | null = null;
+
+      await activeRepos.runInTransaction(async (tx) => {
+        // 1. Foreign key verification
+        const resp = await tx.accommodation.findById(intentData.responsibilityId);
+        if (!resp) {
+          throw new Error(
+            `Foreign key violation: accommodation responsibility "${intentData.responsibilityId}" does not exist.`
+          );
+        }
+
+        // 2. Persist domain state (Prepared payment intent)
+        await tx.intents.save(intentData);
+
+        // 3. Insert transactional outbox event
+        outboxEventToPublish = {
+          id: `outbox-intent-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`,
+          eventType: 'accommodation.payment_intent.prepared',
+          aggregateType: 'accommodation_responsibility',
+          aggregateId: intentData.responsibilityId,
+          payload: {
+            intentId: intentData.id,
+            responsibilityId: intentData.responsibilityId,
+            fellowId: resp.fellowId,
+            fellowName: resp.fellow?.name || 'Current Fellow',
+            accommodationTitle: resp.title || 'September Accommodation',
+            amount: intentData.amount,
+            currency: resp.currency || 'NGN',
+            fulfilmentType: intentData.fulfilmentType,
+            status: 'PREPARED',
+            statusLabel: 'Prepared — Not Verified',
+            createdAt: intentData.createdAt || new Date().toISOString(),
+          },
+          createdAt: new Date().toISOString(),
+          publishedAt: null,
+        };
+        await tx.outbox.insert(outboxEventToPublish);
+      });
+
+      // 4. Publish to connected clients ONLY AFTER database commit succeeds
+      if (outboxEventToPublish) {
+        const activePublisher = publisher || globalOutboxPublisher;
+        await activePublisher.publish(outboxEventToPublish, activeRepos);
+      }
 
       res.statusCode = 200;
       res.setHeader('Content-Type', 'application/json; charset=utf-8');
@@ -212,6 +267,35 @@ export async function handleSaveIntentRequest(
 }
 
 /**
+ * Request handler for GET /api/accommodation/outbox
+ * Lists outbox records stored in PostgreSQL.
+ */
+export async function handleOutboxListRequest(
+  req: http.IncomingMessage,
+  res: http.ServerResponse,
+  repos?: IHut4DevsRepositories
+): Promise<void> {
+  try {
+    const activeRepos = await resolveRepositories(repos);
+    const events = await activeRepos.outbox.listAll();
+    res.statusCode = 200;
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.end(JSON.stringify({ success: true, events }));
+  } catch (err: any) {
+    res.statusCode = 503;
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.end(
+      JSON.stringify({
+        success: false,
+        error: err.message || 'Database error while reading outbox.',
+      })
+    );
+  }
+}
+
+/**
  * Creates the deployable Hut4Devs HTTP Server instance.
  * Exposes POST /api/payments/proposal, GET /api/accommodation/responsibility,
  * and POST /api/payments/intents outside of Vite.
@@ -227,7 +311,13 @@ export function createDeployableServer(options: ServerOptions = {}): http.Server
 
     // 1. API: POST /api/payments/proposal
     if (pathname === '/api/payments/proposal' && req.method === 'POST') {
-      return handlePaymentProposalRequest(req, res, options.customProvider, options.repos);
+      return handlePaymentProposalRequest(
+        req,
+        res,
+        options.customProvider,
+        options.repos,
+        options.publisher
+      );
     }
 
     // 2. API: GET /api/accommodation/responsibility
@@ -237,10 +327,22 @@ export function createDeployableServer(options: ServerOptions = {}): http.Server
 
     // 3. API: POST /api/payments/intents
     if (pathname === '/api/payments/intents' && req.method === 'POST') {
-      return handleSaveIntentRequest(req, res, options.repos);
+      return handleSaveIntentRequest(req, res, options.repos, options.publisher);
     }
 
-    // 4. API: GET /api/health
+    // 4. API: GET /api/accommodation/admin/stream (SSE Real-Time Stream - H4D-FUNC-010)
+    if (pathname === '/api/accommodation/admin/stream' && req.method === 'GET') {
+      const activePublisher = options.publisher || globalOutboxPublisher;
+      activePublisher.handleSseConnection(req, res);
+      return;
+    }
+
+    // 5. API: GET /api/accommodation/outbox (Outbox Audit - H4D-FUNC-010)
+    if (pathname === '/api/accommodation/outbox' && req.method === 'GET') {
+      return handleOutboxListRequest(req, res, options.repos);
+    }
+
+    // 6. API: GET /api/health
     if (pathname === '/api/health' && req.method === 'GET') {
       res.statusCode = 200;
       res.setHeader('Content-Type', 'application/json; charset=utf-8');

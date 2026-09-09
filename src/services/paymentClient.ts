@@ -128,3 +128,68 @@ export async function requestBmoniProposal(
     };
   }
 }
+
+export interface AdminStreamEvent {
+  eventType: string;
+  data: any;
+}
+
+/**
+ * Subscribes to the real-time SSE stream for Accommodation Admin operational updates.
+ * (H4D-FUNC-010)
+ *
+ * Invariant: Real-time stream is a convenience notification layer;
+ * PostgreSQL remains the sole authoritative source of truth.
+ */
+export function subscribeToAdminStream(
+  onEvent: (event: AdminStreamEvent) => void,
+  onStatusChange?: (status: 'connecting' | 'connected' | 'error' | 'disconnected') => void
+): () => void {
+  if (typeof window === 'undefined' || typeof (window as any).EventSource === 'undefined') {
+    onStatusChange?.('disconnected');
+    return () => {};
+  }
+
+  onStatusChange?.('connecting');
+  const eventSource = new window.EventSource('/api/accommodation/admin/stream');
+
+  eventSource.onopen = () => {
+    onStatusChange?.('connected');
+  };
+
+  eventSource.addEventListener('connected', (e: MessageEvent) => {
+    try {
+      const data = JSON.parse(e.data);
+      onEvent({ eventType: 'connected', data });
+    } catch {
+      onEvent({ eventType: 'connected', data: e.data });
+    }
+  });
+
+  eventSource.addEventListener('accommodation.payment_intent.prepared', (e: MessageEvent) => {
+    try {
+      const data = JSON.parse(e.data);
+      onEvent({ eventType: 'accommodation.payment_intent.prepared', data });
+    } catch {
+      onEvent({ eventType: 'accommodation.payment_intent.prepared', data: e.data });
+    }
+  });
+
+  eventSource.addEventListener('accommodation.payment_proposal.created', (e: MessageEvent) => {
+    try {
+      const data = JSON.parse(e.data);
+      onEvent({ eventType: 'accommodation.payment_proposal.created', data });
+    } catch {
+      onEvent({ eventType: 'accommodation.payment_proposal.created', data: e.data });
+    }
+  });
+
+  eventSource.onerror = () => {
+    onStatusChange?.('error');
+  };
+
+  return () => {
+    eventSource.close();
+    onStatusChange?.('disconnected');
+  };
+}

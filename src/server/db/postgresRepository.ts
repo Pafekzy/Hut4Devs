@@ -10,6 +10,8 @@ import {
   IAccommodationRepository,
   IPaymentIntentRepository,
   IExternalProposalRepository,
+  IOutboxRepository,
+  OutboxEventRecord,
   IHut4DevsRepositories,
 } from '../../domain/repositories';
 import { SqlQueryable } from './migrator';
@@ -306,17 +308,98 @@ export class PostgresExternalProposalRepository implements IExternalProposalRepo
 }
 
 /**
+ * PostgreSQL Outbox Repository Implementation (H4D-FUNC-010)
+ */
+export class PostgresOutboxRepository implements IOutboxRepository {
+  constructor(private client: SqlQueryable) {}
+
+  async insert(event: OutboxEventRecord): Promise<void> {
+    const payloadJson = typeof event.payload === 'string' ? event.payload : JSON.stringify(event.payload);
+    await this.client.query(
+      `
+      INSERT INTO outbox_events (
+        id, event_type, aggregate_type, aggregate_id, payload, created_at, published_at
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7)
+      ON CONFLICT (id) DO NOTHING
+      `,
+      [
+        event.id,
+        event.eventType,
+        event.aggregateType,
+        event.aggregateId,
+        payloadJson,
+        event.createdAt || new Date().toISOString(),
+        event.publishedAt || null,
+      ]
+    );
+  }
+
+  async markPublished(id: string, publishedAt?: string): Promise<void> {
+    const pubDate = publishedAt || new Date().toISOString();
+    await this.client.query(
+      'UPDATE outbox_events SET published_at = $1 WHERE id = $2',
+      [pubDate, id]
+    );
+  }
+
+  async findPending(): Promise<OutboxEventRecord[]> {
+    const res = await this.client.query(
+      'SELECT * FROM outbox_events WHERE published_at IS NULL ORDER BY created_at ASC'
+    );
+    return res.rows.map(this.mapRowToEvent);
+  }
+
+  async findById(id: string): Promise<OutboxEventRecord | null> {
+    const res = await this.client.query(
+      'SELECT * FROM outbox_events WHERE id = $1',
+      [id]
+    );
+    if (res.rows.length === 0) return null;
+    return this.mapRowToEvent(res.rows[0]);
+  }
+
+  async listAll(): Promise<OutboxEventRecord[]> {
+    const res = await this.client.query(
+      'SELECT * FROM outbox_events ORDER BY created_at DESC'
+    );
+    return res.rows.map(this.mapRowToEvent);
+  }
+
+  private mapRowToEvent(row: any): OutboxEventRecord {
+    let payload = row.payload;
+    if (typeof payload === 'string') {
+      try {
+        payload = JSON.parse(payload);
+      } catch {
+        // Keep raw if invalid JSON
+      }
+    }
+    return {
+      id: row.id,
+      eventType: row.event_type,
+      aggregateType: row.aggregate_type,
+      aggregateId: row.aggregate_id,
+      payload,
+      createdAt: row.created_at instanceof Date ? row.created_at.toISOString() : String(row.created_at),
+      publishedAt: row.published_at ? (row.published_at instanceof Date ? row.published_at.toISOString() : String(row.published_at)) : null,
+    };
+  }
+}
+
+/**
  * Top-level PostgreSQL Repositories Coordinator
  */
 export class PostgresRepositories implements IHut4DevsRepositories {
   accommodation: IAccommodationRepository;
   intents: IPaymentIntentRepository;
   proposals: IExternalProposalRepository;
+  outbox: IOutboxRepository;
 
   constructor(private poolOrClient: Pool | PoolClient | SqlQueryable) {
     this.accommodation = new PostgresAccommodationRepository(this.poolOrClient);
     this.intents = new PostgresPaymentIntentRepository(this.poolOrClient);
     this.proposals = new PostgresExternalProposalRepository(this.poolOrClient);
+    this.outbox = new PostgresOutboxRepository(this.poolOrClient);
   }
 
   async runInTransaction<T>(fn: (repos: IHut4DevsRepositories) => Promise<T>): Promise<T> {

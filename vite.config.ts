@@ -7,6 +7,8 @@ import {
   handlePaymentProposalRequest,
   handleAccommodationRequest,
   handleSaveIntentRequest,
+  handleOutboxListRequest,
+  globalOutboxPublisher,
 } from './server';
 
 function bmoniDevPlugin(): Plugin {
@@ -21,6 +23,10 @@ function bmoniDevPlugin(): Plugin {
           handleAccommodationRequest(req, res);
         } else if (url === '/api/payments/intents' && req.method === 'POST') {
           handleSaveIntentRequest(req, res);
+        } else if (url === '/api/accommodation/admin/stream' && req.method === 'GET') {
+          globalOutboxPublisher.handleSseConnection(req, res);
+        } else if (url === '/api/accommodation/outbox' && req.method === 'GET') {
+          handleOutboxListRequest(req, res);
         } else {
           next();
         }

@@ -56,10 +56,30 @@ CREATE INDEX idx_payment_intents_resp_id ON payment_intents(responsibility_id);
 CREATE INDEX idx_payment_proposals_intent_id ON external_payment_proposals(payment_intent_id);
 `;
 
+export const OUTBOX_EVENTS_SQL = `
+-- 4. Transactional Outbox Events (H4D-FUNC-010)
+CREATE TABLE outbox_events (
+  id VARCHAR(255) PRIMARY KEY,
+  event_type VARCHAR(100) NOT NULL,
+  aggregate_type VARCHAR(100) NOT NULL,
+  aggregate_id VARCHAR(255) NOT NULL,
+  payload JSONB NOT NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  published_at TIMESTAMPTZ
+);
+
+CREATE INDEX idx_outbox_events_published_at ON outbox_events(published_at);
+CREATE INDEX idx_outbox_events_aggregate ON outbox_events(aggregate_type, aggregate_id);
+`;
+
 export const MIGRATIONS = [
   {
     version: '001_initial_schema',
     sql: INITIAL_SCHEMA_SQL,
+  },
+  {
+    version: '002_outbox_events',
+    sql: OUTBOX_EVENTS_SQL,
   },
 ];
 
@@ -68,6 +88,7 @@ export const REQUIRED_TABLES = [
   'accommodation_responsibilities',
   'payment_intents',
   'external_payment_proposals',
+  'outbox_events',
 ];
 
 /**

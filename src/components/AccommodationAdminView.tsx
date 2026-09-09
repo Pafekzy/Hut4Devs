@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   AccommodationResponsibility,
+  AccommodationPaymentIntent,
   calculateRemainingAmount,
   deriveAccommodationOperationalSummary,
   formatNaira,
@@ -19,6 +20,8 @@ import {
   User,
   FileText,
   UserCheck,
+  Activity,
+  Radio,
 } from 'lucide-react';
 
 interface AccommodationAdminViewProps {
@@ -28,6 +31,8 @@ interface AccommodationAdminViewProps {
   onSwitchToFellow: () => void;
   onExitToLanding: () => void;
   paymentProposals?: ExternalPaymentProposal[];
+  preparedIntents?: AccommodationPaymentIntent[];
+  streamStatus?: 'connecting' | 'connected' | 'error' | 'disconnected';
 }
 
 export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
@@ -37,6 +42,8 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
   onSwitchToFellow,
   onExitToLanding,
   paymentProposals = [],
+  preparedIntents = [],
+  streamStatus = 'disconnected',
 }) => {
   const summary = deriveAccommodationOperationalSummary(responsibilities);
 
@@ -69,16 +76,33 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
             </span>
             <span>Read-Only Admin Workspace &bull; No authentication or authorization is claimed or enforced</span>
           </div>
-          <button
-            type="button"
-            id="admin-switch-to-fellow-banner-btn"
-            onClick={onSwitchToFellow}
-            className={`self-start sm:self-auto font-medium underline underline-offset-2 cursor-pointer hover:opacity-80 transition-opacity text-xs ${
-              isDark ? 'text-[#C88D3A]' : 'text-[#B77620]'
-            }`}
-          >
-            ← Switch to Fellow View
-          </button>
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-1.5 font-mono text-[11px]">
+              <span
+                className={`w-2 h-2 rounded-full ${
+                  streamStatus === 'connected'
+                    ? 'bg-emerald-500 animate-pulse'
+                    : streamStatus === 'connecting'
+                    ? 'bg-amber-500 animate-pulse'
+                    : 'bg-stone-400'
+                }`}
+                aria-hidden="true"
+              />
+              <span className="font-medium">
+                Live Stream: {streamStatus === 'connected' ? 'Connected' : streamStatus === 'connecting' ? 'Connecting...' : 'Offline (PostgreSQL Authoritative)'}
+              </span>
+            </div>
+            <button
+              type="button"
+              id="admin-switch-to-fellow-banner-btn"
+              onClick={onSwitchToFellow}
+              className={`self-start sm:self-auto font-medium underline underline-offset-2 cursor-pointer hover:opacity-80 transition-opacity text-xs ${
+                isDark ? 'text-[#C88D3A]' : 'text-[#B77620]'
+              }`}
+            >
+              ← Switch to Fellow View
+            </button>
+          </div>
         </div>
       </aside>
 
@@ -472,6 +496,101 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
                     </span>
                   </div>
                 </div>
+
+                {/* Real-Time Operational Payment Preparation Activity (H4D-FUNC-010) */}
+                {preparedIntents.some((i) => i.responsibilityId === resp.id) && (
+                  <div
+                    id={`admin-payment-preparations-${resp.id}`}
+                    className="mb-4 p-4 rounded-xl border"
+                    style={{
+                      backgroundColor: isDark ? '#2A170A' : '#F9F5EE',
+                      borderColor: isDark ? '#623416' : '#E7D6C1',
+                    }}
+                  >
+                    <div
+                      className="flex items-center justify-between border-b pb-2.5 mb-3"
+                      style={{ borderColor: isDark ? '#4B2710' : '#EAE0D0' }}
+                    >
+                      <div className="flex items-center gap-2">
+                        <Activity className="w-4 h-4 text-[#C88D3A]" aria-hidden="true" />
+                        <h3
+                          id="admin-operational-activity-heading"
+                          className="text-xs font-bold uppercase tracking-wider"
+                          style={{ color: isDark ? '#E2AB5D' : '#8A5D3B' }}
+                        >
+                          Operational Activity: Payment Preparation
+                        </h3>
+                      </div>
+                      <span className="text-[10px] font-mono px-2 py-0.5 rounded font-semibold uppercase bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/20">
+                        Live Broadcast
+                      </span>
+                    </div>
+
+                    <div className="space-y-2.5">
+                      {preparedIntents
+                        .filter((i) => i.responsibilityId === resp.id)
+                        .map((intent) => (
+                          <div
+                            key={intent.id}
+                            id={`admin-prep-intent-${intent.id}`}
+                            className="p-3 rounded-lg border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2.5 text-xs"
+                            style={{
+                              backgroundColor: isDark ? '#351B0A' : '#FFF9EE',
+                              borderColor: isDark ? '#4B2710' : '#E7D6C1',
+                            }}
+                          >
+                            <div>
+                              <div className="flex items-center gap-2 mb-1">
+                                <span
+                                  className="font-bold text-sm"
+                                  style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+                                >
+                                  Payment Preparation
+                                </span>
+                                <span className="text-stone-400">&bull;</span>
+                                <span
+                                  className="font-medium"
+                                  style={{ color: isDark ? '#E2AB5D' : '#5A2D0C' }}
+                                >
+                                  {resp.fellow?.name || 'Current Fellow'}
+                                </span>
+                              </div>
+                              <div className="text-[11px] text-stone-500 flex flex-wrap items-center gap-x-2 gap-y-1">
+                                <span>{resp.title || 'September Accommodation'}</span>
+                                <span>&bull;</span>
+                                <span>
+                                  Amount:{' '}
+                                  <strong
+                                    className="font-bold"
+                                    style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+                                  >
+                                    {formatNaira(intent.amount)}
+                                  </strong>
+                                </span>
+                              </div>
+                            </div>
+
+                            <div className="flex flex-col sm:items-end gap-1">
+                              <span
+                                id="admin-intent-status-badge"
+                                className="px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wide border shadow-sm"
+                                style={{
+                                  backgroundColor: isDark ? '#3A2810' : '#FEF3C7',
+                                  borderColor: isDark ? '#6B4C1B' : '#FCD34D',
+                                  color: isDark ? '#F59E0B' : '#B45309',
+                                }}
+                              >
+                                Status: Prepared — Not Verified
+                              </span>
+                              <span className="text-[10px] italic text-stone-500">
+                                * Unverified intent. Verified amount remains {formatNaira(resp.verifiedAmount)}.
+                              </span>
+                            </div>
+                          </div>
+                        ))}
+                    </div>
+                  </div>
+                )}
 
                 {/* Visually Separate Payment Preparation Status (if proposal exists) */}
                 {paymentProposals.some((p) => p.responsibilityId === resp.id) && (() => {

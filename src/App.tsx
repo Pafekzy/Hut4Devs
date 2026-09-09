@@ -4,9 +4,17 @@ import { MemberHomeView } from './components/MemberHomeView';
 import { ResponsibilityDetailView } from './components/ResponsibilityDetailView';
 import { AccommodationAdminView } from './components/AccommodationAdminView';
 import { DEMO_ACCOMMODATION_RESPONSIBILITY } from './data/demoAccommodation';
-import { AccommodationResponsibility, AccommodationPaymentIntent } from './domain/accommodation';
+import {
+  AccommodationResponsibility,
+  AccommodationPaymentIntent,
+  PaymentIntentStatus,
+} from './domain/accommodation';
 import { ExternalPaymentProposal } from './domain/payments';
-import { fetchAccommodationState, savePaymentIntent } from './services/paymentClient';
+import {
+  fetchAccommodationState,
+  savePaymentIntent,
+  subscribeToAdminStream,
+} from './services/paymentClient';
 
 type AppView = 'landing' | 'member-home' | 'responsibility-detail' | 'accommodation-admin';
 type AppTheme = 'light' | 'dark';
@@ -42,6 +50,11 @@ export default function App() {
   // Truthful error state if database is unavailable
   const [dbError, setDbError] = useState<string | null>(null);
 
+  // Live stream connection state (H4D-FUNC-010)
+  const [streamStatus, setStreamStatus] = useState<
+    'connecting' | 'connected' | 'error' | 'disconnected'
+  >('disconnected');
+
   // Initial load: Fetch authoritative persistence state from PostgreSQL
   useEffect(() => {
     let isMounted = true;
@@ -66,6 +79,65 @@ export default function App() {
 
     return () => {
       isMounted = false;
+    };
+  }, []);
+
+  // Real-time operational stream for Accommodation Admin (H4D-FUNC-010)
+  // Receives outbox broadcast events when payment intents or proposals are created.
+  useEffect(() => {
+    const unsubscribe = subscribeToAdminStream(
+      (event) => {
+        if (event.eventType === 'accommodation.payment_intent.prepared') {
+          const payload = event.data;
+          if (payload && payload.intentId) {
+            const incomingIntent: AccommodationPaymentIntent = {
+              id: payload.intentId,
+              responsibilityId: payload.responsibilityId,
+              amount: Number(payload.amount),
+              fulfilmentType: payload.fulfilmentType || 'PARTIAL',
+              status: PaymentIntentStatus.PREPARED,
+              createdAt: payload.createdAt || new Date().toISOString(),
+            };
+            setPreparedIntents((prev) => {
+              const exists = prev.some((i) => i.id === incomingIntent.id);
+              if (exists) {
+                return prev.map((i) => (i.id === incomingIntent.id ? incomingIntent : i));
+              }
+              return [...prev, incomingIntent];
+            });
+          }
+        } else if (event.eventType === 'accommodation.payment_proposal.created') {
+          const payload = event.data;
+          if (payload && payload.proposalId) {
+            const incomingProposal: ExternalPaymentProposal = {
+              id: payload.proposalId,
+              paymentIntentId: payload.paymentIntentId,
+              responsibilityId: payload.responsibilityId,
+              amount: Number(payload.amount),
+              currency: payload.currency || 'NGN',
+              provider: payload.provider,
+              providerProposalId: payload.providerProposalId || payload.proposalId,
+              providerStatus: payload.providerStatus,
+              isSimulated: Boolean(payload.isSimulated),
+              createdAt: payload.createdAt || new Date().toISOString(),
+            };
+            setPaymentProposals((prev) => {
+              const exists = prev.some((p) => p.id === incomingProposal.id);
+              if (exists) {
+                return prev.map((p) => (p.id === incomingProposal.id ? incomingProposal : p));
+              }
+              return [...prev, incomingProposal];
+            });
+          }
+        }
+      },
+      (status) => {
+        setStreamStatus(status);
+      }
+    );
+
+    return () => {
+      unsubscribe();
     };
   }, []);
 
@@ -168,6 +240,8 @@ export default function App() {
           onSwitchToFellow={() => setView('member-home')}
           onExitToLanding={() => setView('landing')}
           paymentProposals={paymentProposals}
+          preparedIntents={preparedIntents}
+          streamStatus={streamStatus}
         />
       )}
     </div>

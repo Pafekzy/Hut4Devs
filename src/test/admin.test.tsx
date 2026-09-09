@@ -173,4 +173,67 @@ describe('H4D-FUNC-003: Accommodation Admin Command Center (Read View)', () => {
     // Back in Fellow view
     expect(screen.getByText('What needs your attention?')).toBeInTheDocument();
   });
+
+  // 8. H4D-FUNC-010: Live Real-Time Stream Status & Prepared Intent Delivery
+  it('8. renders live real-time stream status and prepared intent operational updates', () => {
+    render(
+      <AccommodationAdminView
+        isDark={false}
+        responsibilities={[DEMO_ACCOMMODATION_RESPONSIBILITY]}
+        onToggleTheme={() => {}}
+        onSwitchToFellow={() => {}}
+        onExitToLanding={() => {}}
+        streamStatus="connected"
+        preparedIntents={[
+          {
+            id: 'intent-live-test',
+            responsibilityId: DEMO_ACCOMMODATION_RESPONSIBILITY.id,
+            amount: 20000,
+            fulfilmentType: 'PARTIAL' as any,
+            status: 'PREPARED' as any,
+            createdAt: new Date().toISOString(),
+          },
+        ]}
+      />
+    );
+
+    // Live stream status badge
+    expect(screen.getByText(/live stream:\s*connected/i)).toBeInTheDocument();
+
+    // Operational Activity section
+    expect(screen.getByText('Operational Activity: Payment Preparation')).toBeInTheDocument();
+    expect(screen.getByText('Status: Prepared — Not Verified')).toBeInTheDocument();
+    expect(screen.getByText(formatNaira(20000))).toBeInTheDocument();
+  });
+
+  // 9. Invariant: Prepared intent does NOT claim verified money in Admin view
+  it('9. ensures prepared intents do NOT alter verified amounts or claim payment verification', () => {
+    render(
+      <AccommodationAdminView
+        isDark={false}
+        responsibilities={[DEMO_ACCOMMODATION_RESPONSIBILITY]}
+        onToggleTheme={() => {}}
+        onSwitchToFellow={() => {}}
+        onExitToLanding={() => {}}
+        streamStatus="connected"
+        preparedIntents={[
+          {
+            id: 'intent-live-test',
+            responsibilityId: DEMO_ACCOMMODATION_RESPONSIBILITY.id,
+            amount: 20000,
+            fulfilmentType: 'PARTIAL' as any,
+            status: 'PREPARED' as any,
+            createdAt: new Date().toISOString(),
+          },
+        ]}
+      />
+    );
+
+    // Verified amount must still be ₦0
+    expect(screen.getByText('Verified:')).toBeInTheDocument();
+    expect(screen.getByText(formatNaira(0))).toBeInTheDocument();
+
+    // Never display "Verified: ₦20,000"
+    expect(screen.queryByText('Verified: ₦20,000')).toBeNull();
+  });
 });

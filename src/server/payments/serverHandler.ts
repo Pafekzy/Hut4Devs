@@ -7,9 +7,10 @@ import {
   FulfilmentType,
   PaymentIntentStatus,
 } from '../../domain/accommodation';
-import { IHut4DevsRepositories } from '../../domain/repositories';
+import { IHut4DevsRepositories, OutboxEventRecord } from '../../domain/repositories';
 import { BmoniPaymentProvider } from './bmoniProvider';
 import { FakePaymentProvider } from './fakeProvider';
+import { OutboxPublisher, globalOutboxPublisher } from '../realtime/outboxPublisher';
 
 export interface ServerHandlerResponse {
   status: number;
@@ -44,7 +45,8 @@ export async function handleCreateProposal(
   body: any,
   customProvider?: PaymentProvider,
   overrideMode?: ServerProviderMode,
-  repos?: IHut4DevsRepositories
+  repos?: IHut4DevsRepositories,
+  publisher?: OutboxPublisher
 ): Promise<ServerHandlerResponse> {
   if (!body || typeof body !== 'object') {
     return {
@@ -112,8 +114,9 @@ export async function handleCreateProposal(
     }
   }
 
-  // 3. PostgreSQL Transactional Persistence (H4D-FUNC-008)
+  // 3. PostgreSQL Transactional Persistence & Outbox (H4D-FUNC-008 & H4D-FUNC-010)
   if (proposalResult.success && proposalResult.proposal && repos) {
+    let proposalOutboxEvent: OutboxEventRecord | null = null;
     try {
       await repos.runInTransaction(async (tx) => {
         // Enforce intent exists or save it within transaction
@@ -140,7 +143,35 @@ export async function handleCreateProposal(
 
         // Save external payment proposal
         await tx.proposals.save(proposalResult.proposal!);
+
+        // Create transactional outbox event
+        proposalOutboxEvent = {
+          id: `outbox-proposal-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`,
+          eventType: 'accommodation.payment_proposal.created',
+          aggregateType: 'accommodation_responsibility',
+          aggregateId: request.responsibilityId,
+          payload: {
+            proposalId: proposalResult.proposal!.id,
+            paymentIntentId: proposalResult.proposal!.paymentIntentId,
+            responsibilityId: request.responsibilityId,
+            amount: request.amount,
+            currency: request.currency,
+            provider: proposalResult.proposal!.provider,
+            providerStatus: proposalResult.proposal!.providerStatus,
+            isSimulated: Boolean(proposalResult.proposal!.isSimulated),
+            createdAt: proposalResult.proposal!.createdAt,
+          },
+          createdAt: new Date().toISOString(),
+          publishedAt: null,
+        };
+        await tx.outbox.insert(proposalOutboxEvent);
       });
+
+      // Deliver via SSE strictly AFTER database commit succeeds
+      if (proposalOutboxEvent) {
+        const activePublisher = publisher || globalOutboxPublisher;
+        await activePublisher.publish(proposalOutboxEvent, repos);
+      }
     } catch (err: any) {
       return {
         status: 500,
