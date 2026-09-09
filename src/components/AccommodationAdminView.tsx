@@ -24,6 +24,18 @@ import {
   Radio,
 } from 'lucide-react';
 
+export interface AdminProviderEventDisplay {
+  id?: string;
+  provider: string;
+  providerEventId: string;
+  eventType: string;
+  providerStatus: string;
+  providerProposalId?: string | null;
+  statusLabel?: string;
+  notice?: string;
+  receivedAt?: string;
+}
+
 interface AccommodationAdminViewProps {
   isDark: boolean;
   responsibilities: AccommodationResponsibility[];
@@ -32,6 +44,7 @@ interface AccommodationAdminViewProps {
   onExitToLanding: () => void;
   paymentProposals?: ExternalPaymentProposal[];
   preparedIntents?: AccommodationPaymentIntent[];
+  providerEvents?: AdminProviderEventDisplay[];
   streamStatus?: 'connecting' | 'connected' | 'error' | 'disconnected';
 }
 
@@ -43,6 +56,7 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
   onExitToLanding,
   paymentProposals = [],
   preparedIntents = [],
+  providerEvents = [],
   streamStatus = 'disconnected',
 }) => {
   const summary = deriveAccommodationOperationalSummary(responsibilities);
@@ -642,6 +656,80 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
             );
           })}
         </section>
+
+        {/* Provider Event Store Operational Audit (H4D-FUNC-012) */}
+        {providerEvents && providerEvents.length > 0 && (
+          <div
+            id="admin-provider-events-section"
+            className="mt-6 p-4 rounded-xl border flex flex-col gap-3 text-xs"
+            style={{
+              backgroundColor: isDark ? '#2A170A' : '#F9F5EE',
+              borderColor: isDark ? '#4B2710' : '#E7D6C1',
+            }}
+          >
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Activity className="w-3.5 h-3.5 text-amber-500" />
+                <span
+                  className="font-semibold uppercase tracking-wider text-[11px]"
+                  style={{ color: isDark ? '#C88D3A' : '#B77620' }}
+                >
+                  Provider Ingestion Audit &bull; Provider Events Received
+                </span>
+              </div>
+              <span className="font-mono text-[10px] text-stone-500">
+                Total Ingested: {providerEvents.length} (Authoritative PostgreSQL Store)
+              </span>
+            </div>
+            <div className="space-y-2 mt-1">
+              {providerEvents.map((evt, idx) => (
+                <div
+                  key={evt.id || evt.providerEventId || idx}
+                  id={`admin-provider-event-${evt.providerEventId || idx}`}
+                  className="p-3 rounded-lg border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2"
+                  style={{
+                    backgroundColor: isDark ? '#331A0C' : '#FFFDF9',
+                    borderColor: isDark ? '#4B2710' : '#EAE0D0',
+                  }}
+                >
+                  <div className="flex flex-col gap-1">
+                    <div className="flex flex-wrap items-center gap-2 font-mono text-[11px]">
+                      <span className="font-semibold" style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}>
+                        Provider: {evt.provider}
+                      </span>
+                      <span className="text-stone-400">&bull;</span>
+                      <span className="text-stone-500">Event: {evt.eventType}</span>
+                      <span className="text-stone-400">&bull;</span>
+                      <span className="text-stone-400 text-[10px]">ID: {evt.providerEventId}</span>
+                    </div>
+                    <div className="text-[11px] text-stone-500">
+                      Provider Status: <strong className="font-semibold">{evt.providerStatus}</strong>
+                      {evt.providerProposalId && (
+                        <span> &bull; Proposal: {evt.providerProposalId}</span>
+                      )}
+                    </div>
+                  </div>
+                  <div className="flex flex-col sm:items-end gap-1">
+                    <span
+                      id="admin-provider-event-status-badge"
+                      className="px-2 py-0.5 rounded font-mono font-semibold text-[10px] border uppercase"
+                      style={{
+                        backgroundColor: isDark ? '#3A2810' : '#FEF3C7',
+                        borderColor: isDark ? '#6B4C1B' : '#FCD34D',
+                        color: isDark ? '#F59E0B' : '#B45309',
+                      }}
+                    >
+                      Status: Received — Awaiting Reconciliation
+                    </span>
+                    <span className="text-[10px] italic text-stone-500">
+                      * Provider event received. Not verified. Awaiting reconciliation.
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Privacy & Scope Notice */}
         <div

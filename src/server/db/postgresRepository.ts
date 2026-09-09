@@ -19,6 +19,8 @@ import {
   IExternalProposalRepository,
   IOutboxRepository,
   OutboxEventRecord,
+  ProviderEventRecord,
+  IProviderEventRepository,
   IHut4DevsRepositories,
 } from '../../domain/repositories';
 import { SqlQueryable } from './migrator';
@@ -566,6 +568,153 @@ export class PostgresSessionRepository implements ISessionRepository {
 }
 
 /**
+ * PostgreSQL Provider Event Repository (H4D-FUNC-012)
+ *
+ * Persists raw provider event receipts for audit and later reconciliation.
+ * Never stores webhook secrets, API secrets, private keys, wallet PINs, BVN, or NIN.
+ */
+export class PostgresProviderEventRepository implements IProviderEventRepository {
+  constructor(private client: SqlQueryable) {}
+
+  async create(event: ProviderEventRecord): Promise<ProviderEventRecord> {
+    const payloadStr = typeof event.payload === 'string' ? event.payload : JSON.stringify(event.payload);
+    await this.client.query(
+      `INSERT INTO provider_events (
+        id, provider, provider_event_id, source_event_id, event_type,
+        provider_status, provider_proposal_id, payload, received_at,
+        processed_at, processing_status
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+      ON CONFLICT (provider, provider_event_id) DO NOTHING`,
+      [
+        event.id,
+        event.provider,
+        event.providerEventId,
+        event.sourceEventId || null,
+        event.eventType,
+        event.providerStatus,
+        event.providerProposalId || null,
+        payloadStr,
+        event.receivedAt,
+        event.processedAt || null,
+        event.processingStatus || 'RECEIVED',
+      ]
+    );
+    return event;
+  }
+
+  async createWithOutbox(event: ProviderEventRecord, outboxEvent: OutboxEventRecord): Promise<ProviderEventRecord> {
+    const payloadStr = typeof event.payload === 'string' ? event.payload : JSON.stringify(event.payload);
+    const outboxPayloadStr = typeof outboxEvent.payload === 'string' ? outboxEvent.payload : JSON.stringify(outboxEvent.payload);
+
+    await this.client.query('BEGIN');
+    try {
+      await this.client.query(
+        `INSERT INTO provider_events (
+          id, provider, provider_event_id, source_event_id, event_type,
+          provider_status, provider_proposal_id, payload, received_at,
+          processed_at, processing_status
+        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+        ON CONFLICT (provider, provider_event_id) DO NOTHING`,
+        [
+          event.id,
+          event.provider,
+          event.providerEventId,
+          event.sourceEventId || null,
+          event.eventType,
+          event.providerStatus,
+          event.providerProposalId || null,
+          payloadStr,
+          event.receivedAt,
+          event.processedAt || null,
+          event.processingStatus || 'RECEIVED',
+        ]
+      );
+
+      await this.client.query(
+        `INSERT INTO outbox_events (id, event_type, aggregate_type, aggregate_id, payload, created_at, published_at)
+         VALUES ($1, $2, $3, $4, $5, $6, $7)`,
+        [
+          outboxEvent.id,
+          outboxEvent.eventType,
+          outboxEvent.aggregateType,
+          outboxEvent.aggregateId,
+          outboxPayloadStr,
+          outboxEvent.createdAt,
+          outboxEvent.publishedAt || null,
+        ]
+      );
+      await this.client.query('COMMIT');
+      return event;
+    } catch (err) {
+      await this.client.query('ROLLBACK');
+      throw err;
+    }
+  }
+
+  async findByProviderEventId(provider: string, providerEventId: string): Promise<ProviderEventRecord | null> {
+    const res = await this.client.query(
+      `SELECT * FROM provider_events WHERE provider = $1 AND provider_event_id = $2`,
+      [provider, providerEventId]
+    );
+    if (res.rows.length === 0) return null;
+    return this.mapRowToProviderEvent(res.rows[0]);
+  }
+
+  async findById(id: string): Promise<ProviderEventRecord | null> {
+    const res = await this.client.query(
+      `SELECT * FROM provider_events WHERE id = $1`,
+      [id]
+    );
+    if (res.rows.length === 0) return null;
+    return this.mapRowToProviderEvent(res.rows[0]);
+  }
+
+  async listByProposalId(providerProposalId: string): Promise<ProviderEventRecord[]> {
+    const res = await this.client.query(
+      `SELECT * FROM provider_events WHERE provider_proposal_id = $1 ORDER BY received_at DESC`,
+      [providerProposalId]
+    );
+    return res.rows.map((r: any) => this.mapRowToProviderEvent(r));
+  }
+
+  async listAll(): Promise<ProviderEventRecord[]> {
+    const res = await this.client.query(
+      `SELECT * FROM provider_events ORDER BY received_at DESC`
+    );
+    return res.rows.map((r: any) => this.mapRowToProviderEvent(r));
+  }
+
+  private mapRowToProviderEvent(row: any): ProviderEventRecord {
+    let parsedPayload: any = {};
+    if (row.payload) {
+      if (typeof row.payload === 'string') {
+        try {
+          parsedPayload = JSON.parse(row.payload);
+        } catch {
+          parsedPayload = { raw: row.payload };
+        }
+      } else {
+        parsedPayload = row.payload;
+      }
+    }
+
+    return {
+      id: row.id,
+      provider: row.provider,
+      providerEventId: row.provider_event_id,
+      sourceEventId: row.source_event_id,
+      eventType: row.event_type,
+      providerStatus: row.provider_status,
+      providerProposalId: row.provider_proposal_id,
+      payload: parsedPayload,
+      receivedAt: row.received_at instanceof Date ? row.received_at.toISOString() : String(row.received_at),
+      processedAt: row.processed_at ? (row.processed_at instanceof Date ? row.processed_at.toISOString() : String(row.processed_at)) : null,
+      processingStatus: row.processing_status,
+    };
+  }
+}
+
+/**
  * Top-level PostgreSQL Repositories Coordinator
  */
 export class PostgresRepositories implements IHut4DevsRepositories {
@@ -575,6 +724,7 @@ export class PostgresRepositories implements IHut4DevsRepositories {
   outbox: IOutboxRepository;
   members: IMemberRepository;
   sessions: ISessionRepository;
+  providerEvents: IProviderEventRepository;
 
   constructor(private poolOrClient: Pool | PoolClient | SqlQueryable) {
     this.accommodation = new PostgresAccommodationRepository(this.poolOrClient);
@@ -583,6 +733,7 @@ export class PostgresRepositories implements IHut4DevsRepositories {
     this.outbox = new PostgresOutboxRepository(this.poolOrClient);
     this.members = new PostgresMemberRepository(this.poolOrClient);
     this.sessions = new PostgresSessionRepository(this.poolOrClient);
+    this.providerEvents = new PostgresProviderEventRepository(this.poolOrClient);
   }
 
   async runInTransaction<T>(fn: (repos: IHut4DevsRepositories) => Promise<T>): Promise<T> {

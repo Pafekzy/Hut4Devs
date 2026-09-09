@@ -62,6 +62,46 @@ export interface IOutboxRepository {
 }
 
 /**
+ * Provider Event Processing Status (H4D-FUNC-012)
+ *
+ * Invariant: Provider event receipt is evidence. It is NOT automatically
+ * a Hut4Devs accounting mutation. BMONI COMPLETED != Hut4Devs VERIFIED.
+ */
+export type ProviderEventProcessingStatus = 'RECEIVED' | 'DUPLICATE' | 'REJECTED';
+
+/**
+ * Provider Event Record (H4D-FUNC-012)
+ *
+ * Persists raw provider status and stable event identifiers for audit and later reconciliation.
+ * Never stores webhook secrets, API secrets, private keys, wallet PINs, BVN, or NIN.
+ */
+export interface ProviderEventRecord {
+  id: string;
+  provider: string; // e.g. 'BMONI'
+  providerEventId: string;
+  sourceEventId?: string | null;
+  eventType: string; // e.g. 'proposal.status_updated', 'payment.completed'
+  providerStatus: string; // e.g. 'COMPLETED', 'PENDING_APPROVAL'
+  providerProposalId?: string | null;
+  payload: Record<string, any>;
+  receivedAt: string;
+  processedAt?: string | null;
+  processingStatus: ProviderEventProcessingStatus;
+}
+
+/**
+ * Provider Event Repository Interface (H4D-FUNC-012)
+ */
+export interface IProviderEventRepository {
+  create(event: ProviderEventRecord): Promise<ProviderEventRecord>;
+  createWithOutbox(event: ProviderEventRecord, outboxEvent: OutboxEventRecord): Promise<ProviderEventRecord>;
+  findByProviderEventId(provider: string, providerEventId: string): Promise<ProviderEventRecord | null>;
+  findById(id: string): Promise<ProviderEventRecord | null>;
+  listByProposalId(providerProposalId: string): Promise<ProviderEventRecord[]>;
+  listAll(): Promise<ProviderEventRecord[]>;
+}
+
+/**
  * Coherent Unit of Work & Transaction Boundary
  */
 export interface IHut4DevsRepositories {
@@ -71,5 +111,6 @@ export interface IHut4DevsRepositories {
   outbox: IOutboxRepository;
   members: IMemberRepository;
   sessions: ISessionRepository;
+  providerEvents: IProviderEventRepository;
   runInTransaction<T>(fn: (repos: IHut4DevsRepositories) => Promise<T>): Promise<T>;
 }
