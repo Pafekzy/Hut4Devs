@@ -4,14 +4,15 @@ import { MemberHomeView } from './components/MemberHomeView';
 import { ResponsibilityDetailView } from './components/ResponsibilityDetailView';
 import { AccommodationAdminView } from './components/AccommodationAdminView';
 import { DEMO_ACCOMMODATION_RESPONSIBILITY } from './data/demoAccommodation';
-import { AccommodationPaymentIntent } from './domain/accommodation';
+import { AccommodationResponsibility, AccommodationPaymentIntent } from './domain/accommodation';
 import { ExternalPaymentProposal } from './domain/payments';
+import { fetchAccommodationState, savePaymentIntent } from './services/paymentClient';
 
 type AppView = 'landing' | 'member-home' | 'responsibility-detail' | 'accommodation-admin';
 type AppTheme = 'light' | 'dark';
 
 export default function App() {
-  // Theme state with localStorage persistence
+  // Theme state with localStorage persistence (UI preference only, not authoritative financial state)
   const [theme, setTheme] = useState<AppTheme>(() => {
     try {
       const savedTheme = localStorage.getItem('h4d_theme');
@@ -27,18 +28,68 @@ export default function App() {
   // Active view: 'landing' | 'member-home' | 'responsibility-detail' | 'accommodation-admin'
   const [view, setView] = useState<AppView>('landing');
 
-  // Prepared payment intents (H4D-FUNC-004) - Invariant: does not modify responsibility
+  // Authoritative accommodation responsibility from PostgreSQL
+  const [responsibility, setResponsibility] = useState<AccommodationResponsibility>(
+    DEMO_ACCOMMODATION_RESPONSIBILITY
+  );
+
+  // Prepared payment intents (H4D-FUNC-004 & H4D-FUNC-008) - Authoritative PostgreSQL persistence
   const [preparedIntents, setPreparedIntents] = useState<AccommodationPaymentIntent[]>([]);
 
-  // Created payment proposals (H4D-FUNC-005) - Invariant: does not modify responsibility
+  // Created payment proposals (H4D-FUNC-005 & H4D-FUNC-008) - Authoritative PostgreSQL persistence
   const [paymentProposals, setPaymentProposals] = useState<ExternalPaymentProposal[]>([]);
 
-  const handleIntentPrepared = (newIntent: AccommodationPaymentIntent) => {
-    setPreparedIntents((prev) => [...prev, newIntent]);
+  // Truthful error state if database is unavailable
+  const [dbError, setDbError] = useState<string | null>(null);
+
+  // Initial load: Fetch authoritative persistence state from PostgreSQL
+  useEffect(() => {
+    let isMounted = true;
+    if (typeof fetch === 'function') {
+      fetchAccommodationState()
+        .then((state) => {
+          if (!isMounted) return;
+          if (state && state.success) {
+            if (state.responsibility) {
+              setResponsibility(state.responsibility);
+            }
+            if (state.preparedIntents && state.preparedIntents.length > 0) {
+              setPreparedIntents(state.preparedIntents);
+            }
+            if (state.paymentProposals && state.paymentProposals.length > 0) {
+              setPaymentProposals(state.paymentProposals);
+            }
+          }
+        })
+        .catch(() => {});
+    }
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const handleIntentPrepared = async (newIntent: AccommodationPaymentIntent) => {
+    try {
+      const res = await savePaymentIntent(newIntent);
+      if (!res.success) {
+        setDbError(res.error || 'Failed to persist payment intent to PostgreSQL.');
+        return;
+      }
+      setPreparedIntents((prev) => {
+        const filtered = prev.filter((i) => i.id !== newIntent.id);
+        return [...filtered, newIntent];
+      });
+    } catch (err: any) {
+      setDbError(err.message || 'Database unavailable.');
+    }
   };
 
   const handleProposalCreated = (newProposal: ExternalPaymentProposal) => {
-    setPaymentProposals((prev) => [...prev, newProposal]);
+    setPaymentProposals((prev) => {
+      const filtered = prev.filter((p) => p.id !== newProposal.id);
+      return [...filtered, newProposal];
+    });
   };
 
   // Synchronize document theme class and body background
@@ -68,6 +119,15 @@ export default function App() {
 
   return (
     <div className="min-h-screen">
+      {dbError && (
+        <aside
+          role="alert"
+          className="w-full bg-amber-900/20 border-b border-amber-700/40 px-4 py-2 text-center text-xs text-amber-200"
+        >
+          {dbError}
+        </aside>
+      )}
+
       {view === 'landing' && (
         <LandingView
           isDark={isDark}
@@ -79,7 +139,7 @@ export default function App() {
       {view === 'member-home' && (
         <MemberHomeView
           isDark={isDark}
-          responsibility={DEMO_ACCOMMODATION_RESPONSIBILITY}
+          responsibility={responsibility}
           onToggleTheme={toggleTheme}
           onExitToLanding={() => setView('landing')}
           onViewResponsibilityDetails={() => setView('responsibility-detail')}
@@ -89,7 +149,7 @@ export default function App() {
 
       {view === 'responsibility-detail' && (
         <ResponsibilityDetailView
-          responsibility={DEMO_ACCOMMODATION_RESPONSIBILITY}
+          responsibility={responsibility}
           isDark={isDark}
           onToggleTheme={toggleTheme}
           onBackToHome={() => setView('member-home')}
@@ -103,7 +163,7 @@ export default function App() {
       {view === 'accommodation-admin' && (
         <AccommodationAdminView
           isDark={isDark}
-          responsibilities={[DEMO_ACCOMMODATION_RESPONSIBILITY]}
+          responsibilities={[responsibility]}
           onToggleTheme={toggleTheme}
           onSwitchToFellow={() => setView('member-home')}
           onExitToLanding={() => setView('landing')}

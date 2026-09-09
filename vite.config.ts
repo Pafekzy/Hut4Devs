@@ -3,15 +3,24 @@ import { defineConfig, Plugin } from 'vite';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 
-import { handlePaymentProposalRequest } from './server';
+import {
+  handlePaymentProposalRequest,
+  handleAccommodationRequest,
+  handleSaveIntentRequest,
+} from './server';
 
 function bmoniDevPlugin(): Plugin {
   return {
     name: 'bmoni-dev-plugin',
     configureServer(server) {
       server.middlewares.use((req, res, next) => {
-        if (req.url === '/api/payments/proposal' && req.method === 'POST') {
+        const url = req.url?.split('?')[0];
+        if (url === '/api/payments/proposal' && req.method === 'POST') {
           handlePaymentProposalRequest(req, res);
+        } else if (url === '/api/accommodation/responsibility' && req.method === 'GET') {
+          handleAccommodationRequest(req, res);
+        } else if (url === '/api/payments/intents' && req.method === 'POST') {
+          handleSaveIntentRequest(req, res);
         } else {
           next();
         }

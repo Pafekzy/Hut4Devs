@@ -1,12 +1,86 @@
 import {
+  AccommodationResponsibility,
   AccommodationPaymentIntent,
 } from '../domain/accommodation';
 import {
   CreateProposalResult,
+  ExternalPaymentProposal,
 } from '../domain/payments';
 
+export interface AccommodationServerState {
+  success: boolean;
+  responsibility?: AccommodationResponsibility;
+  preparedIntents?: AccommodationPaymentIntent[];
+  paymentProposals?: ExternalPaymentProposal[];
+  error?: string;
+}
+
+export interface SaveIntentResult {
+  success: boolean;
+  intent?: AccommodationPaymentIntent;
+  error?: string;
+}
+
 /**
- * Client-Side Payment Provider Boundary (H4D-FUNC-005)
+ * Fetches authoritative accommodation responsibility state from PostgreSQL backend.
+ * (H4D-FUNC-008)
+ */
+export async function fetchAccommodationState(): Promise<AccommodationServerState> {
+  try {
+    const response = await fetch('/api/accommodation/responsibility');
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) {
+      return {
+        success: false,
+        error: data.error || 'Failed to fetch accommodation responsibility state.',
+      };
+    }
+    return data;
+  } catch (err: any) {
+    return {
+      success: false,
+      error: 'Database unavailable: Could not connect to authoritative persistence layer.',
+    };
+  }
+}
+
+/**
+ * Persists a prepared payment intent to the PostgreSQL repository.
+ * (H4D-FUNC-008)
+ *
+ * Invariant: Failure does NOT fall back to localStorage for authoritative state.
+ */
+export async function savePaymentIntent(
+  intent: AccommodationPaymentIntent
+): Promise<SaveIntentResult> {
+  try {
+    const response = await fetch('/api/payments/intents', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ intent }),
+    });
+
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) {
+      return {
+        success: false,
+        error: data.error || 'Failed to persist payment intent to PostgreSQL.',
+      };
+    }
+
+    return data;
+  } catch (err: any) {
+    return {
+      success: false,
+      error: 'Database unavailable: Connection failed while saving payment intent.',
+    };
+  }
+}
+
+/**
+ * Client-Side Payment Provider Boundary (H4D-FUNC-005 & H4D-FUNC-008)
  *
  * This client function talks ONLY to the local server endpoint /api/payments/proposal.
  * It does NOT hold or transmit any BMONI API keys, partner secrets, or private keys.

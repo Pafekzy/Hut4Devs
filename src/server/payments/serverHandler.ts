@@ -3,6 +3,11 @@ import {
   CreateProposalResult,
   PaymentProvider,
 } from '../../domain/payments';
+import {
+  FulfilmentType,
+  PaymentIntentStatus,
+} from '../../domain/accommodation';
+import { IHut4DevsRepositories } from '../../domain/repositories';
 import { BmoniPaymentProvider } from './bmoniProvider';
 import { FakePaymentProvider } from './fakeProvider';
 
@@ -29,19 +34,17 @@ export function getServerProviderMode(): ServerProviderMode {
 /**
  * Isolated Server-Side Boundary Handler for /api/payments/proposal
  *
- * RUNTIME EXECUTION NOTE:
- * Current external execution capability is DEVELOPMENT ONLY (mounted via Vite dev server plugin).
- * Production build (`vite build`) produces static client bundles without a standalone Node backend.
- * This handler is decoupled from any specific web framework (Express, Fastify, AWS Lambda, Cloud Run)
- * so it can be mounted into a production backend runtime when provisioned.
+ * Persists proposal state into PostgreSQL when repositories are provided.
  *
  * Invariant: Never alters accommodation balances or status. Browser client never sees BMONI credentials.
  * Invariant: When in BMONI mode, NEVER silently fall back to FakePaymentProvider.
+ * Invariant: Transaction boundary ensures proposal is never saved without a valid payment intent and responsibility.
  */
 export async function handleCreateProposal(
   body: any,
   customProvider?: PaymentProvider,
-  overrideMode?: ServerProviderMode
+  overrideMode?: ServerProviderMode,
+  repos?: IHut4DevsRepositories
 ): Promise<ServerHandlerResponse> {
   if (!body || typeof body !== 'object') {
     return {
@@ -72,50 +75,85 @@ export async function handleCreateProposal(
     currency: currency || 'NGN',
   };
 
+  let proposalResult: CreateProposalResult;
+  let status = 200;
+
   // 1. If a custom provider is explicitly injected (e.g. for testing)
   if (customProvider) {
-    const result = await customProvider.createProposal(request);
-    return {
-      status: result.success ? 200 : 400,
-      body: result,
-    };
+    proposalResult = await customProvider.createProposal(request);
+    status = proposalResult.success ? 200 : 400;
+  } else {
+    // 2. Evaluate Server-Side Provider Mode
+    const activeMode = overrideMode ?? getServerProviderMode();
+
+    // Mode: SIMULATED — explicit simulation only
+    if (activeMode === 'SIMULATED') {
+      const fakeProvider = new FakePaymentProvider();
+      proposalResult = await fakeProvider.createProposal(request);
+      status = 200;
+    } else {
+      // Mode: BMONI — strictly real BMONI provider. Never fall back to simulation!
+      const bmoniProvider = new BmoniPaymentProvider();
+
+      if (!bmoniProvider.hasCredentials()) {
+        return {
+          status: 200,
+          body: {
+            success: false,
+            error: 'BMONI Sandbox Not Configured',
+            notConfigured: true,
+            requiresCredentials: true,
+          },
+        };
+      }
+
+      proposalResult = await bmoniProvider.createProposal(request);
+      status = proposalResult.success ? 200 : proposalResult.isAmbiguousError ? 504 : 400;
+    }
   }
 
-  // 2. Evaluate Server-Side Provider Mode
-  const activeMode = overrideMode ?? getServerProviderMode();
+  // 3. PostgreSQL Transactional Persistence (H4D-FUNC-008)
+  if (proposalResult.success && proposalResult.proposal && repos) {
+    try {
+      await repos.runInTransaction(async (tx) => {
+        // Enforce intent exists or save it within transaction
+        let existingIntent = await tx.intents.findById(intentId);
+        if (!existingIntent) {
+          // Verify responsibility exists first
+          const resp = await tx.accommodation.findById(request.responsibilityId);
+          if (!resp) {
+            throw new Error(
+              `Foreign key violation: accommodation responsibility "${request.responsibilityId}" does not exist.`
+            );
+          }
 
-  // Mode: SIMULATED — explicit simulation only
-  if (activeMode === 'SIMULATED') {
-    const fakeProvider = new FakePaymentProvider();
-    const result = await fakeProvider.createProposal(request);
-    return {
-      status: 200,
-      body: result,
-    };
+          existingIntent = {
+            id: intentId,
+            responsibilityId: request.responsibilityId,
+            amount: request.amount,
+            fulfilmentType: FulfilmentType.FULL,
+            status: PaymentIntentStatus.PREPARED,
+            createdAt: new Date().toISOString(),
+          };
+          await tx.intents.save(existingIntent);
+        }
+
+        // Save external payment proposal
+        await tx.proposals.save(proposalResult.proposal!);
+      });
+    } catch (err: any) {
+      return {
+        status: 500,
+        body: {
+          success: false,
+          error: `Database persistence failed: ${err.message || String(err)}`,
+        },
+      };
+    }
   }
-
-  // Mode: BMONI — strictly real BMONI provider. Never fall back to simulation!
-  const bmoniProvider = new BmoniPaymentProvider();
-
-  if (!bmoniProvider.hasCredentials()) {
-    // Missing credentials produce NOT CONFIGURED
-    return {
-      status: 200,
-      body: {
-        success: false,
-        error: 'BMONI Sandbox Not Configured',
-        notConfigured: true,
-        requiresCredentials: true,
-      },
-    };
-  }
-
-  // Real BMONI sandbox request
-  const result = await bmoniProvider.createProposal(request);
-  const status = result.success ? 200 : result.isAmbiguousError ? 504 : 400;
 
   return {
     status,
-    body: result,
+    body: proposalResult,
   };
 }

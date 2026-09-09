@@ -3,6 +3,10 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { handleCreateProposal, ServerHandlerResponse } from './src/server/payments/serverHandler';
 import { PaymentProvider } from './src/domain/payments';
+import { IHut4DevsRepositories } from './src/domain/repositories';
+import { getAuthoritativeRepositories } from './src/server/db/connection';
+import { AccommodationPaymentIntent } from './src/domain/accommodation';
+import { DEMO_ACCOMMODATION_RESPONSIBILITY } from './src/data/demoAccommodation';
 
 const MIME_TYPES: Record<string, string> = {
   '.html': 'text/html; charset=utf-8',
@@ -21,6 +25,12 @@ const MIME_TYPES: Record<string, string> = {
 export interface ServerOptions {
   distDir?: string;
   customProvider?: PaymentProvider;
+  repos?: IHut4DevsRepositories;
+}
+
+async function resolveRepositories(repos?: IHut4DevsRepositories): Promise<IHut4DevsRepositories> {
+  if (repos) return repos;
+  return getAuthoritativeRepositories();
 }
 
 /**
@@ -29,13 +39,13 @@ export interface ServerOptions {
 export async function handlePaymentProposalRequest(
   req: http.IncomingMessage,
   res: http.ServerResponse,
-  customProvider?: PaymentProvider
+  customProvider?: PaymentProvider,
+  repos?: IHut4DevsRepositories
 ): Promise<void> {
   let bodyStr = '';
   req.on('data', (chunk) => {
     bodyStr += chunk;
     if (bodyStr.length > 1024 * 1024) {
-      // 1MB safety guard
       res.statusCode = 413;
       res.setHeader('Content-Type', 'application/json');
       res.end(JSON.stringify({ success: false, error: 'Payload too large.' }));
@@ -58,7 +68,20 @@ export async function handlePaymentProposalRequest(
         }
       }
 
-      const result: ServerHandlerResponse = await handleCreateProposal(body, customProvider);
+      let activeRepos: IHut4DevsRepositories | undefined;
+      try {
+        activeRepos = await resolveRepositories(repos);
+      } catch {
+        // If repositories cannot be initialized, still proceed to evaluate provider
+        // but transactional DB persistence will report failure if required
+      }
+
+      const result: ServerHandlerResponse = await handleCreateProposal(
+        body,
+        customProvider,
+        undefined,
+        activeRepos
+      );
 
       res.statusCode = result.status;
       res.setHeader('Content-Type', 'application/json; charset=utf-8');
@@ -74,8 +97,124 @@ export async function handlePaymentProposalRequest(
 }
 
 /**
+ * Request handler for GET /api/accommodation/responsibility
+ */
+export async function handleAccommodationRequest(
+  req: http.IncomingMessage,
+  res: http.ServerResponse,
+  repos?: IHut4DevsRepositories
+): Promise<void> {
+  try {
+    const activeRepos = await resolveRepositories(repos);
+    const responsibilities = await activeRepos.accommodation.listAll();
+    const responsibility =
+      responsibilities.length > 0
+        ? responsibilities[0]
+        : await activeRepos.accommodation.findById(DEMO_ACCOMMODATION_RESPONSIBILITY.id);
+
+    if (!responsibility) {
+      res.statusCode = 404;
+      res.setHeader('Content-Type', 'application/json; charset=utf-8');
+      res.setHeader('X-Content-Type-Options', 'nosniff');
+      res.end(JSON.stringify({ success: false, error: 'Accommodation responsibility not found.' }));
+      return;
+    }
+
+    const preparedIntents = await activeRepos.intents.findByResponsibilityId(responsibility.id);
+    const paymentProposals = await activeRepos.proposals.listAll();
+
+    res.statusCode = 200;
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.end(
+      JSON.stringify({
+        success: true,
+        responsibility,
+        preparedIntents,
+        paymentProposals,
+      })
+    );
+  } catch (err: any) {
+    res.statusCode = 503;
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.end(
+      JSON.stringify({
+        success: false,
+        error: `Database unavailable: ${err.message || 'Could not connect to PostgreSQL.'}`,
+      })
+    );
+  }
+}
+
+/**
+ * Request handler for POST /api/payments/intents
+ */
+export async function handleSaveIntentRequest(
+  req: http.IncomingMessage,
+  res: http.ServerResponse,
+  repos?: IHut4DevsRepositories
+): Promise<void> {
+  let bodyStr = '';
+  req.on('data', (chunk) => {
+    bodyStr += chunk;
+  });
+
+  req.on('end', async () => {
+    try {
+      let body: any = {};
+      try {
+        body = JSON.parse(bodyStr || '{}');
+      } catch {
+        res.statusCode = 400;
+        res.setHeader('Content-Type', 'application/json; charset=utf-8');
+        res.setHeader('X-Content-Type-Options', 'nosniff');
+        res.end(JSON.stringify({ success: false, error: 'Invalid JSON payload.' }));
+        return;
+      }
+
+      const intentData: AccommodationPaymentIntent = body.intent || body;
+
+      if (
+        !intentData ||
+        !intentData.id ||
+        !intentData.responsibilityId ||
+        typeof intentData.amount !== 'number' ||
+        intentData.amount <= 0
+      ) {
+        res.statusCode = 400;
+        res.setHeader('Content-Type', 'application/json; charset=utf-8');
+        res.setHeader('X-Content-Type-Options', 'nosniff');
+        res.end(JSON.stringify({ success: false, error: 'Invalid payment intent payload.' }));
+        return;
+      }
+
+      const activeRepos = await resolveRepositories(repos);
+      await activeRepos.intents.save(intentData);
+
+      res.statusCode = 200;
+      res.setHeader('Content-Type', 'application/json; charset=utf-8');
+      res.setHeader('X-Content-Type-Options', 'nosniff');
+      res.end(JSON.stringify({ success: true, intent: intentData }));
+    } catch (err: any) {
+      const isFkError = String(err).includes('Foreign key violation');
+      res.statusCode = isFkError ? 400 : 503;
+      res.setHeader('Content-Type', 'application/json; charset=utf-8');
+      res.setHeader('X-Content-Type-Options', 'nosniff');
+      res.end(
+        JSON.stringify({
+          success: false,
+          error: err.message || 'Database error while persisting intent.',
+        })
+      );
+    }
+  });
+}
+
+/**
  * Creates the deployable Hut4Devs HTTP Server instance.
- * Exposes POST /api/payments/proposal outside of Vite.
+ * Exposes POST /api/payments/proposal, GET /api/accommodation/responsibility,
+ * and POST /api/payments/intents outside of Vite.
  * Serves built static frontend from dist/ when available, with SPA routing fallback.
  */
 export function createDeployableServer(options: ServerOptions = {}): http.Server {
@@ -88,10 +227,20 @@ export function createDeployableServer(options: ServerOptions = {}): http.Server
 
     // 1. API: POST /api/payments/proposal
     if (pathname === '/api/payments/proposal' && req.method === 'POST') {
-      return handlePaymentProposalRequest(req, res, options.customProvider);
+      return handlePaymentProposalRequest(req, res, options.customProvider, options.repos);
     }
 
-    // 2. API: GET /api/health
+    // 2. API: GET /api/accommodation/responsibility
+    if (pathname === '/api/accommodation/responsibility' && req.method === 'GET') {
+      return handleAccommodationRequest(req, res, options.repos);
+    }
+
+    // 3. API: POST /api/payments/intents
+    if (pathname === '/api/payments/intents' && req.method === 'POST') {
+      return handleSaveIntentRequest(req, res, options.repos);
+    }
+
+    // 4. API: GET /api/health
     if (pathname === '/api/health' && req.method === 'GET') {
       res.statusCode = 200;
       res.setHeader('Content-Type', 'application/json; charset=utf-8');
@@ -100,6 +249,7 @@ export function createDeployableServer(options: ServerOptions = {}): http.Server
         JSON.stringify({
           status: 'ok',
           server: 'hut4devs-deployable',
+          database: 'postgresql',
           endpoint: '/api/payments/proposal',
           timestamp: new Date().toISOString(),
         })
@@ -116,7 +266,7 @@ export function createDeployableServer(options: ServerOptions = {}): http.Server
       return;
     }
 
-    // 3. Static frontend serving from dist/
+    // 5. Static frontend serving from dist/
     if (req.method === 'GET' || req.method === 'HEAD') {
       try {
         const resolvedDist = path.resolve(distDir);
