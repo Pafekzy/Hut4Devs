@@ -370,22 +370,41 @@ export const ResponsibilityDetailView: React.FC<ResponsibilityDetailViewProps> =
               ) : (
                 <>
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: isDark ? '#C88D3A' : '#B77620' }}>
-                      BMONI Proposal: Created
+                    <span className="text-xs font-bold uppercase tracking-wider" style={{ color: isDark ? '#E2AB5D' : '#B77620' }}>
+                      BMONI
                     </span>
                     <span
                       className="px-2.5 py-0.5 rounded-full text-xs font-semibold font-mono border"
+                      style={{
+                        backgroundColor: isDark ? '#382210' : '#EFF6FF',
+                        borderColor: isDark ? '#5C381A' : '#BFDBFE',
+                        color: isDark ? '#E2AB5D' : '#1D4ED8',
+                      }}
+                    >
+                      Proposal: Created
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between text-xs">
+                    <span style={{ color: isDark ? '#A67B54' : '#8A5D3B' }}>Provider Status:</span>
+                    <span
+                      className="px-2 py-0.5 rounded-full text-xs font-semibold font-mono border"
                       style={{
                         backgroundColor: isDark ? '#3A2810' : '#FEF3C7',
                         borderColor: isDark ? '#6B4C1B' : '#FCD34D',
                         color: isDark ? '#F59E0B' : '#B45309',
                       }}
                     >
-                      Provider Status: {latestProposal.providerStatus || 'Pending Approval'}
+                      {latestProposal.providerStatus || 'Pending Approval'}
+                    </span>
+                  </div>
+                  <div className="text-xs">
+                    <span style={{ color: isDark ? '#A67B54' : '#8A5D3B' }}>Provider Proposal Reference: </span>
+                    <span className="font-mono font-medium" style={{ color: isDark ? '#E5D3BA' : '#5A2D0C' }}>
+                      {latestProposal.providerProposalId}
                     </span>
                   </div>
                   <p className="text-xs text-stone-500 leading-relaxed">
-                    BMONI proposal recorded ({latestProposal.providerProposalId}). No money has moved yet. Your accommodation responsibility remains unverified.
+                    No money has moved yet. Your accommodation responsibility remains unverified.
                   </p>
                 </>
               )}

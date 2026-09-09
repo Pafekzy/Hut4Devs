@@ -34,6 +34,9 @@ export interface CreateProposalResult {
   proposal?: ExternalPaymentProposal;
   error?: string;
   requiresCredentials?: boolean;
+  notConfigured?: boolean;
+  isAmbiguousError?: boolean;
+  definitiveFailure?: boolean;
 }
 
 export interface PaymentProvider {

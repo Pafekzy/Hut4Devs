@@ -48,7 +48,8 @@ export const FulfilmentFlow: React.FC<FulfilmentFlowProps> = ({
   // BMONI proposal state
   const [isBmoniLoading, setIsBmoniLoading] = useState(false);
   const [bmoniError, setBmoniError] = useState<string | null>(null);
-  const [requiresCredentialsNotice, setRequiresCredentialsNotice] = useState<string | null>(null);
+  const [isNotConfigured, setIsNotConfigured] = useState(false);
+  const [isAmbiguousError, setIsAmbiguousError] = useState(false);
   const [createdProposal, setCreatedProposal] = useState<ExternalPaymentProposal | null>(null);
 
   // Selected amount based on current type
@@ -128,22 +129,19 @@ export const FulfilmentFlow: React.FC<FulfilmentFlowProps> = ({
     setStep('prepared');
   };
 
-  const handleContinueWithBmoni = async (allowPreview = false) => {
+  const handleContinueWithBmoni = async () => {
     if (!preparedIntent) return;
 
     setIsBmoniLoading(true);
     setBmoniError(null);
-    setRequiresCredentialsNotice(null);
+    setIsNotConfigured(false);
+    setIsAmbiguousError(false);
 
     try {
-      const res = await requestBmoniProposal(preparedIntent, {
-        allowPreviewMode: allowPreview,
-      });
+      const res = await requestBmoniProposal(preparedIntent);
 
-      if (res.requiresCredentials) {
-        setRequiresCredentialsNotice(
-          'BMONI LIVE SANDBOX VALIDATION: REQUIRES EXTERNAL SERVICE / CREDENTIALS'
-        );
+      if (res.notConfigured || res.requiresCredentials) {
+        setIsNotConfigured(true);
         setIsBmoniLoading(false);
         return;
       }
@@ -153,15 +151,17 @@ export const FulfilmentFlow: React.FC<FulfilmentFlowProps> = ({
         onProposalCreated?.(res.proposal);
         setStep('bmoni-proposal-created');
       } else {
-        setBmoniError(
-          res.error ||
-            "We couldn't prepare this payment with BMONI yet. Your accommodation balance has not changed."
-        );
+        if (res.isAmbiguousError) {
+          setIsAmbiguousError(true);
+        } else {
+          setBmoniError(
+            res.error ||
+              "We couldn't prepare this payment with BMONI. No payment has been executed. Your accommodation balance has not changed."
+          );
+        }
       }
     } catch {
-      setBmoniError(
-        "We couldn't prepare this payment with BMONI yet. Your accommodation balance has not changed."
-      );
+      setIsAmbiguousError(true);
     } finally {
       setIsBmoniLoading(false);
     }
@@ -603,53 +603,75 @@ export const FulfilmentFlow: React.FC<FulfilmentFlowProps> = ({
               </p>
             </div>
 
-            {/* Error or Credentials Notice if any */}
-            {requiresCredentialsNotice && (
+            {/* STATE B — BMONI NOT CONFIGURED */}
+            {isNotConfigured && (
               <div
                 role="alert"
-                id="bmoni-credentials-notice"
+                id="bmoni-not-configured-notice"
                 className="p-4 rounded-xl border mb-6 text-left text-xs max-w-md mx-auto space-y-2"
                 style={{
                   backgroundColor: isDark ? '#3A1E0B' : '#FFF3E0',
                   borderColor: isDark ? '#623416' : '#FFCC80',
-                  color: isDark ? '#FFE082' : '#E65100',
                 }}
               >
-                <div className="flex items-center gap-2 font-semibold">
-                  <ShieldAlert className="w-4 h-4 shrink-0" aria-hidden="true" />
-                  <span>{requiresCredentialsNotice}</span>
+                <div className="flex items-center gap-2 font-bold text-sm" style={{ color: isDark ? '#FFE082' : '#B45309' }}>
+                  <ShieldAlert className="w-5 h-5 shrink-0" aria-hidden="true" />
+                  <span>BMONI Sandbox Not Configured</span>
                 </div>
-                <p className="leading-relaxed text-[11px]" style={{ color: isDark ? '#D9C4AC' : '#704728' }}>
-                  Real BMONI proposal creation requires partner API credentials in the environment. You may preview the proposal flow in sandbox preview mode.
+                <p className="font-semibold text-xs" style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}>
+                  No request was sent.
                 </p>
-                <button
-                  type="button"
-                  id="bmoni-preview-mode-btn"
-                  onClick={() => handleContinueWithBmoni(true)}
-                  className="mt-1 px-3 py-1.5 rounded-lg text-xs font-semibold border transition-colors cursor-pointer"
-                  style={{
-                    backgroundColor: isDark ? '#4B2710' : '#FFF9EE',
-                    borderColor: isDark ? '#C88D3A' : '#B77620',
-                    color: isDark ? '#C88D3A' : '#B77620',
-                  }}
-                >
-                  Continue with Sandbox Preview
-                </button>
+                <p className="text-xs text-stone-500 leading-relaxed">
+                  Your accommodation balance has not changed.
+                </p>
               </div>
             )}
 
+            {/* STATE D — DEFINITIVE FAILURE */}
             {bmoniError && (
               <div
                 role="alert"
                 id="bmoni-error-notice"
-                className="p-3 rounded-xl border mb-6 text-left text-xs max-w-md mx-auto flex items-center gap-2 text-red-500"
+                className="p-4 rounded-xl border mb-6 text-left text-xs max-w-md mx-auto space-y-1.5"
                 style={{
                   backgroundColor: isDark ? '#3A1515' : '#FEE2E2',
                   borderColor: isDark ? '#7F1D1D' : '#FCA5A5',
                 }}
               >
-                <AlertCircle className="w-4 h-4 shrink-0" aria-hidden="true" />
-                <span>{bmoniError}</span>
+                <div className="flex items-center gap-2 font-semibold text-red-500">
+                  <AlertCircle className="w-4 h-4 shrink-0" aria-hidden="true" />
+                  <span>We couldn't prepare this payment with BMONI.</span>
+                </div>
+                <p className="text-xs leading-relaxed" style={{ color: isDark ? '#D9C4AC' : '#704728' }}>
+                  No payment has been executed.
+                </p>
+                <p className="text-xs text-stone-500 leading-relaxed">
+                  Your accommodation balance has not changed.
+                </p>
+              </div>
+            )}
+
+            {/* AMBIGUOUS NETWORK FAILURE */}
+            {isAmbiguousError && (
+              <div
+                role="alert"
+                id="bmoni-ambiguous-notice"
+                className="p-4 rounded-xl border mb-6 text-left text-xs max-w-md mx-auto space-y-2"
+                style={{
+                  backgroundColor: isDark ? '#2D1F0A' : '#FEF3C7',
+                  borderColor: isDark ? '#6B4C1B' : '#FCD34D',
+                }}
+              >
+                <div className="flex items-center gap-2 font-bold text-xs uppercase tracking-wider" style={{ color: isDark ? '#F59E0B' : '#B45309' }}>
+                  <AlertCircle className="w-4 h-4 shrink-0" aria-hidden="true" />
+                  <span>Unresolved Proposal Attempt</span>
+                </div>
+                <p className="font-semibold text-xs leading-relaxed" style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}>
+                  A network timeout or connection failure occurred while contacting BMONI. It is unknown whether BMONI accepted the proposal.
+                </p>
+                <p className="text-xs text-stone-500 leading-relaxed">
+                  Investigation or reconciliation is required before retrying. Automatic retries are disabled to prevent duplicate proposals. Your accommodation balance has not changed.
+                </p>
               </div>
             )}
 
@@ -659,7 +681,7 @@ export const FulfilmentFlow: React.FC<FulfilmentFlowProps> = ({
                 type="button"
                 id="continue-with-bmoni-btn"
                 disabled={isBmoniLoading}
-                onClick={() => handleContinueWithBmoni(false)}
+                onClick={handleContinueWithBmoni}
                 className={`w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 min-h-[44px] rounded-xl text-sm font-semibold transition-all cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 ${
                   isDark
                     ? 'bg-[#C88D3A] text-[#2F1707] hover:bg-[#DDA250] focus-visible:ring-[#C88D3A]'
@@ -696,7 +718,7 @@ export const FulfilmentFlow: React.FC<FulfilmentFlowProps> = ({
           </div>
         )}
 
-        {/* STEP 4: BMONI TRANSFER PROPOSAL CREATED (PAYMENT PREPARATION) */}
+        {/* STEP 4: PAYMENT PREPARATION */}
         {step === 'bmoni-proposal-created' && preparedIntent && (
           <div className="text-center py-2">
             <div
@@ -726,34 +748,10 @@ export const FulfilmentFlow: React.FC<FulfilmentFlowProps> = ({
                 borderColor: isDark ? '#4B2710' : '#E7D6C1',
               }}
             >
-              {/* Amount */}
-              <div className="flex justify-between items-center">
-                <span style={{ color: isDark ? '#A67B54' : '#8A5D3B' }}>Amount:</span>
-                <span className="font-mono font-bold text-lg" style={{ color: isDark ? '#E2AB5D' : '#B77620' }}>
-                  {formatNaira(preparedIntent.amount)}
-                </span>
-              </div>
-
-              {/* Hut4Devs Intent */}
-              <div className="flex justify-between items-center">
-                <span style={{ color: isDark ? '#A67B54' : '#8A5D3B' }}>Hut4Devs Intent:</span>
-                <span
-                  className="px-2.5 py-0.5 rounded-full text-xs font-semibold uppercase tracking-wider font-mono border"
-                  style={{
-                    backgroundColor: isDark ? '#4B2710' : '#FFF9EE',
-                    borderColor: isDark ? '#623416' : '#EAE0D0',
-                    color: isDark ? '#C88D3A' : '#B77620',
-                  }}
-                >
-                  Prepared
-                </span>
-              </div>
-
-              {/* Conditional Provider Proposal Section */}
+              {/* STATE A — SIMULATION */}
               {createdProposal?.isSimulated || createdProposal?.provider === 'SIMULATED' ? (
                 <>
-                  {/* SIMULATED PROVIDER Header */}
-                  <div className="flex justify-between items-center border-t pt-3" style={{ borderColor: isDark ? '#4B2710' : '#EAE0D0' }}>
+                  <div className="flex justify-between items-center border-b pb-3" style={{ borderColor: isDark ? '#4B2710' : '#EAE0D0' }}>
                     <span className="font-bold text-xs uppercase tracking-wider" style={{ color: isDark ? '#E2AB5D' : '#B77620' }}>
                       SIMULATED PROVIDER
                     </span>
@@ -765,19 +763,10 @@ export const FulfilmentFlow: React.FC<FulfilmentFlowProps> = ({
                         color: isDark ? '#F59E0B' : '#B45309',
                       }}
                     >
-                      Simulated
+                      Proposal: Simulated
                     </span>
                   </div>
 
-                  {/* Proposal: Simulated */}
-                  <div className="flex justify-between items-center">
-                    <span style={{ color: isDark ? '#A67B54' : '#8A5D3B' }}>Proposal:</span>
-                    <span className="font-semibold text-xs font-mono" style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}>
-                      Simulated
-                    </span>
-                  </div>
-
-                  {/* Visibly state: No request was sent to BMONI. */}
                   <div
                     className="p-3 rounded-lg text-xs font-medium border"
                     style={{
@@ -790,10 +779,12 @@ export const FulfilmentFlow: React.FC<FulfilmentFlowProps> = ({
                   </div>
                 </>
               ) : (
+                /* STATE C — REAL BMONI PROPOSAL CREATED */
                 <>
-                  {/* BMONI Proposal: Created */}
-                  <div className="flex justify-between items-center">
-                    <span style={{ color: isDark ? '#A67B54' : '#8A5D3B' }}>BMONI Proposal:</span>
+                  <div className="flex justify-between items-center border-b pb-3" style={{ borderColor: isDark ? '#4B2710' : '#EAE0D0' }}>
+                    <span className="font-bold text-xs uppercase tracking-wider" style={{ color: isDark ? '#E2AB5D' : '#B77620' }}>
+                      BMONI
+                    </span>
                     <span
                       className="px-2.5 py-0.5 rounded-full text-xs font-semibold uppercase tracking-wider font-mono border"
                       style={{
@@ -802,12 +793,11 @@ export const FulfilmentFlow: React.FC<FulfilmentFlowProps> = ({
                         color: isDark ? '#E2AB5D' : '#1D4ED8',
                       }}
                     >
-                      Created
+                      Proposal: Created
                     </span>
                   </div>
 
-                  {/* Provider Status: Pending Approval */}
-                  <div className="flex justify-between items-center border-t pt-3" style={{ borderColor: isDark ? '#4B2710' : '#EAE0D0' }}>
+                  <div className="flex justify-between items-center">
                     <span style={{ color: isDark ? '#A67B54' : '#8A5D3B' }}>Provider Status:</span>
                     <span
                       className="px-2.5 py-0.5 rounded-full text-xs font-semibold font-mono border"
@@ -820,22 +810,30 @@ export const FulfilmentFlow: React.FC<FulfilmentFlowProps> = ({
                       {createdProposal?.providerStatus || 'Pending Approval'}
                     </span>
                   </div>
+
+                  {createdProposal?.providerProposalId && (
+                    <div className="flex justify-between items-center text-xs">
+                      <span style={{ color: isDark ? '#A67B54' : '#8A5D3B' }}>Provider Proposal Reference:</span>
+                      <span className="font-mono text-xs font-medium" style={{ color: isDark ? '#E5D3BA' : '#5A2D0C' }}>
+                        {createdProposal.providerProposalId}
+                      </span>
+                    </div>
+                  )}
                 </>
               )}
 
-              {createdProposal?.providerProposalId && (
-                <div className="flex justify-between items-center text-xs pt-1">
-                  <span style={{ color: isDark ? '#A67B54' : '#8A5D3B' }}>Proposal ID:</span>
-                  <span className="font-mono text-[11px] opacity-80" style={{ color: isDark ? '#E5D3BA' : '#5A2D0C' }}>
-                    {createdProposal.providerProposalId}
-                  </span>
-                </div>
-              )}
+              {/* Amount */}
+              <div className="flex justify-between items-center border-t pt-3" style={{ borderColor: isDark ? '#4B2710' : '#EAE0D0' }}>
+                <span style={{ color: isDark ? '#A67B54' : '#8A5D3B' }}>Amount:</span>
+                <span className="font-mono font-bold text-lg" style={{ color: isDark ? '#E2AB5D' : '#B77620' }}>
+                  {formatNaira(createdProposal?.amount || preparedIntent.amount)}
+                </span>
+              </div>
             </div>
 
-            {/* Supporting Messages */}
+            {/* Invariant Messages */}
             <div
-              className="mb-8 text-xs sm:text-sm leading-relaxed max-w-md mx-auto space-y-2"
+              className="mb-8 text-xs sm:text-sm leading-relaxed max-w-md mx-auto space-y-2 text-center"
               style={{ color: isDark ? '#D9C4AC' : '#704728' }}
             >
               <p className="font-medium">

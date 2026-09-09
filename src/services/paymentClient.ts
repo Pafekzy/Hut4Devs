@@ -12,8 +12,7 @@ import {
  * It does NOT hold or transmit any BMONI API keys, partner secrets, or private keys.
  */
 export async function requestBmoniProposal(
-  intent: AccommodationPaymentIntent,
-  options?: { allowPreviewMode?: boolean }
+  intent: AccommodationPaymentIntent
 ): Promise<CreateProposalResult> {
   try {
     const response = await fetch('/api/payments/proposal', {
@@ -26,27 +25,32 @@ export async function requestBmoniProposal(
         responsibilityId: intent.responsibilityId,
         amount: intent.amount,
         currency: 'NGN',
-        allowPreviewMode: options?.allowPreviewMode ?? false,
       }),
     });
 
+    const data = await response.json().catch(() => ({}));
+
     if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
       return {
         success: false,
         error:
-          errorData.error ||
-          "We couldn't prepare this payment with BMONI yet. Your accommodation balance has not changed.",
+          data.error ||
+          "We couldn't prepare this payment with BMONI. No payment has been executed. Your accommodation balance has not changed.",
+        isAmbiguousError: data.isAmbiguousError || response.status === 504,
+        notConfigured: data.notConfigured,
+        requiresCredentials: data.requiresCredentials,
+        definitiveFailure: data.definitiveFailure,
       };
     }
 
-    const data = await response.json();
     return data;
   } catch (err: any) {
-    // Graceful error on network failure / offline without crashing
+    // Ambiguous client network failure / timeout: do NOT blindly retry.
     return {
       success: false,
-      error: "We couldn't prepare this payment with BMONI yet. Your accommodation balance has not changed.",
+      error:
+        "Unresolved proposal attempt: Network connection failure or timeout. It is unknown whether BMONI accepted the proposal. Investigation or reconciliation is required before retrying. Do not retry automatically to prevent duplicate proposals. Your accommodation balance has not changed.",
+      isAmbiguousError: true,
     };
   }
 }

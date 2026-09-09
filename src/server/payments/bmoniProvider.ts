@@ -101,7 +101,8 @@ export class BmoniPaymentProvider implements PaymentProvider {
     if (!this.hasCredentials()) {
       return {
         success: false,
-        error: 'BMONI LIVE SANDBOX VALIDATION: REQUIRES EXTERNAL SERVICE / CREDENTIALS',
+        error: 'BMONI Sandbox Not Configured',
+        notConfigured: true,
         requiresCredentials: true,
       };
     }
@@ -127,12 +128,13 @@ export class BmoniPaymentProvider implements PaymentProvider {
 
       if (!response.ok) {
         const errorText = await response.text().catch(() => '');
-        console.warn(`[BMONI] Proposal creation error (${response.status}): ${errorText}`, {
+        console.warn(`[BMONI] Proposal creation rejected (${response.status}): ${errorText}`, {
           intentId: request.intentId,
         });
         return {
           success: false,
-          error: "We couldn't prepare this payment with BMONI yet. Your accommodation balance has not changed.",
+          error: "We couldn't prepare this payment with BMONI. No payment has been executed. Your accommodation balance has not changed.",
+          definitiveFailure: true,
         };
       }
 
@@ -144,13 +146,15 @@ export class BmoniPaymentProvider implements PaymentProvider {
         proposal,
       };
     } catch (err: any) {
-      console.warn('[BMONI] Proposal network failure or timeout:', {
+      console.warn('[BMONI] Ambiguous network failure or timeout:', {
         intentId: request.intentId,
         error: err?.message,
       });
+      // No assumed idempotency: do NOT blindly retry. Represent truthfully as unresolved.
       return {
         success: false,
-        error: "We couldn't prepare this payment with BMONI yet. Your accommodation balance has not changed.",
+        error: "Unresolved proposal attempt: Network timeout or connection interruption contacting BMONI. It is unknown whether BMONI accepted the proposal. Investigation or reconciliation is required before retrying. Do not retry automatically to prevent duplicate proposals. Your accommodation balance has not changed.",
+        isAmbiguousError: true,
       };
     }
   }
