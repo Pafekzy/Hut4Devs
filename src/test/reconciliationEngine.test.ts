@@ -12,8 +12,9 @@ import { MemberRole } from '../domain/auth';
 import { ReconciliationEngine } from '../server/payments/reconciliationEngine';
 import { PaymentIntentStatus, ResponsibilityStatus, FulfilmentType } from '../domain/accommodation';
 import { PaymentReconciliationStatus, ReconciliationReasonCode } from '../domain/reconciliation';
+import { ProviderEventRecord } from '../domain/repositories';
 
-describe('H4D-FUNC-013: Accommodation Payment Reconciliation Engine', () => {
+describe('H4D-FUNC-013: Concurrency, Idempotency & Audit Hardened Reconciliation Suite (39 Scenarios)', () => {
   let memDb: any;
   let pool: any;
   let repos: PostgresRepositories;
@@ -73,378 +74,628 @@ describe('H4D-FUNC-013: Accommodation Payment Reconciliation Engine', () => {
     return data.token;
   }
 
-  // 1. Full payment reconciliation flow through webhook ingestion
-  it('1. atomically reconciles full payment evidence chain (Event -> Proposal -> Intent -> Responsibility)', async () => {
-    // A. Seed an intent and proposal
-    const intentId = 'intent_rec_full_01';
+  async function setupIntentAndProposal(opts: {
+    intentId: string;
+    proposalId: string;
+    amount: number;
+    respId?: string;
+    fulfilmentType?: FulfilmentType;
+  }) {
+    const respId = opts.respId || DEMO_ACCOMMODATION_RESPONSIBILITY.id;
     await repos.intents.save({
-      id: intentId,
-      responsibilityId: DEMO_ACCOMMODATION_RESPONSIBILITY.id,
-      amount: 66000,
-      fulfilmentType: FulfilmentType.FULL,
+      id: opts.intentId,
+      responsibilityId: respId,
+      amount: opts.amount,
+      fulfilmentType: opts.fulfilmentType || FulfilmentType.PARTIAL,
       status: PaymentIntentStatus.PREPARED,
       createdAt: new Date().toISOString(),
     });
 
-    const proposalId = 'prop_bmoni_full_01';
     await repos.proposals.save({
-      id: 'ext_prop_full_01',
-      paymentIntentId: intentId,
-      responsibilityId: DEMO_ACCOMMODATION_RESPONSIBILITY.id,
-      amount: 66000,
+      id: `ext_${opts.proposalId}`,
+      paymentIntentId: opts.intentId,
+      responsibilityId: respId,
+      amount: opts.amount,
       currency: 'NGN',
       provider: 'BMONI',
-      providerProposalId: proposalId,
+      providerProposalId: opts.proposalId,
+      providerStatus: 'PENDING',
+      isSimulated: false,
+      createdAt: new Date().toISOString(),
+    });
+  }
+
+  function createSampleProviderEvent(opts: {
+    eventId: string;
+    proposalId?: string;
+    amount?: number;
+    status?: string;
+    provider?: string;
+    currency?: string;
+    extraPayload?: Record<string, any>;
+  }): ProviderEventRecord {
+    return {
+      id: `pevt_${opts.eventId}`,
+      provider: opts.provider || 'BMONI',
+      providerEventId: opts.eventId,
+      sourceEventId: `src_${opts.eventId}`,
+      eventType: 'payment.completed',
+      providerStatus: opts.status || 'COMPLETED',
+      providerProposalId: opts.proposalId,
+      payload: {
+        proposalId: opts.proposalId,
+        status: opts.status || 'COMPLETED',
+        amount: opts.amount !== undefined ? opts.amount : 10000,
+        currency: opts.currency || 'NGN',
+        ...(opts.extraPayload || {}),
+      },
+      receivedAt: new Date().toISOString(),
+      processingStatus: 'RECEIVED' as any,
+    };
+  }
+
+  // 1. provider event ingestion alone does not modify accommodation verifiedAmount
+  it('1. provider event ingestion alone does not modify accommodation verifiedAmount', async () => {
+    await repos.providerEvents.create({
+      id: 'pevt_ingest_only',
+      provider: 'BMONI',
+      providerEventId: 'evt_ingest_only',
+      sourceEventId: 'src_ingest_only',
+      eventType: 'payment.completed',
+      providerStatus: 'COMPLETED',
+      providerProposalId: 'prop_ingest_only',
+      payload: { amount: 50000, proposalId: 'prop_ingest_only' },
+      receivedAt: new Date().toISOString(),
+      processingStatus: 'RECEIVED' as any,
+    });
+
+    const resp = await repos.accommodation.findById(DEMO_ACCOMMODATION_RESPONSIBILITY.id);
+    expect(resp!.verifiedAmount).toBe(0);
+    expect(resp!.status).toBe(ResponsibilityStatus.OUTSTANDING);
+  });
+
+  // 2. invalid provider status (e.g. PENDING, FAILED) does not verify
+  it('2. invalid provider status (e.g. PENDING, FAILED) does not verify', async () => {
+    await setupIntentAndProposal({ intentId: 'intent_02', proposalId: 'prop_02', amount: 20000 });
+    const event = createSampleProviderEvent({ eventId: 'evt_02', proposalId: 'prop_02', amount: 20000, status: 'FAILED' });
+    const res = await reconciliationEngine.reconcileProviderEvent(event);
+
+    expect(res.success).toBe(false);
+    expect(res.reconciliationStatus).toBe(PaymentReconciliationStatus.NON_ELIGIBLE);
+    expect(res.reasonCode).toBe(ReconciliationReasonCode.UNSUPPORTED_PROVIDER_STATUS);
+
+    const resp = await repos.accommodation.findById(DEMO_ACCOMMODATION_RESPONSIBILITY.id);
+    expect(resp!.verifiedAmount).toBe(0);
+  });
+
+  // 3. unknown provider proposal does not verify
+  it('3. unknown provider proposal does not verify', async () => {
+    const event = createSampleProviderEvent({ eventId: 'evt_03', proposalId: 'prop_non_existent', amount: 20000 });
+    const res = await reconciliationEngine.reconcileProviderEvent(event);
+
+    expect(res.success).toBe(false);
+    expect(res.reconciliationStatus).toBe(PaymentReconciliationStatus.MISMATCH);
+    expect(res.reasonCode).toBe(ReconciliationReasonCode.PROPOSAL_NOT_FOUND);
+
+    const resp = await repos.accommodation.findById(DEMO_ACCOMMODATION_RESPONSIBILITY.id);
+    expect(resp!.verifiedAmount).toBe(0);
+  });
+
+  // 4. unknown payment intent does not verify
+  it('4. unknown payment intent does not verify', async () => {
+    await repos.proposals.save({
+      id: 'ext_prop_orphaned_intent',
+      paymentIntentId: 'non_existent_intent_id',
+      responsibilityId: DEMO_ACCOMMODATION_RESPONSIBILITY.id,
+      amount: 15000,
+      currency: 'NGN',
+      provider: 'BMONI',
+      providerProposalId: 'prop_04',
       providerStatus: 'PENDING',
       isSimulated: false,
       createdAt: new Date().toISOString(),
     });
 
-    // B. Send valid signed webhook with matching proposalId and amount
-    const rawPayload = JSON.stringify({
-      id: 'bmoni_evt_full_01',
-      type: 'payment.completed',
-      data: {
-        proposalId,
-        status: 'COMPLETED',
-        amount: 66000,
-        currency: 'NGN',
-      },
+    const event = createSampleProviderEvent({ eventId: 'evt_04', proposalId: 'prop_04', amount: 15000 });
+    const res = await reconciliationEngine.reconcileProviderEvent(event);
+
+    expect(res.success).toBe(false);
+    expect(res.reconciliationStatus).toBe(PaymentReconciliationStatus.MISMATCH);
+    expect(res.reasonCode).toBe(ReconciliationReasonCode.INTENT_NOT_FOUND);
+
+    const resp = await repos.accommodation.findById(DEMO_ACCOMMODATION_RESPONSIBILITY.id);
+    expect(resp!.verifiedAmount).toBe(0);
+  });
+
+  // 5. unknown accommodation responsibility does not verify
+  it('5. unknown accommodation responsibility does not verify', async () => {
+    await repos.intents.save({
+      id: 'intent_orphan_resp',
+      responsibilityId: 'non_existent_resp_id',
+      amount: 15000,
+      fulfilmentType: FulfilmentType.PARTIAL,
+      status: PaymentIntentStatus.PREPARED,
       createdAt: new Date().toISOString(),
     });
 
+    await repos.proposals.save({
+      id: 'ext_prop_05',
+      paymentIntentId: 'intent_orphan_resp',
+      responsibilityId: 'non_existent_resp_id',
+      amount: 15000,
+      currency: 'NGN',
+      provider: 'BMONI',
+      providerProposalId: 'prop_05',
+      providerStatus: 'PENDING',
+      isSimulated: false,
+      createdAt: new Date().toISOString(),
+    });
+
+    const event = createSampleProviderEvent({ eventId: 'evt_05', proposalId: 'prop_05', amount: 15000 });
+    const res = await reconciliationEngine.reconcileProviderEvent(event);
+
+    expect(res.success).toBe(false);
+    expect(res.reconciliationStatus).toBe(PaymentReconciliationStatus.MISMATCH);
+    expect(res.reasonCode).toBe(ReconciliationReasonCode.RESPONSIBILITY_NOT_FOUND);
+  });
+
+  // 6. amount mismatch between event and intent does not verify
+  it('6. amount mismatch between event and intent does not verify', async () => {
+    await setupIntentAndProposal({ intentId: 'intent_06', proposalId: 'prop_06', amount: 30000 });
+    const event = createSampleProviderEvent({ eventId: 'evt_06', proposalId: 'prop_06', amount: 20000 });
+    const res = await reconciliationEngine.reconcileProviderEvent(event);
+
+    expect(res.success).toBe(false);
+    expect(res.reconciliationStatus).toBe(PaymentReconciliationStatus.MISMATCH);
+    expect(res.reasonCode).toBe(ReconciliationReasonCode.AMOUNT_MISMATCH);
+
+    const resp = await repos.accommodation.findById(DEMO_ACCOMMODATION_RESPONSIBILITY.id);
+    expect(resp!.verifiedAmount).toBe(0);
+  });
+
+  // 7. currency mismatch does not verify
+  it('7. currency mismatch does not verify', async () => {
+    await setupIntentAndProposal({ intentId: 'intent_07', proposalId: 'prop_07', amount: 25000 });
+    const event = createSampleProviderEvent({ eventId: 'evt_07', proposalId: 'prop_07', amount: 25000, currency: 'USD' });
+    const res = await reconciliationEngine.reconcileProviderEvent(event);
+
+    expect(res.success).toBe(false);
+    expect(res.reconciliationStatus).toBe(PaymentReconciliationStatus.MISMATCH);
+    expect(res.reasonCode).toBe(ReconciliationReasonCode.CURRENCY_MISMATCH);
+
+    const resp = await repos.accommodation.findById(DEMO_ACCOMMODATION_RESPONSIBILITY.id);
+    expect(resp!.verifiedAmount).toBe(0);
+  });
+
+  // 8. zero or negative event amount does not verify
+  it('8. zero or negative event amount does not verify', async () => {
+    await setupIntentAndProposal({ intentId: 'intent_08', proposalId: 'prop_08', amount: 10000 });
+    const eventZero = createSampleProviderEvent({ eventId: 'evt_08_zero', proposalId: 'prop_08', amount: 0 });
+    const resZero = await reconciliationEngine.reconcileProviderEvent(eventZero);
+    expect(resZero.success).toBe(false);
+    expect(resZero.reasonCode).toBe(ReconciliationReasonCode.INVALID_AMOUNT);
+
+    const eventNeg = createSampleProviderEvent({ eventId: 'evt_08_neg', proposalId: 'prop_08', amount: -5000 });
+    const resNeg = await reconciliationEngine.reconcileProviderEvent(eventNeg);
+    expect(resNeg.success).toBe(false);
+    expect(resNeg.reasonCode).toBe(ReconciliationReasonCode.INVALID_AMOUNT);
+
+    const resp = await repos.accommodation.findById(DEMO_ACCOMMODATION_RESPONSIBILITY.id);
+    expect(resp!.verifiedAmount).toBe(0);
+  });
+
+  // 9. amount exceeding remaining requirement does not verify
+  it('9. amount exceeding remaining requirement does not verify', async () => {
+    // Required is 66,000. Try to verify 70,000.
+    await setupIntentAndProposal({ intentId: 'intent_09', proposalId: 'prop_09', amount: 70000 });
+    const event = createSampleProviderEvent({ eventId: 'evt_09', proposalId: 'prop_09', amount: 70000 });
+    const res = await reconciliationEngine.reconcileProviderEvent(event);
+
+    expect(res.success).toBe(false);
+    expect(res.reconciliationStatus).toBe(PaymentReconciliationStatus.MISMATCH);
+    expect(res.reasonCode).toBe(ReconciliationReasonCode.AMOUNT_EXCEEDS_REMAINING);
+
+    const resp = await repos.accommodation.findById(DEMO_ACCOMMODATION_RESPONSIBILITY.id);
+    expect(resp!.verifiedAmount).toBe(0);
+  });
+
+  // 10. complete valid evidence chain verifies and updates verifiedAmount
+  it('10. complete valid evidence chain verifies and updates verifiedAmount', async () => {
+    await setupIntentAndProposal({ intentId: 'intent_10', proposalId: 'prop_10', amount: 33000 });
+    const event = createSampleProviderEvent({ eventId: 'evt_10', proposalId: 'prop_10', amount: 33000 });
+    const res = await reconciliationEngine.reconcileProviderEvent(event);
+
+    expect(res.success).toBe(true);
+    expect(res.reconciliationStatus).toBe(PaymentReconciliationStatus.VERIFIED);
+    expect(res.financialEffect).toBe(33000);
+
+    const resp = await repos.accommodation.findById(DEMO_ACCOMMODATION_RESPONSIBILITY.id);
+    expect(resp!.verifiedAmount).toBe(33000);
+  });
+
+  // 11. full payment transitions status to FULFILLED
+  it('11. full payment transitions status to FULFILLED', async () => {
+    await setupIntentAndProposal({ intentId: 'intent_11', proposalId: 'prop_11', amount: 66000, fulfilmentType: FulfilmentType.FULL });
+    const event = createSampleProviderEvent({ eventId: 'evt_11', proposalId: 'prop_11', amount: 66000 });
+    const res = await reconciliationEngine.reconcileProviderEvent(event);
+
+    expect(res.success).toBe(true);
+    expect(res.updatedResponsibility!.status).toBe(ResponsibilityStatus.FULFILLED);
+
+    const resp = await repos.accommodation.findById(DEMO_ACCOMMODATION_RESPONSIBILITY.id);
+    expect(resp!.status).toBe(ResponsibilityStatus.FULFILLED);
+    expect(resp!.verifiedAmount).toBe(66000);
+  });
+
+  // 12. partial payment transitions status to PARTIALLY_FULFILLED
+  it('12. partial payment transitions status to PARTIALLY_FULFILLED', async () => {
+    await setupIntentAndProposal({ intentId: 'intent_12', proposalId: 'prop_12', amount: 20000 });
+    const event = createSampleProviderEvent({ eventId: 'evt_12', proposalId: 'prop_12', amount: 20000 });
+    const res = await reconciliationEngine.reconcileProviderEvent(event);
+
+    expect(res.success).toBe(true);
+    expect(res.updatedResponsibility!.status).toBe(ResponsibilityStatus.PARTIALLY_FULFILLED);
+
+    const resp = await repos.accommodation.findById(DEMO_ACCOMMODATION_RESPONSIBILITY.id);
+    expect(resp!.status).toBe(ResponsibilityStatus.PARTIALLY_FULFILLED);
+    expect(resp!.verifiedAmount).toBe(20000);
+  });
+
+  // 13. second reconciliation of the same provider event is idempotent (no second financial effect)
+  it('13. second reconciliation of the same provider event is idempotent (no second financial effect)', async () => {
+    await setupIntentAndProposal({ intentId: 'intent_13', proposalId: 'prop_13', amount: 15000 });
+    const event = createSampleProviderEvent({ eventId: 'evt_13', proposalId: 'prop_13', amount: 15000 });
+
+    const res1 = await reconciliationEngine.reconcileProviderEvent(event);
+    expect(res1.financialEffect).toBe(15000);
+
+    const res2 = await reconciliationEngine.reconcileProviderEvent(event);
+    expect(res2.success).toBe(true);
+    expect(res2.isDuplicate).toBe(true);
+    expect(res2.financialEffect).toBe(0);
+
+    const resp = await repos.accommodation.findById(DEMO_ACCOMMODATION_RESPONSIBILITY.id);
+    expect(resp!.verifiedAmount).toBe(15000);
+  });
+
+  // 14. repeated duplicate webhook delivery produces no duplicate credit
+  it('14. repeated duplicate webhook delivery produces no duplicate credit', async () => {
+    await setupIntentAndProposal({ intentId: 'intent_14', proposalId: 'prop_14', amount: 18000 });
+    const rawPayload = JSON.stringify({
+      id: 'evt_webhook_14',
+      type: 'payment.completed',
+      data: { proposalId: 'prop_14', status: 'COMPLETED', amount: 18000, currency: 'NGN' },
+    });
     const signature = computeHmacSignature(rawPayload);
 
-    const res = await fetch(`${baseUrl}/api/webhooks/bmoni`, {
+    // Call 1
+    const res1 = await fetch(`${baseUrl}/api/webhooks/bmoni`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Webhook-Signature': signature,
-        'X-Webhook-Id': 'bmoni_evt_full_01',
-      },
+      headers: { 'Content-Type': 'application/json', 'X-Webhook-Signature': signature, 'X-Webhook-Id': 'evt_webhook_14' },
       body: rawPayload,
     });
+    expect(res1.status).toBe(200);
 
-    expect(res.status).toBe(200);
-    const body = await res.json();
-    expect(body.success).toBe(true);
+    // Call 2 (Duplicate delivery)
+    const res2 = await fetch(`${baseUrl}/api/webhooks/bmoni`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-Webhook-Signature': signature, 'X-Webhook-Id': 'evt_webhook_14' },
+      body: rawPayload,
+    });
+    expect(res2.status).toBe(200);
 
-    // C. Verify authoritative responsibility state updated atomically
     const resp = await repos.accommodation.findById(DEMO_ACCOMMODATION_RESPONSIBILITY.id);
-    expect(resp).toBeDefined();
-    expect(resp!.verifiedAmount).toBe(66000);
-    expect(resp!.status).toBe(ResponsibilityStatus.FULFILLED);
+    expect(resp!.verifiedAmount).toBe(18000);
+  });
 
-    // D. Verify payment reconciliation record inserted
-    const recs = await repos.reconciliations.listByResponsibilityId(DEMO_ACCOMMODATION_RESPONSIBILITY.id);
-    expect(recs.length).toBe(1);
-    expect(recs[0].reconciliationStatus).toBe(PaymentReconciliationStatus.VERIFIED);
-    expect(recs[0].reasonCode).toBe(ReconciliationReasonCode.MATCHED_VERIFIED);
-    expect(recs[0].amount).toBe(66000);
-    expect(recs[0].externalPaymentProposalId).toBe('ext_prop_full_01');
-    expect(recs[0].paymentIntentId).toBe(intentId);
+  // 15. duplicate provider event returns existing reconciliation record
+  it('15. duplicate provider event returns existing reconciliation record', async () => {
+    await setupIntentAndProposal({ intentId: 'intent_15', proposalId: 'prop_15', amount: 10000 });
+    const event = createSampleProviderEvent({ eventId: 'evt_15', proposalId: 'prop_15', amount: 10000 });
 
-    // E. Verify outbox event created
+    const res1 = await reconciliationEngine.reconcileProviderEvent(event);
+    const res2 = await reconciliationEngine.reconcileProviderEvent(event);
+
+    expect(res2.reconciliation.id).toBe(res1.reconciliation.id);
+    expect(res2.reconciliation.reconciliationStatus).toBe(PaymentReconciliationStatus.VERIFIED);
+  });
+
+  // 16. outbox event is created inside the same transaction
+  it('16. outbox event is created inside the same transaction', async () => {
+    await setupIntentAndProposal({ intentId: 'intent_16', proposalId: 'prop_16', amount: 12000 });
+    const event = createSampleProviderEvent({ eventId: 'evt_16', proposalId: 'prop_16', amount: 12000 });
+
+    await reconciliationEngine.reconcileProviderEvent(event);
+
     const outboxEvents = await repos.outbox.listAll();
-    const recOutbox = outboxEvents.find((e) => e.eventType === 'accommodation.payment.reconciled');
-    expect(recOutbox).toBeDefined();
-    expect(recOutbox!.payload.verifiedAmount).toBe(66000);
-    expect(recOutbox!.payload.status).toBe(ResponsibilityStatus.FULFILLED);
+    const eventFound = outboxEvents.find(
+      (e) => e.eventType === 'accommodation.payment.reconciled' && e.payload.amount === 12000
+    );
+    expect(eventFound).toBeDefined();
+    expect(eventFound!.payload.verifiedAmount).toBe(12000);
   });
 
-  // 2. Partial payment reconciliation
-  it('2. correctly updates status to PARTIALLY_FULFILLED on partial payment reconciliation', async () => {
-    const intentId = 'intent_rec_partial_02';
-    await repos.intents.save({
-      id: intentId,
-      responsibilityId: DEMO_ACCOMMODATION_RESPONSIBILITY.id,
-      amount: 30000,
-      fulfilmentType: FulfilmentType.PARTIAL,
-      status: PaymentIntentStatus.PREPARED,
-      createdAt: new Date().toISOString(),
-    });
+  // 17. outbox event is not published if the transaction fails
+  it('17. outbox event is not published if the transaction fails', async () => {
+    let published = false;
+    const testPublisher: any = {
+      publish: () => { published = true; },
+      subscribe: () => () => {},
+      subscriberCount: () => 0,
+    };
 
-    const proposalId = 'prop_bmoni_partial_02';
-    await repos.proposals.save({
-      id: 'ext_prop_partial_02',
-      paymentIntentId: intentId,
-      responsibilityId: DEMO_ACCOMMODATION_RESPONSIBILITY.id,
-      amount: 30000,
-      currency: 'NGN',
-      provider: 'BMONI',
-      providerProposalId: proposalId,
-      providerStatus: 'PENDING',
-      isSimulated: false,
-      createdAt: new Date().toISOString(),
-    });
-
-    const rawPayload = JSON.stringify({
-      id: 'bmoni_evt_partial_02',
-      type: 'payment.completed',
-      data: {
-        proposalId,
-        status: 'COMPLETED',
-        amount: 30000,
-        currency: 'NGN',
+    const faultyRepos: any = {
+      ...repos,
+      runInTransaction: async () => {
+        throw new Error('Database transaction abort test');
       },
-    });
+    };
 
-    const res = await fetch(`${baseUrl}/api/webhooks/bmoni`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Webhook-Signature': computeHmacSignature(rawPayload),
-        'X-Webhook-Id': 'bmoni_evt_partial_02',
-      },
-      body: rawPayload,
-    });
+    const engineWithFault = new ReconciliationEngine(faultyRepos, testPublisher);
+    await setupIntentAndProposal({ intentId: 'intent_17', proposalId: 'prop_17', amount: 10000 });
+    const event = createSampleProviderEvent({ eventId: 'evt_17', proposalId: 'prop_17', amount: 10000 });
 
-    expect(res.status).toBe(200);
-
-    const resp = await repos.accommodation.findById(DEMO_ACCOMMODATION_RESPONSIBILITY.id);
-    expect(resp!.verifiedAmount).toBe(30000);
-    expect(resp!.status).toBe(ResponsibilityStatus.PARTIALLY_FULFILLED);
+    await expect(engineWithFault.reconcileProviderEvent(event)).rejects.toThrow('Database transaction abort test');
+    expect(published).toBe(false);
   });
 
-  // 3. Idempotency: Duplicate provider event does not duplicate financial credit
-  it('3. enforces idempotency: repeated reconciliation of same provider event produces no duplicate credit', async () => {
-    const intentId = 'intent_rec_idem_03';
-    await repos.intents.save({
-      id: intentId,
-      responsibilityId: DEMO_ACCOMMODATION_RESPONSIBILITY.id,
-      amount: 25000,
-      fulfilmentType: FulfilmentType.PARTIAL,
-      status: PaymentIntentStatus.PREPARED,
-      createdAt: new Date().toISOString(),
-    });
+  // 18. outbox event is published via SSE on successful commit
+  it('18. outbox event is published via SSE on successful commit', async () => {
+    let publishedEvent: any = null;
+    const trackingPublisher: any = {
+      publish: (e: any) => { publishedEvent = e; },
+      subscribe: () => () => {},
+      subscriberCount: () => 1,
+    };
 
-    const proposalId = 'prop_bmoni_idem_03';
-    await repos.proposals.save({
-      id: 'ext_prop_idem_03',
-      paymentIntentId: intentId,
-      responsibilityId: DEMO_ACCOMMODATION_RESPONSIBILITY.id,
-      amount: 25000,
-      currency: 'NGN',
-      provider: 'BMONI',
-      providerProposalId: proposalId,
-      providerStatus: 'PENDING',
-      isSimulated: false,
-      createdAt: new Date().toISOString(),
-    });
+    const engine = new ReconciliationEngine(repos, trackingPublisher);
+    await setupIntentAndProposal({ intentId: 'intent_18', proposalId: 'prop_18', amount: 14000 });
+    const event = createSampleProviderEvent({ eventId: 'evt_18', proposalId: 'prop_18', amount: 14000 });
 
-    // Ingest event first time
-    const rawPayload = JSON.stringify({
-      id: 'bmoni_evt_idem_03',
-      type: 'payment.completed',
-      data: {
-        proposalId,
-        status: 'COMPLETED',
-        amount: 25000,
-        currency: 'NGN',
-      },
-    });
-
-    await fetch(`${baseUrl}/api/webhooks/bmoni`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Webhook-Signature': computeHmacSignature(rawPayload),
-        'X-Webhook-Id': 'bmoni_evt_idem_03',
-      },
-      body: rawPayload,
-    });
-
-    const resp1 = await repos.accommodation.findById(DEMO_ACCOMMODATION_RESPONSIBILITY.id);
-    expect(resp1!.verifiedAmount).toBe(25000);
-
-    // Re-reconcile direct invocation or duplicate webhook
-    const providerEvent = (await repos.providerEvents.findByProviderEventId('BMONI', 'bmoni_evt_idem_03'))!;
-    const secondResult = await reconciliationEngine.reconcileProviderEvent(providerEvent);
-
-    expect(secondResult.success).toBe(true);
-    expect(secondResult.isDuplicate).toBe(true);
-    expect(secondResult.reasonCode).toBe(ReconciliationReasonCode.ALREADY_RECONCILED);
-
-    // Verified amount is STILL 25000, strictly NOT 50000!
-    const resp2 = await repos.accommodation.findById(DEMO_ACCOMMODATION_RESPONSIBILITY.id);
-    expect(resp2!.verifiedAmount).toBe(25000);
+    await engine.reconcileProviderEvent(event);
+    expect(publishedEvent).toBeDefined();
+    expect(publishedEvent.eventType).toBe('accommodation.payment.reconciled');
+    expect(publishedEvent.payload.amount).toBe(14000);
   });
 
-  // 4. Mismatch: Orphaned proposal ID leaves financial state untouched
-  it('4. records MISMATCH and strictly leaves financial state untouched when proposal is unknown', async () => {
-    const rawPayload = JSON.stringify({
-      id: 'bmoni_evt_orphan_04',
-      type: 'payment.completed',
-      data: {
-        proposalId: 'prop_unknown_nonexistent',
-        status: 'COMPLETED',
-        amount: 50000,
-        currency: 'NGN',
-      },
-    });
+  // 19. mismatched reconciliation record is preserved with reason code
+  it('19. mismatched reconciliation record is preserved with reason code', async () => {
+    await setupIntentAndProposal({ intentId: 'intent_19', proposalId: 'prop_19', amount: 20000 });
+    const event = createSampleProviderEvent({ eventId: 'evt_19', proposalId: 'prop_19', amount: 10000 });
 
-    const res = await fetch(`${baseUrl}/api/webhooks/bmoni`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Webhook-Signature': computeHmacSignature(rawPayload),
-        'X-Webhook-Id': 'bmoni_evt_orphan_04',
-      },
-      body: rawPayload,
-    });
+    await reconciliationEngine.reconcileProviderEvent(event);
+    const rec = await repos.reconciliations.findByProviderEventId('BMONI', 'evt_19');
 
-    expect(res.status).toBe(200);
-
-    // Verified amount must remain 0!
-    const resp = await repos.accommodation.findById(DEMO_ACCOMMODATION_RESPONSIBILITY.id);
-    expect(resp!.verifiedAmount).toBe(0);
-    expect(resp!.status).toBe(ResponsibilityStatus.OUTSTANDING);
-
-    // Reconciliation audit recorded as MISMATCH
-    const rec = await repos.reconciliations.findByProviderEventId('BMONI', 'bmoni_evt_orphan_04');
     expect(rec).toBeDefined();
-    expect(rec!.reconciliationStatus).toBe(PaymentReconciliationStatus.MISMATCH);
-    expect(rec!.reasonCode).toBe(ReconciliationReasonCode.PROPOSAL_NOT_FOUND);
-  });
-
-  // 5. Mismatch: Amount mismatch leaves financial state untouched
-  it('5. records MISMATCH and does NOT modify verifiedAmount when amount differs from proposal', async () => {
-    const intentId = 'intent_rec_mismatch_05';
-    await repos.intents.save({
-      id: intentId,
-      responsibilityId: DEMO_ACCOMMODATION_RESPONSIBILITY.id,
-      amount: 66000,
-      fulfilmentType: FulfilmentType.FULL,
-      status: PaymentIntentStatus.PREPARED,
-      createdAt: new Date().toISOString(),
-    });
-
-    const proposalId = 'prop_bmoni_mismatch_05';
-    await repos.proposals.save({
-      id: 'ext_prop_mismatch_05',
-      paymentIntentId: intentId,
-      responsibilityId: DEMO_ACCOMMODATION_RESPONSIBILITY.id,
-      amount: 66000,
-      currency: 'NGN',
-      provider: 'BMONI',
-      providerProposalId: proposalId,
-      providerStatus: 'PENDING',
-      isSimulated: false,
-      createdAt: new Date().toISOString(),
-    });
-
-    // Provider sends 50000 instead of 66000
-    const rawPayload = JSON.stringify({
-      id: 'bmoni_evt_amt_mismatch_05',
-      type: 'payment.completed',
-      data: {
-        proposalId,
-        status: 'COMPLETED',
-        amount: 50000,
-        currency: 'NGN',
-      },
-    });
-
-    await fetch(`${baseUrl}/api/webhooks/bmoni`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Webhook-Signature': computeHmacSignature(rawPayload),
-        'X-Webhook-Id': 'bmoni_evt_amt_mismatch_05',
-      },
-      body: rawPayload,
-    });
-
-    const resp = await repos.accommodation.findById(DEMO_ACCOMMODATION_RESPONSIBILITY.id);
-    expect(resp!.verifiedAmount).toBe(0);
-
-    const rec = await repos.reconciliations.findByProviderEventId('BMONI', 'bmoni_evt_amt_mismatch_05');
     expect(rec!.reconciliationStatus).toBe(PaymentReconciliationStatus.MISMATCH);
     expect(rec!.reasonCode).toBe(ReconciliationReasonCode.AMOUNT_MISMATCH);
   });
 
-  // 6. Admin API: Authorization rules for reconciliations endpoint
-  it('6. protects GET /api/accommodation/admin/reconciliations: admin allowed, fellow forbidden, unauthenticated rejected', async () => {
-    // Unauthenticated -> 401
-    const resNoAuth = await fetch(`${baseUrl}/api/accommodation/admin/reconciliations`);
-    expect(resNoAuth.status).toBe(401);
+  // 20. mismatch does not prevent later valid reconciliation of a different event
+  it('20. mismatch does not prevent later valid reconciliation of a different event', async () => {
+    // Event 1 mismatches
+    const eventBad = createSampleProviderEvent({ eventId: 'evt_20_bad', proposalId: 'prop_unknown', amount: 5000 });
+    await reconciliationEngine.reconcileProviderEvent(eventBad);
 
-    // Fellow -> 403
-    const fellowToken = await establishSession(MemberRole.FELLOW);
-    const resFellow = await fetch(`${baseUrl}/api/accommodation/admin/reconciliations`, {
-      headers: { Authorization: `Bearer ${fellowToken}` },
-    });
-    expect(resFellow.status).toBe(403);
+    // Event 2 is valid
+    await setupIntentAndProposal({ intentId: 'intent_20', proposalId: 'prop_20', amount: 16000 });
+    const eventGood = createSampleProviderEvent({ eventId: 'evt_20_good', proposalId: 'prop_20', amount: 16000 });
+    const resGood = await reconciliationEngine.reconcileProviderEvent(eventGood);
 
-    // Admin -> 200
-    const adminToken = await establishSession(MemberRole.ACCOMMODATION_ADMIN);
-    const resAdmin = await fetch(`${baseUrl}/api/accommodation/admin/reconciliations`, {
-      headers: { Authorization: `Bearer ${adminToken}` },
-    });
-    expect(resAdmin.status).toBe(200);
-    const data = await resAdmin.json();
-    expect(data.success).toBe(true);
-    expect(Array.isArray(data.reconciliations)).toBe(true);
+    expect(resGood.success).toBe(true);
+    expect(resGood.reconciliationStatus).toBe(PaymentReconciliationStatus.VERIFIED);
+    const resp = await repos.accommodation.findById(DEMO_ACCOMMODATION_RESPONSIBILITY.id);
+    expect(resp!.verifiedAmount).toBe(16000);
   });
 
-  // 7. Admin API: POST /api/accommodation/admin/reconcile manual trigger
-  it('7. allows Accommodation Admin to trigger reconciliation manually', async () => {
-    // Seed intent and proposal
-    const intentId = 'intent_rec_manual_07';
-    await repos.intents.save({
-      id: intentId,
-      responsibilityId: DEMO_ACCOMMODATION_RESPONSIBILITY.id,
+  // 21. mismatch on an event does not prevent later valid reconciliation of that event if the proposal becomes available
+  it('21. mismatch on an event does not prevent later valid reconciliation of that event if proposal becomes available', async () => {
+    // Step 1: Event arrives before proposal exists
+    const event = createSampleProviderEvent({ eventId: 'evt_21_retry', proposalId: 'prop_21_delayed', amount: 22000 });
+    const res1 = await reconciliationEngine.reconcileProviderEvent(event);
+    expect(res1.reconciliationStatus).toBe(PaymentReconciliationStatus.MISMATCH);
+    expect(res1.reasonCode).toBe(ReconciliationReasonCode.PROPOSAL_NOT_FOUND);
+
+    // Verify initial mismatch audit is recorded
+    const recsInitial = await repos.reconciliations.listByProviderEventId('BMONI', 'evt_21_retry');
+    expect(recsInitial.length).toBe(1);
+    expect(recsInitial[0].reconciliationStatus).toBe(PaymentReconciliationStatus.MISMATCH);
+
+    // Step 2: Proposal and intent become available later
+    await setupIntentAndProposal({ intentId: 'intent_21', proposalId: 'prop_21_delayed', amount: 22000 });
+
+    // Step 3: Event is re-reconciled
+    const res2 = await reconciliationEngine.reconcileProviderEvent(event);
+    expect(res2.success).toBe(true);
+    expect(res2.reconciliationStatus).toBe(PaymentReconciliationStatus.VERIFIED);
+    expect(res2.financialEffect).toBe(22000);
+
+    // Both records are preserved in reconciliation history (append-oriented)
+    const recsAll = await repos.reconciliations.listByProviderEventId('BMONI', 'evt_21_retry');
+    expect(recsAll.length).toBe(2);
+    expect(recsAll[0].reconciliationStatus).toBe(PaymentReconciliationStatus.MISMATCH);
+    expect(recsAll[1].reconciliationStatus).toBe(PaymentReconciliationStatus.VERIFIED);
+
+    const resp = await repos.accommodation.findById(DEMO_ACCOMMODATION_RESPONSIBILITY.id);
+    expect(resp!.verifiedAmount).toBe(22000);
+  });
+
+  // 22. provider metadata responsibilityId cannot redirect payment to another responsibility
+  it('22. provider metadata responsibilityId cannot redirect payment to another responsibility', async () => {
+    await setupIntentAndProposal({ intentId: 'intent_22', proposalId: 'prop_22', amount: 15000 });
+    // Payload contains spoofed metadata trying to credit a different responsibility
+    const event = createSampleProviderEvent({
+      eventId: 'evt_22',
+      proposalId: 'prop_22',
       amount: 15000,
+      extraPayload: { metadata: { responsibilityId: 'malicious_responsibility_spoof' } },
+    });
+
+    const res = await reconciliationEngine.reconcileProviderEvent(event);
+    expect(res.success).toBe(true);
+    // Verified credit was applied to the authoritative DEMO responsibility, NOT spoofed id!
+    expect(res.updatedResponsibility!.id).toBe(DEMO_ACCOMMODATION_RESPONSIBILITY.id);
+    const resp = await repos.accommodation.findById(DEMO_ACCOMMODATION_RESPONSIBILITY.id);
+    expect(resp!.verifiedAmount).toBe(15000);
+  });
+
+  // 23. proposal → intent → responsibility relationship is authoritative
+  it('23. proposal → intent → responsibility relationship is authoritative', async () => {
+    await setupIntentAndProposal({ intentId: 'intent_23', proposalId: 'prop_23', amount: 11000 });
+    const event = createSampleProviderEvent({ eventId: 'evt_23', proposalId: 'prop_23', amount: 11000 });
+
+    const res = await reconciliationEngine.reconcileProviderEvent(event);
+    expect(res.success).toBe(true);
+    expect(res.reconciliation.externalPaymentProposalId).toBe('ext_prop_23');
+    expect(res.reconciliation.paymentIntentId).toBe('intent_23');
+    expect(res.reconciliation.accommodationResponsibilityId).toBe(DEMO_ACCOMMODATION_RESPONSIBILITY.id);
+  });
+
+  // 24. wrong proposal/intent relationship does not verify
+  it('24. wrong proposal/intent relationship does not verify', async () => {
+    // Proposal pointing to intent A, but intent in DB points elsewhere
+    await repos.intents.save({
+      id: 'intent_24_A',
+      responsibilityId: DEMO_ACCOMMODATION_RESPONSIBILITY.id,
+      amount: 10000,
       fulfilmentType: FulfilmentType.PARTIAL,
       status: PaymentIntentStatus.PREPARED,
       createdAt: new Date().toISOString(),
     });
 
-    const proposalId = 'prop_bmoni_manual_07';
     await repos.proposals.save({
-      id: 'ext_prop_manual_07',
-      paymentIntentId: intentId,
-      responsibilityId: DEMO_ACCOMMODATION_RESPONSIBILITY.id,
-      amount: 15000,
+      id: 'ext_prop_24',
+      paymentIntentId: 'intent_24_A',
+      responsibilityId: 'different_resp_id', // Intentionally mismatched
+      amount: 10000,
       currency: 'NGN',
       provider: 'BMONI',
-      providerProposalId: proposalId,
+      providerProposalId: 'prop_24',
       providerStatus: 'PENDING',
       isSimulated: false,
       createdAt: new Date().toISOString(),
     });
 
-    // Save a raw provider event directly into provider_events store
+    const event = createSampleProviderEvent({ eventId: 'evt_24', proposalId: 'prop_24', amount: 10000 });
+    const res = await reconciliationEngine.reconcileProviderEvent(event);
+
+    expect(res.success).toBe(false);
+    expect(res.reconciliationStatus).toBe(PaymentReconciliationStatus.MISMATCH);
+    expect(res.reasonCode).toBe(ReconciliationReasonCode.CORRELATION_BROKEN);
+  });
+
+  // 25. unsupported provider does not verify
+  it('25. unsupported provider does not verify', async () => {
+    const event = createSampleProviderEvent({ eventId: 'evt_25', proposalId: 'prop_25', amount: 10000, provider: 'STRIPE' });
+    const res = await reconciliationEngine.reconcileProviderEvent(event);
+
+    expect(res.success).toBe(false);
+    expect(res.reconciliationStatus).toBe(PaymentReconciliationStatus.NON_ELIGIBLE);
+    expect(res.reasonCode).toBe(ReconciliationReasonCode.UNSUPPORTED_PROVIDER);
+  });
+
+  // 26. missing proposalId in event does not verify
+  it('26. missing proposalId in event does not verify', async () => {
+    const event = createSampleProviderEvent({ eventId: 'evt_26', amount: 10000 });
+    event.providerProposalId = undefined;
+    delete event.payload.proposalId;
+
+    const res = await reconciliationEngine.reconcileProviderEvent(event);
+    expect(res.success).toBe(false);
+    expect(res.reconciliationStatus).toBe(PaymentReconciliationStatus.MISMATCH);
+    expect(res.reasonCode).toBe(ReconciliationReasonCode.PROPOSAL_NOT_FOUND);
+  });
+
+  // 27. non-COMPLETED status does not create verified reconciliation record
+  it('27. non-COMPLETED status does not create verified reconciliation record', async () => {
+    await setupIntentAndProposal({ intentId: 'intent_27', proposalId: 'prop_27', amount: 10000 });
+    const event = createSampleProviderEvent({ eventId: 'evt_27', proposalId: 'prop_27', amount: 10000, status: 'PROCESSING' });
+
+    const res = await reconciliationEngine.reconcileProviderEvent(event);
+    expect(res.success).toBe(false);
+    expect(res.reconciliationStatus).not.toBe(PaymentReconciliationStatus.VERIFIED);
+  });
+
+  // 28. non-COMPLETED status creates NON_ELIGIBLE or MISMATCH record
+  it('28. non-COMPLETED status creates NON_ELIGIBLE or MISMATCH record', async () => {
+    const event = createSampleProviderEvent({ eventId: 'evt_28', proposalId: 'prop_28', amount: 10000, status: 'EXPIRED' });
+    const res = await reconciliationEngine.reconcileProviderEvent(event);
+
+    expect(res.reconciliationStatus).toBe(PaymentReconciliationStatus.NON_ELIGIBLE);
+    const rec = await repos.reconciliations.findByProviderEventId('BMONI', 'evt_28');
+    expect(rec).toBeDefined();
+    expect(rec!.reconciliationStatus).toBe(PaymentReconciliationStatus.NON_ELIGIBLE);
+  });
+
+  // 29. reconciliation record stores correct reason code
+  it('29. reconciliation record stores correct reason code', async () => {
+    await setupIntentAndProposal({ intentId: 'intent_29', proposalId: 'prop_29', amount: 17000 });
+    const event = createSampleProviderEvent({ eventId: 'evt_29', proposalId: 'prop_29', amount: 17000 });
+
+    const res = await reconciliationEngine.reconcileProviderEvent(event);
+    expect(res.reconciliation.reasonCode).toBe(ReconciliationReasonCode.MATCHED_VERIFIED);
+  });
+
+  // 30. reconciliation record stores correct financial snapshot
+  it('30. reconciliation record stores correct financial snapshot', async () => {
+    await setupIntentAndProposal({ intentId: 'intent_30', proposalId: 'prop_30', amount: 13500 });
+    const event = createSampleProviderEvent({ eventId: 'evt_30', proposalId: 'prop_30', amount: 13500 });
+
+    const res = await reconciliationEngine.reconcileProviderEvent(event);
+    expect(res.reconciliation.amount).toBe(13500);
+    expect(res.reconciliation.currency).toBe('NGN');
+    expect(res.reconciliation.provider).toBe('BMONI');
+    expect(res.reconciliation.reconciledAt).toBeDefined();
+  });
+
+  // 31. admin can list reconciliations with correct authorization
+  it('31. admin can list reconciliations with correct authorization', async () => {
+    const adminToken = await establishSession(MemberRole.ACCOMMODATION_ADMIN);
+    const res = await fetch(`${baseUrl}/api/accommodation/admin/reconciliations`, {
+      headers: { Authorization: `Bearer ${adminToken}` },
+    });
+    expect(res.status).toBe(200);
+    const body = await res.json();
+    expect(body.success).toBe(true);
+    expect(Array.isArray(body.reconciliations)).toBe(true);
+  });
+
+  // 32. fellow cannot access admin reconciliation endpoint
+  it('32. fellow cannot access admin reconciliation endpoint', async () => {
+    const fellowToken = await establishSession(MemberRole.FELLOW);
+    const res = await fetch(`${baseUrl}/api/accommodation/admin/reconciliations`, {
+      headers: { Authorization: `Bearer ${fellowToken}` },
+    });
+    expect(res.status).toBe(403);
+  });
+
+  // 33. unauthenticated caller cannot access admin reconciliation endpoint
+  it('33. unauthenticated caller cannot access admin reconciliation endpoint', async () => {
+    const res = await fetch(`${baseUrl}/api/accommodation/admin/reconciliations`);
+    expect(res.status).toBe(401);
+  });
+
+  // 34. admin manual reconciliation trigger verifies valid event
+  it('34. admin manual reconciliation trigger verifies valid event', async () => {
+    await setupIntentAndProposal({ intentId: 'intent_34', proposalId: 'prop_34', amount: 20000 });
     await repos.providerEvents.create({
-      id: 'pevt_manual_07',
+      id: 'pevt_34',
       provider: 'BMONI',
-      providerEventId: 'bmoni_evt_manual_07',
-      sourceEventId: 'src_evt_manual_07',
+      providerEventId: 'evt_34',
+      sourceEventId: 'src_34',
       eventType: 'payment.completed',
       providerStatus: 'COMPLETED',
-      providerProposalId: proposalId,
-      payload: {
-        proposalId,
-        status: 'COMPLETED',
-        amount: 15000,
-        currency: 'NGN',
-      },
+      providerProposalId: 'prop_34',
+      payload: { proposalId: 'prop_34', status: 'COMPLETED', amount: 20000, currency: 'NGN' },
       receivedAt: new Date().toISOString(),
       processingStatus: 'RECEIVED' as any,
     });
 
     const adminToken = await establishSession(MemberRole.ACCOMMODATION_ADMIN);
-
     const res = await fetch(`${baseUrl}/api/accommodation/admin/reconcile`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${adminToken}`,
-      },
-      body: JSON.stringify({
-        providerEventId: 'bmoni_evt_manual_07',
-        provider: 'BMONI',
-      }),
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${adminToken}` },
+      body: JSON.stringify({ providerEventId: 'evt_34', provider: 'BMONI' }),
     });
 
     expect(res.status).toBe(200);
@@ -453,63 +704,106 @@ describe('H4D-FUNC-013: Accommodation Payment Reconciliation Engine', () => {
     expect(body.result.reconciliationStatus).toBe(PaymentReconciliationStatus.VERIFIED);
 
     const resp = await repos.accommodation.findById(DEMO_ACCOMMODATION_RESPONSIBILITY.id);
-    expect(resp!.verifiedAmount).toBe(15000);
+    expect(resp!.verifiedAmount).toBe(20000);
   });
 
-  // 8. Invariant: No automatic peer or guarantor effects
-  it('8. preserves boundary: payment reconciliation does not modify peer support or other records', async () => {
-    // Check initial responsibilities count
-    const initialResp = await repos.accommodation.findById(DEMO_ACCOMMODATION_RESPONSIBILITY.id);
-    expect(initialResp).toBeDefined();
-
-    // Reconcile
-    const intentId = 'intent_rec_bound_08';
-    await repos.intents.save({
-      id: intentId,
-      responsibilityId: DEMO_ACCOMMODATION_RESPONSIBILITY.id,
-      amount: 10000,
-      fulfilmentType: FulfilmentType.PARTIAL,
-      status: PaymentIntentStatus.PREPARED,
-      createdAt: new Date().toISOString(),
-    });
-
-    const proposalId = 'prop_bmoni_bound_08';
-    await repos.proposals.save({
-      id: 'ext_prop_bound_08',
-      paymentIntentId: intentId,
-      responsibilityId: DEMO_ACCOMMODATION_RESPONSIBILITY.id,
-      amount: 10000,
-      currency: 'NGN',
+  // 35. admin manual reconciliation trigger reports mismatch for invalid event
+  it('35. admin manual reconciliation trigger reports mismatch for invalid event', async () => {
+    await repos.providerEvents.create({
+      id: 'pevt_35',
       provider: 'BMONI',
-      providerProposalId: proposalId,
-      providerStatus: 'PENDING',
-      isSimulated: false,
-      createdAt: new Date().toISOString(),
+      providerEventId: 'evt_35',
+      sourceEventId: 'src_35',
+      eventType: 'payment.completed',
+      providerStatus: 'COMPLETED',
+      providerProposalId: 'prop_nonexistent_35',
+      payload: { proposalId: 'prop_nonexistent_35', status: 'COMPLETED', amount: 5000, currency: 'NGN' },
+      receivedAt: new Date().toISOString(),
+      processingStatus: 'RECEIVED' as any,
     });
 
-    const rawPayload = JSON.stringify({
-      id: 'bmoni_evt_bound_08',
-      type: 'payment.completed',
-      data: {
-        proposalId,
-        status: 'COMPLETED',
-        amount: 10000,
-        currency: 'NGN',
-      },
-    });
-
-    await fetch(`${baseUrl}/api/webhooks/bmoni`, {
+    const adminToken = await establishSession(MemberRole.ACCOMMODATION_ADMIN);
+    const res = await fetch(`${baseUrl}/api/accommodation/admin/reconcile`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Webhook-Signature': computeHmacSignature(rawPayload),
-        'X-Webhook-Id': 'bmoni_evt_bound_08',
-      },
-      body: rawPayload,
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${adminToken}` },
+      body: JSON.stringify({ providerEventId: 'evt_35', provider: 'BMONI' }),
     });
 
-    const afterResp = await repos.accommodation.findById(DEMO_ACCOMMODATION_RESPONSIBILITY.id);
-    expect(afterResp).toBeDefined();
-    expect(afterResp!.verifiedAmount).toBe(10000);
+    expect(res.status).toBe(200);
+    const body = await res.json();
+    expect(body.success).toBe(true);
+    expect(body.result.reconciliationStatus).toBe(PaymentReconciliationStatus.MISMATCH);
+
+    const resp = await repos.accommodation.findById(DEMO_ACCOMMODATION_RESPONSIBILITY.id);
+    expect(resp!.verifiedAmount).toBe(0);
+  });
+
+  // 36. concurrent reconciliation attempts for the same event produce exactly one credit
+  it('36. concurrent reconciliation attempts for the same event produce exactly one credit', async () => {
+    await setupIntentAndProposal({ intentId: 'intent_36', proposalId: 'prop_36', amount: 19000 });
+    const event = createSampleProviderEvent({ eventId: 'evt_36', proposalId: 'prop_36', amount: 19000 });
+
+    // Execute concurrent reconciliation attempts
+    const [result1, result2] = await Promise.all([
+      reconciliationEngine.reconcileProviderEvent(event),
+      reconciliationEngine.reconcileProviderEvent(event),
+    ]);
+
+    const totalFinancialEffect = (result1.financialEffect || 0) + (result2.financialEffect || 0);
+    expect(totalFinancialEffect).toBe(19000);
+
+    const resp = await repos.accommodation.findById(DEMO_ACCOMMODATION_RESPONSIBILITY.id);
+    expect(resp!.verifiedAmount).toBe(19000);
+  });
+
+  // 37. concurrent reconciliation attempts for different events do not exceed required amount
+  it('37. concurrent reconciliation attempts for different events do not exceed required amount', async () => {
+    // Current required amount is 66,000.
+    // Event A is 40,000. Event B is 40,000.
+    await setupIntentAndProposal({ intentId: 'intent_37_A', proposalId: 'prop_37_A', amount: 40000 });
+    await setupIntentAndProposal({ intentId: 'intent_37_B', proposalId: 'prop_37_B', amount: 40000 });
+
+    const eventA = createSampleProviderEvent({ eventId: 'evt_37_A', proposalId: 'prop_37_A', amount: 40000 });
+    const eventB = createSampleProviderEvent({ eventId: 'evt_37_B', proposalId: 'prop_37_B', amount: 40000 });
+
+    const [resA, resB] = await Promise.all([
+      reconciliationEngine.reconcileProviderEvent(eventA),
+      reconciliationEngine.reconcileProviderEvent(eventB),
+    ]);
+
+    // One must succeed, the other must fail with AMOUNT_EXCEEDS_REMAINING
+    const oneVerified = (resA.reconciliationStatus === 'VERIFIED') !== (resB.reconciliationStatus === 'VERIFIED');
+    expect(oneVerified).toBe(true);
+
+    const resp = await repos.accommodation.findById(DEMO_ACCOMMODATION_RESPONSIBILITY.id);
+    expect(resp!.verifiedAmount).toBe(40000);
+    expect(resp!.verifiedAmount).toBeLessThanOrEqual(Number(resp!.requiredAmount));
+  });
+
+  // 38. verifiedAmount invariant: 0 <= verifiedAmount <= requiredAmount
+  it('38. verifiedAmount invariant: 0 <= verifiedAmount <= requiredAmount', async () => {
+    await setupIntentAndProposal({ intentId: 'intent_38', proposalId: 'prop_38', amount: 66000, fulfilmentType: FulfilmentType.FULL });
+    const event = createSampleProviderEvent({ eventId: 'evt_38', proposalId: 'prop_38', amount: 66000 });
+
+    const res = await reconciliationEngine.reconcileProviderEvent(event);
+    expect(res.success).toBe(true);
+
+    const resp = await repos.accommodation.findById(DEMO_ACCOMMODATION_RESPONSIBILITY.id);
+    expect(resp!.verifiedAmount).toBeGreaterThanOrEqual(0);
+    expect(resp!.verifiedAmount).toBeLessThanOrEqual(Number(resp!.requiredAmount));
+  });
+
+  // 39. remainingAmount invariant: remainingAmount = requiredAmount - verifiedAmount
+  it('39. remainingAmount invariant: remainingAmount = requiredAmount - verifiedAmount', async () => {
+    await setupIntentAndProposal({ intentId: 'intent_39', proposalId: 'prop_39', amount: 26000 });
+    const event = createSampleProviderEvent({ eventId: 'evt_39', proposalId: 'prop_39', amount: 26000 });
+
+    const res = await reconciliationEngine.reconcileProviderEvent(event);
+    expect(res.success).toBe(true);
+
+    const resp = await repos.accommodation.findById(DEMO_ACCOMMODATION_RESPONSIBILITY.id);
+    const expectedRemaining = Math.round((Number(resp!.requiredAmount) - Number(resp!.verifiedAmount)) * 100) / 100;
+    expect(res.updatedResponsibility!.remainingAmount).toBe(expectedRemaining);
+    expect(expectedRemaining).toBe(40000);
   });
 });

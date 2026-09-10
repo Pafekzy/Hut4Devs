@@ -59,12 +59,12 @@ export class ReconciliationEngine {
       );
     }
 
-    // Check 3: Idempotency check - Has this exact provider event already been reconciled?
-    const existing = await repos.reconciliations.findByProviderEventId(
+    // Check 3: Idempotency check - Has this exact provider event already been verified?
+    const existingVerified = await repos.reconciliations.findVerifiedByProviderEventId(
       event.provider,
       event.providerEventId
     );
-    if (existing && existing.reconciliationStatus === 'VERIFIED') {
+    if (existingVerified) {
       return {
         success: true,
         reconciliationStatus: 'VERIFIED',
@@ -72,7 +72,7 @@ export class ReconciliationEngine {
         financialEffect: 0,
         idempotent: true,
         isDuplicate: true,
-        reconciliation: existing,
+        reconciliation: existingVerified,
       };
     }
 
@@ -141,6 +141,20 @@ export class ReconciliationEngine {
       );
     }
 
+    // Check 6b: Authoritative correlation between proposal and intent
+    if (proposal.paymentIntentId !== intent.id) {
+      return this.recordMismatch(
+        event,
+        'CORRELATION_BROKEN',
+        proposal.id,
+        intent.id,
+        null,
+        repos,
+        publisher,
+        `Proposal paymentIntentId "${proposal.paymentIntentId}" does not match intent ID "${intent.id}".`
+      );
+    }
+
     // Check 7: Resolve Accommodation Responsibility
     // Authoritative relationship: proposal -> intent.responsibilityId
     const responsibility = await repos.accommodation.findById(intent.responsibilityId);
@@ -154,6 +168,20 @@ export class ReconciliationEngine {
         repos,
         publisher,
         `Payment intent "${intent.id}" references non-existent accommodation responsibility "${intent.responsibilityId}".`
+      );
+    }
+
+    // Check 7b: Authoritative correlation: proposal responsibilityId (if present) must match intent.responsibilityId
+    if (proposal.responsibilityId && proposal.responsibilityId !== responsibility.id) {
+      return this.recordMismatch(
+        event,
+        'CORRELATION_BROKEN',
+        proposal.id,
+        intent.id,
+        responsibility.id,
+        repos,
+        publisher,
+        `Proposal responsibility "${proposal.responsibilityId}" does not match intent responsibility "${responsibility.id}".`
       );
     }
 
@@ -237,36 +265,50 @@ export class ReconciliationEngine {
     let outboxToPublish: OutboxEventRecord | null = null;
     let recRecord: PaymentReconciliationRecord | null = null;
     let updatedRespResult: any = null;
+    let isDuplicateReconciliation = false;
+    let amountExceededRemainingInTx = false;
+    let inTxCurrentVerified = 0;
+    let inTxRequiredAmount = 0;
 
     await repos.runInTransaction(async (txRepos) => {
-      // Re-check idempotency within transaction boundary
-      const inTxExisting = await txRepos.reconciliations.findByProviderEventId(
+      // 1. Re-check idempotency within the same transaction boundary using findVerifiedByProviderEventId
+      const inTxExisting = await txRepos.reconciliations.findVerifiedByProviderEventId(
         event.provider,
         event.providerEventId
       );
-      if (inTxExisting && inTxExisting.reconciliationStatus === 'VERIFIED') {
+      if (inTxExisting) {
         recRecord = inTxExisting;
+        isDuplicateReconciliation = true;
         return;
       }
 
-      const txResp = await txRepos.accommodation.findById(responsibility.id);
+      // 2. Lock the responsibility row using SELECT ... FOR UPDATE on the same transaction client
+      const txResp = await txRepos.accommodation.findByIdForUpdate(responsibility.id);
       if (!txResp) {
         throw new Error(`Responsibility "${responsibility.id}" not found during transaction.`);
       }
 
-      const txCurrentVerified = Number(txResp.verifiedAmount) || 0;
-      const txRequired = Number(txResp.requiredAmount);
-      const newVerifiedAmount = Math.round((txCurrentVerified + eventAmount) * 100) / 100;
+      inTxCurrentVerified = Number(txResp.verifiedAmount) || 0;
+      inTxRequiredAmount = Number(txResp.requiredAmount);
+      const inTxRemainingAmount = Math.max(0, Math.round((inTxRequiredAmount - inTxCurrentVerified) * 100) / 100);
 
-      if (newVerifiedAmount > txRequired + 0.001) {
-        throw new Error(`Concurrent modification: amount exceeds remaining required amount.`);
+      // Check if concurrent modifications have already consumed the remaining amount
+      if (eventAmount > inTxRemainingAmount + 0.001) {
+        amountExceededRemainingInTx = true;
+        return;
       }
 
-      const remainingAmount = Math.max(0, Math.round((txRequired - newVerifiedAmount) * 100) / 100);
+      const newVerifiedAmount = Math.round((inTxCurrentVerified + eventAmount) * 100) / 100;
+      const remainingAmount = Math.max(0, Math.round((inTxRequiredAmount - newVerifiedAmount) * 100) / 100);
+
+      // Authoritative Invariant: 0 <= verifiedAmount <= requiredAmount
+      if (newVerifiedAmount > inTxRequiredAmount + 0.001) {
+        throw new Error(`Invariant violation: new verified amount ₦${newVerifiedAmount} exceeds required amount ₦${inTxRequiredAmount}`);
+      }
 
       // Derive operational status
       let newStatus = ResponsibilityStatus.OUTSTANDING;
-      if (newVerifiedAmount >= txRequired) {
+      if (newVerifiedAmount >= inTxRequiredAmount) {
         newStatus = ResponsibilityStatus.FULFILLED;
       } else if (newVerifiedAmount > 0) {
         newStatus = ResponsibilityStatus.PARTIALLY_FULFILLED;
@@ -277,7 +319,7 @@ export class ReconciliationEngine {
       txResp.status = newStatus;
       await txRepos.accommodation.save(txResp);
 
-      // Insert reconciliation record
+      // Insert reconciliation record (append-oriented)
       const createdRecRecord: PaymentReconciliationRecord = {
         id: `rec_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
         providerEventId: event.providerEventId,
@@ -309,7 +351,7 @@ export class ReconciliationEngine {
           reconciliationId: createdRecRecord.id,
           amount: eventAmount,
           currency: respCurrency,
-          requiredAmount: txRequired,
+          requiredAmount: inTxRequiredAmount,
           verifiedAmount: newVerifiedAmount,
           remainingAmount,
           status: newStatus,
@@ -324,20 +366,34 @@ export class ReconciliationEngine {
         id: txResp.id,
         verifiedAmount: newVerifiedAmount,
         remainingAmount,
-        requiredAmount: txRequired,
+        requiredAmount: inTxRequiredAmount,
         status: newStatus,
       };
     });
 
-    if (recRecord && (recRecord as any).reasonCode === 'ALREADY_RECONCILED') {
+    if (isDuplicateReconciliation && recRecord) {
       return {
         success: true,
         reconciliationStatus: 'VERIFIED',
         reasonCode: 'ALREADY_RECONCILED',
         financialEffect: 0,
         idempotent: true,
+        isDuplicate: true,
         reconciliation: recRecord,
       };
+    }
+
+    if (amountExceededRemainingInTx) {
+      return await this.recordMismatch(
+        event,
+        ReconciliationReasonCode.AMOUNT_EXCEEDS_REMAINING,
+        proposal.id,
+        intent.id,
+        responsibility.id,
+        repos,
+        publisher,
+        `Applying payment of ₦${eventAmount} would exceed remaining requirement (Verified: ₦${inTxCurrentVerified}, Required: ₦${inTxRequiredAmount}).`
+      );
     }
 
     // Publish outbox event to SSE subscribers ONLY AFTER COMMIT

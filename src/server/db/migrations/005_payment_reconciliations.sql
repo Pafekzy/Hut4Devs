@@ -14,9 +14,13 @@ CREATE TABLE payment_reconciliations (
   reconciliation_status VARCHAR(50) NOT NULL,
   reason_code VARCHAR(100) NOT NULL,
   reconciled_at TIMESTAMPTZ,
-  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  CONSTRAINT uq_payment_reconciliations_provider_event UNIQUE (provider, provider_event_id)
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
+
+-- Partial unique index: at most ONE VERIFIED reconciliation record per provider event (H4D-FUNC-013 hardening)
+CREATE UNIQUE INDEX uq_payment_reconciliations_verified_event 
+ON payment_reconciliations (provider, provider_event_id) 
+WHERE reconciliation_status = 'VERIFIED';
 
 CREATE INDEX idx_payment_reconciliations_event ON payment_reconciliations(provider, provider_event_id);
 CREATE INDEX idx_payment_reconciliations_resp ON payment_reconciliations(accommodation_responsibility_id);

@@ -40,6 +40,15 @@ export class PostgresAccommodationRepository implements IAccommodationRepository
     return this.mapRowToResponsibility(res.rows[0]);
   }
 
+  async findByIdForUpdate(id: string): Promise<AccommodationResponsibility | null> {
+    const res = await this.client.query(
+      'SELECT * FROM accommodation_responsibilities WHERE id = $1 FOR UPDATE',
+      [id]
+    );
+    if (res.rows.length === 0) return null;
+    return this.mapRowToResponsibility(res.rows[0]);
+  }
+
   async save(responsibility: AccommodationResponsibility): Promise<void> {
     const ctx = responsibility.accommodationContext;
     await this.client.query(
@@ -744,16 +753,6 @@ export class PostgresReconciliationRepository implements IPaymentReconciliationR
         accommodation_responsibility_id, provider, provider_status, amount,
         currency, reconciliation_status, reason_code, reconciled_at, created_at
       ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
-      ON CONFLICT (provider, provider_event_id) DO UPDATE SET
-        external_payment_proposal_id = EXCLUDED.external_payment_proposal_id,
-        payment_intent_id = EXCLUDED.payment_intent_id,
-        accommodation_responsibility_id = EXCLUDED.accommodation_responsibility_id,
-        provider_status = EXCLUDED.provider_status,
-        amount = EXCLUDED.amount,
-        currency = EXCLUDED.currency,
-        reconciliation_status = EXCLUDED.reconciliation_status,
-        reason_code = EXCLUDED.reason_code,
-        reconciled_at = EXCLUDED.reconciled_at
       `,
       [
         record.id,
@@ -775,12 +774,37 @@ export class PostgresReconciliationRepository implements IPaymentReconciliationR
   }
 
   async findByProviderEventId(provider: string, providerEventId: string): Promise<PaymentReconciliationRecord | null> {
+    // Return VERIFIED record if present, else return the latest attempt
     const res = await this.client.query(
-      `SELECT * FROM payment_reconciliations WHERE provider = $1 AND provider_event_id = $2`,
+      `SELECT * FROM payment_reconciliations 
+       WHERE provider = $1 AND provider_event_id = $2 
+       ORDER BY CASE WHEN reconciliation_status = 'VERIFIED' THEN 1 ELSE 2 END ASC, created_at DESC 
+       LIMIT 1`,
       [provider, providerEventId]
     );
     if (res.rows.length === 0) return null;
     return this.mapRowToReconciliation(res.rows[0]);
+  }
+
+  async findVerifiedByProviderEventId(provider: string, providerEventId: string): Promise<PaymentReconciliationRecord | null> {
+    const res = await this.client.query(
+      `SELECT * FROM payment_reconciliations 
+       WHERE provider = $1 AND provider_event_id = $2 AND reconciliation_status = 'VERIFIED' 
+       LIMIT 1`,
+      [provider, providerEventId]
+    );
+    if (res.rows.length === 0) return null;
+    return this.mapRowToReconciliation(res.rows[0]);
+  }
+
+  async listByProviderEventId(provider: string, providerEventId: string): Promise<PaymentReconciliationRecord[]> {
+    const res = await this.client.query(
+      `SELECT * FROM payment_reconciliations 
+       WHERE provider = $1 AND provider_event_id = $2 
+       ORDER BY created_at ASC`,
+      [provider, providerEventId]
+    );
+    return res.rows.map((r) => this.mapRowToReconciliation(r));
   }
 
   async findById(id: string): Promise<PaymentReconciliationRecord | null> {

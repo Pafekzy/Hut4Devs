@@ -11,6 +11,7 @@ import { PaymentReconciliationRecord } from './reconciliation';
  */
 export interface IAccommodationRepository {
   findById(id: string): Promise<AccommodationResponsibility | null>;
+  findByIdForUpdate(id: string): Promise<AccommodationResponsibility | null>;
   save(responsibility: AccommodationResponsibility): Promise<void>;
   listAll(): Promise<AccommodationResponsibility[]>;
 }
@@ -111,6 +112,8 @@ export interface IProviderEventRepository {
 export interface IPaymentReconciliationRepository {
   create(record: PaymentReconciliationRecord): Promise<PaymentReconciliationRecord>;
   findByProviderEventId(provider: string, providerEventId: string): Promise<PaymentReconciliationRecord | null>;
+  findVerifiedByProviderEventId(provider: string, providerEventId: string): Promise<PaymentReconciliationRecord | null>;
+  listByProviderEventId(provider: string, providerEventId: string): Promise<PaymentReconciliationRecord[]>;
   findById(id: string): Promise<PaymentReconciliationRecord | null>;
   listByResponsibilityId(responsibilityId: string): Promise<PaymentReconciliationRecord[]>;
   listAll(): Promise<PaymentReconciliationRecord[]>;
