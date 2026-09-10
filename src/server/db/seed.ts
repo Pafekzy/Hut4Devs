@@ -120,7 +120,67 @@ export async function seedDevelopmentDatabase(client: SqlQueryable): Promise<voi
     ['role-admin-current', 'member-admin-current', 'ACCOMMODATION_ADMIN']
   );
 
-  // 3. Deterministic Development Sessions (valid for 1 year)
+  // 3. Room Captain (Chinedu Okeke - Room 304)
+  await client.query(
+    `
+    INSERT INTO members (id, display_name, email)
+    VALUES ($1, $2, $3)
+    ON CONFLICT (id) DO UPDATE SET
+      display_name = EXCLUDED.display_name,
+      email = EXCLUDED.email
+    `,
+    ['member-chinedu-captain', 'Chinedu Okeke', 'chinedu@infinitegrace.local']
+  );
+
+  await client.query(
+    `
+    INSERT INTO member_roles (id, member_id, role)
+    VALUES ($1, $2, $3)
+    ON CONFLICT (member_id, role) DO NOTHING
+    `,
+    ['role-chinedu-fellow', 'member-chinedu-captain', 'FELLOW']
+  );
+
+  await client.query(
+    `
+    INSERT INTO member_roles (id, member_id, role)
+    VALUES ($1, $2, $3)
+    ON CONFLICT (member_id, role) DO NOTHING
+    `,
+    ['role-chinedu-captain', 'member-chinedu-captain', 'ROOM_CAPTAIN']
+  );
+
+  // 4. Accommodation Fellows Coordinator (Emmanuel Ukom)
+  await client.query(
+    `
+    INSERT INTO members (id, display_name, email)
+    VALUES ($1, $2, $3)
+    ON CONFLICT (id) DO UPDATE SET
+      display_name = EXCLUDED.display_name,
+      email = EXCLUDED.email
+    `,
+    ['member-coordinator-current', 'Emmanuel Ukom', 'coordinator@hut4devs.local']
+  );
+
+  await client.query(
+    `
+    INSERT INTO member_roles (id, member_id, role)
+    VALUES ($1, $2, $3)
+    ON CONFLICT (member_id, role) DO NOTHING
+    `,
+    ['role-coordinator-fellow', 'member-coordinator-current', 'FELLOW']
+  );
+
+  await client.query(
+    `
+    INSERT INTO member_roles (id, member_id, role)
+    VALUES ($1, $2, $3)
+    ON CONFLICT (member_id, role) DO NOTHING
+    `,
+    ['role-coordinator-admin', 'member-coordinator-current', 'ACCOMMODATION_FELLOWS_COORDINATOR']
+  );
+
+  // 5. Deterministic Development Sessions (valid for 1 year)
   const oneYearExpiry = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString();
 
   await client.query(
@@ -141,5 +201,25 @@ export async function seedDevelopmentDatabase(client: SqlQueryable): Promise<voi
       expires_at = EXCLUDED.expires_at
     `,
     ['session-dev-admin', 'dev-session-token-admin', 'member-admin-current', oneYearExpiry]
+  );
+
+  await client.query(
+    `
+    INSERT INTO sessions (id, token, member_id, expires_at)
+    VALUES ($1, $2, $3, $4)
+    ON CONFLICT (token) DO UPDATE SET
+      expires_at = EXCLUDED.expires_at
+    `,
+    ['session-dev-captain', 'dev-session-token-captain', 'member-chinedu-captain', oneYearExpiry]
+  );
+
+  await client.query(
+    `
+    INSERT INTO sessions (id, token, member_id, expires_at)
+    VALUES ($1, $2, $3, $4)
+    ON CONFLICT (token) DO UPDATE SET
+      expires_at = EXCLUDED.expires_at
+    `,
+    ['session-dev-coordinator', 'dev-session-token-coordinator', 'member-coordinator-current', oneYearExpiry]
   );
 }

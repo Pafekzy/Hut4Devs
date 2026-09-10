@@ -3,6 +3,10 @@ import { LandingView } from './components/LandingView';
 import { MemberHomeView } from './components/MemberHomeView';
 import { ResponsibilityDetailView } from './components/ResponsibilityDetailView';
 import { AccommodationAdminView, AdminProviderEventDisplay } from './components/AccommodationAdminView';
+import { CoordinatorWorkspaceView } from './components/CoordinatorWorkspaceView';
+import { CaptainWorkspaceView } from './components/CaptainWorkspaceView';
+import { DevAuthView } from './components/DevAuthView';
+import { RegistrationModal } from './components/RegistrationModal';
 import { DEMO_ACCOMMODATION_RESPONSIBILITY } from './data/demoAccommodation';
 import {
   AccommodationResponsibility,
@@ -11,6 +15,12 @@ import {
 } from './domain/accommodation';
 import { ExternalPaymentProposal } from './domain/payments';
 import { Member, MemberRole } from './domain/auth';
+import {
+  ActiveMode,
+  getDefaultModeForMember,
+  ScopedRoleAssignment,
+} from './domain/membership';
+import { membershipStore } from './services/membershipStore';
 import {
   fetchAccommodationState,
   savePaymentIntent,
@@ -25,11 +35,19 @@ import {
   logoutSession,
 } from './services/authClient';
 
-type AppView = 'landing' | 'member-home' | 'responsibility-detail' | 'accommodation-admin';
+type AppView =
+  | 'landing'
+  | 'dev-auth'
+  | 'member-home'
+  | 'responsibility-detail'
+  | 'accommodation-admin'
+  | 'coordinator'
+  | 'room-captain';
+
 type AppTheme = 'light' | 'dark';
 
 export default function App() {
-  // Theme state with localStorage persistence (UI preference only, not authoritative financial state)
+  // Theme state with localStorage persistence (UI preference only)
   const [theme, setTheme] = useState<AppTheme>(() => {
     try {
       const savedTheme = localStorage.getItem('h4d_theme');
@@ -42,11 +60,20 @@ export default function App() {
     return 'light';
   });
 
-  // Active view: 'landing' | 'member-home' | 'responsibility-detail' | 'accommodation-admin'
+  // Active view: 'landing' | 'dev-auth' | 'member-home' | 'responsibility-detail' | 'accommodation-admin' | 'coordinator' | 'room-captain'
   const [view, setView] = useState<AppView>('landing');
 
-  // Active authenticated member (H4D-FUNC-011)
+  // Active authenticated member (H4D-FUNC-011 + DEMO-001)
   const [member, setMember] = useState<Member | null>(null);
+
+  // Active acting mode (DEMO-001)
+  const [activeMode, setActiveMode] = useState<ActiveMode>('FELLOW');
+
+  // Scoped role assignments for current member
+  const [scopedRoles, setScopedRoles] = useState<ScopedRoleAssignment[]>([]);
+
+  // Registration modal visibility
+  const [isRegistrationOpen, setIsRegistrationOpen] = useState(false);
 
   // Authoritative accommodation responsibility from PostgreSQL
   const [responsibility, setResponsibility] = useState<AccommodationResponsibility>(
@@ -73,11 +100,23 @@ export default function App() {
     'connecting' | 'connected' | 'error' | 'disconnected'
   >('disconnected');
 
+  // Synchronize scoped roles whenever member changes
+  useEffect(() => {
+    if (member) {
+      const roles = membershipStore.getScopedRolesForMember(member.id);
+      setScopedRoles(roles);
+      const defaultMode = getDefaultModeForMember(member);
+      setActiveMode(defaultMode);
+    } else {
+      setScopedRoles([]);
+      setActiveMode('FELLOW');
+    }
+  }, [member?.id]);
+
   // Initial load: Fetch current session and authoritative persistence state from PostgreSQL
   useEffect(() => {
     let isMounted = true;
     if (typeof fetch === 'function') {
-      // Verify existing session if available
       fetchCurrentSession()
         .then((res) => {
           if (!isMounted) return;
@@ -87,7 +126,6 @@ export default function App() {
         })
         .catch(() => {});
 
-      // Fetch accommodation state
       fetchAccommodationState()
         .then((state) => {
           if (!isMounted) return;
@@ -111,11 +149,9 @@ export default function App() {
     };
   }, []);
 
-  // Real-time operational stream for Accommodation Admin (H4D-FUNC-010 & H4D-FUNC-011)
-  // Receives outbox broadcast events when payment intents or proposals are created.
-  // Enforces role discipline: Subscribes only when Accommodation Admin view is active.
+  // Real-time operational stream for Accommodation Admin
   useEffect(() => {
-    if (view !== 'accommodation-admin') {
+    if (view !== 'accommodation-admin' && activeMode !== 'FINANCIAL_ADMIN' && activeMode !== 'FINANCIAL_COVERAGE') {
       setStreamStatus('disconnected');
       return;
     }
@@ -196,18 +232,22 @@ export default function App() {
               verifiedAmount: Number(payload.verifiedAmount),
               status: payload.status,
             }));
-            fetchAdminReconciliations().then((recRes) => {
+            fetchAdminReconciliations()
+              .then((recRes) => {
+                if (recRes.success && Array.isArray(recRes.reconciliations)) {
+                  setReconciliations(recRes.reconciliations);
+                }
+              })
+              .catch(() => {});
+          }
+        } else if (event.eventType === 'accommodation.reconciliation.mismatch') {
+          fetchAdminReconciliations()
+            .then((recRes) => {
               if (recRes.success && Array.isArray(recRes.reconciliations)) {
                 setReconciliations(recRes.reconciliations);
               }
-            }).catch(() => {});
-          }
-        } else if (event.eventType === 'accommodation.reconciliation.mismatch') {
-          fetchAdminReconciliations().then((recRes) => {
-            if (recRes.success && Array.isArray(recRes.reconciliations)) {
-              setReconciliations(recRes.reconciliations);
-            }
-          }).catch(() => {});
+            })
+            .catch(() => {});
         }
       },
       (status) => {
@@ -218,7 +258,28 @@ export default function App() {
     return () => {
       unsubscribe();
     };
-  }, [view, member]);
+  }, [view, activeMode, member]);
+
+  // Mode change handler (DEMO-001)
+  const handleModeChange = (newMode: ActiveMode) => {
+    setActiveMode(newMode);
+    switch (newMode) {
+      case 'FELLOW':
+        setView('member-home');
+        break;
+      case 'ROOM_CAPTAIN':
+      case 'CAPTAIN_COVERAGE':
+        setView('room-captain');
+        break;
+      case 'COORDINATOR':
+        setView('coordinator');
+        break;
+      case 'FINANCIAL_ADMIN':
+      case 'FINANCIAL_COVERAGE':
+        setView('accommodation-admin');
+        break;
+    }
+  };
 
   const handleEnter = () => {
     setView('member-home');
@@ -233,27 +294,56 @@ export default function App() {
     }
   };
 
+  const handleSelectDevIdentity = async (role: MemberRole) => {
+    if (typeof fetch === 'function') {
+      const res = await establishDevSession(role);
+      if (res.success && res.member) {
+        setMember(res.member);
+        const roles = membershipStore.getScopedRolesForMember(res.member.id);
+        setScopedRoles(roles);
+        const defMode = getDefaultModeForMember(res.member);
+        setActiveMode(defMode);
+
+        if (defMode === 'COORDINATOR') {
+          setView('coordinator');
+        } else if (defMode === 'ROOM_CAPTAIN') {
+          setView('room-captain');
+        } else if (defMode === 'FINANCIAL_ADMIN') {
+          setView('accommodation-admin');
+          loadAdminAuditData();
+        } else {
+          setView('member-home');
+        }
+      }
+    }
+  };
+
+  const loadAdminAuditData = () => {
+    fetchAdminProviderEvents()
+      .then((peRes) => {
+        if (peRes.success && Array.isArray(peRes.providerEvents)) {
+          setProviderEvents(peRes.providerEvents);
+        }
+      })
+      .catch(() => {});
+    fetchAdminReconciliations()
+      .then((recRes) => {
+        if (recRes.success && Array.isArray(recRes.reconciliations)) {
+          setReconciliations(recRes.reconciliations);
+        }
+      })
+      .catch(() => {});
+  };
+
   const handleSwitchToAdmin = () => {
     setView('accommodation-admin');
+    setActiveMode('FINANCIAL_ADMIN');
     if (typeof fetch === 'function') {
       establishDevSession(MemberRole.ACCOMMODATION_ADMIN)
         .then((res) => {
           if (res.success && res.member) {
             setMember(res.member);
-            fetchAdminProviderEvents()
-              .then((peRes) => {
-                if (peRes.success && Array.isArray(peRes.providerEvents)) {
-                  setProviderEvents(peRes.providerEvents);
-                }
-              })
-              .catch(() => {});
-            fetchAdminReconciliations()
-              .then((recRes) => {
-                if (recRes.success && Array.isArray(recRes.reconciliations)) {
-                  setReconciliations(recRes.reconciliations);
-                }
-              })
-              .catch(() => {});
+            loadAdminAuditData();
           }
         })
         .catch(() => {});
@@ -263,7 +353,6 @@ export default function App() {
   const handleReconcileEvent = async (providerEventId: string) => {
     const res = await triggerAdminReconcile(providerEventId);
     if (res.success) {
-      // Re-fetch responsibility and reconciliations
       const st = await fetchAccommodationState();
       if (st.success && st.responsibility) {
         setResponsibility(st.responsibility);
@@ -277,6 +366,7 @@ export default function App() {
 
   const handleSwitchToFellow = () => {
     setView('member-home');
+    setActiveMode('FELLOW');
     if (typeof fetch === 'function') {
       establishDevSession(MemberRole.FELLOW)
         .then((res) => {
@@ -357,27 +447,48 @@ export default function App() {
         </aside>
       )}
 
+      {/* Public Landing View */}
       {view === 'landing' && (
         <LandingView
           isDark={isDark}
           onToggleTheme={toggleTheme}
           onEnter={handleEnter}
+          onOpenRegistration={() => setIsRegistrationOpen(true)}
+          onOpenDevAuth={() => setView('dev-auth')}
         />
       )}
 
+      {/* Dev Identity Authentication View */}
+      {view === 'dev-auth' && (
+        <DevAuthView
+          isDark={isDark}
+          onToggleTheme={toggleTheme}
+          onAuthenticate={handleSelectDevIdentity}
+          onCancel={() => setView('landing')}
+          onOpenRegistrationModal={() => setIsRegistrationOpen(true)}
+        />
+      )}
+
+      {/* Fellow Workspace */}
       {view === 'member-home' && (
         <MemberHomeView
           isDark={isDark}
           responsibility={responsibility}
           member={member || undefined}
+          scopedRoles={scopedRoles}
+          currentMode={activeMode}
+          onModeChange={handleModeChange}
           onToggleTheme={toggleTheme}
           onExitToLanding={() => setView('landing')}
           onViewResponsibilityDetails={() => setView('responsibility-detail')}
           onSwitchToAdmin={handleSwitchToAdmin}
+          onSwitchToCaptain={() => handleModeChange('ROOM_CAPTAIN')}
+          onSwitchToCoordinator={() => handleModeChange('COORDINATOR')}
           onLogout={handleLogout}
         />
       )}
 
+      {/* Responsibility Detail View */}
       {view === 'responsibility-detail' && (
         <ResponsibilityDetailView
           responsibility={responsibility}
@@ -391,6 +502,49 @@ export default function App() {
         />
       )}
 
+      {/* Coordinator Workspace View */}
+      {view === 'coordinator' && member && (
+        <div className="min-h-screen bg-[#F7F1E7] text-[#5A2D0C] p-4 sm:p-6 lg:p-8 max-w-6xl mx-auto space-y-6">
+          <div className="flex items-center justify-between border-b border-[#5A2D0C]/10 pb-4">
+            <button
+              onClick={() => setView('landing')}
+              className="text-xs font-semibold text-[#5A2D0C]/70 hover:text-[#5A2D0C]"
+            >
+              ← Exit to Landing
+            </button>
+            <button
+              onClick={handleLogout}
+              className="text-xs font-semibold text-[#5A2D0C]/70 hover:text-[#5A2D0C]"
+            >
+              Log Out Session
+            </button>
+          </div>
+          <CoordinatorWorkspaceView member={member} activeMode={activeMode} />
+        </div>
+      )}
+
+      {/* Room Captain Workspace View */}
+      {view === 'room-captain' && member && (
+        <div className="min-h-screen bg-[#F7F1E7] text-[#5A2D0C] p-4 sm:p-6 lg:p-8 max-w-6xl mx-auto space-y-6">
+          <div className="flex items-center justify-between border-b border-[#5A2D0C]/10 pb-4">
+            <button
+              onClick={() => handleModeChange('FELLOW')}
+              className="text-xs font-semibold text-[#5A2D0C]/70 hover:text-[#5A2D0C]"
+            >
+              ← Back to Fellow Workspace
+            </button>
+            <button
+              onClick={handleLogout}
+              className="text-xs font-semibold text-[#5A2D0C]/70 hover:text-[#5A2D0C]"
+            >
+              Log Out Session
+            </button>
+          </div>
+          <CaptainWorkspaceView member={member} activeMode={activeMode} />
+        </div>
+      )}
+
+      {/* Accommodation Admin View */}
       {view === 'accommodation-admin' && (
         <AccommodationAdminView
           isDark={isDark}
@@ -404,8 +558,21 @@ export default function App() {
           reconciliations={reconciliations}
           streamStatus={streamStatus}
           onReconcileEvent={handleReconcileEvent}
+          currentMember={member || undefined}
+          currentMode={activeMode}
+          scopedRoles={scopedRoles}
+          onModeChange={handleModeChange}
         />
       )}
+
+      {/* Registration Modal */}
+      <RegistrationModal
+        isOpen={isRegistrationOpen}
+        onClose={() => setIsRegistrationOpen(false)}
+        onSuccess={() => {
+          // Keep open or notify
+        }}
+      />
     </div>
   );
 }

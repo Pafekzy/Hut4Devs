@@ -1,18 +1,22 @@
 import React from 'react';
 import { Hut4DevsLogo } from './Hut4DevsLogo';
 import { ThemeToggle } from './ThemeToggle';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Sparkles, Shield } from 'lucide-react';
 
 interface LandingViewProps {
   isDark: boolean;
   onToggleTheme: () => void;
   onEnter: () => void;
+  onOpenRegistration?: () => void;
+  onOpenDevAuth?: () => void;
 }
 
 export const LandingView: React.FC<LandingViewProps> = ({
   isDark,
   onToggleTheme,
   onEnter,
+  onOpenRegistration,
+  onOpenDevAuth,
 }) => {
   return (
     <div
@@ -21,7 +25,8 @@ export const LandingView: React.FC<LandingViewProps> = ({
       }`}
     >
       {/* Top Navigation Bar */}
-      <header className="w-full border-b transition-colors duration-200"
+      <header
+        className="w-full border-b transition-colors duration-200"
         style={{
           borderColor: isDark ? '#3E200C' : '#EAE0D0',
           backgroundColor: isDark ? 'rgba(47, 23, 7, 0.85)' : 'rgba(247, 241, 231, 0.85)',
@@ -29,12 +34,18 @@ export const LandingView: React.FC<LandingViewProps> = ({
         }}
       >
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between">
-          <Hut4DevsLogo
-            isDark={isDark}
-            size="sm"
-            showWordmark={true}
-          />
+          <Hut4DevsLogo isDark={isDark} size="sm" showWordmark={true} />
           <div className="flex items-center gap-3">
+            {onOpenDevAuth && (
+              <button
+                type="button"
+                id="landing-open-dev-auth-btn"
+                onClick={onOpenDevAuth}
+                className="text-xs font-medium px-3 py-1.5 rounded-lg border border-[#C88D3A]/40 text-[#5A2D0C] bg-[#FFF9EE] hover:bg-[#F7F1E7] transition-colors"
+              >
+                Switch Identity
+              </button>
+            )}
             <ThemeToggle isDark={isDark} onToggle={onToggleTheme} />
           </div>
         </div>
@@ -65,7 +76,7 @@ export const LandingView: React.FC<LandingViewProps> = ({
           </p>
 
           {/* Enter Action */}
-          <div className="flex flex-col items-center w-full max-w-xs gap-3">
+          <div className="flex flex-col items-center w-full max-w-sm gap-3">
             <button
               type="button"
               id="enter-hut4devs-btn"
@@ -82,6 +93,18 @@ export const LandingView: React.FC<LandingViewProps> = ({
                 aria-hidden="true"
               />
             </button>
+
+            {onOpenRegistration && (
+              <button
+                type="button"
+                id="landing-open-registration-btn"
+                onClick={onOpenRegistration}
+                className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold bg-white/70 border border-[#C88D3A]/30 text-[#5A2D0C] hover:bg-[#FFF9EE] transition-colors cursor-pointer"
+              >
+                <Sparkles className="w-3.5 h-3.5 text-[#C88D3A]" />
+                <span>Submit Accommodation Membership Request</span>
+              </button>
+            )}
           </div>
         </div>
       </main>

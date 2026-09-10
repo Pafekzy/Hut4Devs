@@ -10,10 +10,14 @@
 export enum MemberRole {
   FELLOW = 'FELLOW',
   ACCOMMODATION_ADMIN = 'ACCOMMODATION_ADMIN',
+  ROOM_CAPTAIN = 'ROOM_CAPTAIN',
+  ACCOMMODATION_FELLOWS_COORDINATOR = 'ACCOMMODATION_FELLOWS_COORDINATOR',
+  ACCOMMODATION_FINANCIAL_ADMIN = 'ACCOMMODATION_ADMIN',
 }
 
 export interface Member {
   id: string;
+  h4dMemberId?: string;
   displayName: string;
   email?: string;
   roles: MemberRole[];

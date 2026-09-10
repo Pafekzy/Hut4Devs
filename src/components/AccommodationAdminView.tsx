@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   AccommodationResponsibility,
   AccommodationPaymentIntent,
@@ -8,6 +8,10 @@ import {
   getStatusLabel,
 } from '../domain/accommodation';
 import { ExternalPaymentProposal } from '../domain/payments';
+import { Member } from '../domain/auth';
+import { ActiveMode, ScopedRoleAssignment, formatActionAttribution, ACCOMMODATION_PROPERTIES } from '../domain/membership';
+import { ModeSwitcher } from './ModeSwitcher';
+import { FinancialNotesThread } from './FinancialNotesThread';
 import { Hut4DevsLogo } from './Hut4DevsLogo';
 import { ThemeToggle } from './ThemeToggle';
 import {
@@ -22,6 +26,11 @@ import {
   UserCheck,
   Activity,
   Radio,
+  Filter,
+  MessageSquare,
+  AlertTriangle,
+  Clock,
+  CheckCircle2,
 } from 'lucide-react';
 
 export interface AdminProviderEventDisplay {
@@ -48,7 +57,19 @@ interface AccommodationAdminViewProps {
   reconciliations?: any[];
   streamStatus?: 'connecting' | 'connected' | 'error' | 'disconnected';
   onReconcileEvent?: (providerEventId: string) => void;
+  currentMember?: Member;
+  currentMode?: ActiveMode;
+  scopedRoles?: ScopedRoleAssignment[];
+  onModeChange?: (mode: ActiveMode) => void;
 }
+
+type AttentionFilterType =
+  | 'ALL'
+  | 'OUTSTANDING'
+  | 'PARTIALLY_FULFILLED'
+  | 'AWAITING_RECONCILIATION'
+  | 'MISMATCH'
+  | 'FULFILLED';
 
 export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
   isDark,
@@ -62,8 +83,41 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
   reconciliations = [],
   streamStatus = 'disconnected',
   onReconcileEvent,
+  currentMember,
+  currentMode = 'FINANCIAL_ADMIN',
+  scopedRoles = [],
+  onModeChange,
 }) => {
   const summary = deriveAccommodationOperationalSummary(responsibilities);
+  const [attentionFilter, setAttentionFilter] = useState<AttentionFilterType>('ALL');
+  const [expandedNotesId, setExpandedNotesId] = useState<string | null>(null);
+
+  const attribution = currentMember
+    ? formatActionAttribution(currentMember, currentMode)
+    : { actingCapacity: 'Accommodation Financial Admin', displayLabel: 'Chief Financial Admin' };
+
+  // Calculate counts for attention filters
+  const hasAwaitingReconciliation = (respId: string) =>
+    providerEvents.some(
+      (evt) =>
+        evt.providerStatus === 'COMPLETED' &&
+        !reconciliations.some((r) => r.providerEventId === evt.providerEventId)
+    );
+
+  const hasMismatch = (respId: string) =>
+    reconciliations.some(
+      (r) => r.reconciliationStatus === 'MISMATCH'
+    );
+
+  const filteredResponsibilities = responsibilities.filter((resp) => {
+    if (attentionFilter === 'ALL') return true;
+    if (attentionFilter === 'OUTSTANDING') return resp.status === 'OUTSTANDING';
+    if (attentionFilter === 'PARTIALLY_FULFILLED') return resp.status === 'PARTIALLY_FULFILLED';
+    if (attentionFilter === 'FULFILLED') return resp.status === 'FULFILLED';
+    if (attentionFilter === 'AWAITING_RECONCILIATION') return hasAwaitingReconciliation(resp.id);
+    if (attentionFilter === 'MISMATCH') return hasMismatch(resp.id);
+    return true;
+  });
 
   return (
     <div
@@ -92,23 +146,23 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
             >
               Development Preview
             </span>
-            <span>Read-Only Admin Workspace &bull; No authentication or authorization is claimed or enforced</span>
+            <span>
+              Development Preview &bull; No authentication or authorization is claimed. Acting Capacity: <strong>{attribution.actingCapacity}</strong>
+            </span>
           </div>
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-1.5 font-mono text-[11px]">
               <span
+                id="realtime-sse-indicator"
                 className={`w-2 h-2 rounded-full ${
                   streamStatus === 'connected'
                     ? 'bg-emerald-500 animate-pulse'
                     : streamStatus === 'connecting'
-                    ? 'bg-amber-500 animate-pulse'
+                    ? 'bg-amber-500'
                     : 'bg-stone-400'
                 }`}
-                aria-hidden="true"
               />
-              <span className="font-medium">
-                Live Stream: {streamStatus === 'connected' ? 'Connected' : streamStatus === 'connecting' ? 'Connecting...' : 'Offline (PostgreSQL Authoritative)'}
-              </span>
+              <span className="capitalize">Live Stream: {streamStatus}</span>
             </div>
             <button
               type="button"
@@ -118,7 +172,7 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
                 isDark ? 'text-[#C88D3A]' : 'text-[#B77620]'
               }`}
             >
-              ← Switch to Fellow View
+              Switch to Fellow View →
             </button>
           </div>
         </div>
@@ -134,7 +188,7 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
         }}
       >
         <div className="max-w-5xl mx-auto px-4 sm:px-6 h-16 sm:h-18 flex items-center justify-between">
-          <div className="flex items-center gap-4 sm:gap-6">
+          <div className="flex items-center gap-4">
             <button
               type="button"
               onClick={onExitToLanding}
@@ -144,86 +198,101 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
               <Hut4DevsLogo isDark={isDark} size="sm" showWordmark={true} />
             </button>
 
-            {/* View Mode Tag */}
-            <span
-              className="hidden xs:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold uppercase tracking-wide border"
-              style={{
-                backgroundColor: isDark ? '#3E200C' : '#FFF9EE',
-                borderColor: isDark ? '#623416' : '#EAE0D0',
-                color: isDark ? '#C88D3A' : '#B77620',
-              }}
-            >
-              <ShieldAlert className="w-3.5 h-3.5" aria-hidden="true" />
-              <span>Admin Workspace</span>
-            </span>
+            {currentMember && onModeChange && (
+              <ModeSwitcher
+                member={currentMember}
+                scopedRoles={scopedRoles}
+                currentMode={currentMode}
+                onModeChange={onModeChange}
+              />
+            )}
           </div>
 
           <div className="flex items-center gap-2 sm:gap-3">
             <ThemeToggle isDark={isDark} onToggle={onToggleTheme} />
-
             <button
               type="button"
-              id="admin-switch-to-fellow-btn"
-              onClick={onSwitchToFellow}
-              aria-label="Switch to Fellow View"
-              className={`inline-flex items-center gap-1.5 px-3 py-2 min-h-[44px] rounded-lg text-xs sm:text-sm font-medium transition-all duration-150 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C88D3A] ${
-                isDark
-                  ? 'bg-[#3E200C] text-[#C88D3A] hover:bg-[#4B2710] border border-[#623416]'
-                  : 'bg-[#FFF9EE] text-[#5A2D0C] hover:bg-[#F2E8D8] border border-[#EAE0D0]'
-              }`}
-            >
-              <UserCheck className="w-4 h-4 shrink-0" aria-hidden="true" />
-              <span className="hidden sm:inline">Fellow View</span>
-            </button>
-
-            <button
-              type="button"
-              id="admin-exit-landing-btn"
               onClick={onExitToLanding}
-              aria-label="Exit to public landing"
-              className={`inline-flex items-center gap-1.5 px-3 py-2 min-h-[44px] rounded-lg text-xs sm:text-sm font-medium transition-all duration-150 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C88D3A] ${
-                isDark
-                  ? 'text-[#E5D3BA] hover:text-[#FFF9EE] hover:bg-[#3E200C]'
-                  : 'text-[#6D4223] hover:text-[#5A2D0C] hover:bg-[#EFE5D5]'
-              }`}
+              className="p-2 text-[#5A2D0C]/70 hover:text-[#5A2D0C] rounded-lg transition-colors cursor-pointer"
+              title="Exit to Landing"
             >
-              <LogOut className="w-4 h-4 shrink-0" aria-hidden="true" />
-              <span className="hidden sm:inline">Landing</span>
+              <LogOut className="w-4 h-4" />
             </button>
           </div>
         </div>
       </header>
 
-      {/* Main Container */}
+      {/* Main Content */}
       <main className="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 py-8 sm:py-12">
-        {/* Breadcrumb / Title */}
         <div className="mb-2">
           <span
             className="text-xs sm:text-sm font-semibold uppercase tracking-wider block"
             style={{ color: isDark ? '#C88D3A' : '#B77620' }}
           >
-            Command Center &bull; Operational Read View
+            Command Center &bull; Attention-First Financial Accountability
           </span>
         </div>
 
         <h1
           id="accommodation-admin-title"
-          className="font-serif text-2xl sm:text-3xl md:text-4xl font-semibold tracking-tight mb-8"
+          className="font-serif text-2xl sm:text-3xl md:text-4xl font-semibold tracking-tight mb-6"
           style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
         >
           Accommodation Admin
         </h1>
 
-        {/* Operational Summary Grid */}
+        {/* Multi-Property Contextual Rates */}
+        <section
+          aria-labelledby="properties-rates-heading"
+          className="mb-6 bg-white/40 border border-[#C88D3A]/25 rounded-2xl p-4 sm:p-5 shadow-xs"
+        >
+          <div className="flex items-center justify-between mb-3 border-b border-[#5A2D0C]/10 pb-2">
+            <div className="flex items-center gap-2">
+              <Building2 className="w-4 h-4 text-[#C88D3A]" />
+              <h2
+                id="properties-rates-heading"
+                className="text-xs font-bold uppercase tracking-wider text-[#5A2D0C]"
+              >
+                Accredited Property Commitments (Multi-Property Architecture)
+              </h2>
+            </div>
+            <span className="text-[10px] text-[#5A2D0C]/60 font-mono">
+              Rates Vary By Property Scope
+            </span>
+          </div>
+
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+            {ACCOMMODATION_PROPERTIES.map((prop) => (
+              <div
+                key={prop.id}
+                className="p-3 bg-[#FFF9EE] border border-[#C88D3A]/20 rounded-xl flex flex-col justify-between text-xs"
+              >
+                <div>
+                  <div className="font-bold text-[#5A2D0C]">{prop.name}</div>
+                  <div className="text-[10px] text-[#5A2D0C]/60 mt-0.5">{prop.location}</div>
+                </div>
+                <div className="mt-2 pt-2 border-t border-[#5A2D0C]/10 flex items-center justify-between">
+                  <span className="text-[10px] uppercase font-semibold text-[#5A2D0C]/60">Required</span>
+                  <span className="font-extrabold text-[#B77620]">
+                    ₦{prop.monthlyCommitment.toLocaleString()}/mo
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Operational Summary Grid (Required Test Selectors) */}
         <section
           aria-labelledby="operational-summary-heading"
-          className="rounded-2xl p-5 sm:p-7 border mb-8 transition-colors duration-200"
+          className="rounded-2xl p-5 sm:p-7 border mb-6 transition-colors duration-200"
           style={{
             backgroundColor: isDark ? '#3E200C' : '#FFF9EE',
             borderColor: isDark ? '#623416' : '#EAE0D0',
           }}
         >
-          <div className="flex items-center justify-between border-b pb-4 mb-5"
+          <div
+            className="flex items-center justify-between border-b pb-4 mb-5"
             style={{ borderColor: isDark ? '#4B2710' : '#EAE0D0' }}
           >
             <h2
@@ -245,7 +314,6 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
           </div>
 
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-            {/* Properties: 1 */}
             <div
               id="summary-properties-count"
               className="p-4 rounded-xl border"
@@ -255,24 +323,14 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
               }}
             >
               <div className="flex items-center gap-2 mb-1.5">
-                <Building2
-                  className="w-4 h-4 shrink-0"
-                  style={{ color: isDark ? '#C88D3A' : '#B77620' }}
-                  aria-hidden="true"
-                />
-                <span className="text-xs font-medium" style={{ color: isDark ? '#A67B54' : '#8A5D3B' }}>
-                  Properties
-                </span>
+                <Building2 className="w-4 h-4 shrink-0 text-[#C88D3A]" aria-hidden="true" />
+                <span className="text-xs font-medium text-stone-600">Properties</span>
               </div>
-              <p
-                className="text-lg sm:text-2xl font-bold"
-                style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
-              >
+              <p className="text-lg sm:text-2xl font-bold text-[#5A2D0C]">
                 Properties: {summary.propertiesCount}
               </p>
             </div>
 
-            {/* Rooms represented: 1 */}
             <div
               id="summary-rooms-count"
               className="p-4 rounded-xl border"
@@ -282,24 +340,14 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
               }}
             >
               <div className="flex items-center gap-2 mb-1.5">
-                <DoorClosed
-                  className="w-4 h-4 shrink-0"
-                  style={{ color: isDark ? '#C88D3A' : '#B77620' }}
-                  aria-hidden="true"
-                />
-                <span className="text-xs font-medium" style={{ color: isDark ? '#A67B54' : '#8A5D3B' }}>
-                  Rooms represented
-                </span>
+                <DoorClosed className="w-4 h-4 shrink-0 text-[#C88D3A]" aria-hidden="true" />
+                <span className="text-xs font-medium text-stone-600">Rooms represented</span>
               </div>
-              <p
-                className="text-lg sm:text-2xl font-bold"
-                style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
-              >
+              <p className="text-lg sm:text-2xl font-bold text-[#5A2D0C]">
                 Rooms represented: {summary.roomsRepresentedCount}
               </p>
             </div>
 
-            {/* Fellows represented: 1 */}
             <div
               id="summary-fellows-count"
               className="p-4 rounded-xl border"
@@ -309,24 +357,14 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
               }}
             >
               <div className="flex items-center gap-2 mb-1.5">
-                <User
-                  className="w-4 h-4 shrink-0"
-                  style={{ color: isDark ? '#C88D3A' : '#B77620' }}
-                  aria-hidden="true"
-                />
-                <span className="text-xs font-medium" style={{ color: isDark ? '#A67B54' : '#8A5D3B' }}>
-                  Fellows represented
-                </span>
+                <User className="w-4 h-4 shrink-0 text-[#C88D3A]" aria-hidden="true" />
+                <span className="text-xs font-medium text-stone-600">Fellows represented</span>
               </div>
-              <p
-                className="text-lg sm:text-2xl font-bold"
-                style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
-              >
+              <p className="text-lg sm:text-2xl font-bold text-[#5A2D0C]">
                 Fellows represented: {summary.fellowsRepresentedCount}
               </p>
             </div>
 
-            {/* Outstanding responsibilities: 1 */}
             <div
               id="summary-outstanding-count"
               className="p-4 rounded-xl border"
@@ -336,30 +374,115 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
               }}
             >
               <div className="flex items-center gap-2 mb-1.5">
-                <FileText
-                  className="w-4 h-4 shrink-0"
-                  style={{ color: isDark ? '#C88D3A' : '#B77620' }}
-                  aria-hidden="true"
-                />
-                <span className="text-xs font-medium" style={{ color: isDark ? '#A67B54' : '#8A5D3B' }}>
-                  Outstanding responsibilities
-                </span>
+                <FileText className="w-4 h-4 shrink-0 text-[#C88D3A]" aria-hidden="true" />
+                <span className="text-xs font-medium text-stone-600">Outstanding responsibilities</span>
               </div>
-              <p
-                className="text-lg sm:text-2xl font-bold"
-                style={{ color: isDark ? '#E2AB5D' : '#B77620' }}
-              >
+              <p className="text-lg sm:text-2xl font-bold text-[#B77620]">
                 Outstanding responsibilities: {summary.outstandingResponsibilitiesCount}
               </p>
             </div>
           </div>
         </section>
 
+        {/* Attention-First Filter Bar */}
+        <section className="mb-6 bg-white border border-[#5A2D0C]/15 rounded-2xl p-4 shadow-xs">
+          <div className="flex items-center justify-between mb-3 border-b border-[#5A2D0C]/10 pb-2">
+            <div className="flex items-center gap-2">
+              <Filter className="w-4 h-4 text-[#C88D3A]" />
+              <h3 className="text-xs font-bold uppercase tracking-wider text-[#5A2D0C]">
+                Attention Queue Filter
+              </h3>
+            </div>
+            <span className="text-[11px] text-[#5A2D0C]/70">
+              Showing {filteredResponsibilities.length} of {responsibilities.length}
+            </span>
+          </div>
+
+          <div className="flex flex-wrap gap-2">
+            <button
+              id="filter-attention-all"
+              type="button"
+              onClick={() => setAttentionFilter('ALL')}
+              className={`px-3 py-1.5 text-xs font-medium rounded-lg border transition-colors ${
+                attentionFilter === 'ALL'
+                  ? 'bg-[#5A2D0C] text-[#FFF9EE] border-[#5A2D0C]'
+                  : 'bg-[#F7F1E7] text-[#5A2D0C] border-[#5A2D0C]/15 hover:border-[#C88D3A]'
+              }`}
+            >
+              All Records ({responsibilities.length})
+            </button>
+
+            <button
+              id="filter-attention-outstanding"
+              type="button"
+              onClick={() => setAttentionFilter('OUTSTANDING')}
+              className={`px-3 py-1.5 text-xs font-medium rounded-lg border transition-colors ${
+                attentionFilter === 'OUTSTANDING'
+                  ? 'bg-[#B77620] text-white border-[#B77620]'
+                  : 'bg-[#FFF9EE] text-[#B77620] border-[#B77620]/30 hover:border-[#B77620]'
+              }`}
+            >
+              Outstanding ({responsibilities.filter((r) => r.status === 'OUTSTANDING').length})
+            </button>
+
+            <button
+              id="filter-attention-partially-fulfilled"
+              type="button"
+              onClick={() => setAttentionFilter('PARTIALLY_FULFILLED')}
+              className={`px-3 py-1.5 text-xs font-medium rounded-lg border transition-colors ${
+                attentionFilter === 'PARTIALLY_FULFILLED'
+                  ? 'bg-amber-600 text-white border-amber-600'
+                  : 'bg-amber-50 text-amber-800 border-amber-300 hover:border-amber-500'
+              }`}
+            >
+              Partially Fulfilled ({responsibilities.filter((r) => r.status === 'PARTIALLY_FULFILLED').length})
+            </button>
+
+            <button
+              id="filter-attention-awaiting-reconciliation"
+              type="button"
+              onClick={() => setAttentionFilter('AWAITING_RECONCILIATION')}
+              className={`px-3 py-1.5 text-xs font-medium rounded-lg border transition-colors ${
+                attentionFilter === 'AWAITING_RECONCILIATION'
+                  ? 'bg-blue-600 text-white border-blue-600'
+                  : 'bg-blue-50 text-blue-800 border-blue-300 hover:border-blue-500'
+              }`}
+            >
+              Awaiting Reconciliation (
+              {providerEvents.filter((e) => e.providerStatus === 'COMPLETED').length} events)
+            </button>
+
+            <button
+              id="filter-attention-mismatch"
+              type="button"
+              onClick={() => setAttentionFilter('MISMATCH')}
+              className={`px-3 py-1.5 text-xs font-medium rounded-lg border transition-colors ${
+                attentionFilter === 'MISMATCH'
+                  ? 'bg-red-600 text-white border-red-600'
+                  : 'bg-red-50 text-red-800 border-red-300 hover:border-red-500'
+              }`}
+            >
+              Mismatch / Requires Review (
+              {reconciliations.filter((r) => r.reconciliationStatus === 'MISMATCH').length})
+            </button>
+
+            <button
+              id="filter-attention-fulfilled"
+              type="button"
+              onClick={() => setAttentionFilter('FULFILLED')}
+              className={`px-3 py-1.5 text-xs font-medium rounded-lg border transition-colors ${
+                attentionFilter === 'FULFILLED'
+                  ? 'bg-emerald-700 text-white border-emerald-700'
+                  : 'bg-emerald-50 text-emerald-800 border-emerald-300 hover:border-emerald-500'
+              }`}
+            >
+              Fulfilled ({responsibilities.filter((r) => r.status === 'FULFILLED').length})
+            </button>
+          </div>
+        </section>
+
         {/* Accommodation Allocations List */}
-        <section
-          aria-labelledby="allocations-heading"
-          className="space-y-6"
-        >
+        <section aria-labelledby="allocations-heading" className="space-y-6">
           <div className="flex items-center justify-between">
             <h2
               id="allocations-heading"
@@ -369,13 +492,14 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
               Accommodation Allocation &amp; Operational Records
             </h2>
             <span className="text-xs text-stone-500 font-mono">
-              {responsibilities.length} Record{responsibilities.length === 1 ? '' : 's'}
+              {filteredResponsibilities.length} Record{filteredResponsibilities.length === 1 ? '' : 's'}
             </span>
           </div>
 
-          {responsibilities.map((resp) => {
+          {filteredResponsibilities.map((resp) => {
             const remaining = calculateRemainingAmount(resp);
             const statusLabel = getStatusLabel(resp.status);
+            const isNotesExpanded = expandedNotesId === resp.id;
 
             return (
               <article
@@ -396,7 +520,6 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
                     Allocation Hierarchy
                   </span>
 
-                  {/* Visual Stepped Hierarchy Chain */}
                   <div
                     className="rounded-xl p-4 sm:p-5 border font-mono text-sm leading-relaxed"
                     style={{
@@ -453,93 +576,52 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
                     borderColor: isDark ? '#4B2710' : '#E7D6C1',
                   }}
                 >
-                  {/* Required: ₦66,000 */}
                   <div>
-                    <span className="text-xs block mb-1" style={{ color: isDark ? '#A67B54' : '#8A5D3B' }}>
-                      Required:
-                    </span>
-                    <p
-                      className="text-base sm:text-lg font-semibold"
-                      style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
-                    >
+                    <span className="text-xs block mb-1 text-stone-600">Required:</span>
+                    <p className="text-base sm:text-lg font-semibold text-[#5A2D0C]">
                       {formatNaira(resp.requiredAmount)}
                     </p>
                   </div>
 
-                  {/* Verified: ₦0 */}
                   <div>
-                    <span className="text-xs block mb-1" style={{ color: isDark ? '#A67B54' : '#8A5D3B' }}>
-                      Verified:
-                    </span>
-                    <p
-                      className="text-base sm:text-lg font-medium"
-                      style={{ color: isDark ? '#D9C4AC' : '#704728' }}
-                    >
+                    <span className="text-xs block mb-1 text-stone-600">Verified:</span>
+                    <p className="text-base sm:text-lg font-medium text-[#704728]">
                       {formatNaira(resp.verifiedAmount)}
                     </p>
                   </div>
 
-                  {/* Remaining: ₦66,000 */}
                   <div>
-                    <span className="text-xs block mb-1 font-medium" style={{ color: isDark ? '#C88D3A' : '#B77620' }}>
-                      Remaining:
-                    </span>
-                    <p
-                      className="text-base sm:text-lg font-bold"
-                      style={{ color: isDark ? '#E2AB5D' : '#B77620' }}
-                    >
+                    <span className="text-xs block mb-1 font-medium text-[#B77620]">Remaining:</span>
+                    <p className="text-base sm:text-lg font-bold text-[#B77620]">
                       {formatNaira(remaining)}
                     </p>
                   </div>
 
-                  {/* Status: Outstanding */}
                   <div>
-                    <span className="text-xs block mb-1" style={{ color: isDark ? '#A67B54' : '#8A5D3B' }}>
-                      Status:
-                    </span>
+                    <span className="text-xs block mb-1 text-stone-600">Status:</span>
                     <span
-                      className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold uppercase tracking-wide"
-                      style={{
-                        backgroundColor: isDark ? '#4B2710' : '#F7F1E7',
-                        color: isDark ? '#E2AB5D' : '#B77620',
-                        border: `1px solid ${isDark ? '#623416' : '#E7D6C1'}`,
-                      }}
+                      className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold uppercase tracking-wide bg-[#F7F1E7] text-[#B77620] border border-[#E7D6C1]"
                     >
-                      <span
-                        className="w-1.5 h-1.5 rounded-full mr-1.5"
-                        style={{ backgroundColor: isDark ? '#C88D3A' : '#B77620' }}
-                        aria-hidden="true"
-                      />
+                      <span className="w-1.5 h-1.5 rounded-full mr-1.5 bg-[#B77620]" />
                       {statusLabel}
                     </span>
                   </div>
                 </div>
 
-                {/* Real-Time Operational Payment Preparation Activity (H4D-FUNC-010) */}
+                {/* Real-Time Operational Payment Preparation Activity */}
                 {preparedIntents.some((i) => i.responsibilityId === resp.id) && (
                   <div
                     id={`admin-payment-preparations-${resp.id}`}
-                    className="mb-4 p-4 rounded-xl border"
-                    style={{
-                      backgroundColor: isDark ? '#2A170A' : '#F9F5EE',
-                      borderColor: isDark ? '#623416' : '#E7D6C1',
-                    }}
+                    className="mb-4 p-4 rounded-xl border bg-[#F9F5EE] border-[#E7D6C1]"
                   >
-                    <div
-                      className="flex items-center justify-between border-b pb-2.5 mb-3"
-                      style={{ borderColor: isDark ? '#4B2710' : '#EAE0D0' }}
-                    >
+                    <div className="flex items-center justify-between border-b pb-2.5 mb-3 border-[#EAE0D0]">
                       <div className="flex items-center gap-2">
-                        <Activity className="w-4 h-4 text-[#C88D3A]" aria-hidden="true" />
-                        <h3
-                          id="admin-operational-activity-heading"
-                          className="text-xs font-bold uppercase tracking-wider"
-                          style={{ color: isDark ? '#E2AB5D' : '#8A5D3B' }}
-                        >
+                        <Activity className="w-4 h-4 text-[#C88D3A]" />
+                        <h3 className="text-xs font-bold uppercase tracking-wider text-[#8A5D3B]">
                           Operational Activity: Payment Preparation
                         </h3>
                       </div>
-                      <span className="text-[10px] font-mono px-2 py-0.5 rounded font-semibold uppercase bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/20">
+                      <span className="text-[10px] font-mono px-2 py-0.5 rounded font-semibold uppercase bg-amber-500/10 text-amber-700 border border-amber-500/20">
                         Live Broadcast
                       </span>
                     </div>
@@ -551,25 +633,15 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
                           <div
                             key={intent.id}
                             id={`admin-prep-intent-${intent.id}`}
-                            className="p-3 rounded-lg border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2.5 text-xs"
-                            style={{
-                              backgroundColor: isDark ? '#351B0A' : '#FFF9EE',
-                              borderColor: isDark ? '#4B2710' : '#E7D6C1',
-                            }}
+                            className="p-3 rounded-lg border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2.5 text-xs bg-[#FFF9EE] border-[#E7D6C1]"
                           >
                             <div>
                               <div className="flex items-center gap-2 mb-1">
-                                <span
-                                  className="font-bold text-sm"
-                                  style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
-                                >
+                                <span className="font-bold text-sm text-[#5A2D0C]">
                                   Payment Preparation
                                 </span>
                                 <span className="text-stone-400">&bull;</span>
-                                <span
-                                  className="font-medium"
-                                  style={{ color: isDark ? '#E2AB5D' : '#5A2D0C' }}
-                                >
+                                <span className="font-medium text-[#5A2D0C]">
                                   {resp.fellow?.name || 'Current Fellow'}
                                 </span>
                               </div>
@@ -577,13 +649,7 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
                                 <span>{resp.title || 'September Accommodation'}</span>
                                 <span>&bull;</span>
                                 <span>
-                                  Amount:{' '}
-                                  <strong
-                                    className="font-bold"
-                                    style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
-                                  >
-                                    {formatNaira(intent.amount)}
-                                  </strong>
+                                  Amount: <strong className="font-bold text-[#5A2D0C]">{formatNaira(intent.amount)}</strong>
                                 </span>
                               </div>
                             </div>
@@ -591,12 +657,7 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
                             <div className="flex flex-col sm:items-end gap-1">
                               <span
                                 id="admin-intent-status-badge"
-                                className="px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wide border shadow-sm"
-                                style={{
-                                  backgroundColor: isDark ? '#3A2810' : '#FEF3C7',
-                                  borderColor: isDark ? '#6B4C1B' : '#FCD34D',
-                                  color: isDark ? '#F59E0B' : '#B45309',
-                                }}
+                                className="px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wide border shadow-xs bg-[#FEF3C7] border-[#FCD34D] text-[#B45309]"
                               >
                                 Status: Prepared — Not Verified
                               </span>
@@ -610,31 +671,20 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
                   </div>
                 )}
 
-                {/* Visually Separate Payment Preparation Status (if proposal exists) */}
+                {/* Proposal status if present */}
                 {paymentProposals.some((p) => p.responsibilityId === resp.id) && (() => {
                   const proposal = paymentProposals.find((p) => p.responsibilityId === resp.id);
                   const isSim = proposal?.isSimulated || proposal?.provider === 'SIMULATED';
                   return (
                     <div
                       id={`admin-payment-prep-${resp.id}`}
-                      className="mb-4 p-3 rounded-xl border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-xs"
-                      style={{
-                        backgroundColor: isDark ? '#2A170A' : '#F9F5EE',
-                        borderColor: isDark ? '#4B2710' : '#E7D6C1',
-                      }}
+                      className="mb-4 p-3 rounded-xl border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-xs bg-[#F9F5EE] border-[#E7D6C1]"
                     >
                       <div className="flex items-center gap-2">
-                        <span className="font-semibold uppercase tracking-wider text-[11px]" style={{ color: isDark ? '#C88D3A' : '#B77620' }}>
+                        <span className="font-semibold uppercase tracking-wider text-[11px] text-[#B77620]">
                           {isSim ? 'SIMULATED PROVIDER:' : 'BMONI Proposal:'}
                         </span>
-                        <span
-                          className="px-2 py-0.5 rounded font-mono font-semibold text-[11px] border"
-                          style={{
-                            backgroundColor: isDark ? '#3A2810' : '#FEF3C7',
-                            borderColor: isDark ? '#6B4C1B' : '#FCD34D',
-                            color: isDark ? '#F59E0B' : '#B45309',
-                          }}
-                        >
+                        <span className="px-2 py-0.5 rounded font-mono font-semibold text-[11px] border bg-[#FEF3C7] border-[#FCD34D] text-[#B45309]">
                           {isSim ? 'Proposal: Simulated' : (proposal?.providerStatus || 'Pending Approval')}
                         </span>
                       </div>
@@ -645,16 +695,33 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
                   );
                 })()}
 
-                {/* Explicit Read-Only Notice */}
-                <div
-                  className="flex items-center justify-between text-xs px-3 py-2 rounded-lg"
-                  style={{
-                    backgroundColor: isDark ? '#2F1707' : '#F7F1E7',
-                    color: isDark ? '#A67B54' : '#8A5D3B',
-                  }}
-                >
-                  <span>Operational Status: Read-Only Record</span>
-                  <span className="font-mono text-[11px]">Period: {resp.period || 'Current'}</span>
+                {/* Contextual Financial Notes Toggle & Section */}
+                <div className="mt-4 pt-4 border-t border-[#5A2D0C]/10 flex flex-col gap-3">
+                  <div className="flex items-center justify-between">
+                    <button
+                      type="button"
+                      id={`btn-toggle-notes-${resp.id}`}
+                      onClick={() => setExpandedNotesId(isNotesExpanded ? null : resp.id)}
+                      className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#5A2D0C] hover:text-[#B77620] transition-colors"
+                    >
+                      <MessageSquare className="w-3.5 h-3.5 text-[#C88D3A]" />
+                      <span>{isNotesExpanded ? 'Close Financial Notes' : 'Contextual Financial Notes & Inquiries'}</span>
+                    </button>
+                    <span className="text-[11px] text-stone-500 font-mono">
+                      Period: {resp.period || 'Current'}
+                    </span>
+                  </div>
+
+                  {isNotesExpanded && currentMember && (
+                    <div className="mt-2">
+                      <FinancialNotesThread
+                        responsibilityId={resp.id}
+                        currentMember={currentMember}
+                        activeMode={currentMode}
+                        isDark={isDark}
+                      />
+                    </div>
+                  )}
                 </div>
               </article>
             );
@@ -665,19 +732,12 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
         {providerEvents && providerEvents.length > 0 && (
           <div
             id="admin-provider-events-section"
-            className="mt-6 p-4 rounded-xl border flex flex-col gap-3 text-xs"
-            style={{
-              backgroundColor: isDark ? '#2A170A' : '#F9F5EE',
-              borderColor: isDark ? '#4B2710' : '#E7D6C1',
-            }}
+            className="mt-6 p-4 rounded-xl border flex flex-col gap-3 text-xs bg-[#F9F5EE] border-[#E7D6C1]"
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Activity className="w-3.5 h-3.5 text-amber-500" />
-                <span
-                  className="font-semibold uppercase tracking-wider text-[11px]"
-                  style={{ color: isDark ? '#C88D3A' : '#B77620' }}
-                >
+                <span className="font-semibold uppercase tracking-wider text-[11px] text-[#B77620]">
                   Provider Ingestion Audit &bull; Provider Events Received
                 </span>
               </div>
@@ -690,15 +750,11 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
                 <div
                   key={evt.id || evt.providerEventId || idx}
                   id={`admin-provider-event-${evt.providerEventId || idx}`}
-                  className="p-3 rounded-lg border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2"
-                  style={{
-                    backgroundColor: isDark ? '#331A0C' : '#FFFDF9',
-                    borderColor: isDark ? '#4B2710' : '#EAE0D0',
-                  }}
+                  className="p-3 rounded-lg border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 bg-[#FFFDF9] border-[#EAE0D0]"
                 >
                   <div className="flex flex-col gap-1">
                     <div className="flex flex-wrap items-center gap-2 font-mono text-[11px]">
-                      <span className="font-semibold" style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}>
+                      <span className="font-semibold text-[#5A2D0C]">
                         Provider: {evt.provider}
                       </span>
                       <span className="text-stone-400">&bull;</span>
@@ -718,28 +774,14 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
                       const rec = reconciliations.find((r) => r.providerEventId === evt.providerEventId);
                       if (rec && rec.reconciliationStatus === 'VERIFIED') {
                         return (
-                          <span
-                            className="px-2 py-0.5 rounded font-mono font-semibold text-[10px] border uppercase"
-                            style={{
-                              backgroundColor: isDark ? '#143823' : '#DCFCE7',
-                              borderColor: isDark ? '#22C55E' : '#86EFAC',
-                              color: isDark ? '#4ADE80' : '#15803D',
-                            }}
-                          >
+                          <span className="px-2 py-0.5 rounded font-mono font-semibold text-[10px] border uppercase bg-[#DCFCE7] border-[#86EFAC] text-[#15803D]">
                             Status: Verified &bull; Reconciled ({formatNaira(rec.amount)})
                           </span>
                         );
                       }
                       if (rec && rec.reconciliationStatus === 'MISMATCH') {
                         return (
-                          <span
-                            className="px-2 py-0.5 rounded font-mono font-semibold text-[10px] border uppercase"
-                            style={{
-                              backgroundColor: isDark ? '#3D2010' : '#FEF2F2',
-                              borderColor: isDark ? '#EF4444' : '#FCA5A5',
-                              color: isDark ? '#F87171' : '#B91C1C',
-                            }}
-                          >
+                          <span className="px-2 py-0.5 rounded font-mono font-semibold text-[10px] border uppercase bg-[#FEF2F2] border-[#FCA5A5] text-[#B91C1C]">
                             Status: Requires Review &bull; {rec.reasonCode}
                           </span>
                         );
@@ -748,12 +790,7 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
                         <>
                           <span
                             id="admin-provider-event-status-badge"
-                            className="px-2 py-0.5 rounded font-mono font-semibold text-[10px] border uppercase"
-                            style={{
-                              backgroundColor: isDark ? '#3A2810' : '#FEF3C7',
-                              borderColor: isDark ? '#6B4C1B' : '#FCD34D',
-                              color: isDark ? '#F59E0B' : '#B45309',
-                            }}
+                            className="px-2 py-0.5 rounded font-mono font-semibold text-[10px] border uppercase bg-[#FEF3C7] border-[#FCD34D] text-[#B45309]"
                           >
                             Status: Received — Awaiting Reconciliation
                           </span>
@@ -761,12 +798,7 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
                             <button
                               type="button"
                               onClick={() => onReconcileEvent(evt.providerEventId)}
-                              className="mt-1 px-2 py-0.5 rounded text-[10px] font-semibold border transition-colors"
-                              style={{
-                                backgroundColor: isDark ? '#3A1E0B' : '#F2E8D8',
-                                borderColor: isDark ? '#C88D3A' : '#B77620',
-                                color: isDark ? '#FFF9EE' : '#5A2D0C',
-                              }}
+                              className="mt-1 px-2 py-0.5 rounded text-[10px] font-semibold border transition-colors bg-[#F2E8D8] border-[#B77620] text-[#5A2D0C]"
                             >
                               Trigger Reconcile
                             </button>
@@ -788,19 +820,12 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
         {reconciliations && reconciliations.length > 0 && (
           <div
             id="admin-reconciliations-section"
-            className="mt-6 p-4 rounded-xl border flex flex-col gap-3 text-xs"
-            style={{
-              backgroundColor: isDark ? '#2A170A' : '#F9F5EE',
-              borderColor: isDark ? '#4B2710' : '#E7D6C1',
-            }}
+            className="mt-6 p-4 rounded-xl border flex flex-col gap-3 text-xs bg-[#F9F5EE] border-[#E7D6C1]"
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <UserCheck className="w-3.5 h-3.5 text-emerald-500" />
-                <span
-                  className="font-semibold uppercase tracking-wider text-[11px]"
-                  style={{ color: isDark ? '#C88D3A' : '#B77620' }}
-                >
+                <span className="font-semibold uppercase tracking-wider text-[11px] text-[#B77620]">
                   Authoritative Payment Reconciliations &bull; Evidence Chain Audit
                 </span>
               </div>
@@ -813,15 +838,11 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
                 <div
                   key={rec.id || idx}
                   id={`admin-reconciliation-${rec.id || idx}`}
-                  className="p-3 rounded-lg border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2"
-                  style={{
-                    backgroundColor: isDark ? '#331A0C' : '#FFFDF9',
-                    borderColor: isDark ? '#4B2710' : '#EAE0D0',
-                  }}
+                  className="p-3 rounded-lg border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 bg-[#FFFDF9] border-[#EAE0D0]"
                 >
                   <div className="flex flex-col gap-1">
                     <div className="flex flex-wrap items-center gap-2 font-mono text-[11px]">
-                      <span className="font-semibold" style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}>
+                      <span className="font-semibold text-[#5A2D0C]">
                         Amount: {formatNaira(rec.amount)}
                       </span>
                       <span className="text-stone-400">&bull;</span>
@@ -836,20 +857,11 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
                   </div>
                   <div className="flex flex-col sm:items-end gap-1">
                     <span
-                      className="px-2 py-0.5 rounded font-mono font-semibold text-[10px] border uppercase"
-                      style={
+                      className={`px-2 py-0.5 rounded font-mono font-semibold text-[10px] border uppercase ${
                         rec.reconciliationStatus === 'VERIFIED'
-                          ? {
-                              backgroundColor: isDark ? '#143823' : '#DCFCE7',
-                              borderColor: isDark ? '#22C55E' : '#86EFAC',
-                              color: isDark ? '#4ADE80' : '#15803D',
-                            }
-                          : {
-                              backgroundColor: isDark ? '#3D2010' : '#FEF2F2',
-                              borderColor: isDark ? '#EF4444' : '#FCA5A5',
-                              color: isDark ? '#F87171' : '#B91C1C',
-                            }
-                      }
+                          ? 'bg-[#DCFCE7] border-[#86EFAC] text-[#15803D]'
+                          : 'bg-[#FEF2F2] border-[#FCA5A5] text-[#B91C1C]'
+                      }`}
                     >
                       Status: {rec.reconciliationStatus === 'VERIFIED' ? 'VERIFIED' : 'Requires Review'}
                     </span>
@@ -864,24 +876,6 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
             </div>
           </div>
         )}
-
-        {/* Privacy & Scope Notice */}
-        <div
-          className="mt-8 p-4 rounded-xl border text-xs leading-relaxed"
-          style={{
-            backgroundColor: isDark ? '#3A1E0B' : '#F2E8D8',
-            borderColor: isDark ? '#4B2710' : '#E7D6C1',
-            color: isDark ? '#D9C4AC' : '#704728',
-          }}
-        >
-          <p className="font-semibold mb-1" style={{ color: isDark ? '#E2AB5D' : '#5A2D0C' }}>
-            Operational Scope &amp; Privacy Boundary:
-          </p>
-          <p>
-            This workspace strictly presents accommodation-operational allocation and responsibility state.
-            Unrelated financial activities, personal member records, and non-operational information are excluded. All operational records are read-only.
-          </p>
-        </div>
       </main>
 
       {/* Footer */}

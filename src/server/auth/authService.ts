@@ -124,17 +124,31 @@ export function requireRole(
 export const DEV_IDENTITIES = [
   {
     memberId: 'member-fellow-current',
-    displayName: 'Current Fellow',
+    displayName: 'Current Fellow (Emmanuel)',
     email: 'fellow@infinitegrace.local',
     role: MemberRole.FELLOW,
     token: 'dev-session-token-fellow',
   },
   {
     memberId: 'member-admin-current',
-    displayName: 'Accommodation Admin',
+    displayName: 'Accommodation Financial Admin (Amara Nwosu)',
     email: 'admin@infinitegrace.local',
     role: MemberRole.ACCOMMODATION_ADMIN,
     token: 'dev-session-token-admin',
+  },
+  {
+    memberId: 'member-chinedu-captain',
+    displayName: 'Room Captain — Room 304 (Chinedu Okeke)',
+    email: 'chinedu@infinitegrace.local',
+    role: MemberRole.ROOM_CAPTAIN,
+    token: 'dev-session-token-captain',
+  },
+  {
+    memberId: 'member-coordinator-current',
+    displayName: 'Accommodation Fellows Coordinator (Emmanuel Ukom)',
+    email: 'coordinator@hut4devs.local',
+    role: MemberRole.ACCOMMODATION_FELLOWS_COORDINATOR,
+    token: 'dev-session-token-coordinator',
   },
 ];
 
@@ -153,6 +167,18 @@ export async function createDevelopmentSession(
     target.memberId === 'member-admin-current'
   ) {
     matched = DEV_IDENTITIES[1];
+  } else if (
+    target.role === MemberRole.ROOM_CAPTAIN ||
+    target.role === 'ROOM_CAPTAIN' ||
+    target.memberId === 'member-chinedu-captain'
+  ) {
+    matched = DEV_IDENTITIES[2];
+  } else if (
+    target.role === MemberRole.ACCOMMODATION_FELLOWS_COORDINATOR ||
+    target.role === 'ACCOMMODATION_FELLOWS_COORDINATOR' ||
+    target.memberId === 'member-coordinator-current'
+  ) {
+    matched = DEV_IDENTITIES[3];
   } else if (
     target.role === MemberRole.FELLOW ||
     target.role === 'FELLOW' ||
