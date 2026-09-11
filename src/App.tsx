@@ -9,6 +9,7 @@ import { DevAuthView } from './components/DevAuthView';
 import { PendingMembershipView } from './components/PendingMembershipView';
 import { RegistrationModal } from './components/RegistrationModal';
 import { Hut4DevsLogo } from './components/Hut4DevsLogo';
+import { ModeSwitcher } from './components/ModeSwitcher';
 import { DEMO_ACCOMMODATION_RESPONSIBILITY } from './data/demoAccommodation';
 import {
   AccommodationResponsibility,
@@ -614,43 +615,105 @@ export default function App() {
 
       {/* Coordinator Workspace View */}
       {view === 'coordinator' && member && (
-        <div className="min-h-screen bg-[#F7F1E7] text-[#5A2D0C] p-4 sm:p-6 lg:p-8 max-w-6xl mx-auto space-y-6">
-          <div className="flex items-center justify-between border-b border-[#5A2D0C]/10 pb-4">
-            <button
-              onClick={() => setView('landing')}
-              className="text-xs font-semibold text-[#5A2D0C]/70 hover:text-[#5A2D0C]"
-            >
-              ← Exit to Landing
-            </button>
-            <button
-              onClick={handleLogout}
-              className="text-xs font-semibold text-[#5A2D0C]/70 hover:text-[#5A2D0C]"
-            >
-              Log Out Session
-            </button>
-          </div>
-          <CoordinatorWorkspaceView member={member} activeMode={activeMode} />
+        <div
+          className={`min-h-screen transition-colors duration-200 ${
+            isDark ? 'bg-[#2F1707] text-[#FFF9EE]' : 'bg-[#F7F1E7] text-[#5A2D0C]'
+          }`}
+        >
+          <header
+            className="border-b transition-colors duration-200"
+            style={{
+              borderColor: isDark ? '#3E200C' : '#EAE0D0',
+              backgroundColor: isDark ? 'rgba(47, 23, 7, 0.95)' : 'rgba(247, 241, 231, 0.95)',
+            }}
+          >
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
+              <button
+                type="button"
+                onClick={() => setView('landing')}
+                className="inline-flex items-center text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C88D3A] rounded-lg cursor-pointer"
+                title="Return to Public Landing"
+              >
+                <Hut4DevsLogo isDark={isDark} size="sm" showWordmark={true} />
+              </button>
+
+              <div className="flex items-center gap-2.5">
+                <ModeSwitcher
+                  member={member}
+                  scopedRoles={scopedRoles}
+                  currentMode={activeMode}
+                  onModeChange={handleModeChange}
+                  isDark={isDark}
+                />
+                <button
+                  type="button"
+                  id="coordinator-logout-btn"
+                  onClick={handleLogout}
+                  aria-label="Log Out"
+                  className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium transition-colors cursor-pointer ${
+                    isDark ? 'text-[#C88D3A] hover:text-[#FFF9EE]' : 'text-[#8A5D3B] hover:text-[#5A2D0C]'
+                  }`}
+                >
+                  Log Out
+                </button>
+              </div>
+            </div>
+          </header>
+          <main className="max-w-6xl mx-auto p-4 sm:p-6 lg:p-8 space-y-6">
+            <CoordinatorWorkspaceView member={member} activeMode={activeMode} />
+          </main>
         </div>
       )}
 
       {/* Room Captain Workspace View */}
       {view === 'room-captain' && member && (
-        <div className="min-h-screen bg-[#F7F1E7] text-[#5A2D0C] p-4 sm:p-6 lg:p-8 max-w-6xl mx-auto space-y-6">
-          <div className="flex items-center justify-between border-b border-[#5A2D0C]/10 pb-4">
-            <button
-              onClick={() => handleModeChange('FELLOW')}
-              className="text-xs font-semibold text-[#5A2D0C]/70 hover:text-[#5A2D0C]"
-            >
-              ← Back to Fellow Workspace
-            </button>
-            <button
-              onClick={handleLogout}
-              className="text-xs font-semibold text-[#5A2D0C]/70 hover:text-[#5A2D0C]"
-            >
-              Log Out Session
-            </button>
-          </div>
-          <CaptainWorkspaceView member={member} activeMode={activeMode} />
+        <div
+          className={`min-h-screen transition-colors duration-200 ${
+            isDark ? 'bg-[#2F1707] text-[#FFF9EE]' : 'bg-[#F7F1E7] text-[#5A2D0C]'
+          }`}
+        >
+          <header
+            className="border-b transition-colors duration-200"
+            style={{
+              borderColor: isDark ? '#3E200C' : '#EAE0D0',
+              backgroundColor: isDark ? 'rgba(47, 23, 7, 0.95)' : 'rgba(247, 241, 231, 0.95)',
+            }}
+          >
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
+              <button
+                type="button"
+                onClick={() => setView('landing')}
+                className="inline-flex items-center text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C88D3A] rounded-lg cursor-pointer"
+                title="Return to Public Landing"
+              >
+                <Hut4DevsLogo isDark={isDark} size="sm" showWordmark={true} />
+              </button>
+
+              <div className="flex items-center gap-2.5">
+                <ModeSwitcher
+                  member={member}
+                  scopedRoles={scopedRoles}
+                  currentMode={activeMode}
+                  onModeChange={handleModeChange}
+                  isDark={isDark}
+                />
+                <button
+                  type="button"
+                  id="captain-logout-btn"
+                  onClick={handleLogout}
+                  aria-label="Log Out"
+                  className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium transition-colors cursor-pointer ${
+                    isDark ? 'text-[#C88D3A] hover:text-[#FFF9EE]' : 'text-[#8A5D3B] hover:text-[#5A2D0C]'
+                  }`}
+                >
+                  Log Out
+                </button>
+              </div>
+            </div>
+          </header>
+          <main className="max-w-6xl mx-auto p-4 sm:p-6 lg:p-8 space-y-6">
+            <CaptainWorkspaceView member={member} activeMode={activeMode} />
+          </main>
         </div>
       )}
 

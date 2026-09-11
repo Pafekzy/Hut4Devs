@@ -160,59 +160,6 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
         isDark ? 'bg-[#2F1707] text-[#FFF9EE]' : 'bg-[#F7F1E7] text-[#5A2D0C]'
       }`}
     >
-      {/* Dev Preview Banner */}
-      <aside
-        aria-label="Development Preview Notice"
-        className="w-full border-b px-4 py-2.5 text-xs transition-colors duration-200"
-        style={{
-          backgroundColor: isDark ? '#3A1E0B' : '#F2E8D8',
-          borderColor: isDark ? '#4B2710' : '#E7D6C1',
-          color: isDark ? '#E2AB5D' : '#8A5D3B',
-        }}
-      >
-        <div className="max-w-5xl mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-          <div className="flex items-center gap-2 font-mono text-[11px] sm:text-xs">
-            <span
-              className="px-2 py-0.5 rounded font-semibold uppercase tracking-wider text-[10px]"
-              style={{
-                backgroundColor: isDark ? '#4B2710' : '#EAE0D0',
-                color: isDark ? '#C88D3A' : '#5A2D0C',
-              }}
-            >
-              Development Preview
-            </span>
-            <span>
-              Development Preview &bull; No authentication or authorization is claimed. Acting Capacity: <strong>{attribution.actingCapacity}</strong>
-            </span>
-          </div>
-          <div className="flex items-center gap-3">
-            <div className="flex items-center gap-1.5 font-mono text-[11px]">
-              <span
-                id="realtime-sse-indicator"
-                className={`w-2 h-2 rounded-full ${
-                  streamStatus === 'connected'
-                    ? 'bg-emerald-500 animate-pulse'
-                    : streamStatus === 'connecting'
-                    ? 'bg-amber-500'
-                    : 'bg-stone-400'
-                }`}
-              />
-              <span className="capitalize">Live Stream: {streamStatus}</span>
-            </div>
-            <button
-              type="button"
-              id="admin-switch-to-fellow-banner-btn"
-              onClick={onSwitchToFellow}
-              className={`self-start sm:self-auto font-medium underline underline-offset-2 cursor-pointer hover:opacity-80 transition-opacity text-xs ${
-                isDark ? 'text-[#C88D3A]' : 'text-[#B77620]'
-              }`}
-            >
-              Switch to Fellow View →
-            </button>
-          </div>
-        </div>
-      </aside>
-
       {/* Header */}
       <header
         className="sticky top-0 z-30 w-full border-b transition-colors duration-200"
@@ -239,11 +186,25 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
                 scopedRoles={scopedRoles}
                 currentMode={currentMode}
                 onModeChange={onModeChange}
+                isDark={isDark}
               />
             )}
           </div>
 
           <div className="flex items-center gap-2 sm:gap-3">
+            <div className="hidden sm:flex items-center gap-1.5 font-mono text-[11px] px-2.5 py-1 rounded-lg border border-[#C88D3A]/30">
+              <span
+                id="realtime-sse-indicator"
+                className={`w-2 h-2 rounded-full ${
+                  streamStatus === 'connected'
+                    ? 'bg-emerald-500 animate-pulse'
+                    : streamStatus === 'connecting'
+                    ? 'bg-amber-500'
+                    : 'bg-stone-400'
+                }`}
+              />
+              <span className="capitalize">Live stream: {streamStatus}</span>
+            </div>
             <ThemeToggle isDark={isDark} onToggle={onToggleTheme} />
             <button
               type="button"
@@ -266,6 +227,9 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
           >
             Command Center &bull; Attention-First Financial Accountability
           </span>
+          <p className="text-[11px] opacity-70 mt-0.5">
+            Development Preview: Accommodation Admin Workspace (No authentication or authorization is claimed in this preview)
+          </p>
         </div>
 
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
@@ -1087,7 +1051,23 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
           color: isDark ? '#A67B54' : '#8A5D3B',
         }}
       >
-        <p>Hut4Devs Accommodation Admin &bull; Operational Command Center</p>
+        <div className="max-w-5xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+          <p className="normal-case tracking-normal">
+            Hut4Devs Accommodation Admin &bull; Operational Command Center
+          </p>
+          {onSwitchToFellow && (
+            <button
+              type="button"
+              id="admin-switch-to-fellow-banner-btn"
+              onClick={onSwitchToFellow}
+              className={`font-medium normal-case tracking-normal underline underline-offset-2 cursor-pointer hover:opacity-80 transition-opacity text-xs ${
+                isDark ? 'text-[#C88D3A]' : 'text-[#B77620]'
+              }`}
+            >
+              Switch to Fellow View →
+            </button>
+          )}
+        </div>
       </footer>
     </div>
   );

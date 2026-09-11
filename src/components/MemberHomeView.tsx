@@ -26,6 +26,7 @@ import {
   User,
   Shield,
   MessageSquare,
+  Bell,
   ChevronDown,
   ChevronUp,
   HandCoins,
@@ -231,62 +232,6 @@ export const MemberHomeView: React.FC<MemberHomeViewProps> = ({
         isDark ? 'bg-[#2F1707] text-[#FFF9EE]' : 'bg-[#F7F1E7] text-[#5A2D0C]'
       }`}
     >
-      {/* Dev Auth Session Banner */}
-      <aside
-        aria-label="Development Authentication Notice"
-        className="w-full border-b px-4 py-2.5 text-xs transition-colors duration-200"
-        style={{
-          backgroundColor: isDark ? '#3A1E0B' : '#F2E8D8',
-          borderColor: isDark ? '#4B2710' : '#E7D6C1',
-          color: isDark ? '#E2AB5D' : '#8A5D3B',
-        }}
-      >
-        <div className="max-w-5xl mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-          <div className="flex items-center gap-2 font-mono text-[11px] sm:text-xs">
-            <span
-              className="px-2 py-0.5 rounded font-semibold uppercase tracking-wider text-[10px]"
-              style={{
-                backgroundColor: isDark ? '#4B2710' : '#EAE0D0',
-                color: isDark ? '#C88D3A' : '#5A2D0C',
-              }}
-            >
-              AUTHENTICATED
-            </span>
-            <span>
-              Member: <strong>{currentMember.displayName}</strong> (
-              {currentMember.h4dMemberId || 'H4D-FELLOW'}) &bull; Acting Capacity:{' '}
-              <strong>{attribution?.actingCapacity || 'Fellow'}</strong>
-            </span>
-          </div>
-          <div className="flex items-center gap-3">
-            {onSwitchToAdmin && (
-              <button
-                type="button"
-                id="fellow-switch-to-admin-banner-btn"
-                onClick={onSwitchToAdmin}
-                className={`self-start sm:self-auto font-medium underline underline-offset-2 cursor-pointer hover:opacity-80 transition-opacity text-xs ${
-                  isDark ? 'text-[#C88D3A]' : 'text-[#B77620]'
-                }`}
-              >
-                Switch to Accommodation Admin →
-              </button>
-            )}
-            {onLogout && (
-              <button
-                type="button"
-                id="dev-auth-logout-banner-btn"
-                onClick={onLogout}
-                className={`self-start sm:self-auto font-medium underline underline-offset-2 cursor-pointer hover:opacity-80 transition-opacity text-xs ${
-                  isDark ? 'text-[#C88D3A]' : 'text-[#B77620]'
-                }`}
-              >
-                Log Out Session
-              </button>
-            )}
-          </div>
-        </div>
-      </aside>
-
       {/* Active Delegated Responsibility Callout Banner for Captains / Coordinators */}
       {captainAssignment && currentMode === 'FELLOW' && onSwitchToCaptain && (
         <div
@@ -348,9 +293,9 @@ export const MemberHomeView: React.FC<MemberHomeViewProps> = ({
           backdropFilter: 'blur(8px)',
         }}
       >
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 h-16 sm:h-18 flex items-center justify-between">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 h-16 sm:h-18 flex items-center justify-between gap-2">
           {/* Brand Mark */}
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-4 shrink-0">
             <button
               type="button"
               onClick={onExitToLanding}
@@ -359,34 +304,56 @@ export const MemberHomeView: React.FC<MemberHomeViewProps> = ({
             >
               <Hut4DevsLogo isDark={isDark} size="sm" showWordmark={true} />
             </button>
+          </div>
 
-            {/* Mode Switcher inside header when multi-role */}
+          {/* Global Actions: Notifications, Messages, Role Switcher, Theme & Logout */}
+          <div className="flex items-center gap-1.5 sm:gap-2.5">
+            {/* Notification Bell */}
+            <button
+              type="button"
+              id="header-notifications-btn"
+              aria-label="Notifications"
+              title="Notifications"
+              className={`p-2 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-xl text-xs transition-colors cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C88D3A] ${
+                isDark
+                  ? 'text-[#E5D3BA] hover:text-[#FFF9EE] hover:bg-[#3E200C]'
+                  : 'text-[#6D4223] hover:text-[#5A2D0C] hover:bg-[#EFE5D5]'
+              }`}
+            >
+              <Bell className="w-4 h-4" aria-hidden="true" />
+              <span className="sr-only">Notifications</span>
+            </button>
+
+            {/* Messages */}
+            <button
+              type="button"
+              id="header-messages-btn"
+              aria-label="Messages"
+              title="Messages"
+              className={`p-2 sm:px-2.5 sm:py-2 min-h-[44px] flex items-center gap-1.5 rounded-xl text-xs font-medium transition-colors cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C88D3A] ${
+                isDark
+                  ? 'text-[#E5D3BA] hover:text-[#FFF9EE] hover:bg-[#3E200C]'
+                  : 'text-[#6D4223] hover:text-[#5A2D0C] hover:bg-[#EFE5D5]'
+              }`}
+            >
+              <MessageSquare className="w-4 h-4 shrink-0" aria-hidden="true" />
+              <span className="hidden md:inline">Messages</span>
+            </button>
+
+            {/* Role / Capacity Switcher — user-facing active-capacity source of truth */}
             {member && onModeChange && (
               <ModeSwitcher
                 member={member}
                 scopedRoles={scopedRoles}
                 currentMode={currentMode}
                 onModeChange={onModeChange}
+                isDark={isDark}
               />
             )}
-          </div>
-
-          {/* Controls: Member Badge, Theme & Logout */}
-          <div className="flex items-center gap-2 sm:gap-3">
-            <div
-              className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-xs font-mono ${
-                isDark
-                  ? 'bg-[#3E200C] text-[#E2AB5D] border border-[#4B2710]'
-                  : 'bg-[#FFF9EE] text-[#5A2D0C] border border-[#EAE0D0]'
-              }`}
-            >
-              <User className="w-3.5 h-3.5 text-[#C88D3A]" />
-              <span className="font-semibold">{currentMember.displayName}</span>
-              <span className="opacity-60 text-[10px]">{currentMode}</span>
-            </div>
 
             <ThemeToggle isDark={isDark} onToggle={onToggleTheme} />
 
+            {/* Quiet Secondary Log Out Action */}
             {onLogout ? (
               <button
                 type="button"
@@ -394,10 +361,10 @@ export const MemberHomeView: React.FC<MemberHomeViewProps> = ({
                 onClick={onLogout}
                 aria-label="Log Out"
                 title="Log Out Session"
-                className={`inline-flex items-center gap-1.5 px-3 py-2 min-h-[44px] rounded-xl text-xs sm:text-sm font-medium transition-all duration-150 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C88D3A] ${
+                className={`inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-2 min-h-[44px] rounded-xl text-xs sm:text-sm font-medium transition-all duration-150 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C88D3A] ${
                   isDark
-                    ? 'text-[#E5D3BA] hover:text-[#FFF9EE] hover:bg-[#3E200C]'
-                    : 'text-[#6D4223] hover:text-[#5A2D0C] hover:bg-[#EFE5D5]'
+                    ? 'text-[#C88D3A] hover:text-[#FFF9EE] hover:bg-[#3E200C]'
+                    : 'text-[#8A5D3B] hover:text-[#5A2D0C] hover:bg-[#EFE5D5]'
                 }`}
               >
                 <LogOut className="w-4 h-4 shrink-0" aria-hidden="true" />
@@ -409,10 +376,10 @@ export const MemberHomeView: React.FC<MemberHomeViewProps> = ({
                 id="exit-landing-btn"
                 onClick={onExitToLanding}
                 aria-label="Exit to public landing"
-                className={`inline-flex items-center gap-1.5 px-3 py-2 min-h-[44px] rounded-xl text-xs sm:text-sm font-medium transition-all duration-150 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C88D3A] ${
+                className={`inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-2 min-h-[44px] rounded-xl text-xs sm:text-sm font-medium transition-all duration-150 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C88D3A] ${
                   isDark
-                    ? 'text-[#E5D3BA] hover:text-[#FFF9EE] hover:bg-[#3E200C]'
-                    : 'text-[#6D4223] hover:text-[#5A2D0C] hover:bg-[#EFE5D5]'
+                    ? 'text-[#C88D3A] hover:text-[#FFF9EE] hover:bg-[#3E200C]'
+                    : 'text-[#8A5D3B] hover:text-[#5A2D0C] hover:bg-[#EFE5D5]'
                 }`}
               >
                 <LogOut className="w-4 h-4 shrink-0" aria-hidden="true" />
@@ -623,7 +590,23 @@ export const MemberHomeView: React.FC<MemberHomeViewProps> = ({
           color: isDark ? '#A67B54' : '#8A5D3B',
         }}
       >
-        <p>Hut4Devs Community Infrastructure &bull; Coordinate &bull; Support &bull; Account &bull; Grow</p>
+        <div className="max-w-5xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+          <p className="normal-case tracking-normal">
+            Hut4Devs Community Infrastructure &bull; Coordinate &bull; Support &bull; Account &bull; Grow
+          </p>
+          {onSwitchToAdmin && (
+            <button
+              type="button"
+              id="fellow-switch-to-admin-banner-btn"
+              onClick={onSwitchToAdmin}
+              className={`font-medium normal-case tracking-normal underline underline-offset-2 cursor-pointer hover:opacity-80 transition-opacity text-xs ${
+                isDark ? 'text-[#C88D3A]' : 'text-[#B77620]'
+              }`}
+            >
+              Switch to Accommodation Admin →
+            </button>
+          )}
+        </div>
       </footer>
     </div>
   );
