@@ -17,6 +17,7 @@ import {
   extractSessionToken,
 } from './src/server/auth/authService';
 import { handleBmoniWebhookRequest } from './src/server/payments/bmoniWebhook';
+import { reconciliationEngine } from './src/server/payments/reconciliationEngine';
 export { OutboxPublisher, globalOutboxPublisher };
 
 const MIME_TYPES: Record<string, string> = {
@@ -582,6 +583,242 @@ export async function handleAdminProviderEventsRequest(
       notice: 'Provider events received. Awaiting future reconciliation. Not verified.',
     })
   );
+}
+
+/** H4D-FUNC-013: Accommodation Admin reconciliation audit. */
+export async function handleAdminReconciliationsRequest(
+  req: http.IncomingMessage,
+  res: http.ServerResponse,
+  repos?: IHut4DevsRepositories
+): Promise<void> {
+  const activeRepos = await resolveRepositories(repos);
+  const session = await authenticateRequest(req, activeRepos);
+  const auth = requireRole(session, MemberRole.ACCOMMODATION_ADMIN);
+  if (!auth.authorized) {
+    res.statusCode = auth.status;
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.end(JSON.stringify({ success: false, error: auth.error }));
+    return;
+  }
+
+  const reconciliations = await activeRepos.reconciliations.listAll();
+  res.statusCode = 200;
+  res.setHeader('Content-Type', 'application/json; charset=utf-8');
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.end(
+    JSON.stringify({
+      success: true,
+      reconciliations,
+    })
+  );
+}
+
+/** H4D-FUNC-013: Deterministic reconciliation retry/recovery. */
+export async function handleAdminReconcileRequest(
+  req: http.IncomingMessage,
+  res: http.ServerResponse,
+  repos?: IHut4DevsRepositories,
+  publisher?: OutboxPublisher
+): Promise<void> {
+  let bodyStr = '';
+  req.on('data', (chunk) => {
+    bodyStr += chunk;
+  });
+
+  req.on('end', async () => {
+    try {
+      const activeRepos = await resolveRepositories(repos);
+      const session = await authenticateRequest(req, activeRepos);
+      const auth = requireRole(session, MemberRole.ACCOMMODATION_ADMIN);
+      if (!auth.authorized) {
+        res.statusCode = auth.status;
+        res.setHeader('Content-Type', 'application/json; charset=utf-8');
+        res.setHeader('X-Content-Type-Options', 'nosniff');
+        res.end(JSON.stringify({ success: false, error: auth.error }));
+        return;
+      }
+
+      let body: any = {};
+      try {
+        body = JSON.parse(bodyStr || '{}');
+      } catch {
+        res.statusCode = 400;
+        res.setHeader('Content-Type', 'application/json; charset=utf-8');
+        res.setHeader('X-Content-Type-Options', 'nosniff');
+        res.end(JSON.stringify({ success: false, error: 'Invalid JSON payload.' }));
+        return;
+      }
+
+      const { providerEventId, provider = 'BMONI' } = body;
+      if (!providerEventId) {
+        res.statusCode = 400;
+        res.setHeader('Content-Type', 'application/json; charset=utf-8');
+        res.setHeader('X-Content-Type-Options', 'nosniff');
+        res.end(JSON.stringify({ success: false, error: 'providerEventId is required.' }));
+        return;
+      }
+
+      const event = await activeRepos.providerEvents.findByProviderEventId(provider, providerEventId);
+      if (!event) {
+        res.statusCode = 404;
+        res.setHeader('Content-Type', 'application/json; charset=utf-8');
+        res.setHeader('X-Content-Type-Options', 'nosniff');
+        res.end(JSON.stringify({ success: false, error: `Provider event "${providerEventId}" not found.` }));
+        return;
+      }
+
+      const result = await reconciliationEngine.reconcileProviderEvent(event, activeRepos, publisher);
+
+      res.statusCode = 200;
+      res.setHeader('Content-Type', 'application/json; charset=utf-8');
+      res.setHeader('X-Content-Type-Options', 'nosniff');
+      res.end(JSON.stringify({ success: true, result }));
+    } catch (err: any) {
+      res.statusCode = 500;
+      res.setHeader('Content-Type', 'application/json; charset=utf-8');
+      res.setHeader('X-Content-Type-Options', 'nosniff');
+      res.end(JSON.stringify({ success: false, error: err.message || 'Reconciliation execution failed.' }));
+    }
+  });
+}
+
+/**
+ * Dispatches API requests to corresponding domain handlers.
+ * Returns true if the request was handled, false if it was not an /api route.
+ */
+export async function handleApiRequest(
+  req: http.IncomingMessage,
+  res: http.ServerResponse,
+  options: ServerOptions = {}
+): Promise<boolean> {
+  const rawUrl = req.url || '/';
+  const parsedUrl = new URL(rawUrl, 'http://localhost');
+  const pathname = parsedUrl.pathname;
+
+  if (!pathname.startsWith('/api/')) {
+    return false;
+  }
+
+  // 1. API: POST /api/payments/proposal
+  if (pathname === '/api/payments/proposal' && req.method === 'POST') {
+    await handlePaymentProposalRequest(
+      req,
+      res,
+      options.customProvider,
+      options.repos,
+      options.publisher
+    );
+    return true;
+  }
+
+  // 2. API: GET /api/accommodation/responsibility
+  if (pathname === '/api/accommodation/responsibility' && req.method === 'GET') {
+    await handleAccommodationRequest(req, res, options.repos);
+    return true;
+  }
+
+  // 3. API: POST /api/payments/intents
+  if (pathname === '/api/payments/intents' && req.method === 'POST') {
+    await handleSaveIntentRequest(req, res, options.repos, options.publisher);
+    return true;
+  }
+
+  // 4. API: GET /api/accommodation/admin/stream (SSE Real-Time Stream - H4D-FUNC-010 & H4D-FUNC-011)
+  if (pathname === '/api/accommodation/admin/stream' && req.method === 'GET') {
+    await handleAdminStreamRequest(req, res, options.repos, options.publisher);
+    return true;
+  }
+
+  // 5. API: GET /api/accommodation/admin/overview (H4D-FUNC-011)
+  if (pathname === '/api/accommodation/admin/overview' && req.method === 'GET') {
+    await handleAdminOverviewRequest(req, res, options.repos);
+    return true;
+  }
+
+  // 6. API: GET /api/accommodation/outbox (Outbox Audit - H4D-FUNC-010 & H4D-FUNC-011)
+  if (pathname === '/api/accommodation/outbox' && req.method === 'GET') {
+    await handleOutboxListRequest(req, res, options.repos);
+    return true;
+  }
+
+  // 7. API: GET /api/auth/session (H4D-FUNC-011)
+  if (pathname === '/api/auth/session' && req.method === 'GET') {
+    await handleGetSessionRequest(req, res, options.repos);
+    return true;
+  }
+
+  // 8. API: POST /api/auth/dev-session (H4D-FUNC-011)
+  if (pathname === '/api/auth/dev-session' && req.method === 'POST') {
+    await handleDevSessionRequest(req, res, options.repos);
+    return true;
+  }
+
+  // 9. API: GET /api/auth/dev-identities (H4D-FUNC-011)
+  if (pathname === '/api/auth/dev-identities' && req.method === 'GET') {
+    handleDevIdentitiesRequest(req, res);
+    return true;
+  }
+
+  // 10. API: POST /api/auth/logout (H4D-FUNC-011)
+  if (pathname === '/api/auth/logout' && req.method === 'POST') {
+    await handleLogoutRequest(req, res, options.repos);
+    return true;
+  }
+
+  // 11. API: POST /api/webhooks/bmoni (BMONI Webhook Ingestion - H4D-FUNC-012)
+  if (pathname === '/api/webhooks/bmoni' && req.method === 'POST') {
+    await handleBmoniWebhookRequest(
+      req,
+      res,
+      options.repos,
+      options.publisher,
+      options.bmoniWebhookSecret
+    );
+    return true;
+  }
+
+  // 12. API: GET /api/accommodation/admin/provider-events (H4D-FUNC-012)
+  if (pathname === '/api/accommodation/admin/provider-events' && req.method === 'GET') {
+    await handleAdminProviderEventsRequest(req, res, options.repos);
+    return true;
+  }
+
+  // 13. API: GET /api/accommodation/admin/reconciliations (H4D-FUNC-013)
+  if (pathname === '/api/accommodation/admin/reconciliations' && req.method === 'GET') {
+    await handleAdminReconciliationsRequest(req, res, options.repos);
+    return true;
+  }
+
+  // 14. API: POST /api/accommodation/admin/reconcile (H4D-FUNC-013)
+  if (pathname === '/api/accommodation/admin/reconcile' && req.method === 'POST') {
+    await handleAdminReconcileRequest(req, res, options.repos, options.publisher);
+    return true;
+  }
+
+  // 15. API: GET /api/health
+  if (pathname === '/api/health' && req.method === 'GET') {
+    res.statusCode = 200;
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.end(
+      JSON.stringify({
+        status: 'ok',
+        server: 'hut4devs-deployable',
+        database: 'postgresql',
+        endpoint: '/api/payments/proposal',
+        timestamp: new Date().toISOString(),
+      })
+    );
+    return true;
+  }
+
+  // Reject unknown /api routes with 404 JSON
+  res.statusCode = 404;
+  res.setHeader('Content-Type', 'application/json; charset=utf-8');
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.end(JSON.stringify({ error: 'Endpoint not found.' }));
+  return true;
 }
 
 /**

@@ -200,6 +200,24 @@ export function subscribeToAdminStream(
     }
   });
 
+  eventSource.addEventListener('accommodation.payment.reconciled', (e: MessageEvent) => {
+    try {
+      const data = JSON.parse(e.data);
+      onEvent({ eventType: 'accommodation.payment.reconciled', data });
+    } catch {
+      onEvent({ eventType: 'accommodation.payment.reconciled', data: e.data });
+    }
+  });
+
+  eventSource.addEventListener('accommodation.reconciliation.mismatch', (e: MessageEvent) => {
+    try {
+      const data = JSON.parse(e.data);
+      onEvent({ eventType: 'accommodation.reconciliation.mismatch', data });
+    } catch {
+      onEvent({ eventType: 'accommodation.reconciliation.mismatch', data: e.data });
+    }
+  });
+
   eventSource.onerror = () => {
     onStatusChange?.('error');
   };
@@ -233,5 +251,66 @@ export async function fetchAdminProviderEvents(sessionToken?: string | null): Pr
     return data;
   } catch (err: any) {
     return { success: false, error: 'Network error fetching provider events.' };
+  }
+}
+
+/**
+ * Fetches authoritative payment reconciliations for Accommodation Admin.
+ * (H4D-FUNC-013)
+ */
+export async function fetchAdminReconciliations(sessionToken?: string | null): Promise<{
+  success: boolean;
+  reconciliations?: any[];
+  error?: string;
+}> {
+  try {
+    const token = sessionToken || (typeof localStorage !== 'undefined' ? localStorage.getItem('h4d_session_token') : null);
+    const headers: Record<string, string> = {};
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+    const res = await fetch('/api/accommodation/admin/reconciliations', { headers });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      return { success: false, error: data.error || 'Failed to fetch reconciliations.' };
+    }
+    return data;
+  } catch (err: any) {
+    return { success: false, error: 'Network error fetching reconciliations.' };
+  }
+}
+
+/**
+ * Triggers manual or retry reconciliation for a provider event.
+ * (H4D-FUNC-013)
+ */
+export async function triggerAdminReconcile(
+  providerEventId: string,
+  sessionToken?: string | null
+): Promise<{
+  success: boolean;
+  result?: any;
+  error?: string;
+}> {
+  try {
+    const token = sessionToken || (typeof localStorage !== 'undefined' ? localStorage.getItem('h4d_session_token') : null);
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json',
+    };
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+    const res = await fetch('/api/accommodation/admin/reconcile', {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({ providerEventId, provider: 'BMONI' }),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      return { success: false, error: data.error || 'Reconciliation request failed.' };
+    }
+    return data;
+  } catch (err: any) {
+    return { success: false, error: 'Network error submitting reconciliation.' };
   }
 }

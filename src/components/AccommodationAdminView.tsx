@@ -45,7 +45,9 @@ interface AccommodationAdminViewProps {
   paymentProposals?: ExternalPaymentProposal[];
   preparedIntents?: AccommodationPaymentIntent[];
   providerEvents?: AdminProviderEventDisplay[];
+  reconciliations?: any[];
   streamStatus?: 'connecting' | 'connected' | 'error' | 'disconnected';
+  onReconcileEvent?: (providerEventId: string) => void;
 }
 
 export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
@@ -57,7 +59,9 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
   paymentProposals = [],
   preparedIntents = [],
   providerEvents = [],
+  reconciliations = [],
   streamStatus = 'disconnected',
+  onReconcileEvent,
 }) => {
   const summary = deriveAccommodationOperationalSummary(responsibilities);
 
@@ -710,19 +714,149 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
                     </div>
                   </div>
                   <div className="flex flex-col sm:items-end gap-1">
-                    <span
-                      id="admin-provider-event-status-badge"
-                      className="px-2 py-0.5 rounded font-mono font-semibold text-[10px] border uppercase"
-                      style={{
-                        backgroundColor: isDark ? '#3A2810' : '#FEF3C7',
-                        borderColor: isDark ? '#6B4C1B' : '#FCD34D',
-                        color: isDark ? '#F59E0B' : '#B45309',
-                      }}
-                    >
-                      Status: Received — Awaiting Reconciliation
-                    </span>
+                    {(() => {
+                      const rec = reconciliations.find((r) => r.providerEventId === evt.providerEventId);
+                      if (rec && rec.reconciliationStatus === 'VERIFIED') {
+                        return (
+                          <span
+                            className="px-2 py-0.5 rounded font-mono font-semibold text-[10px] border uppercase"
+                            style={{
+                              backgroundColor: isDark ? '#143823' : '#DCFCE7',
+                              borderColor: isDark ? '#22C55E' : '#86EFAC',
+                              color: isDark ? '#4ADE80' : '#15803D',
+                            }}
+                          >
+                            Status: Verified &bull; Reconciled ({formatNaira(rec.amount)})
+                          </span>
+                        );
+                      }
+                      if (rec && rec.reconciliationStatus === 'MISMATCH') {
+                        return (
+                          <span
+                            className="px-2 py-0.5 rounded font-mono font-semibold text-[10px] border uppercase"
+                            style={{
+                              backgroundColor: isDark ? '#3D2010' : '#FEF2F2',
+                              borderColor: isDark ? '#EF4444' : '#FCA5A5',
+                              color: isDark ? '#F87171' : '#B91C1C',
+                            }}
+                          >
+                            Status: Requires Review &bull; {rec.reasonCode}
+                          </span>
+                        );
+                      }
+                      return (
+                        <>
+                          <span
+                            id="admin-provider-event-status-badge"
+                            className="px-2 py-0.5 rounded font-mono font-semibold text-[10px] border uppercase"
+                            style={{
+                              backgroundColor: isDark ? '#3A2810' : '#FEF3C7',
+                              borderColor: isDark ? '#6B4C1B' : '#FCD34D',
+                              color: isDark ? '#F59E0B' : '#B45309',
+                            }}
+                          >
+                            Status: Received — Awaiting Reconciliation
+                          </span>
+                          {onReconcileEvent && (
+                            <button
+                              type="button"
+                              onClick={() => onReconcileEvent(evt.providerEventId)}
+                              className="mt-1 px-2 py-0.5 rounded text-[10px] font-semibold border transition-colors"
+                              style={{
+                                backgroundColor: isDark ? '#3A1E0B' : '#F2E8D8',
+                                borderColor: isDark ? '#C88D3A' : '#B77620',
+                                color: isDark ? '#FFF9EE' : '#5A2D0C',
+                              }}
+                            >
+                              Trigger Reconcile
+                            </button>
+                          )}
+                        </>
+                      );
+                    })()}
                     <span className="text-[10px] italic text-stone-500">
                       * Provider event received. Not verified. Awaiting reconciliation.
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Authoritative Payment Reconciliations Audit (H4D-FUNC-013) */}
+        {reconciliations && reconciliations.length > 0 && (
+          <div
+            id="admin-reconciliations-section"
+            className="mt-6 p-4 rounded-xl border flex flex-col gap-3 text-xs"
+            style={{
+              backgroundColor: isDark ? '#2A170A' : '#F9F5EE',
+              borderColor: isDark ? '#4B2710' : '#E7D6C1',
+            }}
+          >
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <UserCheck className="w-3.5 h-3.5 text-emerald-500" />
+                <span
+                  className="font-semibold uppercase tracking-wider text-[11px]"
+                  style={{ color: isDark ? '#C88D3A' : '#B77620' }}
+                >
+                  Authoritative Payment Reconciliations &bull; Evidence Chain Audit
+                </span>
+              </div>
+              <span className="font-mono text-[10px] text-stone-500">
+                Total Reconciled Records: {reconciliations.length}
+              </span>
+            </div>
+            <div className="space-y-2 mt-1">
+              {reconciliations.map((rec, idx) => (
+                <div
+                  key={rec.id || idx}
+                  id={`admin-reconciliation-${rec.id || idx}`}
+                  className="p-3 rounded-lg border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2"
+                  style={{
+                    backgroundColor: isDark ? '#331A0C' : '#FFFDF9',
+                    borderColor: isDark ? '#4B2710' : '#EAE0D0',
+                  }}
+                >
+                  <div className="flex flex-col gap-1">
+                    <div className="flex flex-wrap items-center gap-2 font-mono text-[11px]">
+                      <span className="font-semibold" style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}>
+                        Amount: {formatNaira(rec.amount)}
+                      </span>
+                      <span className="text-stone-400">&bull;</span>
+                      <span className="text-stone-500">Provider: {rec.provider}</span>
+                      <span className="text-stone-400">&bull;</span>
+                      <span className="text-stone-400 text-[10px]">Event ID: {rec.providerEventId}</span>
+                    </div>
+                    <div className="text-[11px] text-stone-500">
+                      Reason: <strong className="font-semibold">{rec.reasonCode}</strong>
+                      {rec.reconciledAt && <span> &bull; Verified At: {new Date(rec.reconciledAt).toLocaleString()}</span>}
+                    </div>
+                  </div>
+                  <div className="flex flex-col sm:items-end gap-1">
+                    <span
+                      className="px-2 py-0.5 rounded font-mono font-semibold text-[10px] border uppercase"
+                      style={
+                        rec.reconciliationStatus === 'VERIFIED'
+                          ? {
+                              backgroundColor: isDark ? '#143823' : '#DCFCE7',
+                              borderColor: isDark ? '#22C55E' : '#86EFAC',
+                              color: isDark ? '#4ADE80' : '#15803D',
+                            }
+                          : {
+                              backgroundColor: isDark ? '#3D2010' : '#FEF2F2',
+                              borderColor: isDark ? '#EF4444' : '#FCA5A5',
+                              color: isDark ? '#F87171' : '#B91C1C',
+                            }
+                      }
+                    >
+                      Status: {rec.reconciliationStatus === 'VERIFIED' ? 'VERIFIED' : 'Requires Review'}
+                    </span>
+                    <span className="text-[10px] italic text-stone-500">
+                      {rec.reconciliationStatus === 'VERIFIED'
+                        ? 'Evidence Chain Matched & Reconciled Atomically.'
+                        : 'Financial State: Unchanged. Requires Administrative Review.'}
                     </span>
                   </div>
                 </div>
