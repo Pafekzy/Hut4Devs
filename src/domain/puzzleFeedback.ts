@@ -85,7 +85,7 @@ export interface CreateFeedbackInput {
   pageContext?: string;
   routeContext?: string;
   locationContext?: string;
-  puzzleCompleted: boolean;
+  puzzleCompleted?: boolean;
   involvementPreference?: MissingPuzzleInvolvement;
   reporterMemberId: string;
   reporterDisplayName: string;

@@ -329,7 +329,7 @@ class PuzzleFeedbackStore {
         category: data.category,
         title: data.title,
         description: data.description,
-        puzzleCompleted: data.puzzleCompleted,
+        puzzleCompleted: !!data.puzzleCompleted,
         involvementPreference: involvement,
         status: 'OPEN',
         events: [createEvent],
@@ -358,7 +358,7 @@ class PuzzleFeedbackStore {
       category: data.category,
       title: data.title,
       description: data.description,
-      puzzleCompleted: data.puzzleCompleted,
+      puzzleCompleted: !!data.puzzleCompleted,
       involvementPreference: involvement,
       status: 'OPEN',
       events: [createEvent],
@@ -541,11 +541,15 @@ class PuzzleFeedbackStore {
   public async requestClarification(
     feedbackId: string,
     actor: Member,
-    question: string
+    questionOrCapacity: string,
+    optionalQuestion?: string
   ): Promise<SharedMissingPuzzleReport> {
     if (!this.isCoordinator(actor)) {
       throw new Error('Authorization denied: Only the Coordinator can request clarification.');
     }
+
+    const question = optionalQuestion !== undefined ? optionalQuestion : questionOrCapacity;
+    const actorCapacity = optionalQuestion !== undefined ? questionOrCapacity : undefined;
 
     if (!question || question.trim().length === 0) {
       throw new Error('Clarification question cannot be empty.');
@@ -562,6 +566,7 @@ class PuzzleFeedbackStore {
       feedbackId,
       actorMemberId: actor.id,
       actorDisplayName: actor.displayName,
+      actorCapacity,
       eventType: 'CLARIFICATION_REQUESTED',
       timestamp: now,
       message: question.trim(),

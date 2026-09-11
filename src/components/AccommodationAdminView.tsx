@@ -97,11 +97,8 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
 }) => {
   const [isPuzzleModalOpen, setIsPuzzleModalOpen] = useState(false);
 
-  // Scope mode: if single test responsibility passed, allow toggling between single focus and 24-fellow community
-  const isSingleTestResp = responsibilities.length === 1 && responsibilities[0].id === 'resp-sept-2026';
-  const [scopeMode, setScopeMode] = useState<'ALL_FELLOWS' | 'SINGLE'>(
-    isSingleTestResp ? 'SINGLE' : 'ALL_FELLOWS'
-  );
+  // Scope mode: default to ALL_FELLOWS to present the deterministic 24-fellow community baseline
+  const [scopeMode, setScopeMode] = useState<'ALL_FELLOWS' | 'SINGLE'>('ALL_FELLOWS');
 
   const effectiveResponsibilities =
     scopeMode === 'SINGLE'

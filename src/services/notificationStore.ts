@@ -12,7 +12,7 @@ export interface MemberNotification {
   feedbackId?: string;
   createdAt: string;
   read: boolean;
-  type:
+  type?:
     | 'FEEDBACK_ACKNOWLEDGED'
     | 'CLARIFICATION_REQUESTED'
     | 'STATUS_CHANGED'
@@ -117,13 +117,14 @@ class NotificationStore {
   }
 
   public addNotification(
-    data: Omit<MemberNotification, 'id' | 'createdAt' | 'read'>
+    data: Omit<MemberNotification, 'id' | 'createdAt' | 'read'> & { read?: boolean }
   ): MemberNotification {
     const newNotif: MemberNotification = {
       ...data,
       id: `notif-${Date.now().toString(36)}-${Math.random().toString(36).substring(2, 6)}`,
       createdAt: new Date().toISOString(),
-      read: false,
+      read: data.read ?? false,
+      type: data.type ?? 'SYSTEM',
     };
 
     const list = this.loadForMember(data.memberId);
