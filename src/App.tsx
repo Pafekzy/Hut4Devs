@@ -660,7 +660,7 @@ export default function App() {
             </div>
           </header>
           <main className="max-w-6xl mx-auto p-4 sm:p-6 lg:p-8 space-y-6">
-            <CoordinatorWorkspaceView member={member} activeMode={activeMode} />
+            <CoordinatorWorkspaceView member={member} activeMode={activeMode} isDark={isDark} />
           </main>
         </div>
       )}

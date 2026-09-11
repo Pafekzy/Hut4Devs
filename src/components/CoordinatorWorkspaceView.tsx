@@ -6,6 +6,8 @@ import {
   formatActionAttribution,
 } from '../domain/membership';
 import { membershipStore } from '../services/membershipStore';
+import { puzzleFeedbackStore } from '../services/puzzleFeedbackStore';
+import { CommunityFeedbackTriageView } from './CommunityFeedbackTriageView';
 import {
   Users,
   Check,
@@ -16,21 +18,38 @@ import {
   UserCheck,
   AlertCircle,
   FileText,
+  Puzzle,
 } from 'lucide-react';
 
 interface CoordinatorWorkspaceViewProps {
   member: Member;
   activeMode: ActiveMode;
+  isDark?: boolean;
 }
 
 export const CoordinatorWorkspaceView: React.FC<CoordinatorWorkspaceViewProps> = ({
   member,
   activeMode,
+  isDark = false,
 }) => {
   const [, setTick] = useState(0);
+  const [workspaceDomain, setWorkspaceDomain] = useState<'RESIDENCY' | 'FEEDBACK_TRIAGE'>('RESIDENCY');
+  const [feedbackCount, setFeedbackCount] = useState(puzzleFeedbackStore.getReports().length);
+  const [openFeedbackCount, setOpenFeedbackCount] = useState(
+    puzzleFeedbackStore.getReports().filter((r) => r.status === 'OPEN').length
+  );
 
   useEffect(() => {
-    return membershipStore.subscribe(() => setTick((t) => t + 1));
+    const unsubMembership = membershipStore.subscribe(() => setTick((t) => t + 1));
+    const unsubFeedback = puzzleFeedbackStore.subscribe(() => {
+      const all = puzzleFeedbackStore.getReports();
+      setFeedbackCount(all.length);
+      setOpenFeedbackCount(all.filter((r) => r.status === 'OPEN').length);
+    });
+    return () => {
+      unsubMembership();
+      unsubFeedback();
+    };
   }, []);
 
   const attribution = formatActionAttribution(member, activeMode);
@@ -98,105 +117,159 @@ export const CoordinatorWorkspaceView: React.FC<CoordinatorWorkspaceViewProps> =
 
   return (
     <div id="coordinator-workspace" className="space-y-6">
-      {/* Workspace Header */}
-      <div className="bg-[#FFF9EE] border border-[#C88D3A]/30 rounded-2xl p-6 shadow-xs">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="px-2.5 py-0.5 rounded-md text-[11px] font-bold uppercase tracking-wider bg-[#C88D3A]/20 text-[#5A2D0C]">
-                L2E Accommodation Fellows Coordination
-              </span>
-              {activeMode === 'CAPTAIN_COVERAGE' && (
-                <span className="px-2.5 py-0.5 rounded-md text-[11px] font-bold uppercase tracking-wider bg-amber-500/20 text-amber-900">
-                  Exercising Room Captain Coverage
-                </span>
-              )}
-              {activeMode === 'FINANCIAL_COVERAGE' && (
-                <span className="px-2.5 py-0.5 rounded-md text-[11px] font-bold uppercase tracking-wider bg-blue-500/20 text-blue-900">
-                  Exercising Financial Admin Coverage
-                </span>
-              )}
-            </div>
-            <h1 className="font-serif text-2xl font-bold text-[#5A2D0C] mt-1.5">
-              Membership Approval & Accommodation Scoping
-            </h1>
-            <p className="text-xs text-[#5A2D0C]/70 mt-1">
-              Authoritative review of applicant identities, room allocations, captain delegations, and transfers.
-            </p>
-          </div>
-
-          <div className="text-right text-xs bg-[#F7F1E7] border border-[#5A2D0C]/10 rounded-xl px-4 py-2.5">
-            <span className="text-[#5A2D0C]/60 block text-[10px] uppercase font-semibold">Active Reviewer</span>
-            <span className="font-bold text-[#5A2D0C]">{attribution.displayLabel}</span>
-          </div>
-        </div>
-
-        {/* Attention KPI Cards */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-6">
-          <div
-            onClick={() => setActiveTab('NEEDS_REVIEW')}
-            className={`p-3.5 rounded-xl border cursor-pointer transition-all ${
-              activeTab === 'NEEDS_REVIEW'
-                ? 'bg-[#F7F1E7] border-[#C88D3A] ring-1 ring-[#C88D3A]'
-                : 'bg-white border-[#5A2D0C]/10 hover:border-[#C88D3A]/40'
-            }`}
-          >
-            <div className="text-[11px] font-semibold text-[#5A2D0C]/70 uppercase">Needs Review</div>
-            <div className="text-2xl font-serif font-bold text-[#B77620] mt-1">
+      {/* Coordinator Domain Switcher (Tactile 3D tabs) */}
+      <div className="flex items-center gap-2 border-b border-[#C88D3A]/20 pb-3">
+        <button
+          type="button"
+          id="coordinator-domain-residency-btn"
+          onClick={() => setWorkspaceDomain('RESIDENCY')}
+          className={`px-4 py-2 text-xs font-bold rounded-xl transition-all flex items-center gap-2 cursor-pointer ${
+            workspaceDomain === 'RESIDENCY'
+              ? 'bg-[#5A2D0C] text-white shadow-md'
+              : 'bg-white/80 dark:bg-[#2F1707] text-[#5A2D0C] dark:text-[#FFF9EE] hover:bg-[#F7F1E7] border border-[#5A2D0C]/10'
+          }`}
+        >
+          <Building className="w-3.5 h-3.5 text-[#C88D3A]" />
+          <span>Residency &amp; Room Scoping</span>
+          {needsReviewRequests.length > 0 && (
+            <span className="px-1.5 py-0.2 rounded-full text-[10px] bg-amber-500 text-white font-bold">
               {needsReviewRequests.length}
-            </div>
-            <div className="text-[10px] text-[#5A2D0C]/60 mt-0.5">Awaiting Coordinator decision</div>
-          </div>
+            </span>
+          )}
+        </button>
 
-          <div
-            onClick={() => setActiveTab('DELEGATED')}
-            className={`p-3.5 rounded-xl border cursor-pointer transition-all ${
-              activeTab === 'DELEGATED'
-                ? 'bg-[#F7F1E7] border-[#C88D3A] ring-1 ring-[#C88D3A]'
-                : 'bg-white border-[#5A2D0C]/10 hover:border-[#C88D3A]/40'
-            }`}
-          >
-            <div className="text-[11px] font-semibold text-[#5A2D0C]/70 uppercase">Delegated to Captains</div>
-            <div className="text-2xl font-serif font-bold text-[#5A2D0C] mt-1">
-              {delegatedRequests.length}
-            </div>
-            <div className="text-[10px] text-[#5A2D0C]/60 mt-0.5">Room-level verification</div>
-          </div>
-
-          <div
-            onClick={() => setActiveTab('CLARIFICATION')}
-            className={`p-3.5 rounded-xl border cursor-pointer transition-all ${
-              activeTab === 'CLARIFICATION'
-                ? 'bg-[#F7F1E7] border-[#C88D3A] ring-1 ring-[#C88D3A]'
-                : 'bg-white border-[#5A2D0C]/10 hover:border-[#C88D3A]/40'
-            }`}
-          >
-            <div className="text-[11px] font-semibold text-[#5A2D0C]/70 uppercase">Needs Clarification</div>
-            <div className="text-2xl font-serif font-bold text-amber-700 mt-1">
-              {clarificationRequests.length}
-            </div>
-            <div className="text-[10px] text-[#5A2D0C]/60 mt-0.5">Candidate response pending</div>
-          </div>
-
-          <div
-            onClick={() => setActiveTab('APPROVED')}
-            className={`p-3.5 rounded-xl border cursor-pointer transition-all ${
-              activeTab === 'APPROVED'
-                ? 'bg-[#F7F1E7] border-[#C88D3A] ring-1 ring-[#C88D3A]'
-                : 'bg-white border-[#5A2D0C]/10 hover:border-[#C88D3A]/40'
-            }`}
-          >
-            <div className="text-[11px] font-semibold text-[#5A2D0C]/70 uppercase">Approved Fellows</div>
-            <div className="text-2xl font-serif font-bold text-emerald-700 mt-1">
-              {approvedRequests.length}
-            </div>
-            <div className="text-[10px] text-[#5A2D0C]/60 mt-0.5">Active accommodation assigned</div>
-          </div>
-        </div>
+        <button
+          type="button"
+          id="coordinator-domain-triage-btn"
+          onClick={() => setWorkspaceDomain('FEEDBACK_TRIAGE')}
+          className={`px-4 py-2 text-xs font-bold rounded-xl transition-all flex items-center gap-2 cursor-pointer ${
+            workspaceDomain === 'FEEDBACK_TRIAGE'
+              ? 'bg-[#5A2D0C] text-white shadow-md'
+              : 'bg-white/80 dark:bg-[#2F1707] text-[#5A2D0C] dark:text-[#FFF9EE] hover:bg-[#F7F1E7] border border-[#5A2D0C]/10'
+          }`}
+        >
+          <Puzzle className="w-3.5 h-3.5 text-[#C88D3A]" />
+          <span>Missing Puzzle Triage</span>
+          {openFeedbackCount > 0 ? (
+            <span className="px-1.5 py-0.2 rounded-full text-[10px] bg-[#C88D3A] text-white font-bold animate-pulse">
+              {openFeedbackCount} new
+            </span>
+          ) : (
+            <span className="px-1.5 py-0.2 rounded-full text-[10px] bg-[#5A2D0C]/20 text-[#5A2D0C] dark:text-[#FFF9EE]">
+              {feedbackCount}
+            </span>
+          )}
+        </button>
       </div>
 
-      {/* Accredited Properties Overview */}
-      <div className="bg-white border border-[#5A2D0C]/15 rounded-2xl p-5 shadow-xs">
+      {workspaceDomain === 'FEEDBACK_TRIAGE' ? (
+        <CommunityFeedbackTriageView
+          currentMember={member}
+          activeMode={activeMode}
+          attribution={attribution}
+          isDark={isDark}
+        />
+      ) : (
+        <>
+          {/* Workspace Header */}
+          <div className="bg-[#FFF9EE] border border-[#C88D3A]/30 rounded-2xl p-6 shadow-xs">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="px-2.5 py-0.5 rounded-md text-[11px] font-bold uppercase tracking-wider bg-[#C88D3A]/20 text-[#5A2D0C]">
+                    L2E Accommodation Fellows Coordination
+                  </span>
+                  {activeMode === 'CAPTAIN_COVERAGE' && (
+                    <span className="px-2.5 py-0.5 rounded-md text-[11px] font-bold uppercase tracking-wider bg-amber-500/20 text-amber-900">
+                      Exercising Room Captain Coverage
+                    </span>
+                  )}
+                  {activeMode === 'FINANCIAL_COVERAGE' && (
+                    <span className="px-2.5 py-0.5 rounded-md text-[11px] font-bold uppercase tracking-wider bg-blue-500/20 text-blue-900">
+                      Exercising Financial Admin Coverage
+                    </span>
+                  )}
+                </div>
+                <h1 className="font-serif text-2xl font-bold text-[#5A2D0C] mt-1.5">
+                  Membership Approval &amp; Accommodation Scoping
+                </h1>
+                <p className="text-xs text-[#5A2D0C]/70 mt-1">
+                  Authoritative review of applicant identities, room allocations, captain delegations, and transfers.
+                </p>
+              </div>
+
+              <div className="text-right text-xs bg-[#F7F1E7] border border-[#5A2D0C]/10 rounded-xl px-4 py-2.5">
+                <span className="text-[#5A2D0C]/60 block text-[10px] uppercase font-semibold">Active Reviewer</span>
+                <span className="font-bold text-[#5A2D0C]">{attribution.displayLabel}</span>
+              </div>
+            </div>
+
+            {/* Attention KPI Cards */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-6">
+              <div
+                onClick={() => setActiveTab('NEEDS_REVIEW')}
+                className={`p-3.5 rounded-xl border cursor-pointer transition-all ${
+                  activeTab === 'NEEDS_REVIEW'
+                    ? 'bg-[#F7F1E7] border-[#C88D3A] ring-1 ring-[#C88D3A]'
+                    : 'bg-white border-[#5A2D0C]/10 hover:border-[#C88D3A]/40'
+                }`}
+              >
+                <div className="text-[11px] font-semibold text-[#5A2D0C]/70 uppercase">Needs Review</div>
+                <div className="text-2xl font-serif font-bold text-[#B77620] mt-1">
+                  {needsReviewRequests.length}
+                </div>
+                <div className="text-[10px] text-[#5A2D0C]/60 mt-0.5">Awaiting Coordinator decision</div>
+              </div>
+
+              <div
+                onClick={() => setActiveTab('DELEGATED')}
+                className={`p-3.5 rounded-xl border cursor-pointer transition-all ${
+                  activeTab === 'DELEGATED'
+                    ? 'bg-[#F7F1E7] border-[#C88D3A] ring-1 ring-[#C88D3A]'
+                    : 'bg-white border-[#5A2D0C]/10 hover:border-[#C88D3A]/40'
+                }`}
+              >
+                <div className="text-[11px] font-semibold text-[#5A2D0C]/70 uppercase">Delegated to Captains</div>
+                <div className="text-2xl font-serif font-bold text-[#5A2D0C] mt-1">
+                  {delegatedRequests.length}
+                </div>
+                <div className="text-[10px] text-[#5A2D0C]/60 mt-0.5">Room-level verification</div>
+              </div>
+
+              <div
+                onClick={() => setActiveTab('CLARIFICATION')}
+                className={`p-3.5 rounded-xl border cursor-pointer transition-all ${
+                  activeTab === 'CLARIFICATION'
+                    ? 'bg-[#F7F1E7] border-[#C88D3A] ring-1 ring-[#C88D3A]'
+                    : 'bg-white border-[#5A2D0C]/10 hover:border-[#C88D3A]/40'
+                }`}
+              >
+                <div className="text-[11px] font-semibold text-[#5A2D0C]/70 uppercase">Needs Clarification</div>
+                <div className="text-2xl font-serif font-bold text-amber-700 mt-1">
+                  {clarificationRequests.length}
+                </div>
+                <div className="text-[10px] text-[#5A2D0C]/60 mt-0.5">Candidate response pending</div>
+              </div>
+
+              <div
+                onClick={() => setActiveTab('APPROVED')}
+                className={`p-3.5 rounded-xl border cursor-pointer transition-all ${
+                  activeTab === 'APPROVED'
+                    ? 'bg-[#F7F1E7] border-[#C88D3A] ring-1 ring-[#C88D3A]'
+                    : 'bg-white border-[#5A2D0C]/10 hover:border-[#C88D3A]/40'
+                }`}
+              >
+                <div className="text-[11px] font-semibold text-[#5A2D0C]/70 uppercase">Approved Fellows</div>
+                <div className="text-2xl font-serif font-bold text-emerald-700 mt-1">
+                  {approvedRequests.length}
+                </div>
+                <div className="text-[10px] text-[#5A2D0C]/60 mt-0.5">Active accommodation assigned</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Accredited Properties Overview */}
+          <div className="bg-white border border-[#5A2D0C]/15 rounded-2xl p-5 shadow-xs">
         <h2 className="text-xs font-bold uppercase tracking-wider text-[#5A2D0C]/70 mb-3 flex items-center gap-1.5">
           <Building className="w-4 h-4 text-[#C88D3A]" />
           Accredited Accommodation Properties & Rates
@@ -506,6 +579,8 @@ export const CoordinatorWorkspaceView: React.FC<CoordinatorWorkspaceViewProps> =
             </div>
           </div>
         </div>
+      )}
+        </>
       )}
     </div>
   );

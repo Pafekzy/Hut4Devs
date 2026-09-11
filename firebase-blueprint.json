@@ -100,6 +100,44 @@
         "timestamp": { "type": "string" }
       },
       "required": ["id", "threadId", "authorMemberId", "content", "timestamp"]
+    },
+    "MissingPuzzleFeedback": {
+      "title": "MissingPuzzleFeedback",
+      "description": "Shared community feedback report for product defects, UX improvements, or gaps.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "reporterMemberId": { "type": "string" },
+        "reporterDisplayName": { "type": "string" },
+        "reporterEmail": { "type": "string" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" },
+        "pageContext": { "type": "string" },
+        "routeContext": { "type": "string" },
+        "category": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "puzzleCompleted": { "type": "boolean" },
+        "involvementPreference": { "type": "string" },
+        "status": { "type": "string" },
+        "events": { "type": "array" }
+      },
+      "required": ["id", "reporterMemberId", "reporterDisplayName", "createdAt", "updatedAt", "category", "title", "description", "status"]
+    },
+    "MissingPuzzleEvent": {
+      "title": "MissingPuzzleEvent",
+      "description": "Append-only factual audit trail event for a missing puzzle feedback report.",
+      "type": "object",
+      "properties": {
+        "eventId": { "type": "string" },
+        "feedbackId": { "type": "string" },
+        "actorMemberId": { "type": "string" },
+        "actorDisplayName": { "type": "string" },
+        "eventType": { "type": "string" },
+        "timestamp": { "type": "string" },
+        "message": { "type": "string" }
+      },
+      "required": ["eventId", "feedbackId", "actorMemberId", "actorDisplayName", "eventType", "timestamp"]
     }
   },
   "firestore": {
@@ -126,6 +164,14 @@
     "/responsibilityMessages/{messageId}": {
       "schema": "ResponsibilityMessage",
       "description": "Threaded financial and responsibility notes."
+    },
+    "/puzzleFeedback/{feedbackId}": {
+      "schema": "MissingPuzzleFeedback",
+      "description": "Shared operational feedback reports."
+    },
+    "/puzzleFeedback/{feedbackId}/events/{eventId}": {
+      "schema": "MissingPuzzleEvent",
+      "description": "Append-only factual event history for a feedback report."
     }
   }
 }

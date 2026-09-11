@@ -54,6 +54,22 @@ service cloud.firestore {
       allow read, create: if isAuthenticated();
       allow update, delete: if false;
     }
+
+    // Missing Puzzle Feedback: shared operational persistence
+    // Authenticated fellows can create and inspect reports; Coordinators can triage
+    // Historical audit events are strictly append-only: updates and deletes are permanently forbidden
+    match /puzzleFeedback/{feedbackId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated();
+      allow update: if isAuthenticated();
+      allow delete: if false;
+
+      match /events/{eventId} {
+        allow read: if isAuthenticated();
+        allow create: if isAuthenticated();
+        allow update, delete: if false;
+      }
+    }
   }
 }
 

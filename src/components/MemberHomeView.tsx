@@ -12,6 +12,7 @@ import { TrustTrailFeed } from './TrustTrailFeed';
 import { VouchSection } from './VouchSection';
 import { RecognitionView } from './RecognitionView';
 import { MissingPuzzleModal } from './MissingPuzzleModal';
+import { MemberNotificationsDropdown } from './MemberNotificationsDropdown';
 import { peerSupportStore } from '../services/peerSupportStore';
 import { membershipStore } from '../services/membershipStore';
 import {
@@ -79,6 +80,7 @@ export const MemberHomeView: React.FC<MemberHomeViewProps> = ({
   const [activeTab, setActiveTab] = useState<FellowWorkspaceTab>('accommodation');
   const [showNotes, setShowNotes] = useState(false);
   const [isPuzzleModalOpen, setIsPuzzleModalOpen] = useState(false);
+  const [selectedPuzzleReportId, setSelectedPuzzleReportId] = useState<string | undefined>(undefined);
 
   // Peer support state managed from store
   const [supports, setSupports] = useState<PeerSupportAgreement[]>(() =>
@@ -328,21 +330,15 @@ export const MemberHomeView: React.FC<MemberHomeViewProps> = ({
               <span className="hidden lg:inline">Fix a Puzzle</span>
             </button>
 
-            {/* Notification Bell */}
-            <button
-              type="button"
-              id="header-notifications-btn"
-              aria-label="Notifications"
-              title="Notifications"
-              className={`p-2 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-xl text-xs transition-colors cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C88D3A] ${
-                isDark
-                  ? 'text-[#E5D3BA] hover:text-[#FFF9EE] hover:bg-[#3E200C]'
-                  : 'text-[#6D4223] hover:text-[#5A2D0C] hover:bg-[#EFE5D5]'
-              }`}
-            >
-              <Bell className="w-4 h-4" aria-hidden="true" />
-              <span className="sr-only">Notifications</span>
-            </button>
+            {/* Notification Bell with Live Operational Dropdown */}
+            <MemberNotificationsDropdown
+              memberId={currentMember.id}
+              isDark={isDark}
+              onOpenFeedbackReport={(feedbackId) => {
+                setSelectedPuzzleReportId(feedbackId);
+                setIsPuzzleModalOpen(true);
+              }}
+            />
 
             {/* Messages */}
             <button
@@ -647,10 +643,14 @@ export const MemberHomeView: React.FC<MemberHomeViewProps> = ({
       {/* Missing Puzzle Feedback Flow */}
       <MissingPuzzleModal
         isOpen={isPuzzleModalOpen}
-        onClose={() => setIsPuzzleModalOpen(false)}
+        onClose={() => {
+          setIsPuzzleModalOpen(false);
+          setSelectedPuzzleReportId(undefined);
+        }}
         currentMember={currentMember}
         isDark={isDark}
         defaultLocation="Member Home Workspace"
+        initialReportId={selectedPuzzleReportId}
       />
     </div>
   );
