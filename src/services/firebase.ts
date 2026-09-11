@@ -23,19 +23,22 @@ import {
   Firestore,
 } from 'firebase/firestore';
 
-// Fallback config from generated applet config or environment variables
+import firebaseAppletConfig from '../../firebase-applet-config.json';
+
+// Configuration resolved from environment variables or generated applet config
 const env = (import.meta as any).env || {};
 const firebaseConfig = {
-  apiKey: env.VITE_FIREBASE_API_KEY || 'AIzaSyBqwaA5P-vw_wz-5Cl_hsVv3BPj9r63ueo',
-  authDomain: env.VITE_FIREBASE_AUTH_DOMAIN || 'gen-lang-client-0067439388.firebaseapp.com',
-  projectId: env.VITE_FIREBASE_PROJECT_ID || 'gen-lang-client-0067439388',
-  storageBucket: env.VITE_FIREBASE_STORAGE_BUCKET || 'gen-lang-client-0067439388.firebasestorage.app',
-  messagingSenderId: env.VITE_FIREBASE_MESSAGING_SENDER_ID || '220110410438',
-  appId: env.VITE_FIREBASE_APP_ID || '1:220110410438:web:1fe62e16fc5109c6913dc7',
+  apiKey: env.VITE_FIREBASE_API_KEY || firebaseAppletConfig.apiKey,
+  authDomain: env.VITE_FIREBASE_AUTH_DOMAIN || firebaseAppletConfig.authDomain,
+  projectId: env.VITE_FIREBASE_PROJECT_ID || firebaseAppletConfig.projectId,
+  storageBucket: env.VITE_FIREBASE_STORAGE_BUCKET || firebaseAppletConfig.storageBucket,
+  messagingSenderId: env.VITE_FIREBASE_MESSAGING_SENDER_ID || firebaseAppletConfig.messagingSenderId,
+  appId: env.VITE_FIREBASE_APP_ID || firebaseAppletConfig.appId,
 };
 
 const databaseId =
   env.VITE_FIREBASE_FIRESTORE_DATABASE_ID ||
+  firebaseAppletConfig.firestoreDatabaseId ||
   'ai-studio-hut4devsstudio04-47c40103-27ae-40fc-92e9-f9602dc6f813';
 
 // Initialize Firebase App

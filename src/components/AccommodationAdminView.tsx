@@ -8,7 +8,7 @@ import {
   getStatusLabel,
 } from '../domain/accommodation';
 import { ExternalPaymentProposal } from '../domain/payments';
-import { Member } from '../domain/auth';
+import { Member, MemberRole } from '../domain/auth';
 import { ActiveMode, ScopedRoleAssignment, formatActionAttribution, ACCOMMODATION_PROPERTIES } from '../domain/membership';
 import {
   DEMO_COMMAND_CENTER_RESPONSIBILITIES,
@@ -1097,9 +1097,10 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
           currentMember ||
           ({
             id: 'admin-current',
-            memberId: 'H4D-FIN-ADMIN',
+            h4dMemberId: 'H4D-FIN-ADMIN',
             displayName: 'Accommodation Financial Admin',
-            role: 'ACCOMMODATION_ADMIN' as any,
+            roles: [MemberRole.ACCOMMODATION_ADMIN],
+            createdAt: '2025-01-01T00:00:00.000Z',
           } as Member)
         }
         isDark={isDark}

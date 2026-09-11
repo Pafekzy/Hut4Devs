@@ -20,9 +20,10 @@ import {
 interface TrustTrailFeedProps {
   trailEvents: TrustTrailEvent[];
   availableMembers: Member[];
+  isDark?: boolean;
 }
 
-export const TrustTrailFeed: React.FC<TrustTrailFeedProps> = ({ trailEvents, availableMembers }) => {
+export const TrustTrailFeed: React.FC<TrustTrailFeedProps> = ({ trailEvents, availableMembers, isDark = false }) => {
   const [filterType, setFilterType] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
 
@@ -130,45 +131,45 @@ export const TrustTrailFeed: React.FC<TrustTrailFeedProps> = ({ trailEvents, ava
   return (
     <div className="space-y-6">
       {/* Header Banner */}
-      <div className="bg-white rounded-2xl border border-stone-200/90 p-6 shadow-xs">
+      <div className="bg-white dark:bg-[#241004] rounded-2xl border-2 border-stone-200/90 dark:border-[#C88D3A]/40 p-6 shadow-sm">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-2">
-              <span className="bg-[#FFF9EE] text-[#5A2D0C] border border-[#E7D6C1] text-xs font-semibold px-2.5 py-0.5 rounded-md">
+              <span className="bg-[#FFF9EE] dark:bg-[#1A0A02] text-[#5A2D0C] dark:text-[#C88D3A] border border-[#E7D6C1] dark:border-[#C88D3A]/30 text-xs font-semibold px-2.5 py-0.5 rounded-md shadow-xs">
                 Append-Only Proof of Trust
               </span>
-              <span className="text-xs text-stone-500">Immutable record • Human accountability</span>
+              <span className="text-xs text-stone-500 dark:text-[#D9C4AC]/70">Immutable record • Human accountability</span>
             </div>
-            <h1 className="text-xl font-serif font-bold text-stone-900 mt-1.5">Trails of Trust Ledger</h1>
-            <p className="text-xs text-stone-600 mt-0.5 max-w-2xl leading-relaxed">
+            <h1 className="text-xl font-serif font-bold text-stone-900 dark:text-[#FFF9EE] mt-1.5">Trails of Trust Ledger</h1>
+            <p className="text-xs text-stone-600 dark:text-[#D9C4AC] mt-0.5 max-w-2xl leading-relaxed">
               "People present narratives. The platform preserves facts." Every verified accommodation settlement,
               peer loan, voluntary gift, forgiven balance, and shared contribution creates an immutable trail of dignity and reliability.
             </p>
           </div>
 
-          <div className="flex items-center gap-3 bg-[#FFF9EE] border border-[#E7D6C1] p-3 rounded-xl text-xs text-[#5A2D0C]">
+          <div className="flex items-center gap-3 bg-[#FFF9EE] dark:bg-[#1A0A02] border border-[#E7D6C1] dark:border-[#C88D3A]/30 p-3 rounded-xl text-xs text-[#5A2D0C] dark:text-[#FFF9EE] shadow-xs">
             <Layers className="w-5 h-5 text-[#C88D3A] shrink-0" />
             <div>
               <span className="font-bold block text-sm">{trailEvents.length} Verified Records</span>
-              <span className="text-[11px] opacity-80">Append-only audit trail</span>
+              <span className="text-[11px] opacity-80 dark:text-[#D9C4AC]/80">Append-only audit trail</span>
             </div>
           </div>
         </div>
 
         {/* Filters and Search Bar */}
-        <div className="mt-5 pt-4 border-t border-stone-100 flex flex-col sm:flex-row gap-3">
+        <div className="mt-5 pt-4 border-t border-stone-100 dark:border-[#5A2D0C]/40 flex flex-col sm:flex-row gap-3">
           <div className="relative flex-1">
-            <Search className="w-4 h-4 text-stone-400 absolute left-3 top-2.5" />
+            <Search className="w-4 h-4 text-stone-400 dark:text-[#D9C4AC]/60 absolute left-3 top-2.5" />
             <input
               type="text"
               placeholder="Search by fellow name, evidence hash, or event details..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-4 py-2 text-xs bg-stone-50 border border-stone-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 outline-none transition-all"
+              className="w-full pl-9 pr-4 py-2 text-xs bg-stone-50 dark:bg-[#180A02] border border-stone-200 dark:border-[#C88D3A]/40 rounded-xl focus:bg-white dark:focus:bg-[#140801] focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 outline-none transition-all text-stone-900 dark:text-[#FFF9EE] placeholder:text-stone-400 dark:placeholder:text-[#D9C4AC]/40"
             />
           </div>
 
-          <div className="flex items-center gap-1 bg-stone-100 p-1 rounded-xl border border-stone-200/80 text-xs">
+          <div className="flex items-center gap-1 bg-stone-100 dark:bg-[#1A0A02] p-1 rounded-xl border border-stone-200/80 dark:border-[#C88D3A]/30 text-xs">
             {[
               { id: 'all', label: 'All Records' },
               { id: 'payments', label: 'Settlements' },
@@ -180,8 +181,8 @@ export const TrustTrailFeed: React.FC<TrustTrailFeedProps> = ({ trailEvents, ava
                 onClick={() => setFilterType(tab.id)}
                 className={`px-3 py-1.5 rounded-lg font-medium transition-all cursor-pointer ${
                   filterType === tab.id
-                    ? 'bg-white text-stone-900 shadow-xs font-semibold'
-                    : 'text-stone-600 hover:text-stone-900'
+                    ? 'bg-white dark:bg-[#5A2D0C] text-stone-900 dark:text-[#FFF9EE] shadow-xs font-semibold'
+                    : 'text-stone-600 dark:text-[#D9C4AC] hover:text-stone-900 dark:hover:text-[#FFF9EE]'
                 }`}
               >
                 {tab.label}
@@ -194,7 +195,7 @@ export const TrustTrailFeed: React.FC<TrustTrailFeedProps> = ({ trailEvents, ava
       {/* Events Timeline Feed */}
       <div className="space-y-3">
         {filteredEvents.length === 0 ? (
-          <div className="text-center py-12 text-xs text-stone-400 bg-white rounded-2xl border border-stone-200">
+          <div className="text-center py-12 text-xs text-stone-400 dark:text-[#D9C4AC]/60 bg-white dark:bg-[#241004] rounded-2xl border border-stone-200 dark:border-[#C88D3A]/30">
             No trust trail events matching your search filter.
           </div>
         ) : (
@@ -203,51 +204,51 @@ export const TrustTrailFeed: React.FC<TrustTrailFeedProps> = ({ trailEvents, ava
               <div
                 key={event.id}
                 id={`trail-event-${event.id}`}
-                className="bg-white rounded-2xl p-4 sm:p-5 border border-stone-200/90 hover:border-stone-300 shadow-xs transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+                className="bg-white dark:bg-[#241004] rounded-2xl p-4 sm:p-5 border-2 border-stone-200/90 dark:border-[#C88D3A]/30 hover:border-stone-300 dark:hover:border-[#C88D3A]/60 shadow-xs transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4"
               >
                 <div className="flex items-start gap-3.5">
-                  <div className="p-2.5 bg-stone-50 border border-stone-200 rounded-xl shrink-0 mt-0.5">
+                  <div className="p-2.5 bg-stone-50 dark:bg-[#1A0A02] border border-stone-200 dark:border-[#C88D3A]/30 rounded-xl shrink-0 mt-0.5">
                     {getEventIcon(event.type)}
                   </div>
 
                   <div>
                     <div className="flex flex-wrap items-center gap-2">
-                      <span className="text-[10px] font-bold uppercase tracking-wider bg-stone-100 text-stone-700 px-2 py-0.5 rounded">
+                      <span className="text-[10px] font-bold uppercase tracking-wider bg-stone-100 dark:bg-[#1A0A02] text-stone-700 dark:text-[#D9C4AC] px-2 py-0.5 rounded border border-stone-200/60 dark:border-[#C88D3A]/20">
                         {getEventTypeLabel(event.type)}
                       </span>
-                      <h3 className="font-bold text-sm text-stone-900">{event.title}</h3>
+                      <h3 className="font-bold text-sm text-stone-900 dark:text-[#FFF9EE]">{event.title}</h3>
                     </div>
 
-                    <p className="text-xs text-stone-600 mt-1 leading-relaxed">{event.description}</p>
+                    <p className="text-xs text-stone-600 dark:text-[#D9C4AC] mt-1 leading-relaxed">{event.description}</p>
 
-                    <div className="mt-2.5 flex flex-wrap items-center gap-3 text-[11px] text-stone-400">
+                    <div className="mt-2.5 flex flex-wrap items-center gap-3 text-[11px] text-stone-400 dark:text-[#D9C4AC]/60">
                       <span>
-                        Actor: <strong className="text-stone-700">{event.actorName}</strong>
+                        Actor: <strong className="text-stone-700 dark:text-[#FFF9EE]">{event.actorName}</strong>
                       </span>
                       {event.recipientName && (
                         <>
                           <span>•</span>
                           <span>
-                            Recipient: <strong className="text-stone-700">{event.recipientName}</strong>
+                            Recipient: <strong className="text-stone-700 dark:text-[#FFF9EE]">{event.recipientName}</strong>
                           </span>
                         </>
                       )}
                       <span>•</span>
-                      <span className="font-mono text-stone-500">Ref: {event.evidenceRef}</span>
+                      <span className="font-mono text-stone-500 dark:text-[#C88D3A]">Ref: {event.evidenceRef}</span>
                     </div>
                   </div>
                 </div>
 
-                <div className="sm:text-right shrink-0 border-t sm:border-t-0 pt-2 sm:pt-0 border-stone-100 flex sm:flex-col justify-between items-center sm:items-end">
+                <div className="sm:text-right shrink-0 border-t sm:border-t-0 pt-2 sm:pt-0 border-stone-100 dark:border-[#5A2D0C]/40 flex sm:flex-col justify-between items-center sm:items-end">
                   {event.amount ? (
-                    <span className="text-sm font-bold text-stone-900">
+                    <span className="text-sm font-bold text-stone-900 dark:text-[#FFF9EE]">
                       {event.currency || '₦'}
                       {event.amount.toLocaleString()}
                     </span>
                   ) : (
-                    <span className="text-xs font-medium text-stone-500">Documented</span>
+                    <span className="text-xs font-medium text-stone-500 dark:text-[#D9C4AC]/80">Documented</span>
                   )}
-                  <span className="text-[11px] text-stone-400 mt-0.5">
+                  <span className="text-[11px] text-stone-400 dark:text-[#D9C4AC]/60 mt-0.5">
                     {new Date(event.timestamp).toLocaleDateString()}
                   </span>
                 </div>

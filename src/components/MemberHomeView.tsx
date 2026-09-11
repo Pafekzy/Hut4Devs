@@ -530,11 +530,11 @@ export const MemberHomeView: React.FC<MemberHomeViewProps> = ({
               />
 
               {/* Contextual Financial Notes Toggle & Section */}
-              <div className="bg-white/40 border border-[#C88D3A]/25 rounded-2xl p-4 shadow-xs">
+              <div className="bg-white/60 dark:bg-[#241004]/80 border border-[#C88D3A]/25 dark:border-[#C88D3A]/40 rounded-2xl p-4 shadow-xs">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <MessageSquare className="w-4 h-4 text-[#C88D3A]" />
-                    <span className="font-serif font-bold text-sm text-[#5A2D0C]">
+                    <span className="font-serif font-bold text-sm text-[#5A2D0C] dark:text-[#FFF9EE]">
                       Accommodation Notes &amp; Clarifications
                     </span>
                   </div>
@@ -542,7 +542,7 @@ export const MemberHomeView: React.FC<MemberHomeViewProps> = ({
                     type="button"
                     id="toggle-fellow-notes-thread-btn"
                     onClick={() => setShowNotes(!showNotes)}
-                    className="inline-flex items-center gap-1 text-xs font-semibold text-[#5A2D0C] hover:text-[#B77620] px-3 py-1.5 rounded-xl bg-[#F7F1E7] border border-[#5A2D0C]/10 cursor-pointer"
+                    className="inline-flex items-center gap-1 text-xs font-semibold text-[#5A2D0C] dark:text-[#FFF9EE] hover:text-[#B77620] px-3 py-1.5 rounded-xl bg-[#F7F1E7] dark:bg-[#3D1D08] border border-[#5A2D0C]/10 dark:border-[#C88D3A]/30 cursor-pointer"
                   >
                     <span>{showNotes ? 'Hide Thread' : 'View Notes Thread'}</span>
                     {showNotes ? (
@@ -575,6 +575,7 @@ export const MemberHomeView: React.FC<MemberHomeViewProps> = ({
               currentMember={currentMember}
               availableMembers={availableMembers}
               supports={supports}
+              isDark={isDark}
               onCreateSupport={handleCreateSupport}
               onRecordRepayment={handleRecordRepayment}
               onConvertToGift={handleConvertToGift}
@@ -586,7 +587,7 @@ export const MemberHomeView: React.FC<MemberHomeViewProps> = ({
         {/* TAB 3: TRUST TRAILS */}
         {activeTab === 'trust-trails' && (
           <div className="animate-in fade-in duration-150">
-            <TrustTrailFeed trailEvents={trailEvents} availableMembers={availableMembers} />
+            <TrustTrailFeed trailEvents={trailEvents} availableMembers={availableMembers} isDark={isDark} />
           </div>
         )}
 
@@ -597,6 +598,7 @@ export const MemberHomeView: React.FC<MemberHomeViewProps> = ({
               vouches={vouches}
               availableMembers={availableMembers}
               currentMember={currentMember}
+              isDark={isDark}
               onAddVouch={handleAddVouch}
             />
           </div>
@@ -609,6 +611,7 @@ export const MemberHomeView: React.FC<MemberHomeViewProps> = ({
               recognitions={recognitions}
               availableMembers={availableMembers}
               currentMember={currentMember}
+              isDark={isDark}
             />
           </div>
         )}
