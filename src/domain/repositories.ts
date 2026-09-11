@@ -4,12 +4,14 @@ import {
 } from './accommodation';
 import { ExternalPaymentProposal } from './payments';
 import { IMemberRepository, ISessionRepository } from './auth';
+import { PaymentReconciliationRecord } from './reconciliation';
 
 /**
  * Accommodation Responsibility Repository Interface (H4D-FUNC-008)
  */
 export interface IAccommodationRepository {
   findById(id: string): Promise<AccommodationResponsibility | null>;
+  findByIdForUpdate(id: string): Promise<AccommodationResponsibility | null>;
   save(responsibility: AccommodationResponsibility): Promise<void>;
   listAll(): Promise<AccommodationResponsibility[]>;
 }
@@ -30,6 +32,7 @@ export interface IPaymentIntentRepository {
 export interface IExternalProposalRepository {
   findById(id: string): Promise<ExternalPaymentProposal | null>;
   findByIntentId(intentId: string): Promise<ExternalPaymentProposal | null>;
+  findByProviderProposalId(provider: string, providerProposalId: string): Promise<ExternalPaymentProposal | null>;
   save(proposal: ExternalPaymentProposal): Promise<void>;
   listAll(): Promise<ExternalPaymentProposal[]>;
 }
@@ -102,6 +105,21 @@ export interface IProviderEventRepository {
 }
 
 /**
+ * Payment Reconciliation Repository Interface (H4D-FUNC-013)
+ *
+ * Persists authoritative reconciliation records verifying the complete evidence chain.
+ */
+export interface IPaymentReconciliationRepository {
+  create(record: PaymentReconciliationRecord): Promise<PaymentReconciliationRecord>;
+  findByProviderEventId(provider: string, providerEventId: string): Promise<PaymentReconciliationRecord | null>;
+  findVerifiedByProviderEventId(provider: string, providerEventId: string): Promise<PaymentReconciliationRecord | null>;
+  listByProviderEventId(provider: string, providerEventId: string): Promise<PaymentReconciliationRecord[]>;
+  findById(id: string): Promise<PaymentReconciliationRecord | null>;
+  listByResponsibilityId(responsibilityId: string): Promise<PaymentReconciliationRecord[]>;
+  listAll(): Promise<PaymentReconciliationRecord[]>;
+}
+
+/**
  * Coherent Unit of Work & Transaction Boundary
  */
 export interface IHut4DevsRepositories {
@@ -112,5 +130,6 @@ export interface IHut4DevsRepositories {
   members: IMemberRepository;
   sessions: ISessionRepository;
   providerEvents: IProviderEventRepository;
+  reconciliations: IPaymentReconciliationRepository;
   runInTransaction<T>(fn: (repos: IHut4DevsRepositories) => Promise<T>): Promise<T>;
 }

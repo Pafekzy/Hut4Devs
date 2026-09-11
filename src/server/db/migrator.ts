@@ -123,6 +123,36 @@ CREATE INDEX idx_provider_events_proposal_id ON provider_events(provider_proposa
 CREATE INDEX idx_provider_events_received_at ON provider_events(received_at);
 `;
 
+export const PAYMENT_RECONCILIATIONS_SQL = `
+-- 7. Payment Reconciliations (H4D-FUNC-013)
+CREATE TABLE payment_reconciliations (
+  id VARCHAR(255) PRIMARY KEY,
+  provider_event_id VARCHAR(255) NOT NULL,
+  external_payment_proposal_id VARCHAR(255) REFERENCES external_payment_proposals(id) ON DELETE SET NULL,
+  payment_intent_id VARCHAR(255) REFERENCES payment_intents(id) ON DELETE SET NULL,
+  accommodation_responsibility_id VARCHAR(255) REFERENCES accommodation_responsibilities(id) ON DELETE SET NULL,
+  provider VARCHAR(50) NOT NULL,
+  provider_status VARCHAR(100) NOT NULL,
+  amount NUMERIC(14, 2) NOT NULL DEFAULT 0.00,
+  currency VARCHAR(10) NOT NULL DEFAULT 'NGN',
+  reconciliation_status VARCHAR(50) NOT NULL,
+  reason_code VARCHAR(100) NOT NULL,
+  reconciled_at TIMESTAMPTZ,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+-- Partial unique index: at most ONE VERIFIED reconciliation record per provider event (H4D-FUNC-013 hardening)
+CREATE UNIQUE INDEX uq_payment_reconciliations_verified_event
+ON payment_reconciliations (provider, provider_event_id)
+WHERE reconciliation_status = 'VERIFIED';
+
+CREATE INDEX idx_payment_reconciliations_event ON payment_reconciliations(provider, provider_event_id);
+CREATE INDEX idx_payment_reconciliations_resp ON payment_reconciliations(accommodation_responsibility_id);
+CREATE INDEX idx_payment_reconciliations_status ON payment_reconciliations(reconciliation_status);
+CREATE INDEX idx_external_proposals_provider_proposal ON external_payment_proposals(provider, provider_proposal_id);
+ALTER TABLE external_payment_proposals ADD COLUMN IF NOT EXISTS responsibility_id VARCHAR(255);
+`;
+
 export const MIGRATIONS = [
   {
     version: '001_initial_schema',
@@ -140,6 +170,10 @@ export const MIGRATIONS = [
     version: '004_provider_events',
     sql: PROVIDER_EVENTS_SQL,
   },
+  {
+    version: '005_payment_reconciliations',
+    sql: PAYMENT_RECONCILIATIONS_SQL,
+  },
 ];
 
 export const REQUIRED_TABLES = [
@@ -152,6 +186,7 @@ export const REQUIRED_TABLES = [
   'member_roles',
   'sessions',
   'provider_events',
+  'payment_reconciliations',
 ];
 
 /**
@@ -168,6 +203,16 @@ export async function ensureMigrationTable(client: SqlQueryable): Promise<void> 
         applied_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
       );
     `);
+  }
+}
+
+async function isPgMemClient(client: SqlQueryable): Promise<boolean> {
+  try {
+    const res = await client.query('SELECT version() AS v;');
+    const v = res.rows?.[0]?.v || '';
+    return typeof v === 'string' && v.includes('pg-mem');
+  } catch {
+    return false;
   }
 }
 
@@ -188,7 +233,22 @@ export async function runMigrations(client: SqlQueryable): Promise<string[]> {
         const poolClient = await (client as any).connect();
         try {
           await poolClient.query('BEGIN');
-          await poolClient.query(migration.sql);
+          let sqlToExecute = migration.sql;
+          // PG-MEM LIMITATION: Partial unique indexes (e.g. WHERE reconciliation_status = 'VERIFIED')
+          // are not faithfully emulated by pg-mem; pg-mem mistakenly treats them as unconditional unique indexes across all rows,
+          // which prevents append-oriented history of (MISMATCH -> later VERIFIED).
+          // In real PostgreSQL, the partial unique index is authoritative and executed as written.
+          if (migration.version === '005_payment_reconciliations') {
+            const isPgMem = await isPgMemClient(poolClient);
+            if (isPgMem) {
+              sqlToExecute = sqlToExecute.replace(
+                /CREATE UNIQUE INDEX uq_payment_reconciliations_verified_event\s+ON payment_reconciliations\s*\(provider,\s*provider_event_id\)\s+WHERE reconciliation_status\s*=\s*'VERIFIED';/i,
+                `-- PG-MEM COMPATIBILITY: pg-mem does not support partial unique indexes with WHERE filter. Converted to non-unique index for emulator only.
+CREATE INDEX uq_payment_reconciliations_verified_event ON payment_reconciliations (provider, provider_event_id);`
+              );
+            }
+          }
+          await poolClient.query(sqlToExecute);
           await poolClient.query(
             `INSERT INTO schema_migrations (version, applied_at) VALUES ($1, NOW());`,
             [migration.version]
@@ -204,7 +264,18 @@ export async function runMigrations(client: SqlQueryable): Promise<string[]> {
       } else {
         await client.query('BEGIN');
         try {
-          await client.query(migration.sql);
+          let sqlToExecute = migration.sql;
+          if (migration.version === '005_payment_reconciliations') {
+            const isPgMem = await isPgMemClient(client);
+            if (isPgMem) {
+              sqlToExecute = sqlToExecute.replace(
+                /CREATE UNIQUE INDEX uq_payment_reconciliations_verified_event\s+ON payment_reconciliations\s*\(provider,\s*provider_event_id\)\s+WHERE reconciliation_status\s*=\s*'VERIFIED';/i,
+                `-- PG-MEM COMPATIBILITY: pg-mem does not support partial unique indexes with WHERE filter. Converted to non-unique index for emulator only.
+CREATE INDEX uq_payment_reconciliations_verified_event ON payment_reconciliations (provider, provider_event_id);`
+              );
+            }
+          }
+          await client.query(sqlToExecute);
           await client.query(
             `INSERT INTO schema_migrations (version, applied_at) VALUES ($1, NOW());`,
             [migration.version]

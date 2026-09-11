@@ -21,8 +21,10 @@ import {
   OutboxEventRecord,
   ProviderEventRecord,
   IProviderEventRepository,
+  IPaymentReconciliationRepository,
   IHut4DevsRepositories,
 } from '../../domain/repositories';
+import { PaymentReconciliationRecord } from '../../domain/reconciliation';
 import { SqlQueryable } from './migrator';
 import { Pool, PoolClient } from 'pg';
 
@@ -32,6 +34,15 @@ export class PostgresAccommodationRepository implements IAccommodationRepository
   async findById(id: string): Promise<AccommodationResponsibility | null> {
     const res = await this.client.query(
       'SELECT * FROM accommodation_responsibilities WHERE id = $1',
+      [id]
+    );
+    if (res.rows.length === 0) return null;
+    return this.mapRowToResponsibility(res.rows[0]);
+  }
+
+  async findByIdForUpdate(id: string): Promise<AccommodationResponsibility | null> {
+    const res = await this.client.query(
+      'SELECT * FROM accommodation_responsibilities WHERE id = $1 FOR UPDATE',
       [id]
     );
     if (res.rows.length === 0) return null;
@@ -167,36 +178,32 @@ export class PostgresPaymentIntentRepository implements IPaymentIntentRepository
   }
 
   async save(intent: AccommodationPaymentIntent): Promise<void> {
-    // Foreign key validation: responsibility must exist
-    const respCheck = await this.client.query(
-      'SELECT id FROM accommodation_responsibilities WHERE id = $1',
-      [intent.responsibilityId]
-    );
-    if (respCheck.rows.length === 0) {
-      throw new Error(
-        `Foreign key violation: accommodation responsibility "${intent.responsibilityId}" does not exist.`
+    try {
+      await this.client.query(
+        `
+        INSERT INTO payment_intents (
+          id, responsibility_id, amount, fulfilment_type, status, created_at
+        ) VALUES ($1, $2, $3, $4, $5, $6)
+        ON CONFLICT (id) DO UPDATE SET
+          amount = EXCLUDED.amount,
+          fulfilment_type = EXCLUDED.fulfilment_type,
+          status = EXCLUDED.status
+        `,
+        [
+          intent.id,
+          intent.responsibilityId,
+          intent.amount,
+          intent.fulfilmentType,
+          intent.status || PaymentIntentStatus.PREPARED,
+          intent.createdAt || new Date().toISOString(),
+        ]
       );
+    } catch (err: any) {
+      if (err?.code === '23503' || String(err?.message || '').toLowerCase().includes('foreign key')) {
+        throw new Error(`Foreign key violation: ${err.message}`);
+      }
+      throw err;
     }
-
-    await this.client.query(
-      `
-      INSERT INTO payment_intents (
-        id, responsibility_id, amount, fulfilment_type, status, created_at
-      ) VALUES ($1, $2, $3, $4, $5, $6)
-      ON CONFLICT (id) DO UPDATE SET
-        amount = EXCLUDED.amount,
-        fulfilment_type = EXCLUDED.fulfilment_type,
-        status = EXCLUDED.status
-      `,
-      [
-        intent.id,
-        intent.responsibilityId,
-        intent.amount,
-        intent.fulfilmentType,
-        intent.status || PaymentIntentStatus.PREPARED,
-        intent.createdAt || new Date().toISOString(),
-      ]
-    );
   }
 
   async listAll(): Promise<AccommodationPaymentIntent[]> {
@@ -222,10 +229,10 @@ export class PostgresExternalProposalRepository implements IExternalProposalRepo
   async findById(id: string): Promise<ExternalPaymentProposal | null> {
     const res = await this.client.query(
       `
-      SELECT p.*, i.responsibility_id, i.amount, r.currency
+      SELECT p.*, COALESCE(p.responsibility_id, i.responsibility_id) AS responsibility_id, i.amount, r.currency
       FROM external_payment_proposals p
-      JOIN payment_intents i ON p.payment_intent_id = i.id
-      JOIN accommodation_responsibilities r ON i.responsibility_id = r.id
+      LEFT JOIN payment_intents i ON p.payment_intent_id = i.id
+      LEFT JOIN accommodation_responsibilities r ON i.responsibility_id = r.id
       WHERE p.id = $1
       `,
       [id]
@@ -237,7 +244,7 @@ export class PostgresExternalProposalRepository implements IExternalProposalRepo
   async findByIntentId(intentId: string): Promise<ExternalPaymentProposal | null> {
     const res = await this.client.query(
       `
-      SELECT p.*, i.responsibility_id, i.amount, r.currency
+      SELECT p.*, COALESCE(p.responsibility_id, i.responsibility_id) AS responsibility_id, i.amount, r.currency
       FROM external_payment_proposals p
       JOIN payment_intents i ON p.payment_intent_id = i.id
       JOIN accommodation_responsibilities r ON i.responsibility_id = r.id
@@ -251,49 +258,64 @@ export class PostgresExternalProposalRepository implements IExternalProposalRepo
     return this.mapRowToProposal(res.rows[0]);
   }
 
-  async save(proposal: ExternalPaymentProposal): Promise<void> {
-    // Foreign key validation: payment intent must exist
-    const intentCheck = await this.client.query(
-      'SELECT id FROM payment_intents WHERE id = $1',
-      [proposal.paymentIntentId]
-    );
-    if (intentCheck.rows.length === 0) {
-      throw new Error(
-        `Foreign key violation: payment intent "${proposal.paymentIntentId}" does not exist.`
-      );
-    }
-
-    await this.client.query(
+  async findByProviderProposalId(provider: string, providerProposalId: string): Promise<ExternalPaymentProposal | null> {
+    const res = await this.client.query(
       `
-      INSERT INTO external_payment_proposals (
-        id, payment_intent_id, provider, provider_proposal_id,
-        provider_status, is_simulated, created_at
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7)
-      ON CONFLICT (id) DO UPDATE SET
-        provider = EXCLUDED.provider,
-        provider_proposal_id = EXCLUDED.provider_proposal_id,
-        provider_status = EXCLUDED.provider_status,
-        is_simulated = EXCLUDED.is_simulated
+      SELECT p.*, COALESCE(p.responsibility_id, i.responsibility_id) AS responsibility_id, i.amount, r.currency
+      FROM external_payment_proposals p
+      LEFT JOIN payment_intents i ON p.payment_intent_id = i.id
+      LEFT JOIN accommodation_responsibilities r ON i.responsibility_id = r.id
+      WHERE p.provider = $1 AND p.provider_proposal_id = $2
+      ORDER BY p.created_at DESC
+      LIMIT 1
       `,
-      [
-        proposal.id,
-        proposal.paymentIntentId,
-        proposal.provider,
-        proposal.providerProposalId,
-        proposal.providerStatus,
-        Boolean(proposal.isSimulated),
-        proposal.createdAt || new Date().toISOString(),
-      ]
+      [provider, providerProposalId]
     );
+    if (res.rows.length === 0) return null;
+    return this.mapRowToProposal(res.rows[0]);
+  }
+
+  async save(proposal: ExternalPaymentProposal): Promise<void> {
+    try {
+      await this.client.query(
+        `
+        INSERT INTO external_payment_proposals (
+          id, payment_intent_id, provider, provider_proposal_id,
+          provider_status, is_simulated, created_at, responsibility_id
+        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+        ON CONFLICT (id) DO UPDATE SET
+          provider = EXCLUDED.provider,
+          provider_proposal_id = EXCLUDED.provider_proposal_id,
+          provider_status = EXCLUDED.provider_status,
+          is_simulated = EXCLUDED.is_simulated,
+          responsibility_id = EXCLUDED.responsibility_id
+        `,
+        [
+          proposal.id,
+          proposal.paymentIntentId,
+          proposal.provider,
+          proposal.providerProposalId,
+          proposal.providerStatus,
+          Boolean(proposal.isSimulated),
+          proposal.createdAt || new Date().toISOString(),
+          proposal.responsibilityId || null,
+        ]
+      );
+    } catch (err: any) {
+      if (err?.code === '23503' || String(err?.message || '').toLowerCase().includes('foreign key')) {
+        throw new Error(`Foreign key violation: ${err.message}`);
+      }
+      throw err;
+    }
   }
 
   async listAll(): Promise<ExternalPaymentProposal[]> {
     const res = await this.client.query(
       `
-      SELECT p.*, i.responsibility_id, i.amount, r.currency
+      SELECT p.*, COALESCE(p.responsibility_id, i.responsibility_id) AS responsibility_id, i.amount, r.currency
       FROM external_payment_proposals p
-      JOIN payment_intents i ON p.payment_intent_id = i.id
-      JOIN accommodation_responsibilities r ON i.responsibility_id = r.id
+      LEFT JOIN payment_intents i ON p.payment_intent_id = i.id
+      LEFT JOIN accommodation_responsibilities r ON i.responsibility_id = r.id
       ORDER BY p.created_at ASC
       `
     );
@@ -714,6 +736,114 @@ export class PostgresProviderEventRepository implements IProviderEventRepository
   }
 }
 
+export class PostgresReconciliationRepository implements IPaymentReconciliationRepository {
+  constructor(private client: SqlQueryable) {}
+
+  async create(record: PaymentReconciliationRecord): Promise<PaymentReconciliationRecord> {
+    await this.client.query(
+      `
+      INSERT INTO payment_reconciliations (
+        id, provider_event_id, external_payment_proposal_id, payment_intent_id,
+        accommodation_responsibility_id, provider, provider_status, amount,
+        currency, reconciliation_status, reason_code, reconciled_at, created_at
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
+      `,
+      [
+        record.id,
+        record.providerEventId,
+        record.externalPaymentProposalId || null,
+        record.paymentIntentId || null,
+        record.accommodationResponsibilityId || null,
+        record.provider,
+        record.providerStatus,
+        record.amount,
+        record.currency,
+        record.reconciliationStatus,
+        record.reasonCode,
+        record.reconciledAt || null,
+        record.createdAt || new Date().toISOString(),
+      ]
+    );
+    return record;
+  }
+
+  async findByProviderEventId(provider: string, providerEventId: string): Promise<PaymentReconciliationRecord | null> {
+    // Return VERIFIED record if present, else return the latest attempt
+    const res = await this.client.query(
+      `SELECT * FROM payment_reconciliations
+       WHERE provider = $1 AND provider_event_id = $2
+       ORDER BY CASE WHEN reconciliation_status = 'VERIFIED' THEN 1 ELSE 2 END ASC, created_at DESC
+       LIMIT 1`,
+      [provider, providerEventId]
+    );
+    if (res.rows.length === 0) return null;
+    return this.mapRowToReconciliation(res.rows[0]);
+  }
+
+  async findVerifiedByProviderEventId(provider: string, providerEventId: string): Promise<PaymentReconciliationRecord | null> {
+    const res = await this.client.query(
+      `SELECT * FROM payment_reconciliations
+       WHERE provider = $1 AND provider_event_id = $2 AND reconciliation_status = 'VERIFIED'
+       LIMIT 1`,
+      [provider, providerEventId]
+    );
+    if (res.rows.length === 0) return null;
+    return this.mapRowToReconciliation(res.rows[0]);
+  }
+
+  async listByProviderEventId(provider: string, providerEventId: string): Promise<PaymentReconciliationRecord[]> {
+    const res = await this.client.query(
+      `SELECT * FROM payment_reconciliations
+       WHERE provider = $1 AND provider_event_id = $2
+       ORDER BY created_at ASC`,
+      [provider, providerEventId]
+    );
+    return res.rows.map((r) => this.mapRowToReconciliation(r));
+  }
+
+  async findById(id: string): Promise<PaymentReconciliationRecord | null> {
+    const res = await this.client.query(
+      `SELECT * FROM payment_reconciliations WHERE id = $1`,
+      [id]
+    );
+    if (res.rows.length === 0) return null;
+    return this.mapRowToReconciliation(res.rows[0]);
+  }
+
+  async listByResponsibilityId(responsibilityId: string): Promise<PaymentReconciliationRecord[]> {
+    const res = await this.client.query(
+      `SELECT * FROM payment_reconciliations WHERE accommodation_responsibility_id = $1 ORDER BY created_at DESC`,
+      [responsibilityId]
+    );
+    return res.rows.map((r) => this.mapRowToReconciliation(r));
+  }
+
+  async listAll(): Promise<PaymentReconciliationRecord[]> {
+    const res = await this.client.query(
+      `SELECT * FROM payment_reconciliations ORDER BY created_at DESC`
+    );
+    return res.rows.map((r) => this.mapRowToReconciliation(r));
+  }
+
+  private mapRowToReconciliation(row: any): PaymentReconciliationRecord {
+    return {
+      id: row.id,
+      providerEventId: row.provider_event_id,
+      externalPaymentProposalId: row.external_payment_proposal_id,
+      paymentIntentId: row.payment_intent_id,
+      accommodationResponsibilityId: row.accommodation_responsibility_id,
+      provider: row.provider,
+      providerStatus: row.provider_status,
+      amount: Number(row.amount),
+      currency: row.currency,
+      reconciliationStatus: row.reconciliation_status,
+      reasonCode: row.reason_code,
+      reconciledAt: row.reconciled_at ? (row.reconciled_at instanceof Date ? row.reconciled_at.toISOString() : String(row.reconciled_at)) : null,
+      createdAt: row.created_at instanceof Date ? row.created_at.toISOString() : String(row.created_at),
+    };
+  }
+}
+
 /**
  * Top-level PostgreSQL Repositories Coordinator
  */
@@ -725,6 +855,7 @@ export class PostgresRepositories implements IHut4DevsRepositories {
   members: IMemberRepository;
   sessions: ISessionRepository;
   providerEvents: IProviderEventRepository;
+  reconciliations: IPaymentReconciliationRepository;
 
   constructor(private poolOrClient: Pool | PoolClient | SqlQueryable) {
     this.accommodation = new PostgresAccommodationRepository(this.poolOrClient);
@@ -734,6 +865,7 @@ export class PostgresRepositories implements IHut4DevsRepositories {
     this.members = new PostgresMemberRepository(this.poolOrClient);
     this.sessions = new PostgresSessionRepository(this.poolOrClient);
     this.providerEvents = new PostgresProviderEventRepository(this.poolOrClient);
+    this.reconciliations = new PostgresReconciliationRepository(this.poolOrClient);
   }
 
   async runInTransaction<T>(fn: (repos: IHut4DevsRepositories) => Promise<T>): Promise<T> {

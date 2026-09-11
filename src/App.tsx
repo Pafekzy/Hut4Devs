@@ -16,6 +16,8 @@ import {
   savePaymentIntent,
   subscribeToAdminStream,
   fetchAdminProviderEvents,
+  fetchAdminReconciliations,
+  triggerAdminReconcile,
 } from './services/paymentClient';
 import {
   establishDevSession,
@@ -59,6 +61,9 @@ export default function App() {
 
   // Ingested provider events (H4D-FUNC-012) - Authoritative PostgreSQL store
   const [providerEvents, setProviderEvents] = useState<AdminProviderEventDisplay[]>([]);
+
+  // Authoritative payment reconciliations (H4D-FUNC-013) - Authoritative PostgreSQL store
+  const [reconciliations, setReconciliations] = useState<any[]>([]);
 
   // Truthful error state if database is unavailable
   const [dbError, setDbError] = useState<string | null>(null);
@@ -183,6 +188,26 @@ export default function App() {
               return [incomingEvt, ...prev];
             });
           }
+        } else if (event.eventType === 'accommodation.payment.reconciled') {
+          const payload = event.data?.payload || event.data;
+          if (payload) {
+            setResponsibility((prev) => ({
+              ...prev,
+              verifiedAmount: Number(payload.verifiedAmount),
+              status: payload.status,
+            }));
+            fetchAdminReconciliations().then((recRes) => {
+              if (recRes.success && Array.isArray(recRes.reconciliations)) {
+                setReconciliations(recRes.reconciliations);
+              }
+            }).catch(() => {});
+          }
+        } else if (event.eventType === 'accommodation.reconciliation.mismatch') {
+          fetchAdminReconciliations().then((recRes) => {
+            if (recRes.success && Array.isArray(recRes.reconciliations)) {
+              setReconciliations(recRes.reconciliations);
+            }
+          }).catch(() => {});
         }
       },
       (status) => {
@@ -222,9 +247,31 @@ export default function App() {
                 }
               })
               .catch(() => {});
+            fetchAdminReconciliations()
+              .then((recRes) => {
+                if (recRes.success && Array.isArray(recRes.reconciliations)) {
+                  setReconciliations(recRes.reconciliations);
+                }
+              })
+              .catch(() => {});
           }
         })
         .catch(() => {});
+    }
+  };
+
+  const handleReconcileEvent = async (providerEventId: string) => {
+    const res = await triggerAdminReconcile(providerEventId);
+    if (res.success) {
+      // Re-fetch responsibility and reconciliations
+      const st = await fetchAccommodationState();
+      if (st.success && st.responsibility) {
+        setResponsibility(st.responsibility);
+      }
+      const recs = await fetchAdminReconciliations();
+      if (recs.success && Array.isArray(recs.reconciliations)) {
+        setReconciliations(recs.reconciliations);
+      }
     }
   };
 
@@ -354,7 +401,9 @@ export default function App() {
           paymentProposals={paymentProposals}
           preparedIntents={preparedIntents}
           providerEvents={providerEvents}
+          reconciliations={reconciliations}
           streamStatus={streamStatus}
+          onReconcileEvent={handleReconcileEvent}
         />
       )}
     </div>

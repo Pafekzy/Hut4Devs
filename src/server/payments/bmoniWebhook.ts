@@ -8,6 +8,7 @@ import {
 } from '../../domain/repositories';
 import { OutboxPublisher } from '../realtime/outboxPublisher';
 import { DEMO_ACCOMMODATION_RESPONSIBILITY } from '../../data/demoAccommodation';
+import { reconciliationEngine } from './reconciliationEngine';
 
 export interface NormalizedBmoniEvent {
   provider: 'BMONI';
@@ -456,7 +457,19 @@ export async function handleBmoniWebhookRequest(
         publisher.publish(outboxEvent);
       }
 
-      // 10. Acknowledge Durable Ingestion
+      // 10. Automatically run reconciliation engine on the ingested provider event
+      let reconciliationResult: any = null;
+      try {
+        reconciliationResult = await reconciliationEngine.reconcileProviderEvent(
+          providerEventRecord,
+          repos,
+          publisher
+        );
+      } catch (recErr) {
+        console.error('[BMONI Webhook] Automated reconciliation encountered error:', recErr);
+      }
+
+      // 11. Acknowledge Durable Ingestion
       res.statusCode = 200;
       res.setHeader('Content-Type', 'application/json; charset=utf-8');
       res.setHeader('X-Content-Type-Options', 'nosniff');
@@ -469,7 +482,10 @@ export async function handleBmoniWebhookRequest(
           providerEventId: providerEventRecord.providerEventId,
           eventType: providerEventRecord.eventType,
           providerStatus: providerEventRecord.providerStatus,
-          notice: 'Provider event recorded. Awaiting future reconciliation.',
+          notice: reconciliationResult?.success
+            ? 'Provider event recorded and verified via reconciliation.'
+            : 'Provider event recorded. Awaiting future reconciliation.',
+          reconciliation: reconciliationResult,
         })
       );
     } catch (err: any) {
