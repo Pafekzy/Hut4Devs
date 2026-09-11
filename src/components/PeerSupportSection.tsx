@@ -127,28 +127,28 @@ export const PeerSupportSection: React.FC<PeerSupportSectionProps> = ({
         {/* 1. GIFT Card */}
         <div
           id="card-action-gift"
-          className="bg-emerald-50/70 border border-emerald-200/80 rounded-2xl p-5 flex flex-col justify-between hover:shadow-md transition-all group"
+          className="bg-[#FFF9EE] border-2 border-[#5A2D0C]/15 dark:bg-[#3E200C] dark:border-[#C88D3A]/30 rounded-2xl p-5 flex flex-col justify-between hover:shadow-md transition-all group"
         >
           <div>
             <div className="flex items-center justify-between mb-2">
-              <div className="p-2 bg-emerald-100 text-emerald-800 rounded-xl">
-                <Gift className="w-5 h-5 text-emerald-700" />
+              <div className="p-2 bg-purple-100 text-purple-900 border border-purple-200/80 rounded-xl">
+                <Gift className="w-5 h-5 text-purple-800" />
               </div>
-              <span className="text-[10px] font-bold text-emerald-800 bg-emerald-100/60 px-2 py-0.5 rounded-full uppercase tracking-wider">
-                Voluntary
+              <span className="text-[10px] font-bold text-purple-900 bg-purple-100/80 border border-purple-200/60 px-2 py-0.5 rounded-full uppercase tracking-wider">
+                Voluntary &bull; No Debt
               </span>
             </div>
-            <h3 className="font-serif font-bold text-stone-900 text-base">1. Give a Gift</h3>
-            <p className="text-stone-600 text-xs mt-1.5 leading-relaxed">
+            <h3 className="font-serif font-bold text-[#5A2D0C] dark:text-[#FFF9EE] text-base">1. Give a Gift</h3>
+            <p className="text-stone-600 dark:text-[#D9C4AC] text-xs mt-1.5 leading-relaxed">
               Support a fellow with zero expectation of repayment. Gifts cannot be weaponized or converted into debt later.
             </p>
           </div>
           <button
             id="btn-open-gift-modal"
             onClick={() => handleOpenCreate('gift')}
-            className="mt-4 w-full py-2 px-3 bg-emerald-700 hover:bg-emerald-800 text-white rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 shadow-xs transition-colors cursor-pointer"
+            className="mt-4 w-full py-2.5 px-3 bg-[#5A2D0C] hover:bg-[#723B12] text-[#FFF9EE] border-b-2 border-[#3E200C] rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 shadow-xs transition-all duration-150 hover:-translate-y-0.5 active:translate-y-0.5 cursor-pointer"
           >
-            <Plus className="w-3.5 h-3.5" />
+            <Plus className="w-3.5 h-3.5 text-[#C88D3A]" />
             Initiate Gift
           </button>
         </div>
@@ -156,28 +156,28 @@ export const PeerSupportSection: React.FC<PeerSupportSectionProps> = ({
         {/* 2. LEND / BORROW Card */}
         <div
           id="card-action-loan"
-          className="bg-blue-50/70 border border-blue-200/80 rounded-2xl p-5 flex flex-col justify-between hover:shadow-md transition-all group"
+          className="bg-[#FFF9EE] border-2 border-[#5A2D0C]/15 dark:bg-[#3E200C] dark:border-[#C88D3A]/30 rounded-2xl p-5 flex flex-col justify-between hover:shadow-md transition-all group"
         >
           <div>
             <div className="flex items-center justify-between mb-2">
-              <div className="p-2 bg-blue-100 text-blue-800 rounded-xl">
-                <HandCoins className="w-5 h-5 text-blue-700" />
+              <div className="p-2 bg-amber-100 text-amber-900 border border-amber-200/80 rounded-xl">
+                <HandCoins className="w-5 h-5 text-amber-800" />
               </div>
-              <span className="text-[10px] font-bold text-blue-800 bg-blue-100/60 px-2 py-0.5 rounded-full uppercase tracking-wider">
-                Clear Terms
+              <span className="text-[10px] font-bold text-amber-900 bg-amber-100/80 border border-amber-200/60 px-2 py-0.5 rounded-full uppercase tracking-wider">
+                Clear Timelines
               </span>
             </div>
-            <h3 className="font-serif font-bold text-stone-900 text-base">2. Lend or Borrow</h3>
-            <p className="text-stone-600 text-xs mt-1.5 leading-relaxed">
+            <h3 className="font-serif font-bold text-[#5A2D0C] dark:text-[#FFF9EE] text-base">2. Lend or Borrow</h3>
+            <p className="text-stone-600 dark:text-[#D9C4AC] text-xs mt-1.5 leading-relaxed">
               Coordinate direct peer loans with clear timelines. Lenders can later permanently forgive debt into a gift.
             </p>
           </div>
           <button
             id="btn-open-loan-modal"
             onClick={() => handleOpenCreate('loan')}
-            className="mt-4 w-full py-2 px-3 bg-blue-700 hover:bg-blue-800 text-white rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 shadow-xs transition-colors cursor-pointer"
+            className="mt-4 w-full py-2.5 px-3 bg-[#5A2D0C] hover:bg-[#723B12] text-[#FFF9EE] border-b-2 border-[#3E200C] rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 shadow-xs transition-all duration-150 hover:-translate-y-0.5 active:translate-y-0.5 cursor-pointer"
           >
-            <Plus className="w-3.5 h-3.5" />
+            <Plus className="w-3.5 h-3.5 text-[#C88D3A]" />
             Initiate Peer Loan
           </button>
         </div>
@@ -185,35 +185,35 @@ export const PeerSupportSection: React.FC<PeerSupportSectionProps> = ({
         {/* 3. CONTRIBUTE Card */}
         <div
           id="card-action-contrib"
-          className="bg-purple-50/70 border border-purple-200/80 rounded-2xl p-5 flex flex-col justify-between hover:shadow-md transition-all group"
+          className="bg-[#FFF9EE] border-2 border-[#5A2D0C]/15 dark:bg-[#3E200C] dark:border-[#C88D3A]/30 rounded-2xl p-5 flex flex-col justify-between hover:shadow-md transition-all group"
         >
           <div>
             <div className="flex items-center justify-between mb-2">
-              <div className="p-2 bg-purple-100 text-purple-800 rounded-xl">
-                <HeartHandshake className="w-5 h-5 text-purple-700" />
+              <div className="p-2 bg-emerald-100 text-emerald-900 border border-emerald-200/80 rounded-xl">
+                <HeartHandshake className="w-5 h-5 text-emerald-800" />
               </div>
-              <span className="text-[10px] font-bold text-purple-800 bg-purple-100/60 px-2 py-0.5 rounded-full uppercase tracking-wider">
-                Communal
+              <span className="text-[10px] font-bold text-emerald-900 bg-emerald-100/80 border border-emerald-200/60 px-2 py-0.5 rounded-full uppercase tracking-wider">
+                Shared Essentials
               </span>
             </div>
-            <h3 className="font-serif font-bold text-stone-900 text-base">3. Chamber Contribution</h3>
-            <p className="text-stone-600 text-xs mt-1.5 leading-relaxed">
+            <h3 className="font-serif font-bold text-[#5A2D0C] dark:text-[#FFF9EE] text-base">3. Chamber Contribution</h3>
+            <p className="text-stone-600 dark:text-[#D9C4AC] text-xs mt-1.5 leading-relaxed">
               Pool mutual resources for shared chamber necessities (solar inverters, mesh Wi-Fi) without social debt.
             </p>
           </div>
           <button
             id="btn-open-contrib-modal"
             onClick={() => handleOpenCreate('contribution')}
-            className="mt-4 w-full py-2 px-3 bg-purple-700 hover:bg-purple-800 text-white rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 shadow-xs transition-colors cursor-pointer"
+            className="mt-4 w-full py-2.5 px-3 bg-[#5A2D0C] hover:bg-[#723B12] text-[#FFF9EE] border-b-2 border-[#3E200C] rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 shadow-xs transition-all duration-150 hover:-translate-y-0.5 active:translate-y-0.5 cursor-pointer"
           >
-            <Plus className="w-3.5 h-3.5" />
+            <Plus className="w-3.5 h-3.5 text-[#C88D3A]" />
             Create Shared Campaign
           </button>
         </div>
       </div>
 
       {/* Main List Section with Filters */}
-      <div className="bg-white rounded-2xl border border-stone-200/90 p-6 shadow-xs">
+      <div className="bg-[#FFFDF9] dark:bg-[#3A1E0B] rounded-2xl border-2 border-[#5A2D0C]/15 dark:border-[#C88D3A]/25 p-6 shadow-xs">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 pb-4 border-b border-stone-100">
           <div>
             <h2 className="font-serif font-bold text-stone-900 text-lg">Active Agreements &amp; Campaigns</h2>

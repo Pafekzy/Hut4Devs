@@ -179,10 +179,10 @@ export const FulfilmentFlow: React.FC<FulfilmentFlowProps> = ({
       }}
     >
       <div
-        className="w-full max-w-xl rounded-2xl p-6 sm:p-8 border shadow-2xl transition-colors duration-200 relative animate-in fade-in zoom-in-95 duration-150"
+        className="w-full max-w-xl rounded-2xl p-6 sm:p-8 border-2 shadow-2xl transition-colors duration-200 relative animate-in fade-in zoom-in-95 duration-150"
         style={{
           backgroundColor: isDark ? '#3E200C' : '#FFF9EE',
-          borderColor: isDark ? '#623416' : '#EAE0D0',
+          borderColor: isDark ? '#C88D3A' : '#5A2D0C',
           color: isDark ? '#FFF9EE' : '#5A2D0C',
         }}
       >
@@ -681,11 +681,11 @@ export const FulfilmentFlow: React.FC<FulfilmentFlowProps> = ({
                 id="continue-with-bmoni-btn"
                 disabled={isBmoniLoading}
                 onClick={handleContinueWithBmoni}
-                className={`w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 min-h-[44px] rounded-xl text-sm font-semibold transition-all cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 ${
+                className={`w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 min-h-[44px] rounded-xl text-sm font-bold border-b-4 shadow-md transition-all duration-150 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 ${
                   isDark
-                    ? 'bg-[#C88D3A] text-[#2F1707] hover:bg-[#DDA250] focus-visible:ring-[#C88D3A]'
-                    : 'bg-[#5A2D0C] text-[#FFF9EE] hover:bg-[#432108] focus-visible:ring-[#5A2D0C]'
-                } ${isBmoniLoading ? 'opacity-60 cursor-not-allowed' : ''}`}
+                    ? 'bg-[#2563EB] text-white border-[#1E3A8A] hover:bg-[#3B82F6] hover:shadow-[0_8px_25px_rgba(59,130,246,0.5)] hover:-translate-y-[2px] active:translate-y-[1px] active:border-b-0 active:shadow-xs focus-visible:ring-[#3B82F6]'
+                    : 'bg-[#1D4ED8] text-white border-[#172554] hover:bg-[#2563EB] hover:shadow-[0_8px_25px_rgba(37,99,235,0.45)] hover:-translate-y-[2px] active:translate-y-[1px] active:border-b-0 active:shadow-xs focus-visible:ring-[#1D4ED8]'
+                } ${isBmoniLoading ? 'opacity-60 cursor-not-allowed pointer-events-none' : ''}`}
               >
                 {isBmoniLoading ? (
                   <>

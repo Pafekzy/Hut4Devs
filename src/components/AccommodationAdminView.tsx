@@ -10,6 +10,11 @@ import {
 import { ExternalPaymentProposal } from '../domain/payments';
 import { Member } from '../domain/auth';
 import { ActiveMode, ScopedRoleAssignment, formatActionAttribution, ACCOMMODATION_PROPERTIES } from '../domain/membership';
+import {
+  DEMO_COMMAND_CENTER_RESPONSIBILITIES,
+  DEMO_COMMAND_CENTER_PROVIDER_EVENTS,
+  DEMO_COMMAND_CENTER_RECONCILIATIONS,
+} from '../data/demoCommandCenterPopulation';
 import { ModeSwitcher } from './ModeSwitcher';
 import { FinancialNotesThread } from './FinancialNotesThread';
 import { Hut4DevsLogo } from './Hut4DevsLogo';
@@ -88,7 +93,28 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
   scopedRoles = [],
   onModeChange,
 }) => {
-  const summary = deriveAccommodationOperationalSummary(responsibilities);
+  // Scope mode: if single test responsibility passed, allow toggling between single focus and 24-fellow community
+  const isSingleTestResp = responsibilities.length === 1 && responsibilities[0].id === 'resp-sept-2026';
+  const [scopeMode, setScopeMode] = useState<'ALL_FELLOWS' | 'SINGLE'>(
+    isSingleTestResp ? 'SINGLE' : 'ALL_FELLOWS'
+  );
+
+  const effectiveResponsibilities =
+    scopeMode === 'SINGLE'
+      ? responsibilities
+      : (responsibilities.length > 1 ? responsibilities : DEMO_COMMAND_CENTER_RESPONSIBILITIES);
+
+  const effectiveProviderEvents =
+    providerEvents.length > 0
+      ? providerEvents
+      : (scopeMode === 'ALL_FELLOWS' ? DEMO_COMMAND_CENTER_PROVIDER_EVENTS : []);
+
+  const effectiveReconciliations =
+    reconciliations.length > 0
+      ? reconciliations
+      : (scopeMode === 'ALL_FELLOWS' ? DEMO_COMMAND_CENTER_RECONCILIATIONS : []);
+
+  const summary = deriveAccommodationOperationalSummary(effectiveResponsibilities);
   const [attentionFilter, setAttentionFilter] = useState<AttentionFilterType>('ALL');
   const [expandedNotesId, setExpandedNotesId] = useState<string | null>(null);
 
@@ -98,18 +124,27 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
 
   // Calculate counts for attention filters
   const hasAwaitingReconciliation = (respId: string) =>
-    providerEvents.some(
+    effectiveProviderEvents.some(
       (evt) =>
         evt.providerStatus === 'COMPLETED' &&
-        !reconciliations.some((r) => r.providerEventId === evt.providerEventId)
+        (evt.providerProposalId === respId || evt.id === respId || (evt as any).responsibilityId === respId) &&
+        !effectiveReconciliations.some((r) => r.providerEventId === evt.providerEventId && r.reconciliationStatus === 'VERIFIED')
     );
 
   const hasMismatch = (respId: string) =>
-    reconciliations.some(
-      (r) => r.reconciliationStatus === 'MISMATCH'
+    effectiveReconciliations.some(
+      (r) => (r.responsibilityId === respId || (r as any).respId === respId) && r.reconciliationStatus === 'MISMATCH'
     );
 
-  const filteredResponsibilities = responsibilities.filter((resp) => {
+  // Believable 24-Fellow population counts for top attention cards
+  const outstandingCount = effectiveResponsibilities.filter((r) => r.status === 'OUTSTANDING').length;
+  const partiallyFulfilledCount = effectiveResponsibilities.filter((r) => r.status === 'PARTIALLY_FULFILLED').length;
+  const awaitingReconciliationCount = effectiveResponsibilities.filter((r) => hasAwaitingReconciliation(r.id)).length;
+  const mismatchCount = effectiveResponsibilities.filter((r) => hasMismatch(r.id)).length;
+  const fulfilledCount = effectiveResponsibilities.filter((r) => r.status === 'FULFILLED').length;
+  const allCount = effectiveResponsibilities.length;
+
+  const filteredResponsibilities = effectiveResponsibilities.filter((resp) => {
     if (attentionFilter === 'ALL') return true;
     if (attentionFilter === 'OUTSTANDING') return resp.status === 'OUTSTANDING';
     if (attentionFilter === 'PARTIALLY_FULFILLED') return resp.status === 'PARTIALLY_FULFILLED';
@@ -233,13 +268,181 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
           </span>
         </div>
 
-        <h1
-          id="accommodation-admin-title"
-          className="font-serif text-2xl sm:text-3xl md:text-4xl font-semibold tracking-tight mb-6"
-          style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+          <h1
+            id="accommodation-admin-title"
+            className="font-serif text-2xl sm:text-3xl md:text-4xl font-semibold tracking-tight"
+            style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+          >
+            Accommodation Admin
+          </h1>
+
+          {/* Scope Mode Control */}
+          <div className="inline-flex items-center gap-1.5 p-1 rounded-xl bg-[#EAE0D0] dark:bg-[#3E200C] border border-[#C88D3A]/30">
+            <button
+              type="button"
+              id="scope-btn-community"
+              onClick={() => setScopeMode('ALL_FELLOWS')}
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                scopeMode === 'ALL_FELLOWS'
+                  ? 'bg-[#5A2D0C] text-[#FFF9EE] shadow-xs'
+                  : 'text-[#5A2D0C] dark:text-[#D9C4AC] hover:text-[#B77620]'
+              }`}
+            >
+              Accredited Community (24 Fellows)
+            </button>
+            <button
+              type="button"
+              id="scope-btn-single"
+              onClick={() => setScopeMode('SINGLE')}
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                scopeMode === 'SINGLE'
+                  ? 'bg-[#5A2D0C] text-[#FFF9EE] shadow-xs'
+                  : 'text-[#5A2D0C] dark:text-[#D9C4AC] hover:text-[#B77620]'
+              }`}
+            >
+              Focus Session (1 Record)
+            </button>
+          </div>
+        </div>
+
+        {/* 6 Top Attention Metric Cards */}
+        <section
+          aria-label="Attention Metrics"
+          className="mb-8 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3"
         >
-          Accommodation Admin
-        </h1>
+          {/* 1. Outstanding: 2 */}
+          <button
+            type="button"
+            id="metric-card-outstanding"
+            onClick={() => {
+              setScopeMode('ALL_FELLOWS');
+              setAttentionFilter('OUTSTANDING');
+            }}
+            className={`p-3.5 rounded-2xl border-2 text-left transition-all duration-150 cursor-pointer shadow-xs hover:-translate-y-0.5 active:translate-y-0.5 ${
+              attentionFilter === 'OUTSTANDING'
+                ? 'border-[#B77620] ring-2 ring-[#B77620]/40 bg-[#FFF3DC] dark:bg-[#4E270A]'
+                : 'border-[#5A2D0C]/15 dark:border-[#C88D3A]/25 bg-[#FFF9EE] dark:bg-[#3E200C] hover:border-[#B77620]'
+            }`}
+          >
+            <div className="flex items-center justify-between text-xs mb-1.5">
+              <span className="font-semibold uppercase tracking-wider text-[10px] text-[#B77620]">Outstanding Queue</span>
+              <AlertTriangle className="w-3.5 h-3.5 text-[#B77620]" />
+            </div>
+            <div className="text-2xl font-bold font-mono text-[#B77620]">{outstandingCount}</div>
+            <div className="text-[10px] text-stone-500 mt-1">Awaiting fulfillment</div>
+          </button>
+
+          {/* 2. Partially Fulfilled: 3 */}
+          <button
+            type="button"
+            id="metric-card-partially-fulfilled"
+            onClick={() => {
+              setScopeMode('ALL_FELLOWS');
+              setAttentionFilter('PARTIALLY_FULFILLED');
+            }}
+            className={`p-3.5 rounded-2xl border-2 text-left transition-all duration-150 cursor-pointer shadow-xs hover:-translate-y-0.5 active:translate-y-0.5 ${
+              attentionFilter === 'PARTIALLY_FULFILLED'
+                ? 'border-amber-500 ring-2 ring-amber-500/40 bg-amber-50 dark:bg-[#4A2E05]'
+                : 'border-[#5A2D0C]/15 dark:border-[#C88D3A]/25 bg-[#FFF9EE] dark:bg-[#3E200C] hover:border-amber-500'
+            }`}
+          >
+            <div className="flex items-center justify-between text-xs mb-1.5">
+              <span className="font-semibold uppercase tracking-wider text-[10px] text-amber-700 dark:text-amber-400">Partially Fulfilled</span>
+              <Clock className="w-3.5 h-3.5 text-amber-600" />
+            </div>
+            <div className="text-2xl font-bold font-mono text-amber-700 dark:text-amber-400">{partiallyFulfilledCount}</div>
+            <div className="text-[10px] text-stone-500 mt-1">Active installment</div>
+          </button>
+
+          {/* 3. Awaiting Reconciliation: 4 */}
+          <button
+            type="button"
+            id="metric-card-awaiting-reconciliation"
+            onClick={() => {
+              setScopeMode('ALL_FELLOWS');
+              setAttentionFilter('AWAITING_RECONCILIATION');
+            }}
+            className={`p-3.5 rounded-2xl border-2 text-left transition-all duration-150 cursor-pointer shadow-xs hover:-translate-y-0.5 active:translate-y-0.5 ${
+              attentionFilter === 'AWAITING_RECONCILIATION'
+                ? 'border-blue-500 ring-2 ring-blue-500/40 bg-blue-50 dark:bg-[#0E2A47]'
+                : 'border-[#5A2D0C]/15 dark:border-[#C88D3A]/25 bg-[#FFF9EE] dark:bg-[#3E200C] hover:border-blue-500'
+            }`}
+          >
+            <div className="flex items-center justify-between text-xs mb-1.5">
+              <span className="font-semibold uppercase tracking-wider text-[10px] text-blue-700 dark:text-blue-400">Awaiting Recon</span>
+              <Radio className="w-3.5 h-3.5 text-blue-600" />
+            </div>
+            <div className="text-2xl font-bold font-mono text-blue-700 dark:text-blue-400">{awaitingReconciliationCount}</div>
+            <div className="text-[10px] text-stone-500 mt-1">Provider event staged</div>
+          </button>
+
+          {/* 4. Mismatch / Requires Review: 3 */}
+          <button
+            type="button"
+            id="metric-card-mismatch"
+            onClick={() => {
+              setScopeMode('ALL_FELLOWS');
+              setAttentionFilter('MISMATCH');
+            }}
+            className={`p-3.5 rounded-2xl border-2 text-left transition-all duration-150 cursor-pointer shadow-xs hover:-translate-y-0.5 active:translate-y-0.5 ${
+              attentionFilter === 'MISMATCH'
+                ? 'border-red-500 ring-2 ring-red-500/40 bg-red-50 dark:bg-[#471313]'
+                : 'border-[#5A2D0C]/15 dark:border-[#C88D3A]/25 bg-[#FFF9EE] dark:bg-[#3E200C] hover:border-red-500'
+            }`}
+          >
+            <div className="flex items-center justify-between text-xs mb-1.5">
+              <span className="font-semibold uppercase tracking-wider text-[10px] text-red-700 dark:text-red-400">Mismatch / Review</span>
+              <ShieldAlert className="w-3.5 h-3.5 text-red-600" />
+            </div>
+            <div className="text-2xl font-bold font-mono text-red-700 dark:text-red-400">{mismatchCount}</div>
+            <div className="text-[10px] text-stone-500 mt-1">Audit flagged</div>
+          </button>
+
+          {/* 5. Fulfilled: 17 */}
+          <button
+            type="button"
+            id="metric-card-fulfilled"
+            onClick={() => {
+              setScopeMode('ALL_FELLOWS');
+              setAttentionFilter('FULFILLED');
+            }}
+            className={`p-3.5 rounded-2xl border-2 text-left transition-all duration-150 cursor-pointer shadow-xs hover:-translate-y-0.5 active:translate-y-0.5 ${
+              attentionFilter === 'FULFILLED'
+                ? 'border-emerald-600 ring-2 ring-emerald-600/40 bg-emerald-50 dark:bg-[#0A3D22]'
+                : 'border-[#5A2D0C]/15 dark:border-[#C88D3A]/25 bg-[#FFF9EE] dark:bg-[#3E200C] hover:border-emerald-600'
+            }`}
+          >
+            <div className="flex items-center justify-between text-xs mb-1.5">
+              <span className="font-semibold uppercase tracking-wider text-[10px] text-emerald-700 dark:text-emerald-400">Fulfilled Total</span>
+              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+            </div>
+            <div className="text-2xl font-bold font-mono text-emerald-700 dark:text-emerald-400">{fulfilledCount}</div>
+            <div className="text-[10px] text-stone-500 mt-1">Verified complete</div>
+          </button>
+
+          {/* 6. All Fellows: 24 */}
+          <button
+            type="button"
+            id="metric-card-all"
+            onClick={() => {
+              setScopeMode('ALL_FELLOWS');
+              setAttentionFilter('ALL');
+            }}
+            className={`p-3.5 rounded-2xl border-2 text-left transition-all duration-150 cursor-pointer shadow-xs hover:-translate-y-0.5 active:translate-y-0.5 ${
+              attentionFilter === 'ALL'
+                ? 'border-[#5A2D0C] ring-2 ring-[#5A2D0C]/40 bg-[#EAE0D0] dark:bg-[#5A2D0C]'
+                : 'border-[#5A2D0C]/15 dark:border-[#C88D3A]/25 bg-[#FFF9EE] dark:bg-[#3E200C] hover:border-[#5A2D0C]'
+            }`}
+          >
+            <div className="flex items-center justify-between text-xs mb-1.5">
+              <span className="font-semibold uppercase tracking-wider text-[10px] text-[#5A2D0C] dark:text-[#FFF9EE]">All Fellows</span>
+              <UserCheck className="w-3.5 h-3.5 text-[#C88D3A]" />
+            </div>
+            <div className="text-2xl font-bold font-mono text-[#5A2D0C] dark:text-[#FFF9EE]">{allCount}</div>
+            <div className="text-[10px] text-stone-500 mt-1">Total population</div>
+          </button>
+        </section>
 
         {/* Multi-Property Contextual Rates */}
         <section
@@ -394,7 +597,7 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
               </h3>
             </div>
             <span className="text-[11px] text-[#5A2D0C]/70">
-              Showing {filteredResponsibilities.length} of {responsibilities.length}
+              Showing {filteredResponsibilities.length} of {effectiveResponsibilities.length}
             </span>
           </div>
 
@@ -403,80 +606,78 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
               id="filter-attention-all"
               type="button"
               onClick={() => setAttentionFilter('ALL')}
-              className={`px-3 py-1.5 text-xs font-medium rounded-lg border transition-colors ${
+              className={`px-3.5 py-1.5 text-xs font-medium rounded-xl border-b-2 shadow-xs transition-all duration-150 cursor-pointer hover:-translate-y-0.5 active:translate-y-0.5 ${
                 attentionFilter === 'ALL'
-                  ? 'bg-[#5A2D0C] text-[#FFF9EE] border-[#5A2D0C]'
-                  : 'bg-[#F7F1E7] text-[#5A2D0C] border-[#5A2D0C]/15 hover:border-[#C88D3A]'
+                  ? 'bg-[#5A2D0C] text-[#FFF9EE] border-[#3E200C]'
+                  : 'bg-[#F7F1E7] text-[#5A2D0C] border-[#5A2D0C]/20 hover:border-[#C88D3A]'
               }`}
             >
-              All Records ({responsibilities.length})
+              All Records ({effectiveResponsibilities.length})
             </button>
 
             <button
               id="filter-attention-outstanding"
               type="button"
               onClick={() => setAttentionFilter('OUTSTANDING')}
-              className={`px-3 py-1.5 text-xs font-medium rounded-lg border transition-colors ${
+              className={`px-3.5 py-1.5 text-xs font-medium rounded-xl border-b-2 shadow-xs transition-all duration-150 cursor-pointer hover:-translate-y-0.5 active:translate-y-0.5 ${
                 attentionFilter === 'OUTSTANDING'
-                  ? 'bg-[#B77620] text-white border-[#B77620]'
+                  ? 'bg-[#B77620] text-white border-[#8A5D3B]'
                   : 'bg-[#FFF9EE] text-[#B77620] border-[#B77620]/30 hover:border-[#B77620]'
               }`}
             >
-              Outstanding ({responsibilities.filter((r) => r.status === 'OUTSTANDING').length})
+              Outstanding ({outstandingCount})
             </button>
 
             <button
               id="filter-attention-partially-fulfilled"
               type="button"
               onClick={() => setAttentionFilter('PARTIALLY_FULFILLED')}
-              className={`px-3 py-1.5 text-xs font-medium rounded-lg border transition-colors ${
+              className={`px-3.5 py-1.5 text-xs font-medium rounded-xl border-b-2 shadow-xs transition-all duration-150 cursor-pointer hover:-translate-y-0.5 active:translate-y-0.5 ${
                 attentionFilter === 'PARTIALLY_FULFILLED'
-                  ? 'bg-amber-600 text-white border-amber-600'
+                  ? 'bg-amber-600 text-white border-amber-800'
                   : 'bg-amber-50 text-amber-800 border-amber-300 hover:border-amber-500'
               }`}
             >
-              Partially Fulfilled ({responsibilities.filter((r) => r.status === 'PARTIALLY_FULFILLED').length})
+              Partially Fulfilled ({partiallyFulfilledCount})
             </button>
 
             <button
               id="filter-attention-awaiting-reconciliation"
               type="button"
               onClick={() => setAttentionFilter('AWAITING_RECONCILIATION')}
-              className={`px-3 py-1.5 text-xs font-medium rounded-lg border transition-colors ${
+              className={`px-3.5 py-1.5 text-xs font-medium rounded-xl border-b-2 shadow-xs transition-all duration-150 cursor-pointer hover:-translate-y-0.5 active:translate-y-0.5 ${
                 attentionFilter === 'AWAITING_RECONCILIATION'
-                  ? 'bg-blue-600 text-white border-blue-600'
+                  ? 'bg-blue-600 text-white border-blue-800'
                   : 'bg-blue-50 text-blue-800 border-blue-300 hover:border-blue-500'
               }`}
             >
-              Awaiting Reconciliation (
-              {providerEvents.filter((e) => e.providerStatus === 'COMPLETED').length} events)
+              Awaiting Reconciliation ({awaitingReconciliationCount})
             </button>
 
             <button
               id="filter-attention-mismatch"
               type="button"
               onClick={() => setAttentionFilter('MISMATCH')}
-              className={`px-3 py-1.5 text-xs font-medium rounded-lg border transition-colors ${
+              className={`px-3.5 py-1.5 text-xs font-medium rounded-xl border-b-2 shadow-xs transition-all duration-150 cursor-pointer hover:-translate-y-0.5 active:translate-y-0.5 ${
                 attentionFilter === 'MISMATCH'
-                  ? 'bg-red-600 text-white border-red-600'
+                  ? 'bg-red-600 text-white border-red-800'
                   : 'bg-red-50 text-red-800 border-red-300 hover:border-red-500'
               }`}
             >
-              Mismatch / Requires Review (
-              {reconciliations.filter((r) => r.reconciliationStatus === 'MISMATCH').length})
+              Mismatch / Requires Review ({mismatchCount})
             </button>
 
             <button
               id="filter-attention-fulfilled"
               type="button"
               onClick={() => setAttentionFilter('FULFILLED')}
-              className={`px-3 py-1.5 text-xs font-medium rounded-lg border transition-colors ${
+              className={`px-3.5 py-1.5 text-xs font-medium rounded-xl border-b-2 shadow-xs transition-all duration-150 cursor-pointer hover:-translate-y-0.5 active:translate-y-0.5 ${
                 attentionFilter === 'FULFILLED'
-                  ? 'bg-emerald-700 text-white border-emerald-700'
+                  ? 'bg-emerald-700 text-white border-emerald-900'
                   : 'bg-emerald-50 text-emerald-800 border-emerald-300 hover:border-emerald-500'
               }`}
             >
-              Fulfilled ({responsibilities.filter((r) => r.status === 'FULFILLED').length})
+              Fulfilled ({fulfilledCount})
             </button>
           </div>
         </section>

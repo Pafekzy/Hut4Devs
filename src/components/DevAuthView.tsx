@@ -377,50 +377,60 @@ export const DevAuthView: React.FC<DevAuthViewProps> = ({
           </div>
 
           {/* DEVELOPMENT TOOLS & SEED FIXTURES (DEV-ONLY COLLAPSIBLE) */}
-          <div className="mt-6 pt-4 border-t border-stone-200 dark:border-stone-800">
+          <div className="mt-6 pt-4 border-t border-[#5A2D0C]/15 dark:border-[#C88D3A]/25">
             <button
               type="button"
               onClick={() => setShowDevTools(!showDevTools)}
-              className="w-full flex items-center justify-between text-xs text-stone-500 hover:text-stone-700 dark:hover:text-stone-300 font-mono py-1 cursor-pointer"
+              className="w-full flex items-center justify-between text-xs text-[#5A2D0C]/80 dark:text-[#FFF9EE]/80 hover:text-[#5A2D0C] dark:hover:text-[#FFF9EE] py-1.5 cursor-pointer transition-colors"
             >
-              <div className="flex items-center gap-1.5">
-                <Code2 className="w-3.5 h-3.5 text-stone-400" />
-                <span>Development Tools & Seed Fixtures (Dev-Only)</span>
+              <div className="flex items-center gap-2">
+                <Code2 className="w-3.5 h-3.5 text-[#C88D3A]" />
+                <span className="font-semibold text-xs tracking-tight text-[#5A2D0C] dark:text-[#FFF9EE]">
+                  Development Tools & Seed Fixtures (Dev-Only)
+                </span>
               </div>
               {showDevTools ? (
-                <ChevronUp className="w-3.5 h-3.5" />
+                <ChevronUp className="w-4 h-4 text-[#C88D3A]" />
               ) : (
-                <ChevronDown className="w-3.5 h-3.5" />
+                <ChevronDown className="w-4 h-4 text-[#C88D3A]" />
               )}
             </button>
 
             {showDevTools && (
-              <div className="mt-3 p-3.5 rounded-xl bg-stone-100 dark:bg-stone-900/60 border border-stone-200 dark:border-stone-800 space-y-3">
-                <p className="text-[11px] text-stone-600 dark:text-stone-400 leading-relaxed font-mono">
-                  Notice: In production Hut4Devs, authority is granted only through Coordinator approval & scoped role delegation. These 1-click test identities are provided solely for rapid development inspection and test execution.
-                </p>
+              <div className="mt-3 p-4 rounded-xl bg-[#F7F1E7] dark:bg-[#2F1707] border border-[#5A2D0C]/15 dark:border-[#C88D3A]/30 border-t-2 border-t-[#C88D3A] space-y-3.5 shadow-xs">
+                {/* Informational Dev-Only Notice Panel */}
+                <div className="p-3 rounded-lg bg-[#FFF9EE] dark:bg-[#3D1F0B] border border-[#C88D3A]/40 text-[#5A2D0C] dark:text-[#FFF9EE]">
+                  <div className="flex items-center gap-1.5 mb-1">
+                    <span className="px-1.5 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider bg-[#5A2D0C] text-[#FFF9EE]">
+                      DEV-ONLY NOTICE
+                    </span>
+                  </div>
+                  <p className="text-[11px] leading-relaxed text-[#5A2D0C]/90 dark:text-[#FFF9EE]/90">
+                    In production Hut4Devs, authority is granted only through Coordinator approval and scoped role delegation. These identities exist only for development inspection and test execution.
+                  </p>
+                </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {/* 1. Fellow Option */}
                   <div
                     onClick={() => setSelectedRole(MemberRole.FELLOW)}
-                    className={`p-2.5 rounded-lg border cursor-pointer transition-all flex flex-col justify-between ${
+                    className={`p-3 rounded-xl border cursor-pointer transition-all flex flex-col justify-between shadow-2xs ${
                       selectedRole === MemberRole.FELLOW
-                        ? 'border-[#5A2D0C] dark:border-[#C88D3A] bg-white dark:bg-[#331A09]'
-                        : 'border-stone-200 dark:border-stone-800 bg-white/60 dark:bg-[#2F1707]/60'
+                        ? 'border-2 border-[#5A2D0C] dark:border-[#C88D3A] ring-1 ring-[#C88D3A]/50 bg-white dark:bg-[#381D0B]'
+                        : 'border-[#C88D3A]/30 dark:border-[#623416] bg-[#FFF9EE] dark:bg-[#331A09] hover:border-[#C88D3A]/60'
                     }`}
                   >
                     <div>
                       <div className="flex items-center justify-between mb-1">
-                        <div className="flex items-center gap-1">
+                        <div className="flex items-center gap-1.5">
                           <User className="w-3.5 h-3.5 text-[#C88D3A]" />
-                          <span className="font-bold text-xs">Normal Fellow</span>
+                          <span className="font-bold text-xs text-[#5A2D0C] dark:text-[#FFF9EE]">Normal Fellow</span>
                         </div>
-                        <span className="text-[9px] font-mono px-1 py-0.5 rounded bg-stone-200 dark:bg-stone-800">
+                        <span className="text-[9px] font-mono font-semibold px-1.5 py-0.5 rounded tracking-wider bg-[#F7F1E7] dark:bg-[#2A1406] border border-[#5A2D0C]/20 dark:border-[#C88D3A]/30 text-[#5A2D0C] dark:text-[#FFF9EE]">
                           FELLOW
                         </span>
                       </div>
-                      <p className="text-[10px] opacity-75">Infinite Grace • Room 3B</p>
+                      <p className="text-[10px] text-[#5A2D0C]/70 dark:text-[#FFF9EE]/70 mt-1">Infinite Grace • Room 3B</p>
                     </div>
                     <button
                       type="button"
@@ -430,7 +440,7 @@ export const DevAuthView: React.FC<DevAuthViewProps> = ({
                         e.stopPropagation();
                         handleSelectAndAuth(MemberRole.FELLOW);
                       }}
-                      className="mt-2 w-full py-1.5 px-2 rounded text-[11px] font-semibold flex items-center justify-center gap-1 transition-colors bg-[#5A2D0C] text-[#FFF9EE] hover:bg-[#432108] cursor-pointer"
+                      className="mt-3 w-full py-2 px-2.5 rounded-lg text-[11px] font-semibold flex items-center justify-center gap-1.5 transition-colors bg-[#5A2D0C] text-[#FFF9EE] hover:bg-[#B77620] shadow-xs cursor-pointer disabled:opacity-50"
                     >
                       <span>Enter as Fellow</span>
                       <ArrowRight className="w-3 h-3" />
@@ -440,23 +450,23 @@ export const DevAuthView: React.FC<DevAuthViewProps> = ({
                   {/* 2. Room Captain Option */}
                   <div
                     onClick={() => setSelectedRole(MemberRole.ROOM_CAPTAIN)}
-                    className={`p-2.5 rounded-lg border cursor-pointer transition-all flex flex-col justify-between ${
+                    className={`p-3 rounded-xl border cursor-pointer transition-all flex flex-col justify-between shadow-2xs ${
                       selectedRole === MemberRole.ROOM_CAPTAIN
-                        ? 'border-[#5A2D0C] dark:border-[#C88D3A] bg-white dark:bg-[#331A09]'
-                        : 'border-stone-200 dark:border-stone-800 bg-white/60 dark:bg-[#2F1707]/60'
+                        ? 'border-2 border-[#5A2D0C] dark:border-[#C88D3A] ring-1 ring-[#C88D3A]/50 bg-white dark:bg-[#381D0B]'
+                        : 'border-[#C88D3A]/30 dark:border-[#623416] bg-[#FFF9EE] dark:bg-[#331A09] hover:border-[#C88D3A]/60'
                     }`}
                   >
                     <div>
                       <div className="flex items-center justify-between mb-1">
-                        <div className="flex items-center gap-1">
+                        <div className="flex items-center gap-1.5">
                           <Home className="w-3.5 h-3.5 text-[#C88D3A]" />
-                          <span className="font-bold text-xs">Chinedu Okeke</span>
+                          <span className="font-bold text-xs text-[#5A2D0C] dark:text-[#FFF9EE]">Chinedu Okeke</span>
                         </div>
-                        <span className="text-[9px] font-mono px-1 py-0.5 rounded bg-amber-100 text-amber-900">
+                        <span className="text-[9px] font-mono font-semibold px-1.5 py-0.5 rounded tracking-wider bg-[#FBF0DD] dark:bg-[#4B2B11] border border-[#C88D3A]/60 text-[#8C5209] dark:text-[#E5AD5B]">
                           CAPTAIN
                         </span>
                       </div>
-                      <p className="text-[10px] opacity-75">Scope: Infinite Grace • Room 304</p>
+                      <p className="text-[10px] text-[#5A2D0C]/70 dark:text-[#FFF9EE]/70 mt-1">Scope: Infinite Grace • Room 304</p>
                     </div>
                     <button
                       type="button"
@@ -466,7 +476,7 @@ export const DevAuthView: React.FC<DevAuthViewProps> = ({
                         e.stopPropagation();
                         handleSelectAndAuth(MemberRole.ROOM_CAPTAIN);
                       }}
-                      className="mt-2 w-full py-1.5 px-2 rounded text-[11px] font-semibold flex items-center justify-center gap-1 transition-colors bg-[#5A2D0C] text-[#FFF9EE] hover:bg-[#432108] cursor-pointer"
+                      className="mt-3 w-full py-2 px-2.5 rounded-lg text-[11px] font-semibold flex items-center justify-center gap-1.5 transition-colors bg-[#5A2D0C] text-[#FFF9EE] hover:bg-[#B77620] shadow-xs cursor-pointer disabled:opacity-50"
                     >
                       <span>Enter as Captain</span>
                       <ArrowRight className="w-3 h-3" />
@@ -476,23 +486,23 @@ export const DevAuthView: React.FC<DevAuthViewProps> = ({
                   {/* 3. Fellows Coordinator Option */}
                   <div
                     onClick={() => setSelectedRole(MemberRole.ACCOMMODATION_FELLOWS_COORDINATOR)}
-                    className={`p-2.5 rounded-lg border cursor-pointer transition-all flex flex-col justify-between ${
+                    className={`p-3 rounded-xl border cursor-pointer transition-all flex flex-col justify-between shadow-2xs ${
                       selectedRole === MemberRole.ACCOMMODATION_FELLOWS_COORDINATOR
-                        ? 'border-[#5A2D0C] dark:border-[#C88D3A] bg-white dark:bg-[#331A09]'
-                        : 'border-stone-200 dark:border-stone-800 bg-white/60 dark:bg-[#2F1707]/60'
+                        ? 'border-2 border-[#5A2D0C] dark:border-[#C88D3A] ring-1 ring-[#C88D3A]/50 bg-white dark:bg-[#381D0B]'
+                        : 'border-[#C88D3A]/30 dark:border-[#623416] bg-[#FFF9EE] dark:bg-[#331A09] hover:border-[#C88D3A]/60'
                     }`}
                   >
                     <div>
                       <div className="flex items-center justify-between mb-1">
-                        <div className="flex items-center gap-1">
+                        <div className="flex items-center gap-1.5">
                           <Users className="w-3.5 h-3.5 text-[#C88D3A]" />
-                          <span className="font-bold text-xs">Emmanuel Ukom</span>
+                          <span className="font-bold text-xs text-[#5A2D0C] dark:text-[#FFF9EE]">Emmanuel Ukom</span>
                         </div>
-                        <span className="text-[9px] font-mono px-1 py-0.5 rounded bg-purple-100 text-purple-900">
+                        <span className="text-[9px] font-mono font-semibold px-1.5 py-0.5 rounded tracking-wider bg-[#F4E3CB] dark:bg-[#522F13] border border-[#B77620]/60 text-[#6C3F06] dark:text-[#F3CA8A]">
                           COORDINATOR
                         </span>
                       </div>
-                      <p className="text-[10px] opacity-75">L2E Accommodation Coordinator</p>
+                      <p className="text-[10px] text-[#5A2D0C]/70 dark:text-[#FFF9EE]/70 mt-1">L2E Accommodation Coordinator</p>
                     </div>
                     <button
                       type="button"
@@ -502,7 +512,7 @@ export const DevAuthView: React.FC<DevAuthViewProps> = ({
                         e.stopPropagation();
                         handleSelectAndAuth(MemberRole.ACCOMMODATION_FELLOWS_COORDINATOR);
                       }}
-                      className="mt-2 w-full py-1.5 px-2 rounded text-[11px] font-semibold flex items-center justify-center gap-1 transition-colors bg-[#5A2D0C] text-[#FFF9EE] hover:bg-[#432108] cursor-pointer"
+                      className="mt-3 w-full py-2 px-2.5 rounded-lg text-[11px] font-semibold flex items-center justify-center gap-1.5 transition-colors bg-[#5A2D0C] text-[#FFF9EE] hover:bg-[#B77620] shadow-xs cursor-pointer disabled:opacity-50"
                     >
                       <span>Enter as Coordinator</span>
                       <ArrowRight className="w-3 h-3" />
@@ -512,23 +522,23 @@ export const DevAuthView: React.FC<DevAuthViewProps> = ({
                   {/* 4. Financial Admin Option */}
                   <div
                     onClick={() => setSelectedRole(MemberRole.ACCOMMODATION_ADMIN)}
-                    className={`p-2.5 rounded-lg border cursor-pointer transition-all flex flex-col justify-between ${
+                    className={`p-3 rounded-xl border cursor-pointer transition-all flex flex-col justify-between shadow-2xs ${
                       selectedRole === MemberRole.ACCOMMODATION_ADMIN
-                        ? 'border-[#5A2D0C] dark:border-[#C88D3A] bg-white dark:bg-[#331A09]'
-                        : 'border-stone-200 dark:border-stone-800 bg-white/60 dark:bg-[#2F1707]/60'
+                        ? 'border-2 border-[#5A2D0C] dark:border-[#C88D3A] ring-1 ring-[#C88D3A]/50 bg-white dark:bg-[#381D0B]'
+                        : 'border-[#C88D3A]/30 dark:border-[#623416] bg-[#FFF9EE] dark:bg-[#331A09] hover:border-[#C88D3A]/60'
                     }`}
                   >
                     <div>
                       <div className="flex items-center justify-between mb-1">
-                        <div className="flex items-center gap-1">
+                        <div className="flex items-center gap-1.5">
                           <ShieldCheck className="w-3.5 h-3.5 text-[#C88D3A]" />
-                          <span className="font-bold text-xs">Financial Admin</span>
+                          <span className="font-bold text-xs text-[#5A2D0C] dark:text-[#FFF9EE]">Financial Admin</span>
                         </div>
-                        <span className="text-[9px] font-mono px-1 py-0.5 rounded bg-emerald-100 text-emerald-900">
+                        <span className="text-[9px] font-mono font-semibold px-1.5 py-0.5 rounded tracking-wider bg-[#5A2D0C] dark:bg-[#231004] border border-[#C88D3A]/50 text-[#FFF9EE]">
                           ADMIN
                         </span>
                       </div>
-                      <p className="text-[10px] opacity-75">Monthly Accountability Center</p>
+                      <p className="text-[10px] text-[#5A2D0C]/70 dark:text-[#FFF9EE]/70 mt-1">Monthly Accountability Center</p>
                     </div>
                     <button
                       type="button"
@@ -538,7 +548,7 @@ export const DevAuthView: React.FC<DevAuthViewProps> = ({
                         e.stopPropagation();
                         handleSelectAndAuth(MemberRole.ACCOMMODATION_ADMIN);
                       }}
-                      className="mt-2 w-full py-1.5 px-2 rounded text-[11px] font-semibold flex items-center justify-center gap-1 transition-colors bg-[#5A2D0C] text-[#FFF9EE] hover:bg-[#432108] cursor-pointer"
+                      className="mt-3 w-full py-2 px-2.5 rounded-lg text-[11px] font-semibold flex items-center justify-center gap-1.5 transition-colors bg-[#5A2D0C] text-[#FFF9EE] hover:bg-[#B77620] shadow-xs cursor-pointer disabled:opacity-50"
                     >
                       <span>Enter as Admin</span>
                       <ArrowRight className="w-3 h-3" />
@@ -550,11 +560,11 @@ export const DevAuthView: React.FC<DevAuthViewProps> = ({
           </div>
 
           {onCancel && (
-            <div className="mt-4 text-center">
+            <div className="mt-5 text-center">
               <button
                 type="button"
                 onClick={onCancel}
-                className="text-xs underline opacity-70 hover:opacity-100 cursor-pointer"
+                className="text-xs font-medium text-[#5A2D0C]/75 dark:text-[#FFF9EE]/75 hover:text-[#C88D3A] dark:hover:text-[#C88D3A] transition-colors cursor-pointer"
               >
                 Back to Public Landing
               </button>
