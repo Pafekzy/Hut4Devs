@@ -19,6 +19,7 @@ import { ModeSwitcher } from './ModeSwitcher';
 import { FinancialNotesThread } from './FinancialNotesThread';
 import { Hut4DevsLogo } from './Hut4DevsLogo';
 import { ThemeToggle } from './ThemeToggle';
+import { MissingPuzzleModal } from './MissingPuzzleModal';
 import {
   ShieldAlert,
   ArrowRight,
@@ -36,6 +37,7 @@ import {
   AlertTriangle,
   Clock,
   CheckCircle2,
+  Puzzle,
 } from 'lucide-react';
 
 export interface AdminProviderEventDisplay {
@@ -93,6 +95,8 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
   scopedRoles = [],
   onModeChange,
 }) => {
+  const [isPuzzleModalOpen, setIsPuzzleModalOpen] = useState(false);
+
   // Scope mode: if single test responsibility passed, allow toggling between single focus and 24-fellow community
   const isSingleTestResp = responsibilities.length === 1 && responsibilities[0].id === 'resp-sept-2026';
   const [scopeMode, setScopeMode] = useState<'ALL_FELLOWS' | 'SINGLE'>(
@@ -192,6 +196,21 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
           </div>
 
           <div className="flex items-center gap-2 sm:gap-3">
+            <button
+              type="button"
+              id="admin-btn-missing-puzzle"
+              onClick={() => setIsPuzzleModalOpen(true)}
+              title="Fix a Missing Puzzle (Feedback)"
+              className={`px-2.5 sm:px-3 py-1.5 rounded-xl border-2 text-xs font-bold flex items-center gap-1.5 transition-all shadow-xs cursor-pointer border-b-3 active:border-b active:translate-y-[1px] ${
+                isDark
+                  ? 'bg-[#3E200C] text-[#FFF9EE] border-[#C88D3A]/50 hover:bg-[#52270A]'
+                  : 'bg-[#FFF9EE] text-[#5A2D0C] border-[#C88D3A]/60 hover:bg-[#F2E8D8]'
+              }`}
+            >
+              <Puzzle className="w-3.5 h-3.5 text-[#C88D3A]" />
+              <span className="hidden sm:inline">Fix a Puzzle</span>
+            </button>
+
             <div className="hidden sm:flex items-center gap-1.5 font-mono text-[11px] px-2.5 py-1 rounded-lg border border-[#C88D3A]/30">
               <span
                 id="realtime-sse-indicator"
@@ -273,7 +292,7 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
         {/* 6 Top Attention Metric Cards */}
         <section
           aria-label="Attention Metrics"
-          className="mb-8 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3"
+          className="mb-8 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-3.5"
         >
           {/* 1. Outstanding: 2 */}
           <button
@@ -283,18 +302,18 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
               setScopeMode('ALL_FELLOWS');
               setAttentionFilter('OUTSTANDING');
             }}
-            className={`p-3.5 rounded-2xl border-2 text-left transition-all duration-150 cursor-pointer shadow-xs hover:-translate-y-0.5 active:translate-y-0.5 ${
+            className={`p-3.5 sm:p-4 rounded-2xl border-2 border-b-4 text-left transition-all duration-150 cursor-pointer shadow-sm hover:-translate-y-1 hover:shadow-md active:translate-y-0.5 active:border-b-2 ${
               attentionFilter === 'OUTSTANDING'
-                ? 'border-[#B77620] ring-2 ring-[#B77620]/40 bg-[#FFF3DC] dark:bg-[#4E270A]'
-                : 'border-[#5A2D0C]/15 dark:border-[#C88D3A]/25 bg-[#FFF9EE] dark:bg-[#3E200C] hover:border-[#B77620]'
+                ? 'border-[#B77620] ring-2 ring-[#B77620]/50 bg-[#FFF0D4] dark:bg-[#4E270A] shadow-md'
+                : 'border-[#5A2D0C]/20 dark:border-[#C88D3A]/30 bg-[#FFF9EE] dark:bg-[#2A1305] hover:border-[#B77620]'
             }`}
           >
             <div className="flex items-center justify-between text-xs mb-1.5">
-              <span className="font-semibold uppercase tracking-wider text-[10px] text-[#B77620]">Outstanding Queue</span>
-              <AlertTriangle className="w-3.5 h-3.5 text-[#B77620]" />
+              <span className="font-bold uppercase tracking-wider text-[10px] text-[#B77620] dark:text-[#F3BA6B]">Outstanding Dues</span>
+              <AlertTriangle className="w-4 h-4 text-[#B77620] dark:text-[#F3BA6B]" />
             </div>
-            <div className="text-2xl font-bold font-mono text-[#B77620]">{outstandingCount}</div>
-            <div className="text-[10px] text-stone-500 mt-1">Awaiting fulfillment</div>
+            <div className="text-2xl sm:text-3xl font-bold font-mono text-[#B77620] dark:text-[#F3BA6B]">{outstandingCount}</div>
+            <div className="text-[10px] text-[#5A2D0C]/70 dark:text-[#FFF9EE]/70 mt-1">Awaiting fulfillment</div>
           </button>
 
           {/* 2. Partially Fulfilled: 3 */}
@@ -305,18 +324,18 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
               setScopeMode('ALL_FELLOWS');
               setAttentionFilter('PARTIALLY_FULFILLED');
             }}
-            className={`p-3.5 rounded-2xl border-2 text-left transition-all duration-150 cursor-pointer shadow-xs hover:-translate-y-0.5 active:translate-y-0.5 ${
+            className={`p-3.5 sm:p-4 rounded-2xl border-2 border-b-4 text-left transition-all duration-150 cursor-pointer shadow-sm hover:-translate-y-1 hover:shadow-md active:translate-y-0.5 active:border-b-2 ${
               attentionFilter === 'PARTIALLY_FULFILLED'
-                ? 'border-amber-500 ring-2 ring-amber-500/40 bg-amber-50 dark:bg-[#4A2E05]'
-                : 'border-[#5A2D0C]/15 dark:border-[#C88D3A]/25 bg-[#FFF9EE] dark:bg-[#3E200C] hover:border-amber-500'
+                ? 'border-amber-500 ring-2 ring-amber-500/50 bg-amber-50 dark:bg-[#4A2E05] shadow-md'
+                : 'border-[#5A2D0C]/20 dark:border-[#C88D3A]/30 bg-[#FFF9EE] dark:bg-[#2A1305] hover:border-amber-500'
             }`}
           >
             <div className="flex items-center justify-between text-xs mb-1.5">
-              <span className="font-semibold uppercase tracking-wider text-[10px] text-amber-700 dark:text-amber-400">Partially Fulfilled</span>
-              <Clock className="w-3.5 h-3.5 text-amber-600" />
+              <span className="font-bold uppercase tracking-wider text-[10px] text-amber-700 dark:text-amber-300">Partial</span>
+              <Clock className="w-4 h-4 text-amber-600 dark:text-amber-400" />
             </div>
-            <div className="text-2xl font-bold font-mono text-amber-700 dark:text-amber-400">{partiallyFulfilledCount}</div>
-            <div className="text-[10px] text-stone-500 mt-1">Active installment</div>
+            <div className="text-2xl sm:text-3xl font-bold font-mono text-amber-700 dark:text-amber-300">{partiallyFulfilledCount}</div>
+            <div className="text-[10px] text-[#5A2D0C]/70 dark:text-[#FFF9EE]/70 mt-1">Active installment</div>
           </button>
 
           {/* 3. Awaiting Reconciliation: 4 */}
@@ -327,18 +346,18 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
               setScopeMode('ALL_FELLOWS');
               setAttentionFilter('AWAITING_RECONCILIATION');
             }}
-            className={`p-3.5 rounded-2xl border-2 text-left transition-all duration-150 cursor-pointer shadow-xs hover:-translate-y-0.5 active:translate-y-0.5 ${
+            className={`p-3.5 sm:p-4 rounded-2xl border-2 border-b-4 text-left transition-all duration-150 cursor-pointer shadow-sm hover:-translate-y-1 hover:shadow-md active:translate-y-0.5 active:border-b-2 ${
               attentionFilter === 'AWAITING_RECONCILIATION'
-                ? 'border-blue-500 ring-2 ring-blue-500/40 bg-blue-50 dark:bg-[#0E2A47]'
-                : 'border-[#5A2D0C]/15 dark:border-[#C88D3A]/25 bg-[#FFF9EE] dark:bg-[#3E200C] hover:border-blue-500'
+                ? 'border-blue-500 ring-2 ring-blue-500/50 bg-blue-50 dark:bg-[#0E2A47] shadow-md'
+                : 'border-[#5A2D0C]/20 dark:border-[#C88D3A]/30 bg-[#FFF9EE] dark:bg-[#2A1305] hover:border-blue-500'
             }`}
           >
             <div className="flex items-center justify-between text-xs mb-1.5">
-              <span className="font-semibold uppercase tracking-wider text-[10px] text-blue-700 dark:text-blue-400">Awaiting Recon</span>
-              <Radio className="w-3.5 h-3.5 text-blue-600" />
+              <span className="font-bold uppercase tracking-wider text-[10px] text-blue-700 dark:text-blue-300">Awaiting Recon</span>
+              <Radio className="w-4 h-4 text-blue-600 dark:text-blue-400" />
             </div>
-            <div className="text-2xl font-bold font-mono text-blue-700 dark:text-blue-400">{awaitingReconciliationCount}</div>
-            <div className="text-[10px] text-stone-500 mt-1">Provider event staged</div>
+            <div className="text-2xl sm:text-3xl font-bold font-mono text-blue-700 dark:text-blue-300">{awaitingReconciliationCount}</div>
+            <div className="text-[10px] text-[#5A2D0C]/70 dark:text-[#FFF9EE]/70 mt-1">Provider event staged</div>
           </button>
 
           {/* 4. Mismatch / Requires Review: 3 */}
@@ -349,18 +368,18 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
               setScopeMode('ALL_FELLOWS');
               setAttentionFilter('MISMATCH');
             }}
-            className={`p-3.5 rounded-2xl border-2 text-left transition-all duration-150 cursor-pointer shadow-xs hover:-translate-y-0.5 active:translate-y-0.5 ${
+            className={`p-3.5 sm:p-4 rounded-2xl border-2 border-b-4 text-left transition-all duration-150 cursor-pointer shadow-sm hover:-translate-y-1 hover:shadow-md active:translate-y-0.5 active:border-b-2 ${
               attentionFilter === 'MISMATCH'
-                ? 'border-red-500 ring-2 ring-red-500/40 bg-red-50 dark:bg-[#471313]'
-                : 'border-[#5A2D0C]/15 dark:border-[#C88D3A]/25 bg-[#FFF9EE] dark:bg-[#3E200C] hover:border-red-500'
+                ? 'border-red-500 ring-2 ring-red-500/50 bg-red-50 dark:bg-[#471313] shadow-md'
+                : 'border-[#5A2D0C]/20 dark:border-[#C88D3A]/30 bg-[#FFF9EE] dark:bg-[#2A1305] hover:border-red-500'
             }`}
           >
             <div className="flex items-center justify-between text-xs mb-1.5">
-              <span className="font-semibold uppercase tracking-wider text-[10px] text-red-700 dark:text-red-400">Mismatch / Review</span>
-              <ShieldAlert className="w-3.5 h-3.5 text-red-600" />
+              <span className="font-bold uppercase tracking-wider text-[10px] text-red-700 dark:text-red-300">Mismatch Review</span>
+              <ShieldAlert className="w-4 h-4 text-red-600 dark:text-red-400" />
             </div>
-            <div className="text-2xl font-bold font-mono text-red-700 dark:text-red-400">{mismatchCount}</div>
-            <div className="text-[10px] text-stone-500 mt-1">Audit flagged</div>
+            <div className="text-2xl sm:text-3xl font-bold font-mono text-red-700 dark:text-red-300">{mismatchCount}</div>
+            <div className="text-[10px] text-[#5A2D0C]/70 dark:text-[#FFF9EE]/70 mt-1">Audit flagged</div>
           </button>
 
           {/* 5. Fulfilled: 17 */}
@@ -371,18 +390,18 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
               setScopeMode('ALL_FELLOWS');
               setAttentionFilter('FULFILLED');
             }}
-            className={`p-3.5 rounded-2xl border-2 text-left transition-all duration-150 cursor-pointer shadow-xs hover:-translate-y-0.5 active:translate-y-0.5 ${
+            className={`p-3.5 sm:p-4 rounded-2xl border-2 border-b-4 text-left transition-all duration-150 cursor-pointer shadow-sm hover:-translate-y-1 hover:shadow-md active:translate-y-0.5 active:border-b-2 ${
               attentionFilter === 'FULFILLED'
-                ? 'border-emerald-600 ring-2 ring-emerald-600/40 bg-emerald-50 dark:bg-[#0A3D22]'
-                : 'border-[#5A2D0C]/15 dark:border-[#C88D3A]/25 bg-[#FFF9EE] dark:bg-[#3E200C] hover:border-emerald-600'
+                ? 'border-emerald-600 ring-2 ring-emerald-600/50 bg-emerald-50 dark:bg-[#0A3D22] shadow-md'
+                : 'border-[#5A2D0C]/20 dark:border-[#C88D3A]/30 bg-[#FFF9EE] dark:bg-[#2A1305] hover:border-emerald-600'
             }`}
           >
             <div className="flex items-center justify-between text-xs mb-1.5">
-              <span className="font-semibold uppercase tracking-wider text-[10px] text-emerald-700 dark:text-emerald-400">Fulfilled Total</span>
-              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+              <span className="font-bold uppercase tracking-wider text-[10px] text-emerald-700 dark:text-emerald-300">Fulfilled</span>
+              <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
             </div>
-            <div className="text-2xl font-bold font-mono text-emerald-700 dark:text-emerald-400">{fulfilledCount}</div>
-            <div className="text-[10px] text-stone-500 mt-1">Verified complete</div>
+            <div className="text-2xl sm:text-3xl font-bold font-mono text-emerald-700 dark:text-emerald-300">{fulfilledCount}</div>
+            <div className="text-[10px] text-[#5A2D0C]/70 dark:text-[#FFF9EE]/70 mt-1">Verified complete</div>
           </button>
 
           {/* 6. All Fellows: 24 */}
@@ -393,18 +412,18 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
               setScopeMode('ALL_FELLOWS');
               setAttentionFilter('ALL');
             }}
-            className={`p-3.5 rounded-2xl border-2 text-left transition-all duration-150 cursor-pointer shadow-xs hover:-translate-y-0.5 active:translate-y-0.5 ${
+            className={`p-3.5 sm:p-4 rounded-2xl border-2 border-b-4 text-left transition-all duration-150 cursor-pointer shadow-sm hover:-translate-y-1 hover:shadow-md active:translate-y-0.5 active:border-b-2 ${
               attentionFilter === 'ALL'
-                ? 'border-[#5A2D0C] ring-2 ring-[#5A2D0C]/40 bg-[#EAE0D0] dark:bg-[#5A2D0C]'
-                : 'border-[#5A2D0C]/15 dark:border-[#C88D3A]/25 bg-[#FFF9EE] dark:bg-[#3E200C] hover:border-[#5A2D0C]'
+                ? 'border-[#5A2D0C] dark:border-[#C88D3A] ring-2 ring-[#C88D3A]/50 bg-[#EAE0D0] dark:bg-[#5A2D0C] shadow-md'
+                : 'border-[#5A2D0C]/20 dark:border-[#C88D3A]/30 bg-[#FFF9EE] dark:bg-[#2A1305] hover:border-[#5A2D0C]'
             }`}
           >
             <div className="flex items-center justify-between text-xs mb-1.5">
-              <span className="font-semibold uppercase tracking-wider text-[10px] text-[#5A2D0C] dark:text-[#FFF9EE]">All Fellows</span>
-              <UserCheck className="w-3.5 h-3.5 text-[#C88D3A]" />
+              <span className="font-bold uppercase tracking-wider text-[10px] text-[#5A2D0C] dark:text-[#FFF9EE]">All Fellows</span>
+              <UserCheck className="w-4 h-4 text-[#C88D3A]" />
             </div>
-            <div className="text-2xl font-bold font-mono text-[#5A2D0C] dark:text-[#FFF9EE]">{allCount}</div>
-            <div className="text-[10px] text-stone-500 mt-1">Total population</div>
+            <div className="text-2xl sm:text-3xl font-bold font-mono text-[#5A2D0C] dark:text-[#FFF9EE]">{allCount}</div>
+            <div className="text-[10px] text-[#5A2D0C]/70 dark:text-[#FFF9EE]/70 mt-1">Total population</div>
           </button>
         </section>
 
@@ -1069,6 +1088,23 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
           )}
         </div>
       </footer>
+
+      {/* Missing Puzzle Feedback Flow */}
+      <MissingPuzzleModal
+        isOpen={isPuzzleModalOpen}
+        onClose={() => setIsPuzzleModalOpen(false)}
+        currentMember={
+          currentMember ||
+          ({
+            id: 'admin-current',
+            memberId: 'H4D-FIN-ADMIN',
+            displayName: 'Accommodation Financial Admin',
+            role: 'ACCOMMODATION_ADMIN' as any,
+          } as Member)
+        }
+        isDark={isDark}
+        defaultLocation="Accommodation Admin Workspace"
+      />
     </div>
   );
 };

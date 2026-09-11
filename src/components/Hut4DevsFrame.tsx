@@ -34,14 +34,14 @@ export const Hut4DevsFrame: React.FC<Hut4DevsFrameProps> = ({
   // Variant styling
   const variantStyles = {
     card: isDark
-      ? 'bg-[#3E200C] text-[#FFF9EE] border border-[#C88D3A]/35 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.5)]'
-      : 'bg-[#FFF9EE] text-[#5A2D0C] border border-[#C88D3A]/30 shadow-[0_4px_20px_-4px_rgba(90,45,12,0.08)]',
+      ? 'bg-[#241004] text-[#FFF9EE] border-2 border-[#C88D3A]/40 shadow-[0_8px_30px_-6px_rgba(0,0,0,0.7),inset_0_1px_0_rgba(200,141,58,0.2)]'
+      : 'bg-[#FFFDF9] text-[#5A2D0C] border-2 border-[#5A2D0C]/15 shadow-[0_8px_30px_-6px_rgba(90,45,12,0.12),inset_0_1px_0_rgba(255,255,255,0.8)]',
     surface: isDark
-      ? 'bg-[#2F1707] text-[#FFF9EE] border border-[#623416] shadow-sm'
+      ? 'bg-[#1E0D03] text-[#FFF9EE] border border-[#C88D3A]/25 shadow-md'
       : 'bg-[#F7F1E7] text-[#5A2D0C] border border-[#EAE0D0] shadow-sm',
     highlight: isDark
-      ? 'bg-[#3E200C] text-[#FFF9EE] border-2 border-[#C88D3A] shadow-[0_0_25px_-5px_rgba(200,141,58,0.25)]'
-      : 'bg-[#FFF9EE] text-[#5A2D0C] border-2 border-[#C88D3A] shadow-[0_0_25px_-5px_rgba(200,141,58,0.2)]',
+      ? 'bg-[#2B1406] text-[#FFF9EE] border-2 border-[#C88D3A] shadow-[0_10px_35px_-5px_rgba(200,141,58,0.35),inset_0_1px_0_rgba(226,171,93,0.3)]'
+      : 'bg-[#FFF9EE] text-[#5A2D0C] border-2 border-[#C88D3A] shadow-[0_10px_35px_-5px_rgba(200,141,58,0.25),inset_0_1px_0_rgba(255,255,255,0.9)]',
     subtle: isDark
       ? 'bg-[#2F1707]/60 text-[#FFF9EE] border border-[#C88D3A]/20'
       : 'bg-[#F7F1E7]/80 text-[#5A2D0C] border border-[#C88D3A]/20',
@@ -99,7 +99,7 @@ export const BrandedSurface: React.FC<BrandedSurfaceProps> = ({
 
 export interface BrandedActionButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   isDark?: boolean;
-  variant?: 'bmoni' | 'primary' | 'secondary' | 'accent';
+  variant?: 'bmoni' | 'primary' | 'secondary' | 'accent' | 'gift' | 'loan' | 'contribution';
   isLoading?: boolean;
   children: React.ReactNode;
 }
@@ -127,20 +127,32 @@ export const BrandedActionButton: React.FC<BrandedActionButtonProps> = ({
   const variantStyles = {
     // BMONI button: BMONI own brand color inside Hut4Devs 3D raised elevation
     bmoni: isDark
-      ? 'bg-[#2563EB] text-white border-b-4 border-[#1E3A8A] hover:bg-[#3B82F6] hover:border-b-4 hover:border-[#1D4ED8] hover:shadow-[0_8px_25px_rgba(59,130,246,0.5)] active:border-b-0 active:translate-y-[1px]'
-      : 'bg-[#1D4ED8] text-white border-b-4 border-[#172554] hover:bg-[#2563EB] hover:border-b-4 hover:border-[#1E3A8A] hover:shadow-[0_8px_25px_rgba(37,99,235,0.45)] active:border-b-0 active:translate-y-[1px]',
+      ? 'bg-[#2563EB] text-white border-b-4 border-[#1E3A8A] hover:bg-[#3B82F6] hover:border-[#1D4ED8] hover:shadow-[0_8px_25px_rgba(59,130,246,0.5)] active:border-b-1 active:translate-y-[2px]'
+      : 'bg-[#1D4ED8] text-white border-b-4 border-[#172554] hover:bg-[#2563EB] hover:border-[#1E3A8A] hover:shadow-[0_8px_25px_rgba(37,99,235,0.45)] active:border-b-1 active:translate-y-[2px]',
     // Primary caramel/gold
     primary: isDark
-      ? 'bg-[#C88D3A] text-[#2F1707] border-b-4 border-[#8E560C] hover:bg-[#DDA250] hover:shadow-[0_6px_18px_rgba(200,141,58,0.35)] active:border-b-0 active:translate-y-[2px]'
-      : 'bg-[#5A2D0C] text-[#FFF9EE] border-b-4 border-[#351A07] hover:bg-[#432108] hover:shadow-[0_6px_18px_rgba(90,45,12,0.3)] active:border-b-0 active:translate-y-[2px]',
+      ? 'bg-[#C88D3A] text-[#2F1707] border-b-4 border-[#8E560C] hover:bg-[#DDA250] hover:shadow-[0_6px_18px_rgba(200,141,58,0.35)] active:border-b-1 active:translate-y-[2px]'
+      : 'bg-[#5A2D0C] text-[#FFF9EE] border-b-4 border-[#351A07] hover:bg-[#432108] hover:shadow-[0_6px_18px_rgba(90,45,12,0.3)] active:border-b-1 active:translate-y-[2px]',
     // Secondary ivory / chocolate outline
     secondary: isDark
-      ? 'bg-[#2F1707] text-[#E5D3BA] border-b-4 border-[#1A0C04] hover:bg-[#3E200C] hover:text-[#FFF9EE] active:border-b-0 active:translate-y-[2px]'
-      : 'bg-[#FFF9EE] text-[#5A2D0C] border-b-4 border-[#D9C8B0] hover:bg-[#F2E8D8] active:border-b-0 active:translate-y-[2px]',
+      ? 'bg-[#2F1707] text-[#E5D3BA] border-b-4 border-[#1A0C04] hover:bg-[#3E200C] hover:text-[#FFF9EE] active:border-b-1 active:translate-y-[2px]'
+      : 'bg-[#FFF9EE] text-[#5A2D0C] border-b-4 border-[#D9C8B0] hover:bg-[#F2E8D8] active:border-b-1 active:translate-y-[2px]',
     // Accent semantic button
     accent: isDark
-      ? 'bg-[#B77620] text-white border-b-4 border-[#7A4B0A] hover:bg-[#C88D3A] active:border-b-0 active:translate-y-[2px]'
-      : 'bg-[#B77620] text-white border-b-4 border-[#8E560C] hover:bg-[#9E6316] active:border-b-0 active:translate-y-[2px]',
+      ? 'bg-[#B77620] text-white border-b-4 border-[#7A4B0A] hover:bg-[#C88D3A] active:border-b-1 active:translate-y-[2px]'
+      : 'bg-[#B77620] text-white border-b-4 border-[#8E560C] hover:bg-[#9E6316] active:border-b-1 active:translate-y-[2px]',
+    // Peer Support: Gift
+    gift: isDark
+      ? 'bg-[#059669] text-white border-b-4 border-[#064E3B] hover:bg-[#10B981] hover:shadow-[0_6px_20px_rgba(16,185,129,0.35)] active:border-b-1 active:translate-y-[2px]'
+      : 'bg-[#047857] text-white border-b-4 border-[#064E3B] hover:bg-[#059669] hover:shadow-[0_6px_20px_rgba(4,120,87,0.3)] active:border-b-1 active:translate-y-[2px]',
+    // Peer Support: Loan
+    loan: isDark
+      ? 'bg-[#2563EB] text-white border-b-4 border-[#1E3A8A] hover:bg-[#3B82F6] hover:shadow-[0_6px_20px_rgba(59,130,246,0.35)] active:border-b-1 active:translate-y-[2px]'
+      : 'bg-[#1D4ED8] text-white border-b-4 border-[#172554] hover:bg-[#2563EB] hover:shadow-[0_6px_20px_rgba(29,78,216,0.3)] active:border-b-1 active:translate-y-[2px]',
+    // Peer Support: Contribution
+    contribution: isDark
+      ? 'bg-[#7C3AED] text-white border-b-4 border-[#4C1D95] hover:bg-[#8B5CF6] hover:shadow-[0_6px_20px_rgba(139,92,246,0.35)] active:border-b-1 active:translate-y-[2px]'
+      : 'bg-[#6D28D9] text-white border-b-4 border-[#4C1D95] hover:bg-[#7C3AED] hover:shadow-[0_6px_20px_rgba(109,40,217,0.3)] active:border-b-1 active:translate-y-[2px]',
   };
 
   return (

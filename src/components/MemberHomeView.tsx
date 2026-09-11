@@ -11,6 +11,7 @@ import { PeerSupportSection } from './PeerSupportSection';
 import { TrustTrailFeed } from './TrustTrailFeed';
 import { VouchSection } from './VouchSection';
 import { RecognitionView } from './RecognitionView';
+import { MissingPuzzleModal } from './MissingPuzzleModal';
 import { peerSupportStore } from '../services/peerSupportStore';
 import { membershipStore } from '../services/membershipStore';
 import {
@@ -34,6 +35,7 @@ import {
   Award,
   ShieldCheck,
   Building,
+  Puzzle,
 } from 'lucide-react';
 
 interface MemberHomeViewProps {
@@ -76,6 +78,7 @@ export const MemberHomeView: React.FC<MemberHomeViewProps> = ({
 }) => {
   const [activeTab, setActiveTab] = useState<FellowWorkspaceTab>('accommodation');
   const [showNotes, setShowNotes] = useState(false);
+  const [isPuzzleModalOpen, setIsPuzzleModalOpen] = useState(false);
 
   // Peer support state managed from store
   const [supports, setSupports] = useState<PeerSupportAgreement[]>(() =>
@@ -306,8 +309,25 @@ export const MemberHomeView: React.FC<MemberHomeViewProps> = ({
             </button>
           </div>
 
-          {/* Global Actions: Notifications, Messages, Role Switcher, Theme & Logout */}
+          {/* Global Actions: Notifications, Messages, Fix a Puzzle, Role Switcher, Theme & Logout */}
           <div className="flex items-center gap-1.5 sm:gap-2.5">
+            {/* Fix a Missing Puzzle Button */}
+            <button
+              type="button"
+              id="header-missing-puzzle-btn"
+              onClick={() => setIsPuzzleModalOpen(true)}
+              aria-label="Fix a Missing Puzzle"
+              title="Fix a Missing Puzzle (Feedback)"
+              className={`p-2 sm:px-3 sm:py-2 min-h-[44px] flex items-center gap-1.5 rounded-xl text-xs font-bold transition-all duration-150 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C88D3A] border-2 border-b-3 active:border-b active:translate-y-[1px] shadow-xs ${
+                isDark
+                  ? 'bg-[#3E200C] text-[#FFF9EE] border-[#C88D3A]/50 hover:bg-[#52270A]'
+                  : 'bg-[#FFF9EE] text-[#5A2D0C] border-[#C88D3A]/60 hover:bg-[#F2E8D8]'
+              }`}
+            >
+              <Puzzle className="w-4 h-4 text-[#C88D3A] shrink-0" aria-hidden="true" />
+              <span className="hidden lg:inline">Fix a Puzzle</span>
+            </button>
+
             {/* Notification Bell */}
             <button
               type="button"
@@ -389,17 +409,21 @@ export const MemberHomeView: React.FC<MemberHomeViewProps> = ({
           </div>
         </div>
 
-        {/* Primary Workspace Navigation Tabs */}
-        <div className="border-t border-stone-200/60 bg-[#FFFDF9]/60">
-          <div className="max-w-5xl mx-auto px-4 sm:px-6 flex items-center gap-1 overflow-x-auto py-1">
+        {/* Primary Workspace Navigation Tabs with 3D tactile buttons and dark mode styling */}
+        <div className={`border-t transition-colors ${
+          isDark ? 'border-[#3E200C] bg-[#231004]/90' : 'border-[#5A2D0C]/15 bg-[#FFFDF9]/90'
+        }`}>
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 flex items-center gap-1.5 overflow-x-auto py-1.5">
             <button
               id="tab-nav-accommodation"
               type="button"
               onClick={() => setActiveTab('accommodation')}
-              className={`px-3.5 py-2 rounded-xl text-xs font-semibold flex items-center gap-1.5 whitespace-nowrap transition-all cursor-pointer ${
+              className={`px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 whitespace-nowrap transition-all cursor-pointer border-b-2 active:border-b active:translate-y-[1px] ${
                 activeTab === 'accommodation'
-                  ? 'bg-[#5A2D0C] text-[#FFF9EE] shadow-xs'
-                  : 'text-stone-600 hover:text-stone-900 hover:bg-stone-100'
+                  ? 'bg-[#5A2D0C] text-[#FFF9EE] border-[#381B07] shadow-xs'
+                  : isDark
+                  ? 'text-[#D9C4AC] hover:text-[#FFF9EE] hover:bg-[#3E200C] border-transparent'
+                  : 'text-[#6D4223] hover:text-[#5A2D0C] hover:bg-[#EFE5D5] border-transparent'
               }`}
             >
               <Building className="w-3.5 h-3.5" />
@@ -410,10 +434,12 @@ export const MemberHomeView: React.FC<MemberHomeViewProps> = ({
               id="tab-nav-peer-support"
               type="button"
               onClick={() => setActiveTab('peer-support')}
-              className={`px-3.5 py-2 rounded-xl text-xs font-semibold flex items-center gap-1.5 whitespace-nowrap transition-all cursor-pointer ${
+              className={`px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 whitespace-nowrap transition-all cursor-pointer border-b-2 active:border-b active:translate-y-[1px] ${
                 activeTab === 'peer-support'
-                  ? 'bg-[#5A2D0C] text-[#FFF9EE] shadow-xs'
-                  : 'text-stone-600 hover:text-stone-900 hover:bg-stone-100'
+                  ? 'bg-[#5A2D0C] text-[#FFF9EE] border-[#381B07] shadow-xs'
+                  : isDark
+                  ? 'text-[#D9C4AC] hover:text-[#FFF9EE] hover:bg-[#3E200C] border-transparent'
+                  : 'text-[#6D4223] hover:text-[#5A2D0C] hover:bg-[#EFE5D5] border-transparent'
               }`}
             >
               <HandCoins className="w-3.5 h-3.5 text-[#C88D3A]" />
@@ -424,10 +450,12 @@ export const MemberHomeView: React.FC<MemberHomeViewProps> = ({
               id="tab-nav-trust-trails"
               type="button"
               onClick={() => setActiveTab('trust-trails')}
-              className={`px-3.5 py-2 rounded-xl text-xs font-semibold flex items-center gap-1.5 whitespace-nowrap transition-all cursor-pointer ${
+              className={`px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 whitespace-nowrap transition-all cursor-pointer border-b-2 active:border-b active:translate-y-[1px] ${
                 activeTab === 'trust-trails'
-                  ? 'bg-[#5A2D0C] text-[#FFF9EE] shadow-xs'
-                  : 'text-stone-600 hover:text-stone-900 hover:bg-stone-100'
+                  ? 'bg-[#5A2D0C] text-[#FFF9EE] border-[#381B07] shadow-xs'
+                  : isDark
+                  ? 'text-[#D9C4AC] hover:text-[#FFF9EE] hover:bg-[#3E200C] border-transparent'
+                  : 'text-[#6D4223] hover:text-[#5A2D0C] hover:bg-[#EFE5D5] border-transparent'
               }`}
             >
               <Footprints className="w-3.5 h-3.5" />
@@ -438,10 +466,12 @@ export const MemberHomeView: React.FC<MemberHomeViewProps> = ({
               id="tab-nav-vouches"
               type="button"
               onClick={() => setActiveTab('vouches')}
-              className={`px-3.5 py-2 rounded-xl text-xs font-semibold flex items-center gap-1.5 whitespace-nowrap transition-all cursor-pointer ${
+              className={`px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 whitespace-nowrap transition-all cursor-pointer border-b-2 active:border-b active:translate-y-[1px] ${
                 activeTab === 'vouches'
-                  ? 'bg-[#5A2D0C] text-[#FFF9EE] shadow-xs'
-                  : 'text-stone-600 hover:text-stone-900 hover:bg-stone-100'
+                  ? 'bg-[#5A2D0C] text-[#FFF9EE] border-[#381B07] shadow-xs'
+                  : isDark
+                  ? 'text-[#D9C4AC] hover:text-[#FFF9EE] hover:bg-[#3E200C] border-transparent'
+                  : 'text-[#6D4223] hover:text-[#5A2D0C] hover:bg-[#EFE5D5] border-transparent'
               }`}
             >
               <ShieldCheck className="w-3.5 h-3.5" />
@@ -452,10 +482,12 @@ export const MemberHomeView: React.FC<MemberHomeViewProps> = ({
               id="tab-nav-recognition"
               type="button"
               onClick={() => setActiveTab('recognition')}
-              className={`px-3.5 py-2 rounded-xl text-xs font-semibold flex items-center gap-1.5 whitespace-nowrap transition-all cursor-pointer ${
+              className={`px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 whitespace-nowrap transition-all cursor-pointer border-b-2 active:border-b active:translate-y-[1px] ${
                 activeTab === 'recognition'
-                  ? 'bg-[#5A2D0C] text-[#FFF9EE] shadow-xs'
-                  : 'text-stone-600 hover:text-stone-900 hover:bg-stone-100'
+                  ? 'bg-[#5A2D0C] text-[#FFF9EE] border-[#381B07] shadow-xs'
+                  : isDark
+                  ? 'text-[#D9C4AC] hover:text-[#FFF9EE] hover:bg-[#3E200C] border-transparent'
+                  : 'text-[#6D4223] hover:text-[#5A2D0C] hover:bg-[#EFE5D5] border-transparent'
               }`}
             >
               <Award className="w-3.5 h-3.5" />
@@ -608,6 +640,15 @@ export const MemberHomeView: React.FC<MemberHomeViewProps> = ({
           )}
         </div>
       </footer>
+
+      {/* Missing Puzzle Feedback Flow */}
+      <MissingPuzzleModal
+        isOpen={isPuzzleModalOpen}
+        onClose={() => setIsPuzzleModalOpen(false)}
+        currentMember={currentMember}
+        isDark={isDark}
+        defaultLocation="Member Home Workspace"
+      />
     </div>
   );
 };

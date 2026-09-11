@@ -25,24 +25,24 @@ export const AccommodationResponsibilityCard: React.FC<AccommodationResponsibili
     <article
       id={`responsibility-card-${responsibility.id}`}
       aria-labelledby={`responsibility-title-${responsibility.id}`}
-      className="rounded-2xl p-5 sm:p-7 border transition-all duration-200"
+      className="rounded-2xl p-5 sm:p-7 border-2 border-b-4 transition-all duration-200 shadow-md"
       style={{
-        backgroundColor: isDark ? '#3E200C' : '#FFF9EE',
-        borderColor: isDark ? '#623416' : '#EAE0D0',
+        backgroundColor: isDark ? '#261205' : '#FFF9EE',
+        borderColor: isDark ? '#5C2D0C' : '#E0CEBA',
       }}
     >
       {/* Header: Title & Status Badge */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
         <div>
           <span
-            className="text-xs font-semibold uppercase tracking-wider block mb-1"
-            style={{ color: isDark ? '#C88D3A' : '#B77620' }}
+            className="text-xs font-bold uppercase tracking-wider block mb-1"
+            style={{ color: isDark ? '#E5A955' : '#B77620' }}
           >
             Accommodation Responsibility
           </span>
           <h2
             id={`responsibility-title-${responsibility.id}`}
-            className="font-serif text-xl sm:text-2xl font-semibold tracking-tight"
+            className="font-serif text-xl sm:text-2xl font-bold tracking-tight"
             style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
           >
             {responsibility.title}
@@ -52,15 +52,15 @@ export const AccommodationResponsibilityCard: React.FC<AccommodationResponsibili
         {/* Status indicator */}
         <div className="self-start sm:self-auto">
           <span
-            className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium tracking-wide uppercase"
+            className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-bold tracking-wide uppercase shadow-xs border"
             style={{
-              backgroundColor: isDark ? '#4B2710' : '#F7F1E7',
-              color: isDark ? '#E2AB5D' : '#B77620',
-              border: `1px solid ${isDark ? '#623416' : '#E7D6C1'}`,
+              backgroundColor: isDark ? '#3D1B06' : '#F7F1E7',
+              color: isDark ? '#F5C678' : '#8C4D11',
+              borderColor: isDark ? '#75380F' : '#E7D6C1',
             }}
           >
             <span
-              className="w-2 h-2 rounded-full mr-1.5"
+              className="w-2 h-2 rounded-full mr-2 shadow-xs"
               style={{ backgroundColor: isDark ? '#C88D3A' : '#B77620' }}
               aria-hidden="true"
             />
@@ -71,17 +71,17 @@ export const AccommodationResponsibilityCard: React.FC<AccommodationResponsibili
 
       {/* Location Hierarchy: Property → Floor → Room */}
       <div
-        className="rounded-xl p-3 sm:p-4 mb-5 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-xs sm:text-sm"
+        className="rounded-xl p-3.5 sm:p-4 mb-5 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-xs sm:text-sm border-2 shadow-xs"
         style={{
-          backgroundColor: isDark ? '#2F1707' : '#F7F1E7',
-          color: isDark ? '#D9C4AC' : '#5A2D0C',
-          border: `1px solid ${isDark ? '#4B2710' : '#E7D6C1'}`,
+          backgroundColor: isDark ? '#1D0C03' : '#F7F1E7',
+          color: isDark ? '#EAD6C0' : '#5A2D0C',
+          borderColor: isDark ? '#4A2207' : '#E2CFB9',
         }}
       >
-        <div className="flex items-center gap-2 font-medium">
+        <div className="flex items-center gap-2 font-bold">
           <Building2
             className="w-4 h-4 shrink-0"
-            style={{ color: isDark ? '#C88D3A' : '#B77620' }}
+            style={{ color: isDark ? '#E5A955' : '#B77620' }}
             aria-hidden="true"
           />
           <span>{responsibility.accommodationContext.property.name}</span>
@@ -90,24 +90,24 @@ export const AccommodationResponsibilityCard: React.FC<AccommodationResponsibili
         <div className="flex items-center gap-3">
           <span>{responsibility.accommodationContext.floor.name}</span>
           <span aria-hidden="true">&bull;</span>
-          <span className="font-medium">{responsibility.accommodationContext.room.name}</span>
+          <span className="font-semibold">{responsibility.accommodationContext.room.name}</span>
         </div>
       </div>
 
       {/* Financial State Breakdown: Required, Verified, Remaining */}
-      <div className="grid grid-cols-3 gap-2 sm:gap-4 py-3 sm:py-4 border-t border-b mb-5"
-        style={{ borderColor: isDark ? '#4B2710' : '#EAE0D0' }}
+      <div className="grid grid-cols-3 gap-2 sm:gap-4 py-3 sm:py-4 border-t-2 border-b-2 mb-5"
+        style={{ borderColor: isDark ? '#421E06' : '#EAE0D0' }}
       >
         {/* Required Amount */}
         <div className="min-w-0">
           <span
-            className="text-[11px] sm:text-xs block mb-1 truncate"
-            style={{ color: isDark ? '#A67B54' : '#8A5D3B' }}
+            className="text-[11px] sm:text-xs block mb-1 truncate font-medium"
+            style={{ color: isDark ? '#C49B75' : '#8A5D3B' }}
           >
             Required Amount
           </span>
           <p
-            className="text-sm sm:text-base md:text-lg font-semibold truncate"
+            className="text-sm sm:text-base md:text-lg font-bold truncate"
             style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
           >
             {formatNaira(responsibility.requiredAmount)}
@@ -117,14 +117,14 @@ export const AccommodationResponsibilityCard: React.FC<AccommodationResponsibili
         {/* Verified Amount */}
         <div className="min-w-0">
           <span
-            className="text-[11px] sm:text-xs block mb-1 truncate"
-            style={{ color: isDark ? '#A67B54' : '#8A5D3B' }}
+            className="text-[11px] sm:text-xs block mb-1 truncate font-medium"
+            style={{ color: isDark ? '#C49B75' : '#8A5D3B' }}
           >
             Verified Amount
           </span>
           <p
-            className="text-sm sm:text-base md:text-lg font-medium truncate"
-            style={{ color: isDark ? '#D9C4AC' : '#704728' }}
+            className="text-sm sm:text-base md:text-lg font-semibold truncate"
+            style={{ color: isDark ? '#EAD6C0' : '#704728' }}
           >
             {formatNaira(responsibility.verifiedAmount)}
           </p>
@@ -133,14 +133,14 @@ export const AccommodationResponsibilityCard: React.FC<AccommodationResponsibili
         {/* Remaining Amount (Derived) */}
         <div className="min-w-0">
           <span
-            className="text-[11px] sm:text-xs block mb-1 truncate font-medium"
-            style={{ color: isDark ? '#C88D3A' : '#B77620' }}
+            className="text-[11px] sm:text-xs block mb-1 truncate font-bold"
+            style={{ color: isDark ? '#F5C678' : '#B77620' }}
           >
             Remaining Amount
           </span>
           <p
-            className="text-sm sm:text-base md:text-lg font-bold truncate"
-            style={{ color: isDark ? '#E2AB5D' : '#B77620' }}
+            className="text-sm sm:text-base md:text-lg font-extrabold truncate"
+            style={{ color: isDark ? '#F5C678' : '#B77620' }}
           >
             {formatNaira(remainingAmount)}
           </p>
@@ -153,10 +153,10 @@ export const AccommodationResponsibilityCard: React.FC<AccommodationResponsibili
           type="button"
           id={`view-responsibility-${responsibility.id}-btn`}
           onClick={() => onViewDetails(responsibility.id)}
-          className={`inline-flex items-center gap-2 px-4 py-2.5 min-h-[44px] rounded-xl text-sm font-medium transition-all duration-150 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 ${
+          className={`inline-flex items-center gap-2 px-4 py-2.5 min-h-[44px] rounded-xl text-sm font-bold transition-all duration-150 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 border-b-3 active:border-b active:translate-y-[1px] shadow-sm ${
             isDark
-              ? 'bg-[#C88D3A] text-[#2F1707] hover:bg-[#DDA250] focus-visible:ring-[#C88D3A] focus-visible:ring-offset-[#3E200C]'
-              : 'bg-[#5A2D0C] text-[#FFF9EE] hover:bg-[#432108] focus-visible:ring-[#5A2D0C] focus-visible:ring-offset-[#FFF9EE]'
+              ? 'bg-[#C88D3A] text-[#241104] hover:bg-[#DDA250] border-[#915B15] focus-visible:ring-[#C88D3A] focus-visible:ring-offset-[#261205]'
+              : 'bg-[#5A2D0C] text-[#FFF9EE] hover:bg-[#432108] border-[#381B07] focus-visible:ring-[#5A2D0C] focus-visible:ring-offset-[#FFF9EE]'
           }`}
         >
           <span>View Responsibility</span>
