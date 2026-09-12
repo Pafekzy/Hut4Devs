@@ -181,7 +181,7 @@ export const DevAuthView: React.FC<DevAuthViewProps> = ({
       {/* Main Authentication Card */}
       <main className="flex-1 flex items-center justify-center px-4 sm:px-6 py-8 sm:py-12">
         <div
-          className="w-full max-w-lg rounded-2xl border p-6 sm:p-8 shadow-md transition-colors duration-200"
+          className={`w-full ${showDevTools ? 'max-w-4xl' : 'max-w-lg'} rounded-2xl border p-5 sm:p-8 shadow-md transition-all duration-300`}
           style={{
             backgroundColor: isDark ? '#3A1E0B' : '#FFFFFF',
             borderColor: isDark ? '#4B2710' : '#E7D6C1',
