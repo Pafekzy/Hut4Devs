@@ -44,14 +44,14 @@ export const VouchSection: React.FC<VouchSectionProps> = ({
       case 'high':
         return (
           <span className="relative inline-flex group select-none">
-            {/* 3D Underlay Backplate - Reuses exact Dark-Mode High Confidence visual treatment (gradient, border, shadow) */}
+            {/* 3D Underlay Backplate - Solid Dark Chocolate (#5A2D0C) for tactile physical base in Light Mode */}
             <span
               aria-hidden="true"
-              className="absolute inset-0 translate-y-[2.5px] translate-x-[0.5px] rounded-full bg-gradient-to-r from-[#3F8F76] via-[#5CA98C] to-[#78C2A4] border border-[#5CA98C] shadow-xs shadow-[#3F8F76]/40 dark:hidden"
+              className="absolute inset-0 translate-y-[3px] rounded-full bg-[#5A2D0C] dark:hidden"
             />
             {/* Top Badge */}
             <span
-              className="relative animate-badge-shine inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold tracking-tight border transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md bg-gradient-to-r from-[#D7F3E9] via-[#E8F8F2] to-[#D7F3E9] text-[#0C3829] border-[#227B5D] dark:from-[#3F8F76]/40 dark:via-[#5CA98C]/45 dark:to-[#78C2A4]/35 dark:text-[#C1F5E8] dark:border-[#5CA98C]/70 dark:shadow-[#3F8F76]/30 dark:shadow-xs"
+              className="relative z-1 animate-badge-shine inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold tracking-tight border transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md bg-gradient-to-r from-[#D7F3E9] via-[#E8F8F2] to-[#D7F3E9] text-[#0C3829] border-[#227B5D] dark:from-[#3F8F76]/40 dark:via-[#5CA98C]/45 dark:to-[#78C2A4]/35 dark:text-[#C1F5E8] dark:border-[#5CA98C]/70 dark:shadow-[#3F8F76]/30 dark:shadow-xs"
             >
               <CheckCircle2 className="w-3.5 h-3.5 text-[#0C3829] dark:text-[#C1F5E8] shrink-0" strokeWidth={2.5} />
               <span className="font-bold tracking-tight">High Confidence</span>
@@ -61,14 +61,14 @@ export const VouchSection: React.FC<VouchSectionProps> = ({
       case 'moderate':
         return (
           <span className="relative inline-flex group select-none">
-            {/* 3D Underlay Backplate - Reuses exact Dark-Mode Moderate Confidence visual treatment (gradient, border, shadow) */}
+            {/* 3D Underlay Backplate - Solid Dark Chocolate (#5A2D0C) for tactile physical base in Light Mode */}
             <span
               aria-hidden="true"
-              className="absolute inset-0 translate-y-[2.5px] translate-x-[0.5px] rounded-full bg-gradient-to-r from-[#6F7FBF] via-[#8190CF] to-[#9AA5DE] border border-[#8190CF] shadow-xs shadow-[#6F7FBF]/40 dark:hidden"
+              className="absolute inset-0 translate-y-[3px] rounded-full bg-[#5A2D0C] dark:hidden"
             />
             {/* Top Badge */}
             <span
-              className="relative animate-badge-shine inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold tracking-tight border transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md bg-gradient-to-r from-[#DFE6F9] via-[#EDF2FC] to-[#DFE6F9] text-[#192750] border-[#465BA0] dark:from-[#6F7FBF]/40 dark:via-[#8190CF]/45 dark:to-[#9AA5DE]/35 dark:text-[#D8E0FF] dark:border-[#8190CF]/70 dark:shadow-[#6F7FBF]/30 dark:shadow-xs"
+              className="relative z-1 animate-badge-shine inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold tracking-tight border transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md bg-gradient-to-r from-[#DFE6F9] via-[#EDF2FC] to-[#DFE6F9] text-[#192750] border-[#465BA0] dark:from-[#6F7FBF]/40 dark:via-[#8190CF]/45 dark:to-[#9AA5DE]/35 dark:text-[#D8E0FF] dark:border-[#8190CF]/70 dark:shadow-[#6F7FBF]/30 dark:shadow-xs"
             >
               <Info className="w-3.5 h-3.5 text-[#192750] dark:text-[#D8E0FF] shrink-0" strokeWidth={2.5} />
               <span className="font-bold tracking-tight">Moderate Confidence</span>
@@ -78,14 +78,14 @@ export const VouchSection: React.FC<VouchSectionProps> = ({
       case 'cautious':
         return (
           <span className="relative inline-flex group select-none">
-            {/* 3D Underlay Backplate - Reuses exact Dark-Mode Cautious visual treatment (gradient, border, shadow) */}
+            {/* 3D Underlay Backplate - Solid Dark Chocolate (#5A2D0C) for tactile physical base in Light Mode */}
             <span
               aria-hidden="true"
-              className="absolute inset-0 translate-y-[2.5px] translate-x-[0.5px] rounded-full bg-gradient-to-r from-[#D97706] via-[#F59E0B] to-[#FBBF24] border border-[#F59E0B] shadow-xs shadow-[#D97706]/40 dark:hidden"
+              className="absolute inset-0 translate-y-[3px] rounded-full bg-[#5A2D0C] dark:hidden"
             />
             {/* Top Badge */}
             <span
-              className="relative animate-badge-shine inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold tracking-tight border transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md bg-gradient-to-r from-[#FDE68A]/60 via-[#FEF3C7] to-[#FDE68A]/60 text-[#712B07] border-[#C25E00] dark:from-[#D97706]/40 dark:via-[#F59E0B]/45 dark:to-[#FBBF24]/35 dark:text-[#FDE68A] dark:border-[#F59E0B]/70 dark:shadow-[#D97706]/30 dark:shadow-xs"
+              className="relative z-1 animate-badge-shine inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold tracking-tight border transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md bg-gradient-to-r from-[#FDE68A]/60 via-[#FEF3C7] to-[#FDE68A]/60 text-[#712B07] border-[#C25E00] dark:from-[#D97706]/40 dark:via-[#F59E0B]/45 dark:to-[#FBBF24]/35 dark:text-[#FDE68A] dark:border-[#F59E0B]/70 dark:shadow-[#D97706]/30 dark:shadow-xs"
             >
               <AlertCircle className="w-3.5 h-3.5 text-[#712B07] dark:text-[#FDE68A] shrink-0" strokeWidth={2.5} />
               <span className="font-bold tracking-tight">Cautious / Bounded</span>
