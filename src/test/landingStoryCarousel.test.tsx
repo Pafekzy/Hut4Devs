@@ -1,0 +1,117 @@
+import { describe, it, expect, vi } from 'vitest';
+import React from 'react';
+import { render, screen, fireEvent } from '@testing-library/react';
+import { LANDING_STORY_SLIDES } from '../data/landingStorySlides';
+import { LandingStoryCarousel } from '../components/LandingStoryCarousel';
+import { LandingView } from '../components/LandingView';
+
+describe('Hut4Devs Landing Story Carousel Framework (Checkpoint 01)', () => {
+  it('defines exactly six structured slides with full required attributes', () => {
+    expect(LANDING_STORY_SLIDES).toHaveLength(6);
+
+    LANDING_STORY_SLIDES.forEach((slide, idx) => {
+      expect(slide.slideNumber).toBe(idx + 1);
+      expect(slide.id).toBeTruthy();
+      expect(slide.focus).toBeTruthy();
+      expect(slide.title).toBeTruthy();
+      expect(slide.message).toBeTruthy();
+      expect(slide.imageAlt).toBeTruthy();
+      expect(slide.plannedSceneDescription).toBeTruthy();
+    });
+  });
+
+  it('verifies slide 1 is Mutual Support in Shared Living', () => {
+    const slide1 = LANDING_STORY_SLIDES[0];
+    expect(slide1.focus).toBe('Mutual Support in Shared Living');
+    expect(slide1.title).toBe('Community shows up');
+    expect(slide1.message).toContain('When one of us needs support');
+  });
+
+  it('verifies slide 6 focuses strictly on Welfare & Mediation without institution customization', () => {
+    const slide6 = LANDING_STORY_SLIDES[5];
+    expect(slide6.focus).toBe('Welfare & Mediation');
+    expect(slide6.title).toBe('See where help is needed');
+    expect(slide6.message).toContain('Feedback and welfare concerns');
+    // Ensure no provider or institution branding leaked into slide 6
+    expect(slide6.message).not.toContain('branding');
+    expect(slide6.message).not.toContain('provider');
+    expect(slide6.message).not.toContain('wallet');
+  });
+
+  it('renders LandingStoryCarousel with accessible controls and navigates slides', () => {
+    const onSlideChange = vi.fn();
+    render(<LandingStoryCarousel isDark={false} onSlideChange={onSlideChange} />);
+
+    // Check initial slide is slide 1
+    expect(screen.getByText('Story 1 of 6')).toBeInTheDocument();
+    expect(screen.getByText('"Community shows up"')).toBeInTheDocument();
+
+    // Check next button navigates to slide 2
+    const nextBtn = screen.getByRole('button', { name: /Next story/i });
+    fireEvent.click(nextBtn);
+    expect(screen.getByText('Story 2 of 6')).toBeInTheDocument();
+    expect(screen.getByText('"Shared needs. Shared action."')).toBeInTheDocument();
+    expect(onSlideChange).toHaveBeenCalledWith(1);
+
+    // Check previous button navigates back to slide 1
+    const prevBtn = screen.getByRole('button', { name: /Previous story/i });
+    fireEvent.click(prevBtn);
+    expect(screen.getByText('Story 1 of 6')).toBeInTheDocument();
+    expect(onSlideChange).toHaveBeenCalledWith(0);
+
+    // Check clicking dot 4 navigates to slide 4
+    const dot4 = screen.getByRole('tab', { name: /Go to story 4/i });
+    fireEvent.click(dot4);
+    expect(screen.getByText('Story 4 of 6')).toBeInTheDocument();
+    expect(onSlideChange).toHaveBeenCalledWith(3);
+  });
+
+  it('supports pause and resume of slideshow', () => {
+    render(<LandingStoryCarousel isDark={false} />);
+    const pausePlayBtn = screen.getByRole('button', { name: /Pause story slideshow/i });
+    expect(pausePlayBtn).toBeInTheDocument();
+
+    // Click to pause
+    fireEvent.click(pausePlayBtn);
+    expect(screen.getByRole('button', { name: /Play story slideshow/i })).toBeInTheDocument();
+  });
+
+  it('renders LandingView preserving all primary CTAs, sticky header, and identity switch', () => {
+    const onEnter = vi.fn();
+    const onOpenRegistration = vi.fn();
+    const onOpenDevAuth = vi.fn();
+    const onToggleTheme = vi.fn();
+
+    render(
+      <LandingView
+        isDark={false}
+        onEnter={onEnter}
+        onOpenRegistration={onOpenRegistration}
+        onOpenDevAuth={onOpenDevAuth}
+        onToggleTheme={onToggleTheme}
+      />
+    );
+
+    // Header & Brand
+    expect(screen.getByText(/Switch Identity/i)).toBeInTheDocument();
+    expect(screen.getByText(/Turning everyday collaboration into trails of trust/i)).toBeInTheDocument();
+
+    // CTAs
+    const enterBtn = screen.getByRole('button', { name: /Enter Hut4Devs/i });
+    expect(enterBtn).toBeInTheDocument();
+    fireEvent.click(enterBtn);
+    expect(onEnter).toHaveBeenCalledTimes(1);
+
+    const regBtn = screen.getByRole('button', { name: /Submit Accommodation Membership Request/i });
+    expect(regBtn).toBeInTheDocument();
+    fireEvent.click(regBtn);
+    expect(onOpenRegistration).toHaveBeenCalledTimes(1);
+
+    const devAuthBtn = screen.getByRole('button', { name: /Switch Identity/i });
+    fireEvent.click(devAuthBtn);
+    expect(onOpenDevAuth).toHaveBeenCalledTimes(1);
+
+    // Carousel is also present on LandingView
+    expect(screen.getByText('Story 1 of 6')).toBeInTheDocument();
+  });
+});
