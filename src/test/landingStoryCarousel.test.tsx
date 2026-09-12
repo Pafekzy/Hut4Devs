@@ -42,21 +42,32 @@ describe('Hut4Devs Landing Story Carousel Framework (Checkpoint 01)', () => {
     const onSlideChange = vi.fn();
     render(<LandingStoryCarousel isDark={false} onSlideChange={onSlideChange} />);
 
-    // Check initial slide is slide 1
-    expect(screen.getByText('Story 1 of 6')).toBeInTheDocument();
-    expect(screen.getByText('"Community shows up"')).toBeInTheDocument();
+    // Check initial slide is slide 1 with integrated image and heading
+    const slide1Img = screen.getByRole('img', {
+      name: /Three African roommates supporting one another/i,
+    });
+    expect(slide1Img).toBeInTheDocument();
+    expect(slide1Img).toHaveAttribute('src', '/story/slide-01-mutual-support.webp');
+    expect(screen.getByRole('heading', { name: /Community shows up/i })).toBeInTheDocument();
 
-    // Check next button navigates to slide 2
+    // Check next button navigates to slide 2 (with integrated image and heading)
     const nextBtn = screen.getByRole('button', { name: /Next story/i });
     fireEvent.click(nextBtn);
     expect(screen.getByText('Story 2 of 6')).toBeInTheDocument();
-    expect(screen.getByText('"Shared needs. Shared action."')).toBeInTheDocument();
+    const slide2Img = screen.getByRole('img', {
+      name: /Four African roommates reviewing a superior Wi-Fi plan/i,
+    });
+    expect(slide2Img).toBeInTheDocument();
+    expect(slide2Img).toHaveAttribute('src', '/story/slide-02-shared-contribution.webp');
+    expect(screen.getByRole('heading', { name: /Shared needs\. Shared action\./i })).toBeInTheDocument();
     expect(onSlideChange).toHaveBeenCalledWith(1);
 
     // Check previous button navigates back to slide 1
     const prevBtn = screen.getByRole('button', { name: /Previous story/i });
     fireEvent.click(prevBtn);
-    expect(screen.getByText('Story 1 of 6')).toBeInTheDocument();
+    expect(
+      screen.getByRole('img', { name: /Three African roommates supporting one another/i })
+    ).toBeInTheDocument();
     expect(onSlideChange).toHaveBeenCalledWith(0);
 
     // Check clicking dot 4 navigates to slide 4

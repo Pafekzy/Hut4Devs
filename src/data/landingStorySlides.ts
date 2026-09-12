@@ -28,8 +28,9 @@ export const LANDING_STORY_SLIDES: LandingStorySlide[] = [
     title: 'Community shows up',
     message:
       'When one of us needs support, shared living should not feel isolating.',
+    imageSrc: '/story/slide-01-mutual-support.webp',
     imageAlt:
-      'Three African female Techpreneurs in a modest shared room offering mutual support and encouragement',
+      'Three African roommates supporting one another in a modest shared accommodation room',
     plannedSceneDescription:
       'Three African female Techpreneurs in a modest shared room. One is worried about low funds. Two roommates encourage her. One of the supporting women may be an adult woman with dwarfism.',
   },
@@ -40,8 +41,9 @@ export const LANDING_STORY_SLIDES: LandingStorySlide[] = [
     title: 'Shared needs. Shared action.',
     message:
       'Small contributions can help communities solve practical needs together.',
+    imageSrc: '/story/slide-02-shared-contribution.webp',
     imageAlt:
-      'African male roommates in a modest bunk-room environment contributing toward shared Wi-Fi at a wooden study table',
+      'Four African roommates reviewing a superior Wi-Fi plan and planning shared contributions in their accommodation room',
     plannedSceneDescription:
       'African male roommates in a modest bunk-room environment contributing toward shared Wi-Fi.',
   },

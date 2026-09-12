@@ -132,13 +132,29 @@ export const LandingStoryCarousel: React.FC<LandingStoryCarouselProps> = ({
         aria-roledescription="slide"
         aria-label={`Story ${currentSlide.slideNumber} of ${totalSlides}: ${currentSlide.focus}`}
       >
-        {/* If imageSrc is available, render it; otherwise render the tasteful story stage placeholder */}
+        {/* If imageSrc is available, render it with subtle top story counter badge; otherwise render the tasteful story stage placeholder */}
         {currentSlide.imageSrc ? (
-          <img
-            src={currentSlide.imageSrc}
-            alt={currentSlide.imageAlt}
-            className="w-full h-full object-cover transition-opacity duration-300"
-          />
+          <div className="relative w-full h-full">
+            <img
+              src={currentSlide.imageSrc}
+              alt={currentSlide.imageAlt}
+              referrerPolicy="no-referrer"
+              className="w-full h-full object-cover transition-opacity duration-300"
+            />
+            <div className="absolute top-3 left-3 sm:top-4 sm:left-4 z-10 pointer-events-none">
+              <span
+                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-mono font-bold tracking-wider uppercase border shadow-xs backdrop-blur-xs"
+                style={{
+                  backgroundColor: isDark ? 'rgba(47, 23, 7, 0.85)' : 'rgba(255, 249, 238, 0.92)',
+                  borderColor: isDark ? '#623416' : '#C88D3A40',
+                  color: isDark ? '#C88D3A' : '#5A2D0C',
+                }}
+              >
+                <StoryIcon className="w-3.5 h-3.5 text-[#C88D3A]" aria-hidden="true" />
+                <span>Story {currentSlide.slideNumber} of {totalSlides}</span>
+              </span>
+            </div>
+          </div>
         ) : (
           <div className="w-full h-full flex flex-col items-center justify-between p-4 sm:p-6 text-center relative overflow-hidden">
             {/* Background watermark badge */}
