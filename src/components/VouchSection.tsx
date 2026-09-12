@@ -44,10 +44,10 @@ export const VouchSection: React.FC<VouchSectionProps> = ({
       case 'high':
         return (
           <span className="relative inline-flex group select-none">
-            {/* 3D Underlay Backplate (Light Mode Tactical Depth) */}
+            {/* 3D Underlay Backplate - Reuses exact Dark-Mode High Confidence visual treatment (gradient, border, shadow) */}
             <span
               aria-hidden="true"
-              className="absolute inset-0 translate-y-[2.5px] translate-x-[0.5px] rounded-full bg-[#0F3D2E] dark:hidden"
+              className="absolute inset-0 translate-y-[2.5px] translate-x-[0.5px] rounded-full bg-gradient-to-r from-[#3F8F76] via-[#5CA98C] to-[#78C2A4] border border-[#5CA98C] shadow-xs shadow-[#3F8F76]/40 dark:hidden"
             />
             {/* Top Badge */}
             <span
@@ -61,10 +61,10 @@ export const VouchSection: React.FC<VouchSectionProps> = ({
       case 'moderate':
         return (
           <span className="relative inline-flex group select-none">
-            {/* 3D Underlay Backplate (Light Mode Tactical Depth) */}
+            {/* 3D Underlay Backplate - Reuses exact Dark-Mode Moderate Confidence visual treatment (gradient, border, shadow) */}
             <span
               aria-hidden="true"
-              className="absolute inset-0 translate-y-[2.5px] translate-x-[0.5px] rounded-full bg-[#1F2C54] dark:hidden"
+              className="absolute inset-0 translate-y-[2.5px] translate-x-[0.5px] rounded-full bg-gradient-to-r from-[#6F7FBF] via-[#8190CF] to-[#9AA5DE] border border-[#8190CF] shadow-xs shadow-[#6F7FBF]/40 dark:hidden"
             />
             {/* Top Badge */}
             <span
@@ -78,10 +78,10 @@ export const VouchSection: React.FC<VouchSectionProps> = ({
       case 'cautious':
         return (
           <span className="relative inline-flex group select-none">
-            {/* 3D Underlay Backplate (Light Mode Tactical Depth) */}
+            {/* 3D Underlay Backplate - Reuses exact Dark-Mode Cautious visual treatment (gradient, border, shadow) */}
             <span
               aria-hidden="true"
-              className="absolute inset-0 translate-y-[2.5px] translate-x-[0.5px] rounded-full bg-[#6B2806] dark:hidden"
+              className="absolute inset-0 translate-y-[2.5px] translate-x-[0.5px] rounded-full bg-gradient-to-r from-[#D97706] via-[#F59E0B] to-[#FBBF24] border border-[#F59E0B] shadow-xs shadow-[#D97706]/40 dark:hidden"
             />
             {/* Top Badge */}
             <span
