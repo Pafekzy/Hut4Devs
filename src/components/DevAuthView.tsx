@@ -53,6 +53,15 @@ export const DevAuthView: React.FC<DevAuthViewProps> = ({
   const [authenticating, setAuthenticating] = useState(false);
   const [authError, setAuthError] = useState<string | null>(null);
   const [showDevTools, setShowDevTools] = useState(false);
+  const [hierarchyResetKey, setHierarchyResetKey] = useState(0);
+
+  // Safe Home Key handler: clears only temporary governance navigation state
+  // and returns cleanly to the Sign In / Development Entry screen
+  const handleHomeKeyClick = () => {
+    setShowDevTools(false);
+    setHierarchyResetKey((prev) => prev + 1);
+    setAuthError(null);
+  };
 
   // Firebase email form state
   const [authMode, setAuthMode] = useState<'signin' | 'signup'>('signin');
@@ -161,18 +170,47 @@ export const DevAuthView: React.FC<DevAuthViewProps> = ({
         isDark ? 'bg-[#2F1707] text-[#FFF9EE]' : 'bg-[#F7F1E7] text-[#5A2D0C]'
       }`}
     >
-      {/* Top Header */}
+      {/* Top Sticky Header */}
       <header
-        className="w-full border-b transition-colors duration-200"
+        className="sticky top-0 z-30 w-full border-b transition-colors duration-200"
         style={{
           borderColor: isDark ? '#3E200C' : '#EAE0D0',
-          backgroundColor: isDark ? 'rgba(47, 23, 7, 0.85)' : 'rgba(247, 241, 231, 0.85)',
+          backgroundColor: isDark ? 'rgba(47, 23, 7, 0.95)' : 'rgba(247, 241, 231, 0.95)',
           backdropFilter: 'blur(8px)',
         }}
       >
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between">
-          <Hut4DevsLogo isDark={isDark} size="sm" showWordmark={true} />
-          <div className="flex items-center gap-3">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between gap-3">
+          <div className="flex items-center gap-3 min-w-0">
+            <button
+              type="button"
+              id="dev-auth-home-key-btn"
+              onClick={handleHomeKeyClick}
+              aria-label="Return to Sign In"
+              title="Return to Sign In"
+              className="inline-flex items-center text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C88D3A] rounded-lg cursor-pointer transition-opacity hover:opacity-90 active:opacity-75 shrink-0"
+            >
+              <Hut4DevsLogo isDark={isDark} size="sm" showWordmark={true} />
+            </button>
+            {showDevTools && (
+              <span className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold border border-[#C88D3A]/40 bg-[#FFF9EE] dark:bg-[#3A1E0B] text-[#5A2D0C] dark:text-[#FFF9EE] shadow-xs truncate">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#C88D3A] shrink-0" aria-hidden="true" />
+                <span>Switch Role &amp; Governance</span>
+              </span>
+            )}
+          </div>
+          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+            {showDevTools && (
+              <button
+                type="button"
+                onClick={handleHomeKeyClick}
+                aria-label="Return to Sign In"
+                title="Return to Sign In"
+                className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-semibold rounded-lg bg-[#FFF9EE] dark:bg-[#2F1707] border border-[#C88D3A]/40 text-[#5A2D0C] dark:text-[#FFF9EE] hover:bg-[#F7F1E7] dark:hover:bg-[#3E200C] transition-colors cursor-pointer shadow-xs"
+              >
+                <Home className="w-3.5 h-3.5 text-[#C88D3A]" />
+                <span className="hidden md:inline">Sign In Entry</span>
+              </button>
+            )}
             <ThemeToggle isDark={isDark} onToggle={onToggleTheme} />
           </div>
         </div>
@@ -403,10 +441,12 @@ export const DevAuthView: React.FC<DevAuthViewProps> = ({
             {showDevTools && (
               <div className="mt-3">
                 <GovernanceDevHierarchy
+                  key={hierarchyResetKey}
                   isDark={isDark}
                   isLoading={isLoading}
                   authenticating={authenticating}
                   onAuthenticate={handleSelectAndAuth}
+                  onReturnToSignIn={handleHomeKeyClick}
                 />
               </div>
             )}

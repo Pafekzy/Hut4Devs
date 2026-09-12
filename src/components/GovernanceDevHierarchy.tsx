@@ -37,6 +37,7 @@ interface GovernanceDevHierarchyProps {
   isLoading: boolean;
   authenticating: boolean;
   onAuthenticate: (role: MemberRole) => Promise<void>;
+  onReturnToSignIn?: () => void;
 }
 
 type DrillLevel = 'INSTITUTIONS' | 'CAMPUSES' | 'CATEGORIES' | 'ROOM_CAPTAINS' | 'COORDINATOR' | 'ADMINISTRATION';
@@ -46,6 +47,7 @@ export const GovernanceDevHierarchy: React.FC<GovernanceDevHierarchyProps> = ({
   isLoading,
   authenticating,
   onAuthenticate,
+  onReturnToSignIn,
 }) => {
   // Navigation State
   const [drillLevel, setDrillLevel] = useState<DrillLevel>('INSTITUTIONS');
@@ -134,20 +136,48 @@ export const GovernanceDevHierarchy: React.FC<GovernanceDevHierarchyProps> = ({
           </p>
         </div>
 
-        {drillLevel !== 'INSTITUTIONS' && (
-          <button
-            type="button"
-            onClick={handleBack}
-            className="self-start sm:self-auto inline-flex items-center gap-1.5 px-3 py-1 text-xs font-semibold rounded-lg bg-[#F7F1E7] dark:bg-[#1E0D03] border border-[#5A2D0C]/20 dark:border-[#C88D3A]/40 text-[#5A2D0C] dark:text-[#FFF9EE] hover:bg-[#EAE0D0] dark:hover:bg-[#321605] transition-colors cursor-pointer shadow-xs"
-          >
-            <ArrowLeft className="w-3.5 h-3.5 text-[#C88D3A]" />
-            <span>Back</span>
-          </button>
-        )}
+        <div className="flex items-center gap-2 self-start sm:self-auto">
+          {drillLevel !== 'INSTITUTIONS' && (
+            <button
+              type="button"
+              onClick={handleBack}
+              className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-semibold rounded-lg bg-[#F7F1E7] dark:bg-[#1E0D03] border border-[#5A2D0C]/20 dark:border-[#C88D3A]/40 text-[#5A2D0C] dark:text-[#FFF9EE] hover:bg-[#EAE0D0] dark:hover:bg-[#321605] transition-colors cursor-pointer shadow-xs"
+            >
+              <ArrowLeft className="w-3.5 h-3.5 text-[#C88D3A]" />
+              <span>Back</span>
+            </button>
+          )}
+          {onReturnToSignIn && (
+            <button
+              type="button"
+              onClick={onReturnToSignIn}
+              aria-label="Return to Sign In"
+              title="Return to Sign In"
+              className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-lg bg-[#FFF9EE] dark:bg-[#2F1707] border border-[#C88D3A]/40 text-[#5A2D0C] dark:text-[#FFF9EE] hover:bg-[#F7F1E7] dark:hover:bg-[#3E200C] transition-colors cursor-pointer shadow-xs"
+            >
+              <Home className="w-3.5 h-3.5 text-[#C88D3A]" />
+              <span className="hidden sm:inline">Sign In Entry</span>
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Breadcrumbs Navigation */}
       <nav aria-label="Governance Hierarchy Breadcrumbs" className="mb-4 flex items-center flex-wrap gap-1.5 text-[11px] font-medium">
+        {onReturnToSignIn && (
+          <>
+            <button
+              type="button"
+              onClick={onReturnToSignIn}
+              className="text-[#C88D3A] hover:text-[#B77620] hover:underline cursor-pointer transition-colors flex items-center gap-1"
+              title="Return to Sign In"
+            >
+              <Home className="w-3 h-3" />
+              <span>Sign In</span>
+            </button>
+            <ChevronRight className="w-3.5 h-3.5 text-stone-400" />
+          </>
+        )}
         <button
           type="button"
           onClick={() => {
