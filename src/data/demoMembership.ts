@@ -459,6 +459,7 @@ export const DEMO_ACCOMMODATION_ASSIGNMENTS = DEMO_ASSIGNMENTS;
 export const DEMO_SCOPED_ROLE_ASSIGNMENTS = DEMO_SCOPED_ROLES;
 
 export const INITIAL_RESPONSIBILITY_MESSAGES: ResponsibilityMessage[] = [
+  // Responsibility: resp-infinite-grace-2026-09
   {
     id: 'msg-01',
     responsibilityId: 'resp-infinite-grace-2026-09',
@@ -474,12 +475,71 @@ export const INITIAL_RESPONSIBILITY_MESSAGES: ResponsibilityMessage[] = [
     id: 'msg-02',
     responsibilityId: 'resp-infinite-grace-2026-09',
     fellowId: 'member-emmanuel-fellow',
+    senderId: 'member-adebayo-admin',
+    senderName: 'Adebayo Ogunlesi (Accommodation Financial Admin)',
+    senderRole: 'Financial Admin',
+    actingCapacity: 'Accommodation Financial Admin',
+    content: 'Your latest payment evidence has been received. ₦46,000 is verified, with ₦20,000 remaining.',
+    createdAt: '2026-09-09T09:15:00Z',
+  },
+  {
+    id: 'msg-03',
+    responsibilityId: 'resp-infinite-grace-2026-09',
+    fellowId: 'member-emmanuel-fellow',
     senderId: 'member-emmanuel-fellow',
     senderName: 'Emmanuel Ukom',
     senderRole: 'Fellow',
     actingCapacity: 'Fellow',
-    content: 'Thanks Chinedu! Preparing payment intent now through BMONI.',
-    createdAt: '2026-09-08T11:30:00Z',
+    content: 'Thank you. I’ll complete the remaining amount tomorrow.',
+    createdAt: '2026-09-09T09:45:00Z',
+  },
+
+  // Responsibility: resp-sept-2026 (Fellow workspace default)
+  {
+    id: 'msg-sept-01',
+    responsibilityId: 'resp-sept-2026',
+    fellowId: 'mem-1',
+    senderId: 'mem-adebayo',
+    senderName: 'Adebayo Ogunlesi (Accommodation Financial Admin)',
+    senderRole: 'Financial Admin',
+    actingCapacity: 'Accommodation Financial Admin',
+    content: 'Your latest payment evidence has been received. ₦46,000 is verified, with ₦20,000 remaining.',
+    createdAt: '2026-09-09T09:15:00Z',
+  },
+  {
+    id: 'msg-sept-02',
+    responsibilityId: 'resp-sept-2026',
+    fellowId: 'mem-1',
+    senderId: 'mem-1',
+    senderName: 'Emmanuel Ukom',
+    senderRole: 'Fellow',
+    actingCapacity: 'Fellow',
+    content: 'Thank you. I’ll complete the remaining amount tomorrow.',
+    createdAt: '2026-09-09T09:45:00Z',
+  },
+
+  // Responsibility: resp-ig-01 (Command Center Emmanuel Ukom)
+  {
+    id: 'msg-ig01-01',
+    responsibilityId: 'resp-ig-01',
+    fellowId: 'mem-01',
+    senderId: 'mem-adebayo',
+    senderName: 'Adebayo Ogunlesi (Accommodation Financial Admin)',
+    senderRole: 'Financial Admin',
+    actingCapacity: 'Accommodation Financial Admin',
+    content: 'Your latest payment evidence has been received. ₦46,000 is verified, with ₦20,000 remaining.',
+    createdAt: '2026-09-09T09:15:00Z',
+  },
+  {
+    id: 'msg-ig01-02',
+    responsibilityId: 'resp-ig-01',
+    fellowId: 'mem-01',
+    senderId: 'mem-01',
+    senderName: 'Emmanuel Ukom',
+    senderRole: 'Fellow',
+    actingCapacity: 'Fellow',
+    content: 'Thank you. I’ll complete the remaining amount tomorrow.',
+    createdAt: '2026-09-09T09:45:00Z',
   },
 ];
 
