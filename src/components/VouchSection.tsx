@@ -43,29 +43,53 @@ export const VouchSection: React.FC<VouchSectionProps> = ({
     switch (confidence) {
       case 'high':
         return (
-          <span
-            className="animate-badge-shine inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold tracking-tight border transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md select-none bg-gradient-to-r from-[#D7F3E9] via-[#E8F8F2] to-[#D7F3E9] text-[#0C3829] border-[#227B5D] shadow-xs shadow-[#227B5D]/15 dark:from-[#3F8F76]/40 dark:via-[#5CA98C]/45 dark:to-[#78C2A4]/35 dark:text-[#C1F5E8] dark:border-[#5CA98C]/70 dark:shadow-[#3F8F76]/30"
-          >
-            <CheckCircle2 className="w-3.5 h-3.5 text-[#0C3829] dark:text-[#C1F5E8] shrink-0" strokeWidth={2.5} />
-            <span className="font-bold tracking-tight">High Confidence</span>
+          <span className="relative inline-flex group select-none">
+            {/* 3D Underlay Backplate (Light Mode Tactical Depth) */}
+            <span
+              aria-hidden="true"
+              className="absolute inset-0 translate-y-[2.5px] translate-x-[0.5px] rounded-full bg-[#0F3D2E] dark:hidden"
+            />
+            {/* Top Badge */}
+            <span
+              className="relative animate-badge-shine inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold tracking-tight border transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md bg-gradient-to-r from-[#D7F3E9] via-[#E8F8F2] to-[#D7F3E9] text-[#0C3829] border-[#227B5D] dark:from-[#3F8F76]/40 dark:via-[#5CA98C]/45 dark:to-[#78C2A4]/35 dark:text-[#C1F5E8] dark:border-[#5CA98C]/70 dark:shadow-[#3F8F76]/30 dark:shadow-xs"
+            >
+              <CheckCircle2 className="w-3.5 h-3.5 text-[#0C3829] dark:text-[#C1F5E8] shrink-0" strokeWidth={2.5} />
+              <span className="font-bold tracking-tight">High Confidence</span>
+            </span>
           </span>
         );
       case 'moderate':
         return (
-          <span
-            className="animate-badge-shine inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold tracking-tight border transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md select-none bg-gradient-to-r from-[#DFE6F9] via-[#EDF2FC] to-[#DFE6F9] text-[#192750] border-[#465BA0] shadow-xs shadow-[#465BA0]/15 dark:from-[#6F7FBF]/40 dark:via-[#8190CF]/45 dark:to-[#9AA5DE]/35 dark:text-[#D8E0FF] dark:border-[#8190CF]/70 dark:shadow-[#6F7FBF]/30"
-          >
-            <Info className="w-3.5 h-3.5 text-[#192750] dark:text-[#D8E0FF] shrink-0" strokeWidth={2.5} />
-            <span className="font-bold tracking-tight">Moderate Confidence</span>
+          <span className="relative inline-flex group select-none">
+            {/* 3D Underlay Backplate (Light Mode Tactical Depth) */}
+            <span
+              aria-hidden="true"
+              className="absolute inset-0 translate-y-[2.5px] translate-x-[0.5px] rounded-full bg-[#1F2C54] dark:hidden"
+            />
+            {/* Top Badge */}
+            <span
+              className="relative animate-badge-shine inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold tracking-tight border transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md bg-gradient-to-r from-[#DFE6F9] via-[#EDF2FC] to-[#DFE6F9] text-[#192750] border-[#465BA0] dark:from-[#6F7FBF]/40 dark:via-[#8190CF]/45 dark:to-[#9AA5DE]/35 dark:text-[#D8E0FF] dark:border-[#8190CF]/70 dark:shadow-[#6F7FBF]/30 dark:shadow-xs"
+            >
+              <Info className="w-3.5 h-3.5 text-[#192750] dark:text-[#D8E0FF] shrink-0" strokeWidth={2.5} />
+              <span className="font-bold tracking-tight">Moderate Confidence</span>
+            </span>
           </span>
         );
       case 'cautious':
         return (
-          <span
-            className="animate-badge-shine inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold tracking-tight border transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md select-none bg-gradient-to-r from-[#FDE68A]/60 via-[#FEF3C7] to-[#FDE68A]/60 text-[#712B07] border-[#C25E00] shadow-xs shadow-[#C25E00]/15 dark:from-[#D97706]/40 dark:via-[#F59E0B]/45 dark:to-[#FBBF24]/35 dark:text-[#FDE68A] dark:border-[#F59E0B]/70 dark:shadow-[#D97706]/30"
-          >
-            <AlertCircle className="w-3.5 h-3.5 text-[#712B07] dark:text-[#FDE68A] shrink-0" strokeWidth={2.5} />
-            <span className="font-bold tracking-tight">Cautious / Bounded</span>
+          <span className="relative inline-flex group select-none">
+            {/* 3D Underlay Backplate (Light Mode Tactical Depth) */}
+            <span
+              aria-hidden="true"
+              className="absolute inset-0 translate-y-[2.5px] translate-x-[0.5px] rounded-full bg-[#6B2806] dark:hidden"
+            />
+            {/* Top Badge */}
+            <span
+              className="relative animate-badge-shine inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold tracking-tight border transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md bg-gradient-to-r from-[#FDE68A]/60 via-[#FEF3C7] to-[#FDE68A]/60 text-[#712B07] border-[#C25E00] dark:from-[#D97706]/40 dark:via-[#F59E0B]/45 dark:to-[#FBBF24]/35 dark:text-[#FDE68A] dark:border-[#F59E0B]/70 dark:shadow-[#D97706]/30 dark:shadow-xs"
+            >
+              <AlertCircle className="w-3.5 h-3.5 text-[#712B07] dark:text-[#FDE68A] shrink-0" strokeWidth={2.5} />
+              <span className="font-bold tracking-tight">Cautious / Bounded</span>
+            </span>
           </span>
         );
     }
