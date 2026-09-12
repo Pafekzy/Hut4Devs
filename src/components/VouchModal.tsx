@@ -103,9 +103,9 @@ export const VouchModal: React.FC<VouchModalProps> = ({
               <button
                 type="button"
                 onClick={() => setConfidence('high')}
-                className={`p-2 rounded-xl border-2 text-xs font-bold text-center transition-all cursor-pointer ${
+                className={`p-2.5 rounded-xl border-2 text-xs font-bold text-center transition-all cursor-pointer ${
                   confidence === 'high'
-                    ? 'border-[#3F8F76] bg-[#3F8F76]/20 text-[#0F3D2E] dark:bg-[#3F8F76]/40 dark:text-[#C1F5E8] dark:border-[#5CA98C]'
+                    ? 'border-[#227B5D] bg-[#D7F3E9] text-[#0C3829] dark:bg-[#3F8F76]/40 dark:text-[#C1F5E8] dark:border-[#5CA98C]'
                     : 'border-stone-200 dark:border-[#C88D3A]/30 bg-white dark:bg-[#1E1B18] text-stone-600 dark:text-[#D9C4AC] hover:bg-stone-50 dark:hover:bg-[#292522]'
                 }`}
               >
@@ -114,9 +114,9 @@ export const VouchModal: React.FC<VouchModalProps> = ({
               <button
                 type="button"
                 onClick={() => setConfidence('moderate')}
-                className={`p-2 rounded-xl border-2 text-xs font-bold text-center transition-all cursor-pointer ${
+                className={`p-2.5 rounded-xl border-2 text-xs font-bold text-center transition-all cursor-pointer ${
                   confidence === 'moderate'
-                    ? 'border-[#6F7FBF] bg-[#6F7FBF]/20 text-[#24345F] dark:bg-[#6F7FBF]/40 dark:text-[#D8E0FF] dark:border-[#8190CF]'
+                    ? 'border-[#465BA0] bg-[#DFE6F9] text-[#192750] dark:bg-[#6F7FBF]/40 dark:text-[#D8E0FF] dark:border-[#8190CF]'
                     : 'border-stone-200 dark:border-[#C88D3A]/30 bg-white dark:bg-[#1E1B18] text-stone-600 dark:text-[#D9C4AC] hover:bg-stone-50 dark:hover:bg-[#292522]'
                 }`}
               >
@@ -125,9 +125,9 @@ export const VouchModal: React.FC<VouchModalProps> = ({
               <button
                 type="button"
                 onClick={() => setConfidence('cautious')}
-                className={`p-2 rounded-xl border-2 text-xs font-bold text-center transition-all cursor-pointer ${
+                className={`p-2.5 rounded-xl border-2 text-xs font-bold text-center transition-all cursor-pointer ${
                   confidence === 'cautious'
-                    ? 'border-[#D97706] bg-[#D97706]/20 text-[#78350F] dark:bg-[#D97706]/40 dark:text-[#FDE68A] dark:border-[#F59E0B]'
+                    ? 'border-[#C25E00] bg-[#FEF3C7] text-[#712B07] dark:bg-[#D97706]/40 dark:text-[#FDE68A] dark:border-[#F59E0B]'
                     : 'border-stone-200 dark:border-[#C88D3A]/30 bg-white dark:bg-[#1E1B18] text-stone-600 dark:text-[#D9C4AC] hover:bg-stone-50 dark:hover:bg-[#292522]'
                 }`}
               >
