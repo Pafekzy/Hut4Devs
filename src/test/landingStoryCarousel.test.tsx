@@ -82,10 +82,16 @@ describe('Hut4Devs Landing Story Carousel Framework (Checkpoint 01)', () => {
     expect(screen.getByRole('heading', { name: /Registration becomes an agreement/i })).toBeInTheDocument();
     expect(onSlideChange).toHaveBeenCalledWith(2);
 
-    // Check clicking dot 4 navigates to slide 4 (placeholder)
+    // Check clicking dot 4 navigates to slide 4 with image and heading
     const dot4 = screen.getByRole('tab', { name: /Go to story 4/i });
     fireEvent.click(dot4);
     expect(screen.getByText('Story 4 of 6')).toBeInTheDocument();
+    const slide4Img = screen.getByRole('img', {
+      name: /A Fellow, a Muslim Room Captain, and a Financial Admin coordinating through Hut4Devs/i,
+    });
+    expect(slide4Img).toBeInTheDocument();
+    expect(slide4Img).toHaveAttribute('src', '/story/slide-04-role-coordination.webp');
+    expect(screen.getByRole('heading', { name: /The right people stay informed/i })).toBeInTheDocument();
     expect(onSlideChange).toHaveBeenCalledWith(3);
   });
 

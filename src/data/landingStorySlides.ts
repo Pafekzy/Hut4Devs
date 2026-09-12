@@ -67,8 +67,9 @@ export const LANDING_STORY_SLIDES: LandingStorySlide[] = [
     title: 'The right people stay informed',
     message:
       'Room-level, coordination and financial conversations stay connected to the responsibility that created them.',
+    imageSrc: '/story/slide-04-role-coordination.webp',
     imageAlt:
-      'African Members and coordinators communicating across room, coordination, and financial roles',
+      'A Fellow, a Muslim Room Captain, and a Financial Admin coordinating through Hut4Devs',
     plannedSceneDescription:
       'African Members interacting through relevant room / coordinator / Financial Admin communication.',
   },
