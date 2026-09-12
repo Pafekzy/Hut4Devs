@@ -80,8 +80,9 @@ export const LANDING_STORY_SLIDES: LandingStorySlide[] = [
     title: 'Problems should surface themselves',
     message:
       'Clear records and attention queues help Financial Admins act without searching for problems manually.',
+    imageSrc: '/story/slide-05-financial-accountability.webp',
     imageAlt:
-      'African Financial Admin reviewing accommodation responsibilities and actionable reconciliation queues',
+      'Comparison of stressed manual accounting with Excel versus calm structured oversight using Hut4Devs Financial Command Center with attention queues',
     plannedSceneDescription:
       'African Financial Admin reviewing accommodation responsibilities and issues requiring attention.',
   },
