@@ -54,8 +54,9 @@ export const LANDING_STORY_SLIDES: LandingStorySlide[] = [
     title: 'Registration becomes an agreement',
     message:
       'Membership details, consent and signatures can become one structured accommodation record.',
+    imageSrc: '/story/slide-03-digital-agreement.webp',
     imageAlt:
-      'African Member reviewing and signing a digital accommodation agreement on a modern device',
+      'A young African Member reviewing and signing a digital accommodation membership agreement on a laptop with an enlarged agreement preview',
     plannedSceneDescription:
       'African Member reviewing and signing a digital accommodation agreement.',
   },
