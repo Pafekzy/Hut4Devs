@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { MemberRole } from '../domain/auth';
 import { Hut4DevsLogo } from './Hut4DevsLogo';
 import { ThemeToggle } from './ThemeToggle';
+import { GovernanceDevHierarchy } from './GovernanceDevHierarchy';
 import {
   User,
   ShieldCheck,
@@ -400,164 +401,13 @@ export const DevAuthView: React.FC<DevAuthViewProps> = ({
             </button>
 
             {showDevTools && (
-              <div className="mt-3 p-4 sm:p-5 rounded-2xl bg-[#F7F1E7] dark:bg-[#241004] border-2 border-[#5A2D0C]/20 dark:border-[#C88D3A]/40 space-y-4 shadow-[0_8px_30px_-6px_rgba(0,0,0,0.5)]">
-                {/* Informational Dev-Only Notice Panel */}
-                <div className="p-3.5 rounded-xl bg-[#FFF9EE] dark:bg-[#2F1707] border-2 border-[#C88D3A]/50 text-[#5A2D0C] dark:text-[#FFF9EE] shadow-xs">
-                  <div className="flex items-center gap-2 mb-1.5">
-                    <span className="px-2 py-0.5 rounded-md text-[10px] font-bold font-mono uppercase tracking-wider bg-[#5A2D0C] text-[#FFF9EE] border border-[#C88D3A]/40">
-                      DEV-ONLY NOTICE
-                    </span>
-                  </div>
-                  <p className="text-xs leading-relaxed text-[#5A2D0C]/90 dark:text-[#FFF9EE]/90">
-                    In production Hut4Devs, authority is granted only through Coordinator approval and scoped role delegation. These identities exist only for development inspection and test execution.
-                  </p>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  {/* 1. Fellow Option */}
-                  <div
-                    onClick={() => setSelectedRole(MemberRole.FELLOW)}
-                    className={`p-3.5 rounded-2xl border-2 cursor-pointer transition-all flex flex-col justify-between shadow-xs hover:-translate-y-0.5 ${
-                      selectedRole === MemberRole.FELLOW
-                        ? 'border-[#5A2D0C] dark:border-[#C88D3A] ring-2 ring-[#C88D3A]/60 bg-white dark:bg-[#381D0B] shadow-md'
-                        : 'border-[#C88D3A]/30 dark:border-[#52270A] bg-[#FFF9EE] dark:bg-[#2A1305] hover:border-[#C88D3A]/70'
-                    }`}
-                  >
-                    <div>
-                      <div className="flex items-center justify-between mb-1.5">
-                        <div className="flex items-center gap-1.5">
-                          <User className="w-3.5 h-3.5 text-[#C88D3A]" />
-                          <span className="font-bold text-xs text-[#5A2D0C] dark:text-[#FFF9EE]">Normal Fellow</span>
-                        </div>
-                        <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full tracking-wider bg-[#F7F1E7] dark:bg-[#1E0D03] border border-[#5A2D0C]/20 dark:border-[#C88D3A]/40 text-[#5A2D0C] dark:text-[#FFF9EE]">
-                          FELLOW
-                        </span>
-                      </div>
-                      <p className="text-[11px] text-[#5A2D0C]/75 dark:text-[#FFF9EE]/75 mt-1">Infinite Grace • Room 3B</p>
-                    </div>
-                    <button
-                      type="button"
-                      id="dev-auth-fellow-btn"
-                      disabled={isLoading || authenticating}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleSelectAndAuth(MemberRole.FELLOW);
-                      }}
-                      className="mt-3.5 w-full py-2.5 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all bg-[#5A2D0C] text-[#FFF9EE] hover:bg-[#723B12] border-b-3 border-[#351A07] active:border-b-1 active:translate-y-[1px] shadow-xs cursor-pointer disabled:opacity-50"
-                    >
-                      <span>Enter as Fellow</span>
-                      <ArrowRight className="w-3.5 h-3.5 text-[#C88D3A]" />
-                    </button>
-                  </div>
-
-                  {/* 2. Room Captain Option */}
-                  <div
-                    onClick={() => setSelectedRole(MemberRole.ROOM_CAPTAIN)}
-                    className={`p-3.5 rounded-2xl border-2 cursor-pointer transition-all flex flex-col justify-between shadow-xs hover:-translate-y-0.5 ${
-                      selectedRole === MemberRole.ROOM_CAPTAIN
-                        ? 'border-[#5A2D0C] dark:border-[#C88D3A] ring-2 ring-[#C88D3A]/60 bg-white dark:bg-[#381D0B] shadow-md'
-                        : 'border-[#C88D3A]/30 dark:border-[#52270A] bg-[#FFF9EE] dark:bg-[#2A1305] hover:border-[#C88D3A]/70'
-                    }`}
-                  >
-                    <div>
-                      <div className="flex items-center justify-between mb-1.5">
-                        <div className="flex items-center gap-1.5">
-                          <Home className="w-3.5 h-3.5 text-[#C88D3A]" />
-                          <span className="font-bold text-xs text-[#5A2D0C] dark:text-[#FFF9EE]">Chinedu Okeke</span>
-                        </div>
-                        <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full tracking-wider bg-[#FBF0DD] dark:bg-[#4B2B11] border border-[#C88D3A]/70 text-[#8C5209] dark:text-[#E5AD5B]">
-                          CAPTAIN
-                        </span>
-                      </div>
-                      <p className="text-[11px] text-[#5A2D0C]/75 dark:text-[#FFF9EE]/75 mt-1">Scope: Infinite Grace • Room 304</p>
-                    </div>
-                    <button
-                      type="button"
-                      id="dev-auth-captain-btn"
-                      disabled={isLoading || authenticating}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleSelectAndAuth(MemberRole.ROOM_CAPTAIN);
-                      }}
-                      className="mt-3.5 w-full py-2.5 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all bg-[#5A2D0C] text-[#FFF9EE] hover:bg-[#723B12] border-b-3 border-[#351A07] active:border-b-1 active:translate-y-[1px] shadow-xs cursor-pointer disabled:opacity-50"
-                    >
-                      <span>Enter as Captain</span>
-                      <ArrowRight className="w-3.5 h-3.5 text-[#C88D3A]" />
-                    </button>
-                  </div>
-
-                  {/* 3. Fellows Coordinator Option */}
-                  <div
-                    onClick={() => setSelectedRole(MemberRole.ACCOMMODATION_FELLOWS_COORDINATOR)}
-                    className={`p-3.5 rounded-2xl border-2 cursor-pointer transition-all flex flex-col justify-between shadow-xs hover:-translate-y-0.5 ${
-                      selectedRole === MemberRole.ACCOMMODATION_FELLOWS_COORDINATOR
-                        ? 'border-[#5A2D0C] dark:border-[#C88D3A] ring-2 ring-[#C88D3A]/60 bg-white dark:bg-[#381D0B] shadow-md'
-                        : 'border-[#C88D3A]/30 dark:border-[#52270A] bg-[#FFF9EE] dark:bg-[#2A1305] hover:border-[#C88D3A]/70'
-                    }`}
-                  >
-                    <div>
-                      <div className="flex items-center justify-between mb-1.5">
-                        <div className="flex items-center gap-1.5">
-                          <Users className="w-3.5 h-3.5 text-[#C88D3A]" />
-                          <span className="font-bold text-xs text-[#5A2D0C] dark:text-[#FFF9EE]">Emmanuel Ukom</span>
-                        </div>
-                        <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full tracking-wider bg-[#F4E3CB] dark:bg-[#522F13] border border-[#B77620]/70 text-[#6C3F06] dark:text-[#F3CA8A]">
-                          COORDINATOR
-                        </span>
-                      </div>
-                      <p className="text-[11px] text-[#5A2D0C]/75 dark:text-[#FFF9EE]/75 mt-1">L2E Accommodation Coordinator</p>
-                    </div>
-                    <button
-                      type="button"
-                      id="dev-auth-coordinator-btn"
-                      disabled={isLoading || authenticating}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleSelectAndAuth(MemberRole.ACCOMMODATION_FELLOWS_COORDINATOR);
-                      }}
-                      className="mt-3.5 w-full py-2.5 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all bg-[#5A2D0C] text-[#FFF9EE] hover:bg-[#723B12] border-b-3 border-[#351A07] active:border-b-1 active:translate-y-[1px] shadow-xs cursor-pointer disabled:opacity-50"
-                    >
-                      <span>Enter as Coordinator</span>
-                      <ArrowRight className="w-3.5 h-3.5 text-[#C88D3A]" />
-                    </button>
-                  </div>
-
-                  {/* 4. Financial Admin Option */}
-                  <div
-                    onClick={() => setSelectedRole(MemberRole.ACCOMMODATION_ADMIN)}
-                    className={`p-3.5 rounded-2xl border-2 cursor-pointer transition-all flex flex-col justify-between shadow-xs hover:-translate-y-0.5 ${
-                      selectedRole === MemberRole.ACCOMMODATION_ADMIN
-                        ? 'border-[#5A2D0C] dark:border-[#C88D3A] ring-2 ring-[#C88D3A]/60 bg-white dark:bg-[#381D0B] shadow-md'
-                        : 'border-[#C88D3A]/30 dark:border-[#52270A] bg-[#FFF9EE] dark:bg-[#2A1305] hover:border-[#C88D3A]/70'
-                    }`}
-                  >
-                    <div>
-                      <div className="flex items-center justify-between mb-1.5">
-                        <div className="flex items-center gap-1.5">
-                          <ShieldCheck className="w-3.5 h-3.5 text-[#C88D3A]" />
-                          <span className="font-bold text-xs text-[#5A2D0C] dark:text-[#FFF9EE]">Financial Admin</span>
-                        </div>
-                        <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full tracking-wider bg-[#5A2D0C] dark:bg-[#231004] border border-[#C88D3A]/60 text-[#FFF9EE]">
-                          ADMIN
-                        </span>
-                      </div>
-                      <p className="text-[11px] text-[#5A2D0C]/75 dark:text-[#FFF9EE]/75 mt-1">Monthly Accountability Center</p>
-                    </div>
-                    <button
-                      type="button"
-                      id="dev-auth-admin-btn"
-                      disabled={isLoading || authenticating}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleSelectAndAuth(MemberRole.ACCOMMODATION_ADMIN);
-                      }}
-                      className="mt-3.5 w-full py-2.5 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all bg-[#5A2D0C] text-[#FFF9EE] hover:bg-[#723B12] border-b-3 border-[#351A07] active:border-b-1 active:translate-y-[1px] shadow-xs cursor-pointer disabled:opacity-50"
-                    >
-                      <span>Enter as Admin</span>
-                      <ArrowRight className="w-3.5 h-3.5 text-[#C88D3A]" />
-                    </button>
-                  </div>
-                </div>
+              <div className="mt-3">
+                <GovernanceDevHierarchy
+                  isDark={isDark}
+                  isLoading={isLoading}
+                  authenticating={authenticating}
+                  onAuthenticate={handleSelectAndAuth}
+                />
               </div>
             )}
           </div>
