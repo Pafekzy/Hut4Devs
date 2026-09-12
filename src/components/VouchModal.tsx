@@ -46,14 +46,14 @@ export const VouchModal: React.FC<VouchModalProps> = ({
 
   return (
     <div className="fixed inset-0 bg-stone-900/70 backdrop-blur-xs flex items-center justify-center p-4 z-50">
-      <div className="bg-white dark:bg-[#241004] text-stone-900 dark:text-[#FFF9EE] rounded-2xl max-w-md w-full p-6 shadow-2xl border-2 border-stone-200 dark:border-[#C88D3A]/40 animate-in fade-in zoom-in-95">
-        <div className="flex items-center justify-between border-b border-stone-100 dark:border-[#5A2D0C]/40 pb-3">
+      <div className="bg-white dark:bg-[#24211F] text-[#2B211B] dark:text-[#FFF9EE] rounded-2xl max-w-md w-full p-6 shadow-2xl border-2 border-stone-200 dark:border-[#C88D3A]/40 animate-in fade-in zoom-in-95">
+        <div className="flex items-center justify-between border-b border-stone-100 dark:border-[#C88D3A]/20 pb-3">
           <div className="flex items-center gap-2">
-            <div className="p-2 bg-[#FFF9EE] dark:bg-[#1A0A02] text-[#5A2D0C] dark:text-[#C88D3A] rounded-xl border border-[#E7D6C1] dark:border-[#C88D3A]/30 shadow-xs">
+            <div className="p-2 bg-[#FFF9EE] dark:bg-[#1E1B18] text-[#5A2D0C] dark:text-[#C88D3A] rounded-xl border border-[#E7D6C1] dark:border-[#C88D3A]/30 shadow-xs">
               <Shield className="w-4 h-4 text-[#C88D3A]" />
             </div>
             <div>
-              <h3 className="font-serif font-bold text-stone-900 dark:text-[#FFF9EE] text-base">Issue Contextual Vouch</h3>
+              <h3 className="font-serif font-bold text-[#5A2D0C] dark:text-[#FFF9EE] text-base">Issue Contextual Vouch</h3>
               <p className="text-[11px] text-stone-500 dark:text-[#D9C4AC]/70">Provide bounded trust evidence for a peer</p>
             </div>
           </div>
@@ -72,10 +72,10 @@ export const VouchModal: React.FC<VouchModalProps> = ({
               id="select-vouch-target"
               value={targetId}
               onChange={(e) => setTargetId(e.target.value)}
-              className="w-full px-3 py-2 text-xs border border-stone-300 dark:border-[#C88D3A]/40 rounded-xl focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 outline-none bg-white dark:bg-[#180A02] text-stone-900 dark:text-[#FFF9EE] font-medium"
+              className="w-full px-3 py-2 text-xs border border-stone-300 dark:border-[#C88D3A]/40 rounded-xl focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 outline-none bg-white dark:bg-[#1E1B18] text-stone-900 dark:text-[#FFF9EE] font-medium"
             >
               {eligibleTargets.map((f) => (
-                <option key={f.id} value={f.id} className="bg-white dark:bg-[#180A02] text-stone-900 dark:text-[#FFF9EE]">
+                <option key={f.id} value={f.id} className="bg-white dark:bg-[#1E1B18] text-stone-900 dark:text-[#FFF9EE]">
                   {f.displayName} ({f.h4dMemberId || f.roles?.join(', ') || 'FELLOW'})
                 </option>
               ))}
@@ -87,13 +87,13 @@ export const VouchModal: React.FC<VouchModalProps> = ({
             <select
               value={context}
               onChange={(e) => setContext(e.target.value)}
-              className="w-full px-3 py-2 text-xs border border-stone-300 dark:border-[#C88D3A]/40 rounded-xl focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 outline-none bg-white dark:bg-[#180A02] text-stone-900 dark:text-[#FFF9EE] font-medium"
+              className="w-full px-3 py-2 text-xs border border-stone-300 dark:border-[#C88D3A]/40 rounded-xl focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 outline-none bg-white dark:bg-[#1E1B18] text-stone-900 dark:text-[#FFF9EE] font-medium"
             >
-              <option value="Accommodation Rent Reliability" className="bg-white dark:bg-[#180A02] text-stone-900 dark:text-[#FFF9EE]">Accommodation Rent Reliability</option>
-              <option value="Chamber Utilities & Upkeep" className="bg-white dark:bg-[#180A02] text-stone-900 dark:text-[#FFF9EE]">Chamber Utilities & Upkeep</option>
-              <option value="Short-term Hardware / Laptop Support" className="bg-white dark:bg-[#180A02] text-stone-900 dark:text-[#FFF9EE]">Short-term Hardware / Laptop Support</option>
-              <option value="Technical Project Delivery" className="bg-white dark:bg-[#180A02] text-stone-900 dark:text-[#FFF9EE]">Technical Project Delivery</option>
-              <option value="Communication During Stoppages" className="bg-white dark:bg-[#180A02] text-stone-900 dark:text-[#FFF9EE]">Communication During Stoppages</option>
+              <option value="Accommodation Rent Reliability" className="bg-white dark:bg-[#1E1B18] text-stone-900 dark:text-[#FFF9EE]">Accommodation Rent Reliability</option>
+              <option value="Chamber Utilities & Upkeep" className="bg-white dark:bg-[#1E1B18] text-stone-900 dark:text-[#FFF9EE]">Chamber Utilities & Upkeep</option>
+              <option value="Short-term Hardware / Laptop Support" className="bg-white dark:bg-[#1E1B18] text-stone-900 dark:text-[#FFF9EE]">Short-term Hardware / Laptop Support</option>
+              <option value="Technical Project Delivery" className="bg-white dark:bg-[#1E1B18] text-stone-900 dark:text-[#FFF9EE]">Technical Project Delivery</option>
+              <option value="Communication During Stoppages" className="bg-white dark:bg-[#1E1B18] text-stone-900 dark:text-[#FFF9EE]">Communication During Stoppages</option>
             </select>
           </div>
 
@@ -103,10 +103,10 @@ export const VouchModal: React.FC<VouchModalProps> = ({
               <button
                 type="button"
                 onClick={() => setConfidence('high')}
-                className={`p-2 rounded-xl border-2 text-xs font-medium text-center transition-all cursor-pointer ${
+                className={`p-2 rounded-xl border-2 text-xs font-semibold text-center transition-all cursor-pointer ${
                   confidence === 'high'
-                    ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-950/50 text-emerald-900 dark:text-emerald-300 font-semibold'
-                    : 'border-stone-200 dark:border-[#C88D3A]/30 bg-white dark:bg-[#1A0A02] text-stone-600 dark:text-[#D9C4AC] hover:bg-stone-50 dark:hover:bg-[#2F1707]'
+                    ? 'border-[#3F8F76] bg-[#3F8F76]/15 text-[#175240] dark:bg-[#3F8F76]/30 dark:text-[#B4EFE0] dark:border-[#5CA98C]'
+                    : 'border-stone-200 dark:border-[#C88D3A]/30 bg-white dark:bg-[#1E1B18] text-stone-600 dark:text-[#D9C4AC] hover:bg-stone-50 dark:hover:bg-[#292522]'
                 }`}
               >
                 High Confidence
@@ -114,10 +114,10 @@ export const VouchModal: React.FC<VouchModalProps> = ({
               <button
                 type="button"
                 onClick={() => setConfidence('moderate')}
-                className={`p-2 rounded-xl border-2 text-xs font-medium text-center transition-all cursor-pointer ${
+                className={`p-2 rounded-xl border-2 text-xs font-semibold text-center transition-all cursor-pointer ${
                   confidence === 'moderate'
-                    ? 'border-blue-500 bg-blue-50 dark:bg-blue-950/50 text-blue-900 dark:text-blue-300 font-semibold'
-                    : 'border-stone-200 dark:border-[#C88D3A]/30 bg-white dark:bg-[#1A0A02] text-stone-600 dark:text-[#D9C4AC] hover:bg-stone-50 dark:hover:bg-[#2F1707]'
+                    ? 'border-[#6F7FBF] bg-[#6F7FBF]/15 text-[#2E3C73] dark:bg-[#6F7FBF]/30 dark:text-[#D4DCFC] dark:border-[#8190CF]'
+                    : 'border-stone-200 dark:border-[#C88D3A]/30 bg-white dark:bg-[#1E1B18] text-stone-600 dark:text-[#D9C4AC] hover:bg-stone-50 dark:hover:bg-[#292522]'
                 }`}
               >
                 Moderate
@@ -125,10 +125,10 @@ export const VouchModal: React.FC<VouchModalProps> = ({
               <button
                 type="button"
                 onClick={() => setConfidence('cautious')}
-                className={`p-2 rounded-xl border-2 text-xs font-medium text-center transition-all cursor-pointer ${
+                className={`p-2 rounded-xl border-2 text-xs font-semibold text-center transition-all cursor-pointer ${
                   confidence === 'cautious'
-                    ? 'border-amber-500 bg-amber-50 dark:bg-amber-950/50 text-amber-900 dark:text-amber-300 font-semibold'
-                    : 'border-stone-200 dark:border-[#C88D3A]/30 bg-white dark:bg-[#1A0A02] text-stone-600 dark:text-[#D9C4AC] hover:bg-stone-50 dark:hover:bg-[#2F1707]'
+                    ? 'border-[#D97706] bg-[#D97706]/15 text-[#853B0A] dark:bg-[#D97706]/30 dark:text-[#FDE68A] dark:border-[#F59E0B]'
+                    : 'border-stone-200 dark:border-[#C88D3A]/30 bg-white dark:bg-[#1E1B18] text-stone-600 dark:text-[#D9C4AC] hover:bg-stone-50 dark:hover:bg-[#292522]'
                 }`}
               >
                 Cautious / Bounded
@@ -144,7 +144,7 @@ export const VouchModal: React.FC<VouchModalProps> = ({
               onChange={(e) => setScope(e.target.value)}
               placeholder="e.g. Up to ₦50,000 accommodation share"
               required
-              className="w-full px-3 py-2 text-xs border border-stone-300 dark:border-[#C88D3A]/40 rounded-xl focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 outline-none bg-white dark:bg-[#180A02] text-stone-900 dark:text-[#FFF9EE]"
+              className="w-full px-3 py-2 text-xs border border-stone-300 dark:border-[#C88D3A]/40 rounded-xl focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 outline-none bg-white dark:bg-[#1E1B18] text-stone-900 dark:text-[#FFF9EE]"
             />
           </div>
 
@@ -155,23 +155,23 @@ export const VouchModal: React.FC<VouchModalProps> = ({
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               required
-              className="w-full px-3 py-2 text-xs border border-stone-300 dark:border-[#C88D3A]/40 rounded-xl focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 outline-none bg-white dark:bg-[#180A02] text-stone-900 dark:text-[#FFF9EE]"
+              className="w-full px-3 py-2 text-xs border border-stone-300 dark:border-[#C88D3A]/40 rounded-xl focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 outline-none bg-white dark:bg-[#1E1B18] text-stone-900 dark:text-[#FFF9EE]"
             />
           </div>
 
           {/* Explicit No Guarantor Liability Reassurance */}
-          <div className="p-3 bg-[#FFF9EE] dark:bg-[#1A0A02] border border-[#E7D6C1] dark:border-[#C88D3A]/30 rounded-xl text-[11px] text-[#5A2D0C] dark:text-[#FFF9EE] flex items-start gap-2 shadow-xs">
+          <div className="p-3 bg-[#FFF9EE] dark:bg-[#1E1B18] border border-[#E7D6C1] dark:border-[#C88D3A]/30 rounded-xl text-[11px] text-[#5A2D0C] dark:text-[#FFF9EE] flex items-start gap-2 shadow-xs">
             <ShieldCheck className="w-4 h-4 text-[#C88D3A] shrink-0 mt-0.5" />
             <p className="leading-tight">
               <strong>Guarantor Liability Notice:</strong> This vouch serves strictly as evidence of past demonstrated reliability. In Hut4Devs, issuing a vouch creates NO automatic financial liability or debt responsibility for the voucher.
             </p>
           </div>
 
-          <div className="flex items-center justify-end gap-2 pt-2 border-t border-stone-100 dark:border-[#5A2D0C]/40">
+          <div className="flex items-center justify-end gap-2 pt-2 border-t border-stone-100 dark:border-[#C88D3A]/20">
             <button
               type="button"
               onClick={onClose}
-              className="px-3.5 py-1.5 text-xs font-semibold text-stone-600 dark:text-[#D9C4AC] hover:bg-stone-100 dark:hover:bg-[#2F1707] rounded-xl cursor-pointer"
+              className="px-3.5 py-1.5 text-xs font-semibold text-stone-600 dark:text-[#D9C4AC] hover:bg-stone-100 dark:hover:bg-[#1E1B18] rounded-xl cursor-pointer"
             >
               Cancel
             </button>

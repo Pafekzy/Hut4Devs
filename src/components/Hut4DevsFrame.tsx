@@ -34,17 +34,17 @@ export const Hut4DevsFrame: React.FC<Hut4DevsFrameProps> = ({
   // Variant styling
   const variantStyles = {
     card: isDark
-      ? 'bg-[#241004] text-[#FFF9EE] border-2 border-[#C88D3A]/40 shadow-[0_8px_30px_-6px_rgba(0,0,0,0.7),inset_0_1px_0_rgba(200,141,58,0.2)]'
-      : 'bg-[#FFFDF9] text-[#5A2D0C] border-2 border-[#5A2D0C]/15 shadow-[0_8px_30px_-6px_rgba(90,45,12,0.12),inset_0_1px_0_rgba(255,255,255,0.8)]',
+      ? 'bg-[rgba(23,21,19,0.55)] text-[#FFF9EE] border-2 border-[#C88D3A]/35 backdrop-blur-md shadow-[0_8px_32px_-4px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(200,141,58,0.2)]'
+      : 'bg-[rgba(255,253,248,0.65)] text-[#2B211B] border-2 border-[#5A2D0C]/25 backdrop-blur-md shadow-[0_8px_30px_-6px_rgba(90,45,12,0.08),inset_0_1px_0_rgba(255,255,255,0.9)]',
     surface: isDark
-      ? 'bg-[#1E0D03] text-[#FFF9EE] border border-[#C88D3A]/25 shadow-md'
-      : 'bg-[#F7F1E7] text-[#5A2D0C] border border-[#EAE0D0] shadow-sm',
+      ? 'bg-[rgba(30,27,24,0.45)] text-[#FFF9EE] border border-[#C88D3A]/25 backdrop-blur-xs shadow-xs'
+      : 'bg-[rgba(247,241,231,0.50)] text-[#2B211B] border border-[#5A2D0C]/18 backdrop-blur-xs shadow-xs',
     highlight: isDark
-      ? 'bg-[#2B1406] text-[#FFF9EE] border-2 border-[#C88D3A] shadow-[0_10px_35px_-5px_rgba(200,141,58,0.35),inset_0_1px_0_rgba(226,171,93,0.3)]'
-      : 'bg-[#FFF9EE] text-[#5A2D0C] border-2 border-[#C88D3A] shadow-[0_10px_35px_-5px_rgba(200,141,58,0.25),inset_0_1px_0_rgba(255,255,255,0.9)]',
+      ? 'bg-[rgba(42,34,28,0.60)] text-[#FFF9EE] border-2 border-[#C88D3A] backdrop-blur-md shadow-[0_10px_35px_-5px_rgba(200,141,58,0.25),inset_0_1px_0_rgba(226,171,93,0.3)]'
+      : 'bg-[rgba(255,249,238,0.75)] text-[#2B211B] border-2 border-[#C88D3A] backdrop-blur-md shadow-[0_10px_35px_-5px_rgba(200,141,58,0.18),inset_0_1px_0_rgba(255,255,255,0.9)]',
     subtle: isDark
-      ? 'bg-[#2F1707]/60 text-[#FFF9EE] border border-[#C88D3A]/20'
-      : 'bg-[#F7F1E7]/80 text-[#5A2D0C] border border-[#C88D3A]/20',
+      ? 'bg-[rgba(23,21,19,0.35)] text-[#FFF9EE] border border-[#C88D3A]/20 backdrop-blur-xs'
+      : 'bg-[rgba(255,253,248,0.40)] text-[#2B211B] border border-[#5A2D0C]/15 backdrop-blur-xs',
   };
 
   const combinedStyles: React.CSSProperties = {
@@ -81,9 +81,15 @@ export const BrandedSurface: React.FC<BrandedSurfaceProps> = ({
   ...rest
 }) => {
   const elevationStyles = {
-    1: isDark ? 'bg-[#2F1707]/80 border border-[#4B2710]' : 'bg-[#F7F1E7] border border-[#E7D6C1]',
-    2: isDark ? 'bg-[#3E200C] border border-[#623416]' : 'bg-[#FFF9EE] border border-[#C88D3A]/25',
-    3: isDark ? 'bg-[#4B2710] border border-[#C88D3A]/40' : 'bg-white border border-[#C88D3A]/30',
+    1: isDark
+      ? 'bg-[rgba(30,27,24,0.45)] border border-[#C88D3A]/20 backdrop-blur-xs text-[#FFF9EE]'
+      : 'bg-[rgba(247,241,231,0.50)] border border-[#5A2D0C]/15 backdrop-blur-xs text-[#2B211B]',
+    2: isDark
+      ? 'bg-[rgba(42,34,28,0.55)] border border-[#C88D3A]/30 backdrop-blur-xs text-[#FFF9EE]'
+      : 'bg-[rgba(255,249,238,0.65)] border border-[#C88D3A]/25 backdrop-blur-xs text-[#2B211B]',
+    3: isDark
+      ? 'bg-[rgba(50,40,32,0.65)] border border-[#C88D3A]/45 backdrop-blur-xs text-[#FFF9EE]'
+      : 'bg-[rgba(255,255,255,0.75)] border border-[#C88D3A]/35 backdrop-blur-xs text-[#2B211B]',
   };
 
   return (

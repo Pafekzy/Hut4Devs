@@ -25,10 +25,10 @@ export const AccommodationResponsibilityCard: React.FC<AccommodationResponsibili
     <article
       id={`responsibility-card-${responsibility.id}`}
       aria-labelledby={`responsibility-title-${responsibility.id}`}
-      className="rounded-2xl p-5 sm:p-7 border-2 border-b-4 transition-all duration-200 shadow-md"
+      className="rounded-2xl p-5 sm:p-7 border-2 border-b-4 transition-all duration-200 shadow-md backdrop-blur-md"
       style={{
-        backgroundColor: isDark ? '#261205' : '#FFF9EE',
-        borderColor: isDark ? '#5C2D0C' : '#E0CEBA',
+        backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : 'rgba(255, 253, 248, 0.65)',
+        borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : 'rgba(90, 45, 12, 0.25)',
       }}
     >
       {/* Header: Title & Status Badge */}
@@ -54,9 +54,9 @@ export const AccommodationResponsibilityCard: React.FC<AccommodationResponsibili
           <span
             className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-bold tracking-wide uppercase shadow-xs border"
             style={{
-              backgroundColor: isDark ? '#3D1B06' : '#F7F1E7',
+              backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : 'rgba(247, 241, 231, 0.7)',
               color: isDark ? '#F5C678' : '#8C4D11',
-              borderColor: isDark ? '#75380F' : '#E7D6C1',
+              borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : 'rgba(90, 45, 12, 0.2)',
             }}
           >
             <span
@@ -71,11 +71,11 @@ export const AccommodationResponsibilityCard: React.FC<AccommodationResponsibili
 
       {/* Location Hierarchy: Property → Floor → Room */}
       <div
-        className="rounded-xl p-3.5 sm:p-4 mb-5 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-xs sm:text-sm border-2 shadow-xs"
+        className="rounded-xl p-3.5 sm:p-4 mb-5 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-xs sm:text-sm border shadow-xs backdrop-blur-xs"
         style={{
-          backgroundColor: isDark ? '#1D0C03' : '#F7F1E7',
+          backgroundColor: isDark ? 'rgba(30, 27, 24, 0.45)' : 'rgba(247, 241, 231, 0.50)',
           color: isDark ? '#EAD6C0' : '#5A2D0C',
-          borderColor: isDark ? '#4A2207' : '#E2CFB9',
+          borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : 'rgba(90, 45, 12, 0.15)',
         }}
       >
         <div className="flex items-center gap-2 font-bold">

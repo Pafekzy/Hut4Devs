@@ -15,6 +15,7 @@ import {
   Layers,
   Sparkles,
   HeartHandshake,
+  Calendar,
 } from 'lucide-react';
 
 interface TrustTrailFeedProps {
@@ -131,45 +132,90 @@ export const TrustTrailFeed: React.FC<TrustTrailFeedProps> = ({ trailEvents, ava
   return (
     <div className="space-y-6">
       {/* Header Banner */}
-      <div className="bg-white dark:bg-[#241004] rounded-2xl border-2 border-stone-200/90 dark:border-[#C88D3A]/40 p-6 shadow-sm">
+      <section
+        className="rounded-2xl p-5 sm:p-7 border-2 border-b-4 transition-all duration-200 shadow-md backdrop-blur-md"
+        style={{
+          backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : 'rgba(255, 253, 248, 0.65)',
+          borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : 'rgba(90, 45, 12, 0.25)',
+        }}
+      >
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <div className="flex items-center gap-2">
-              <span className="bg-[#FFF9EE] dark:bg-[#1A0A02] text-[#5A2D0C] dark:text-[#C88D3A] border border-[#E7D6C1] dark:border-[#C88D3A]/30 text-xs font-semibold px-2.5 py-0.5 rounded-md shadow-xs">
+            <div className="flex items-center gap-2 mb-1">
+              <span
+                className="text-xs font-bold uppercase tracking-wider block"
+                style={{ color: isDark ? '#E5A955' : '#B77620' }}
+              >
                 Append-Only Proof of Trust
               </span>
-              <span className="text-xs text-stone-500 dark:text-[#D9C4AC]/70">Immutable record • Human accountability</span>
+              <span
+                className="text-xs font-medium"
+                style={{ color: isDark ? '#C49B75' : '#8A5D3B' }}
+              >
+                &bull; Human Accountability
+              </span>
             </div>
-            <h1 className="text-xl font-serif font-bold text-stone-900 dark:text-[#FFF9EE] mt-1.5">Trails of Trust Ledger</h1>
-            <p className="text-xs text-stone-600 dark:text-[#D9C4AC] mt-0.5 max-w-2xl leading-relaxed">
+            <h1
+              className="font-serif text-xl sm:text-2xl font-bold tracking-tight"
+              style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+            >
+              Trails of Trust Ledger
+            </h1>
+            <p
+              className="text-xs mt-1.5 max-w-2xl leading-relaxed"
+              style={{ color: isDark ? '#EAD6C0' : '#5A2D0C' }}
+            >
               "People present narratives. The platform preserves facts." Every verified accommodation settlement,
               peer loan, voluntary gift, forgiven balance, and shared contribution creates an immutable trail of dignity and reliability.
             </p>
           </div>
 
-          <div className="flex items-center gap-3 bg-[#FFF9EE] dark:bg-[#1A0A02] border border-[#E7D6C1] dark:border-[#C88D3A]/30 p-3 rounded-xl text-xs text-[#5A2D0C] dark:text-[#FFF9EE] shadow-xs">
-            <Layers className="w-5 h-5 text-[#C88D3A] shrink-0" />
+          <div
+            className="flex items-center gap-3 p-3.5 rounded-xl border shrink-0 shadow-xs"
+            style={{
+              backgroundColor: isDark ? 'rgba(30, 27, 24, 0.45)' : 'rgba(247, 241, 231, 0.50)',
+              borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : 'rgba(90, 45, 12, 0.15)',
+              color: isDark ? '#FFF9EE' : '#5A2D0C',
+            }}
+          >
+            <Layers className="w-5 h-5 text-[#B77620] shrink-0" />
             <div>
-              <span className="font-bold block text-sm">{trailEvents.length} Verified Records</span>
-              <span className="text-[11px] opacity-80 dark:text-[#D9C4AC]/80">Append-only audit trail</span>
+              <span className="font-bold block text-sm sm:text-base">{trailEvents.length} Verified Records</span>
+              <span className="text-xs font-medium" style={{ color: isDark ? '#C49B75' : '#8A5D3B' }}>
+                Append-only audit trail
+              </span>
             </div>
           </div>
         </div>
 
         {/* Filters and Search Bar */}
-        <div className="mt-5 pt-4 border-t border-stone-100 dark:border-[#5A2D0C]/40 flex flex-col sm:flex-row gap-3">
+        <div
+          className="mt-6 pt-5 border-t-2 flex flex-col sm:flex-row gap-3"
+          style={{ borderColor: isDark ? '#421E06' : '#EAE0D0' }}
+        >
           <div className="relative flex-1">
-            <Search className="w-4 h-4 text-stone-400 dark:text-[#D9C4AC]/60 absolute left-3 top-2.5" />
+            <Search className="w-4 h-4 text-[#B77620] absolute left-3.5 top-3" />
             <input
               type="text"
               placeholder="Search by fellow name, evidence hash, or event details..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-4 py-2 text-xs bg-stone-50 dark:bg-[#180A02] border border-stone-200 dark:border-[#C88D3A]/40 rounded-xl focus:bg-white dark:focus:bg-[#140801] focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 outline-none transition-all text-stone-900 dark:text-[#FFF9EE] placeholder:text-stone-400 dark:placeholder:text-[#D9C4AC]/40"
+              className="w-full pl-10 pr-4 py-2.5 text-xs rounded-xl border outline-none font-medium transition-all"
+              style={{
+                backgroundColor: isDark ? 'rgba(30, 27, 24, 0.6)' : 'rgba(255, 255, 255, 0.85)',
+                borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : 'rgba(90, 45, 12, 0.25)',
+                color: isDark ? '#FFF9EE' : '#5A2D0C',
+              }}
             />
           </div>
 
-          <div className="flex items-center gap-1 bg-stone-100 dark:bg-[#1A0A02] p-1 rounded-xl border border-stone-200/80 dark:border-[#C88D3A]/30 text-xs">
+          <div
+            className="flex items-center gap-1 p-1 rounded-xl border text-xs"
+            style={{
+              backgroundColor: isDark ? 'rgba(30, 27, 24, 0.45)' : 'rgba(247, 241, 231, 0.50)',
+              borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : 'rgba(90, 45, 12, 0.15)',
+            }}
+          >
             {[
               { id: 'all', label: 'All Records' },
               { id: 'payments', label: 'Settlements' },
@@ -179,10 +225,14 @@ export const TrustTrailFeed: React.FC<TrustTrailFeedProps> = ({ trailEvents, ava
               <button
                 key={tab.id}
                 onClick={() => setFilterType(tab.id)}
-                className={`px-3 py-1.5 rounded-lg font-medium transition-all cursor-pointer ${
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                   filterType === tab.id
-                    ? 'bg-white dark:bg-[#5A2D0C] text-stone-900 dark:text-[#FFF9EE] shadow-xs font-semibold'
-                    : 'text-stone-600 dark:text-[#D9C4AC] hover:text-stone-900 dark:hover:text-[#FFF9EE]'
+                    ? isDark
+                      ? 'bg-[#C88D3A] text-[#241104] shadow-xs'
+                      : 'bg-[#5A2D0C] text-[#FFF9EE] shadow-xs'
+                    : isDark
+                    ? 'text-[#D9C4AC] hover:text-[#FFF9EE]'
+                    : 'text-[#6D4223] hover:text-[#5A2D0C]'
                 }`}
               >
                 {tab.label}
@@ -190,69 +240,128 @@ export const TrustTrailFeed: React.FC<TrustTrailFeedProps> = ({ trailEvents, ava
             ))}
           </div>
         </div>
-      </div>
+      </section>
 
       {/* Events Timeline Feed */}
-      <div className="space-y-3">
+      <div className="space-y-4">
         {filteredEvents.length === 0 ? (
-          <div className="text-center py-12 text-xs text-stone-400 dark:text-[#D9C4AC]/60 bg-white dark:bg-[#241004] rounded-2xl border border-stone-200 dark:border-[#C88D3A]/30">
+          <div
+            className="text-center py-12 text-xs rounded-xl border border-dashed"
+            style={{
+              backgroundColor: isDark ? 'rgba(30, 27, 24, 0.45)' : 'rgba(247, 241, 231, 0.50)',
+              borderColor: isDark ? 'rgba(200, 141, 58, 0.25)' : 'rgba(90, 45, 12, 0.2)',
+              color: isDark ? '#D9C4AC' : '#8A5D3B',
+            }}
+          >
             No trust trail events matching your search filter.
           </div>
         ) : (
           filteredEvents.map((event) => {
             return (
-              <div
+              <article
                 key={event.id}
                 id={`trail-event-${event.id}`}
-                className="bg-white dark:bg-[#241004] rounded-2xl p-4 sm:p-5 border-2 border-stone-200/90 dark:border-[#C88D3A]/30 hover:border-stone-300 dark:hover:border-[#C88D3A]/60 shadow-xs transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+                className="rounded-2xl p-5 sm:p-6 border-2 border-b-4 transition-all duration-200 shadow-md flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+                style={{
+                  backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : 'rgba(255, 253, 248, 0.65)',
+                  borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : 'rgba(90, 45, 12, 0.25)',
+                }}
               >
                 <div className="flex items-start gap-3.5">
-                  <div className="p-2.5 bg-stone-50 dark:bg-[#1A0A02] border border-stone-200 dark:border-[#C88D3A]/30 rounded-xl shrink-0 mt-0.5">
+                  <div
+                    className="p-2.5 rounded-xl border shrink-0 mt-0.5 shadow-xs"
+                    style={{
+                      backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : 'rgba(247, 241, 231, 0.7)',
+                      borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : 'rgba(90, 45, 12, 0.2)',
+                    }}
+                  >
                     {getEventIcon(event.type)}
                   </div>
 
                   <div>
-                    <div className="flex flex-wrap items-center gap-2">
-                      <span className="text-[10px] font-bold uppercase tracking-wider bg-stone-100 dark:bg-[#1A0A02] text-stone-700 dark:text-[#D9C4AC] px-2 py-0.5 rounded border border-stone-200/60 dark:border-[#C88D3A]/20">
+                    <div className="flex flex-wrap items-center gap-2 mb-1">
+                      <span
+                        className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wide uppercase border shadow-xs"
+                        style={{
+                          backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : 'rgba(247, 241, 231, 0.7)',
+                          color: isDark ? '#F5C678' : '#8C4D11',
+                          borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : 'rgba(90, 45, 12, 0.2)',
+                        }}
+                      >
+                        <span
+                          className="w-1.5 h-1.5 rounded-full mr-1.5 shadow-xs"
+                          style={{ backgroundColor: isDark ? '#C88D3A' : '#B77620' }}
+                          aria-hidden="true"
+                        />
                         {getEventTypeLabel(event.type)}
                       </span>
-                      <h3 className="font-bold text-sm text-stone-900 dark:text-[#FFF9EE]">{event.title}</h3>
+                      <h3
+                        className="font-serif font-bold text-sm sm:text-base"
+                        style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+                      >
+                        {event.title}
+                      </h3>
                     </div>
 
-                    <p className="text-xs text-stone-600 dark:text-[#D9C4AC] mt-1 leading-relaxed">{event.description}</p>
+                    <p
+                      className="text-xs leading-relaxed"
+                      style={{ color: isDark ? '#EAD6C0' : '#5A2D0C' }}
+                    >
+                      {event.description}
+                    </p>
 
-                    <div className="mt-2.5 flex flex-wrap items-center gap-3 text-[11px] text-stone-400 dark:text-[#D9C4AC]/60">
+                    <div
+                      className="mt-2.5 flex flex-wrap items-center gap-2 text-xs font-medium"
+                      style={{ color: isDark ? '#C49B75' : '#8A5D3B' }}
+                    >
                       <span>
-                        Actor: <strong className="text-stone-700 dark:text-[#FFF9EE]">{event.actorName}</strong>
+                        Actor: <strong style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}>{event.actorName}</strong>
                       </span>
                       {event.recipientName && (
                         <>
-                          <span>•</span>
+                          <span>&bull;</span>
                           <span>
-                            Recipient: <strong className="text-stone-700 dark:text-[#FFF9EE]">{event.recipientName}</strong>
+                            Recipient: <strong style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}>{event.recipientName}</strong>
                           </span>
                         </>
                       )}
-                      <span>•</span>
-                      <span className="font-mono text-stone-500 dark:text-[#C88D3A]">Ref: {event.evidenceRef}</span>
+                      <span>&bull;</span>
+                      <span className="font-mono text-[11px]" style={{ color: isDark ? '#F5C678' : '#B77620' }}>
+                        Ref: {event.evidenceRef}
+                      </span>
                     </div>
                   </div>
                 </div>
 
-                <div className="sm:text-right shrink-0 border-t sm:border-t-0 pt-2 sm:pt-0 border-stone-100 dark:border-[#5A2D0C]/40 flex sm:flex-col justify-between items-center sm:items-end">
+                <div
+                  className="sm:text-right shrink-0 border-t sm:border-t-0 pt-2 sm:pt-0 flex sm:flex-col justify-between items-center sm:items-end"
+                  style={{ borderColor: isDark ? '#421E06' : '#EAE0D0' }}
+                >
                   {event.amount ? (
-                    <span className="text-sm font-bold text-stone-900 dark:text-[#FFF9EE]">
+                    <span
+                      className="text-base sm:text-lg font-bold"
+                      style={{ color: isDark ? '#F5C678' : '#5A2D0C' }}
+                    >
                       {event.currency || '₦'}
                       {event.amount.toLocaleString()}
                     </span>
                   ) : (
-                    <span className="text-xs font-medium text-stone-500 dark:text-[#D9C4AC]/80">Documented</span>
+                    <span
+                      className="text-xs font-bold"
+                      style={{ color: isDark ? '#C49B75' : '#8A5D3B' }}
+                    >
+                      Documented
+                    </span>
                   )}
-                  <span className="text-[11px] text-stone-400 dark:text-[#D9C4AC]/60 mt-0.5">
+                  <span
+                    className="text-xs font-medium mt-0.5 flex items-center gap-1"
+                    style={{ color: isDark ? '#C49B75' : '#8A5D3B' }}
+                  >
+                    <Calendar className="w-3.5 h-3.5" />
                     {new Date(event.timestamp).toLocaleDateString()}
                   </span>
                 </div>
-              </div>
+              </article>
             );
           })
         )}
@@ -260,3 +369,4 @@ export const TrustTrailFeed: React.FC<TrustTrailFeedProps> = ({ trailEvents, ava
     </div>
   );
 };
+

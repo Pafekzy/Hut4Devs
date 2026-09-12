@@ -113,15 +113,15 @@ export const PeerSupportModal: React.FC<PeerSupportModalProps> = ({
 
   return (
     <div className="fixed inset-0 bg-stone-900/70 backdrop-blur-xs flex items-center justify-center p-4 z-50">
-      <div className="bg-white dark:bg-[#241004] text-stone-900 dark:text-[#FFF9EE] rounded-2xl max-w-lg w-full p-6 shadow-2xl border-2 border-stone-200 dark:border-[#C88D3A]/40 animate-in fade-in zoom-in-95 duration-150 max-h-[90vh] overflow-y-auto">
+      <div className="bg-white dark:bg-[#24211F] text-[#2B211B] dark:text-[#FFF9EE] rounded-2xl max-w-lg w-full p-6 shadow-2xl border-2 border-stone-200 dark:border-[#C88D3A]/40 animate-in fade-in zoom-in-95 duration-150 max-h-[90vh] overflow-y-auto">
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-stone-100 dark:border-[#5A2D0C]/40 pb-3">
+        <div className="flex items-center justify-between border-b border-stone-100 dark:border-[#C88D3A]/20 pb-3">
           <div className="flex items-center gap-2.5">
-            <div className="p-2 bg-[#FFF9EE] dark:bg-[#1A0A02] text-[#5A2D0C] dark:text-[#C88D3A] rounded-xl border border-[#E7D6C1] dark:border-[#C88D3A]/30 shadow-xs">
+            <div className="p-2 bg-[#FFF9EE] dark:bg-[#1E1B18] text-[#5A2D0C] dark:text-[#C88D3A] rounded-xl border border-[#E7D6C1] dark:border-[#C88D3A]/30 shadow-xs">
               <HandCoins className="w-5 h-5 text-[#C88D3A]" />
             </div>
             <div>
-              <h3 className="font-serif font-bold text-stone-900 dark:text-[#FFF9EE] text-base">Initiate Peer Support</h3>
+              <h3 className="font-serif font-bold text-[#5A2D0C] dark:text-[#FFF9EE] text-base">Initiate Peer Support</h3>
               <p className="text-[11px] text-stone-500 dark:text-[#D9C4AC]/80">
                 Direct peer-to-peer cooperation without gatekeepers
               </p>
@@ -136,7 +136,7 @@ export const PeerSupportModal: React.FC<PeerSupportModalProps> = ({
         </div>
 
         {/* Culture Tenet Callout */}
-        <div className="mt-3.5 p-3 bg-[#FFF9EE] dark:bg-[#1A0A02] border border-[#E7D6C1] dark:border-[#C88D3A]/30 rounded-xl text-[11px] text-[#5A2D0C] dark:text-[#FFF9EE] space-y-1 shadow-xs">
+        <div className="mt-3.5 p-3 bg-[#FFF9EE] dark:bg-[#1E1B18] border border-[#E7D6C1] dark:border-[#C88D3A]/30 rounded-xl text-[11px] text-[#5A2D0C] dark:text-[#FFF9EE] space-y-1 shadow-xs">
           <div className="font-semibold flex items-center gap-1.5 text-[#5A2D0C] dark:text-[#C88D3A]">
             <span className="text-xs" aria-hidden="true">🛖</span> Hut4Devs Mutual Support Principle
           </div>
@@ -158,7 +158,7 @@ export const PeerSupportModal: React.FC<PeerSupportModalProps> = ({
                 className={`p-2.5 rounded-xl border-2 text-left transition-all text-xs flex flex-col gap-1 cursor-pointer ${
                   supportType === 'gift'
                     ? 'border-emerald-600 bg-emerald-50 dark:bg-emerald-950/50 text-emerald-950 dark:text-emerald-200 font-semibold shadow-xs ring-1 ring-emerald-600/30'
-                    : 'border-stone-200 dark:border-[#C88D3A]/30 bg-white dark:bg-[#1A0A02] text-stone-600 dark:text-[#D9C4AC] hover:bg-stone-50 dark:hover:bg-[#2F1707]'
+                    : 'border-stone-200 dark:border-[#C88D3A]/30 bg-white dark:bg-[#1E1B18] text-stone-600 dark:text-[#D9C4AC] hover:bg-stone-50 dark:hover:bg-[#292522]'
                 }`}
               >
                 <div className="flex items-center gap-1.5 text-emerald-800 dark:text-emerald-400 font-bold">
@@ -177,7 +177,7 @@ export const PeerSupportModal: React.FC<PeerSupportModalProps> = ({
                 className={`p-2.5 rounded-xl border-2 text-left transition-all text-xs flex flex-col gap-1 cursor-pointer ${
                   supportType === 'loan'
                     ? 'border-blue-600 bg-blue-50 dark:bg-blue-950/50 text-blue-950 dark:text-blue-200 font-semibold shadow-xs ring-1 ring-blue-600/30'
-                    : 'border-stone-200 dark:border-[#C88D3A]/30 bg-white dark:bg-[#1A0A02] text-stone-600 dark:text-[#D9C4AC] hover:bg-stone-50 dark:hover:bg-[#2F1707]'
+                    : 'border-stone-200 dark:border-[#C88D3A]/30 bg-white dark:bg-[#1E1B18] text-stone-600 dark:text-[#D9C4AC] hover:bg-stone-50 dark:hover:bg-[#292522]'
                 }`}
               >
                 <div className="flex items-center gap-1.5 text-blue-800 dark:text-blue-400 font-bold">
@@ -196,7 +196,7 @@ export const PeerSupportModal: React.FC<PeerSupportModalProps> = ({
                 className={`p-2.5 rounded-xl border-2 text-left transition-all text-xs flex flex-col gap-1 cursor-pointer ${
                   supportType === 'contribution'
                     ? 'border-purple-600 bg-purple-50 dark:bg-purple-950/50 text-purple-950 dark:text-purple-200 font-semibold shadow-xs ring-1 ring-purple-600/30'
-                    : 'border-stone-200 dark:border-[#C88D3A]/30 bg-white dark:bg-[#1A0A02] text-stone-600 dark:text-[#D9C4AC] hover:bg-stone-50 dark:hover:bg-[#2F1707]'
+                    : 'border-stone-200 dark:border-[#C88D3A]/30 bg-white dark:bg-[#1E1B18] text-stone-600 dark:text-[#D9C4AC] hover:bg-stone-50 dark:hover:bg-[#292522]'
                 }`}
               >
                 <div className="flex items-center gap-1.5 text-purple-800 dark:text-purple-400 font-bold">
@@ -235,10 +235,10 @@ export const PeerSupportModal: React.FC<PeerSupportModalProps> = ({
                   setToMemberId(e.target.value);
                   setAcknowledgedWarning(false);
                 }}
-                className="w-full px-3 py-2 text-xs border border-stone-300 dark:border-[#C88D3A]/40 rounded-xl focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 outline-none bg-white dark:bg-[#180A02] text-stone-900 dark:text-[#FFF9EE] font-medium"
+                className="w-full px-3 py-2 text-xs border border-stone-300 dark:border-[#C88D3A]/40 rounded-xl focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 outline-none bg-white dark:bg-[#1E1B18] text-stone-900 dark:text-[#FFF9EE] font-medium"
               >
                 {eligibleRecipients.map((f) => (
-                  <option key={f.id} value={f.id} className="bg-white dark:bg-[#180A02] text-stone-900 dark:text-[#FFF9EE]">
+                  <option key={f.id} value={f.id} className="bg-white dark:bg-[#1E1B18] text-stone-900 dark:text-[#FFF9EE]">
                     {f.displayName} ({f.h4dMemberId || f.roles?.join(', ') || 'FELLOW'})
                   </option>
                 ))}
@@ -248,25 +248,25 @@ export const PeerSupportModal: React.FC<PeerSupportModalProps> = ({
 
           {/* Contextual Debt History Preview (Informational only, not a public shaming wall) */}
           {supportType === 'loan' && showDebtHistory && borrowerHistory && (
-            <div className="p-3 bg-stone-50 dark:bg-[#1A0A02] border border-stone-200 dark:border-[#C88D3A]/30 rounded-xl text-xs space-y-2 animate-in fade-in duration-150">
+            <div className="p-3 bg-stone-50 dark:bg-[#1E1B18] border border-stone-200 dark:border-[#C88D3A]/30 rounded-xl text-xs space-y-2 animate-in fade-in duration-150">
               <div className="flex items-center justify-between font-semibold text-stone-800 dark:text-[#FFF9EE]">
                 <span>Contextual Loan History for {recipientMember?.displayName}</span>
                 <span className="text-[10px] text-stone-500 dark:text-stone-400 font-normal">Confidential to Prospective Lender</span>
               </div>
               <div className="grid grid-cols-2 gap-2 text-[11px]">
-                <div className="p-2 bg-white dark:bg-[#241004] rounded-lg border border-stone-200/80 dark:border-[#C88D3A]/20">
+                <div className="p-2 bg-white dark:bg-[#292522] rounded-lg border border-stone-200/80 dark:border-[#C88D3A]/20">
                   <span className="text-stone-500 dark:text-[#D9C4AC]/80 block">Fully Repaid Loans:</span>
                   <strong className="text-emerald-700 dark:text-emerald-400 text-xs">{borrowerHistory.repaidLoans.length} completed</strong>
                 </div>
-                <div className="p-2 bg-white dark:bg-[#241004] rounded-lg border border-stone-200/80 dark:border-[#C88D3A]/20">
+                <div className="p-2 bg-white dark:bg-[#292522] rounded-lg border border-stone-200/80 dark:border-[#C88D3A]/20">
                   <span className="text-stone-500 dark:text-[#D9C4AC]/80 block">Forgiven / Gift Converted:</span>
                   <strong className="text-purple-700 dark:text-purple-400 text-xs">{borrowerHistory.convertedGifts.length} agreements</strong>
                 </div>
-                <div className="p-2 bg-white dark:bg-[#241004] rounded-lg border border-stone-200/80 dark:border-[#C88D3A]/20">
+                <div className="p-2 bg-white dark:bg-[#292522] rounded-lg border border-stone-200/80 dark:border-[#C88D3A]/20">
                   <span className="text-stone-500 dark:text-[#D9C4AC]/80 block">Active Loans:</span>
                   <strong className="text-blue-700 dark:text-blue-400 text-xs">{borrowerHistory.activeLoans.length} active</strong>
                 </div>
-                <div className="p-2 bg-white dark:bg-[#241004] rounded-lg border border-stone-200/80 dark:border-[#C88D3A]/20">
+                <div className="p-2 bg-white dark:bg-[#292522] rounded-lg border border-stone-200/80 dark:border-[#C88D3A]/20">
                   <span className="text-stone-500 dark:text-[#D9C4AC]/80 block">Overdue Delays:</span>
                   <strong className={`text-xs ${borrowerHistory.overdueLoans.length > 0 ? 'text-amber-700 dark:text-amber-400 font-bold' : 'text-stone-600 dark:text-stone-400'}`}>
                     {borrowerHistory.overdueLoans.length} delay(s)

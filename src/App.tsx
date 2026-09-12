@@ -11,6 +11,7 @@ import { RegistrationModal } from './components/RegistrationModal';
 import { Hut4DevsLogo } from './components/Hut4DevsLogo';
 import { ModeSwitcher } from './components/ModeSwitcher';
 import { DEMO_ACCOMMODATION_RESPONSIBILITY } from './data/demoAccommodation';
+import { DEMO_COMMAND_CENTER_RESPONSIBILITIES } from './data/demoCommandCenterPopulation';
 import {
   AccommodationResponsibility,
   AccommodationPaymentIntent,
@@ -721,7 +722,7 @@ export default function App() {
       {view === 'accommodation-admin' && (
         <AccommodationAdminView
           isDark={isDark}
-          responsibilities={[responsibility]}
+          responsibilities={DEMO_COMMAND_CENTER_RESPONSIBILITIES}
           onToggleTheme={toggleTheme}
           onSwitchToFellow={handleSwitchToFellow}
           onExitToLanding={() => setView('landing')}

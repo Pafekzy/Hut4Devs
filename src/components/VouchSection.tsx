@@ -43,20 +43,29 @@ export const VouchSection: React.FC<VouchSectionProps> = ({
     switch (confidence) {
       case 'high':
         return (
-          <span className="inline-flex items-center gap-1 bg-emerald-50 dark:bg-emerald-950/50 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800/40 text-xs px-2.5 py-0.5 rounded-full font-medium">
-            <CheckCircle2 className="w-3 h-3" /> High Confidence
+          <span
+            className="animate-badge-shine inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold tracking-tight border transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md select-none bg-gradient-to-r from-[#3F8F76]/15 via-[#5CA98C]/25 to-[#78C2A4]/15 text-[#175240] border-[#3F8F76]/45 shadow-xs shadow-[#3F8F76]/10 dark:from-[#3F8F76]/35 dark:via-[#5CA98C]/40 dark:to-[#78C2A4]/30 dark:text-[#B4EFE0] dark:border-[#5CA98C]/55 dark:shadow-[#3F8F76]/25"
+          >
+            <CheckCircle2 className="w-3.5 h-3.5 text-[#2A755E] dark:text-[#78C2A4] shrink-0" />
+            <span>High Confidence</span>
           </span>
         );
       case 'moderate':
         return (
-          <span className="inline-flex items-center gap-1 bg-blue-50 dark:bg-blue-950/50 text-blue-800 dark:text-blue-300 border border-blue-200 dark:border-blue-800/40 text-xs px-2.5 py-0.5 rounded-full font-medium">
-            <Info className="w-3 h-3" /> Moderate Confidence
+          <span
+            className="animate-badge-shine inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold tracking-tight border transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md select-none bg-gradient-to-r from-[#6F7FBF]/15 via-[#8190CF]/25 to-[#9AA5DE]/15 text-[#2E3C73] border-[#6F7FBF]/45 shadow-xs shadow-[#6F7FBF]/10 dark:from-[#6F7FBF]/35 dark:via-[#8190CF]/40 dark:to-[#9AA5DE]/30 dark:text-[#D4DCFC] dark:border-[#8190CF]/55 dark:shadow-[#6F7FBF]/25"
+          >
+            <Info className="w-3.5 h-3.5 text-[#5566A8] dark:text-[#9AA5DE] shrink-0" />
+            <span>Moderate Confidence</span>
           </span>
         );
       case 'cautious':
         return (
-          <span className="inline-flex items-center gap-1 bg-amber-50 dark:bg-amber-950/50 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-800/40 text-xs px-2.5 py-0.5 rounded-full font-medium">
-            <AlertCircle className="w-3 h-3" /> Cautious / Bounded
+          <span
+            className="animate-badge-shine inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold tracking-tight border transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md select-none bg-gradient-to-r from-[#D97706]/15 via-[#F59E0B]/25 to-[#FBBF24]/15 text-[#853B0A] border-[#D97706]/45 shadow-xs shadow-[#D97706]/10 dark:from-[#D97706]/35 dark:via-[#F59E0B]/40 dark:to-[#FBBF24]/30 dark:text-[#FDE68A] dark:border-[#F59E0B]/55 dark:shadow-[#D97706]/25"
+          >
+            <AlertCircle className="w-3.5 h-3.5 text-[#B45309] dark:text-[#FBBF24] shrink-0" />
+            <span>Cautious / Bounded</span>
           </span>
         );
     }
@@ -65,17 +74,39 @@ export const VouchSection: React.FC<VouchSectionProps> = ({
   return (
     <div className="space-y-6">
       {/* Vouching Philosophy Banner */}
-      <div className="bg-white dark:bg-[#241004] rounded-2xl border-2 border-stone-200/90 dark:border-[#C88D3A]/40 p-6 shadow-sm">
+      <section
+        className="rounded-2xl p-5 sm:p-7 border-2 border-b-4 transition-all duration-200 shadow-md backdrop-blur-md"
+        style={{
+          backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : 'rgba(255, 253, 248, 0.65)',
+          borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : 'rgba(90, 45, 12, 0.25)',
+        }}
+      >
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <div className="flex items-center gap-2">
-              <span className="bg-[#FFF9EE] dark:bg-[#1A0A02] text-[#5A2D0C] dark:text-[#C88D3A] border border-[#E7D6C1] dark:border-[#C88D3A]/30 text-xs font-semibold px-2.5 py-0.5 rounded-md shadow-xs">
+            <div className="flex items-center gap-2 mb-1">
+              <span
+                className="text-xs font-bold uppercase tracking-wider block"
+                style={{ color: isDark ? '#E5A955' : '#B77620' }}
+              >
                 Distributed Peer Confidence
               </span>
-              <span className="text-xs text-stone-500 dark:text-[#D9C4AC]/70">Contextual • No universal scores</span>
+              <span
+                className="text-xs font-medium"
+                style={{ color: isDark ? '#C49B75' : '#8A5D3B' }}
+              >
+                &bull; Contextual &bull; No Universal Scores
+              </span>
             </div>
-            <h1 className="text-xl font-serif font-bold text-stone-900 dark:text-[#FFF9EE] mt-1.5">Contextual Vouching Matrix</h1>
-            <p className="text-xs text-stone-600 dark:text-[#D9C4AC] mt-0.5 max-w-2xl leading-relaxed">
+            <h1
+              className="font-serif text-xl sm:text-2xl font-bold tracking-tight"
+              style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+            >
+              Contextual Vouching Matrix
+            </h1>
+            <p
+              className="text-xs mt-1.5 max-w-2xl leading-relaxed"
+              style={{ color: isDark ? '#EAD6C0' : '#5A2D0C' }}
+            >
               When a fellow needs context before lending or coordinating, they consult trusted peers.
               A vouch is never a blank check: it states who vouches for whom, in what specific domain,
               at what confidence level, with zero automatic guarantor liability.
@@ -83,90 +114,178 @@ export const VouchSection: React.FC<VouchSectionProps> = ({
           </div>
 
           <button
+            type="button"
             id="btn-issue-vouch"
             onClick={() => setIsModalOpen(true)}
-            className="inline-flex items-center gap-2 bg-[#5A2D0C] hover:bg-[#3D1D08] dark:bg-[#C88D3A] dark:hover:bg-[#B77620] text-[#FFF9EE] dark:text-[#241004] text-xs font-bold px-4 py-2.5 rounded-xl border-b-4 border-[#381B07] dark:border-[#915B15] active:border-b active:translate-y-[2px] transition-all shadow-sm cursor-pointer"
+            className={`inline-flex items-center justify-center gap-2 px-4 py-2.5 min-h-[44px] rounded-xl text-sm font-bold transition-all duration-150 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 border-b-3 active:border-b active:translate-y-[1px] shadow-sm shrink-0 ${
+              isDark
+                ? 'bg-[#C88D3A] text-[#241104] hover:bg-[#DDA250] border-[#915B15] focus-visible:ring-[#C88D3A] focus-visible:ring-offset-[#261205]'
+                : 'bg-[#5A2D0C] text-[#FFF9EE] hover:bg-[#432108] border-[#381B07] focus-visible:ring-[#5A2D0C] focus-visible:ring-offset-[#FFF9EE]'
+            }`}
           >
-            <Plus className="w-4 h-4 text-[#C88D3A] dark:text-[#241004]" />
-            Issue Contextual Vouch
+            <Plus className="w-4 h-4 shrink-0" aria-hidden="true" />
+            <span>Issue Contextual Vouch</span>
           </button>
         </div>
 
-        <div className="mt-4 p-3.5 bg-[#FFF9EE] dark:bg-[#1A0A02] rounded-xl border border-[#E7D6C1] dark:border-[#C88D3A]/30 flex items-start gap-2.5 text-xs text-[#5A2D0C] dark:text-[#FFF9EE] shadow-xs">
+        <div
+          className="mt-5 p-3.5 rounded-xl border flex items-start gap-2.5 text-xs shadow-xs"
+          style={{
+            backgroundColor: isDark ? 'rgba(30, 27, 24, 0.45)' : 'rgba(247, 241, 231, 0.50)',
+            borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : 'rgba(90, 45, 12, 0.15)',
+            color: isDark ? '#EAD6C0' : '#5A2D0C',
+          }}
+        >
           <span className="text-sm shrink-0 mt-0.5" aria-hidden="true">🛖</span>
           <p className="leading-relaxed">
             <strong>Hut4Devs Vouching Invariant:</strong> A vouch means "Fellow A vouches for Fellow B in domain X with confidence Y for scope Z". It does NOT create financial guarantor liability or universal reputation points. Declining to vouch ("No") is always legitimate and non-punitive.
           </p>
         </div>
-      </div>
+      </section>
 
       {/* Vouches Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
         {vouches.map((vouch) => {
           const voucher = getMember(vouch.voucherMemberId, vouch.voucherMemberName);
           const target = getMember(vouch.targetMemberId, vouch.targetMemberName);
 
           return (
-            <div
+            <article
               key={vouch.id}
               id={`vouch-card-${vouch.id}`}
-              className="bg-white dark:bg-[#241004] rounded-2xl p-5 border-2 border-stone-200/90 dark:border-[#C88D3A]/30 shadow-sm hover:border-amber-400/80 dark:hover:border-[#C88D3A]/70 transition-all flex flex-col justify-between"
+              className="rounded-2xl p-5 sm:p-6 border-2 border-b-4 transition-all duration-200 shadow-md flex flex-col justify-between"
+              style={{
+                backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : 'rgba(255, 253, 248, 0.65)',
+                borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : 'rgba(90, 45, 12, 0.25)',
+              }}
             >
               <div>
-                <div className="flex items-start justify-between gap-2 border-b border-stone-100 dark:border-[#5A2D0C]/40 pb-3">
-                  <div className="flex items-center gap-2.5">
-                    <div className="w-10 h-10 rounded-full bg-[#5A2D0C] text-[#FFF9EE] font-bold text-sm flex items-center justify-center border border-amber-300">
+                <div
+                  className="flex items-start justify-between gap-2 pb-3.5 border-b-2"
+                  style={{ borderColor: isDark ? '#421E06' : '#EAE0D0' }}
+                >
+                  <div className="flex items-center gap-3">
+                    <div
+                      className="w-10 h-10 rounded-full font-bold text-sm flex items-center justify-center border shadow-xs"
+                      style={{
+                        backgroundColor: isDark ? '#C88D3A' : '#5A2D0C',
+                        color: isDark ? '#241104' : '#FFF9EE',
+                        borderColor: isDark ? '#F5C678' : '#C88D3A',
+                      }}
+                    >
                       {target.displayName.charAt(0)}
                     </div>
                     <div>
-                      <div className="text-[10px] text-stone-400 dark:text-[#D9C4AC]/70 font-semibold uppercase tracking-wider">Vouch For</div>
-                      <h3 className="font-bold text-sm text-stone-900 dark:text-[#FFF9EE] leading-tight">{target.displayName}</h3>
-                      <span className="text-[11px] text-stone-500 dark:text-[#C88D3A] font-mono">{target.h4dMemberId || 'H4D-MEMBER'}</span>
+                      <span
+                        className="text-[10px] font-bold uppercase tracking-wider block"
+                        style={{ color: isDark ? '#E5A955' : '#B77620' }}
+                      >
+                        Vouch For Fellow
+                      </span>
+                      <h3
+                        className="font-serif font-bold text-base sm:text-lg leading-tight"
+                        style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+                      >
+                        {target.displayName}
+                      </h3>
+                      <span
+                        className="text-xs font-mono font-semibold"
+                        style={{ color: isDark ? '#C49B75' : '#8A5D3B' }}
+                      >
+                        {target.h4dMemberId || 'H4D-MEMBER'}
+                      </span>
                     </div>
                   </div>
                   {getConfidenceBadge(vouch.confidence)}
                 </div>
 
-                <div className="mt-3.5 space-y-2 text-xs">
+                <div className="mt-4 space-y-2.5 text-xs">
                   <div>
-                    <span className="text-stone-400 dark:text-[#D9C4AC]/70 font-medium">Domain Context:</span>
-                    <p className="font-semibold text-stone-800 dark:text-[#FFF9EE] mt-0.5">{vouch.context}</p>
+                    <span
+                      className="text-[11px] font-medium block"
+                      style={{ color: isDark ? '#C49B75' : '#8A5D3B' }}
+                    >
+                      Domain Context:
+                    </span>
+                    <p
+                      className="font-bold text-sm mt-0.5"
+                      style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+                    >
+                      {vouch.context}
+                    </p>
                   </div>
 
                   <div>
-                    <span className="text-stone-400 dark:text-[#D9C4AC]/70 font-medium">Commitment Scope:</span>
-                    <p className="text-stone-700 dark:text-[#D9C4AC] font-mono text-[11px] mt-0.5">{vouch.commitmentScope}</p>
+                    <span
+                      className="text-[11px] font-medium block"
+                      style={{ color: isDark ? '#C49B75' : '#8A5D3B' }}
+                    >
+                      Commitment Scope:
+                    </span>
+                    <p
+                      className="font-mono text-xs font-semibold mt-0.5"
+                      style={{ color: isDark ? '#F5C678' : '#B77620' }}
+                    >
+                      {vouch.commitmentScope}
+                    </p>
                   </div>
 
                   <div>
-                    <span className="text-stone-400 dark:text-[#D9C4AC]/70 font-medium">Voucher Statement:</span>
-                    <p className="text-stone-600 dark:text-[#FFF9EE] italic bg-stone-50 dark:bg-[#1A0A02] p-2.5 rounded-xl border border-stone-100 dark:border-[#C88D3A]/20 mt-1 leading-relaxed">
+                    <span
+                      className="text-[11px] font-medium block"
+                      style={{ color: isDark ? '#C49B75' : '#8A5D3B' }}
+                    >
+                      Voucher Statement:
+                    </span>
+                    <p
+                      className="italic p-3 rounded-xl border mt-1 leading-relaxed text-xs"
+                      style={{
+                        backgroundColor: isDark ? 'rgba(30, 27, 24, 0.45)' : 'rgba(247, 241, 231, 0.50)',
+                        borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : 'rgba(90, 45, 12, 0.15)',
+                        color: isDark ? '#EAD6C0' : '#5A2D0C',
+                      }}
+                    >
                       "{vouch.notes}"
                     </p>
                   </div>
 
                   {vouch.disclaimer && (
-                    <div className="text-[10px] text-stone-400 dark:text-[#D9C4AC]/70 flex items-center gap-1 mt-1">
-                      <ShieldCheck className="w-3 h-3 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                    <div
+                      className="text-[11px] flex items-center gap-1.5 mt-2 font-medium"
+                      style={{ color: isDark ? '#C49B75' : '#8A5D3B' }}
+                    >
+                      <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
                       <span>{vouch.disclaimer}</span>
                     </div>
                   )}
                 </div>
               </div>
 
-              <div className="mt-4 pt-3 border-t border-stone-100 dark:border-[#5A2D0C]/40 flex items-center justify-between text-[11px] text-stone-500 dark:text-[#D9C4AC]/70">
-                <div className="flex items-center gap-1.5">
-                  <div className="w-4 h-4 rounded-full bg-stone-300 dark:bg-[#5A2D0C] text-stone-700 dark:text-[#FFF9EE] text-[9px] font-bold flex items-center justify-center">
+              <div
+                className="mt-5 pt-3.5 border-t-2 flex items-center justify-between text-xs font-medium"
+                style={{
+                  borderColor: isDark ? '#421E06' : '#EAE0D0',
+                  color: isDark ? '#C49B75' : '#8A5D3B',
+                }}
+              >
+                <div className="flex items-center gap-2">
+                  <div
+                    className="w-5 h-5 rounded-full text-[10px] font-bold flex items-center justify-center"
+                    style={{
+                      backgroundColor: isDark ? '#C88D3A' : '#5A2D0C',
+                      color: isDark ? '#241104' : '#FFF9EE',
+                    }}
+                  >
                     {voucher.displayName.charAt(0)}
                   </div>
-                  <span>Vouched by <strong className="text-stone-800 dark:text-[#FFF9EE]">{voucher.displayName}</strong></span>
+                  <span>Vouched by <strong style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}>{voucher.displayName}</strong></span>
                 </div>
                 <div className="flex items-center gap-1">
-                  <Calendar className="w-3 h-3" />
+                  <Calendar className="w-3.5 h-3.5" />
                   {vouch.createdAt.split('T')[0]}
                 </div>
               </div>
-            </div>
+            </article>
           );
         })}
       </div>

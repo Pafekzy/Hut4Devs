@@ -409,86 +409,37 @@ export const MemberHomeView: React.FC<MemberHomeViewProps> = ({
         <div className={`border-t transition-colors ${
           isDark ? 'border-[#3E200C] bg-[#231004]/90' : 'border-[#5A2D0C]/15 bg-[#FFFDF9]/90'
         }`}>
-          <div className="max-w-5xl mx-auto px-4 sm:px-6 flex items-center gap-1.5 overflow-x-auto py-1.5">
-            <button
-              id="tab-nav-accommodation"
-              type="button"
-              onClick={() => setActiveTab('accommodation')}
-              className={`px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 whitespace-nowrap transition-all cursor-pointer border-b-2 active:border-b active:translate-y-[1px] ${
-                activeTab === 'accommodation'
-                  ? 'bg-[#5A2D0C] text-[#FFF9EE] border-[#381B07] shadow-xs'
-                  : isDark
-                  ? 'text-[#D9C4AC] hover:text-[#FFF9EE] hover:bg-[#3E200C] border-transparent'
-                  : 'text-[#6D4223] hover:text-[#5A2D0C] hover:bg-[#EFE5D5] border-transparent'
-              }`}
-            >
-              <Building className="w-3.5 h-3.5" />
-              <span>Accommodation</span>
-            </button>
-
-            <button
-              id="tab-nav-peer-support"
-              type="button"
-              onClick={() => setActiveTab('peer-support')}
-              className={`px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 whitespace-nowrap transition-all cursor-pointer border-b-2 active:border-b active:translate-y-[1px] ${
-                activeTab === 'peer-support'
-                  ? 'bg-[#5A2D0C] text-[#FFF9EE] border-[#381B07] shadow-xs'
-                  : isDark
-                  ? 'text-[#D9C4AC] hover:text-[#FFF9EE] hover:bg-[#3E200C] border-transparent'
-                  : 'text-[#6D4223] hover:text-[#5A2D0C] hover:bg-[#EFE5D5] border-transparent'
-              }`}
-            >
-              <HandCoins className="w-3.5 h-3.5 text-[#C88D3A]" />
-              <span>Peer Support Hub</span>
-            </button>
-
-            <button
-              id="tab-nav-trust-trails"
-              type="button"
-              onClick={() => setActiveTab('trust-trails')}
-              className={`px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 whitespace-nowrap transition-all cursor-pointer border-b-2 active:border-b active:translate-y-[1px] ${
-                activeTab === 'trust-trails'
-                  ? 'bg-[#5A2D0C] text-[#FFF9EE] border-[#381B07] shadow-xs'
-                  : isDark
-                  ? 'text-[#D9C4AC] hover:text-[#FFF9EE] hover:bg-[#3E200C] border-transparent'
-                  : 'text-[#6D4223] hover:text-[#5A2D0C] hover:bg-[#EFE5D5] border-transparent'
-              }`}
-            >
-              <Footprints className="w-3.5 h-3.5" />
-              <span>Trails of Trust</span>
-            </button>
-
-            <button
-              id="tab-nav-vouches"
-              type="button"
-              onClick={() => setActiveTab('vouches')}
-              className={`px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 whitespace-nowrap transition-all cursor-pointer border-b-2 active:border-b active:translate-y-[1px] ${
-                activeTab === 'vouches'
-                  ? 'bg-[#5A2D0C] text-[#FFF9EE] border-[#381B07] shadow-xs'
-                  : isDark
-                  ? 'text-[#D9C4AC] hover:text-[#FFF9EE] hover:bg-[#3E200C] border-transparent'
-                  : 'text-[#6D4223] hover:text-[#5A2D0C] hover:bg-[#EFE5D5] border-transparent'
-              }`}
-            >
-              <ShieldCheck className="w-3.5 h-3.5" />
-              <span>Contextual Vouches</span>
-            </button>
-
-            <button
-              id="tab-nav-recognition"
-              type="button"
-              onClick={() => setActiveTab('recognition')}
-              className={`px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 whitespace-nowrap transition-all cursor-pointer border-b-2 active:border-b active:translate-y-[1px] ${
-                activeTab === 'recognition'
-                  ? 'bg-[#5A2D0C] text-[#FFF9EE] border-[#381B07] shadow-xs'
-                  : isDark
-                  ? 'text-[#D9C4AC] hover:text-[#FFF9EE] hover:bg-[#3E200C] border-transparent'
-                  : 'text-[#6D4223] hover:text-[#5A2D0C] hover:bg-[#EFE5D5] border-transparent'
-              }`}
-            >
-              <Award className="w-3.5 h-3.5" />
-              <span>Recognition</span>
-            </button>
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 flex items-center gap-1.5 overflow-x-auto py-2">
+            {[
+              { id: 'accommodation', label: 'Accommodation', icon: Building },
+              { id: 'peer-support', label: 'Peer Support Hub', icon: HandCoins },
+              { id: 'trust-trails', label: 'Trails of Trust', icon: Footprints },
+              { id: 'vouches', label: 'Contextual Vouches', icon: ShieldCheck },
+              { id: 'recognition', label: 'Recognition', icon: Award },
+            ].map((tab) => {
+              const Icon = tab.icon;
+              const isActive = activeTab === tab.id;
+              return (
+                <button
+                  key={tab.id}
+                  id={`tab-nav-${tab.id}`}
+                  type="button"
+                  onClick={() => setActiveTab(tab.id as FellowWorkspaceTab)}
+                  className={`px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 whitespace-nowrap transition-all cursor-pointer border-b-3 active:border-b active:translate-y-[1px] shadow-xs ${
+                    isActive
+                      ? isDark
+                        ? 'bg-[#C88D3A] text-[#241104] border-[#915B15]'
+                        : 'bg-[#5A2D0C] text-[#FFF9EE] border-[#381B07]'
+                      : isDark
+                      ? 'text-[#D9C4AC] hover:text-[#FFF9EE] hover:bg-[#3E200C] border-transparent'
+                      : 'text-[#6D4223] hover:text-[#5A2D0C] hover:bg-[#EFE5D5] border-transparent'
+                  }`}
+                >
+                  <Icon className="w-3.5 h-3.5" />
+                  <span>{tab.label}</span>
+                </button>
+              );
+            })}
           </div>
         </div>
       </header>

@@ -97,12 +97,14 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
 }) => {
   const [isPuzzleModalOpen, setIsPuzzleModalOpen] = useState(false);
 
-  // Scope mode: default to ALL_FELLOWS to present the deterministic 24-fellow community baseline
-  const [scopeMode, setScopeMode] = useState<'ALL_FELLOWS' | 'SINGLE'>('ALL_FELLOWS');
+  // Scope mode: default to ALL_FELLOWS if population has multiple records or if not restricted to single
+  const [scopeMode, setScopeMode] = useState<'ALL_FELLOWS' | 'SINGLE'>(() =>
+    responsibilities.length === 1 ? 'SINGLE' : 'ALL_FELLOWS'
+  );
 
   const effectiveResponsibilities =
     scopeMode === 'SINGLE'
-      ? responsibilities
+      ? (responsibilities.length === 1 ? responsibilities : [responsibilities[0]])
       : (responsibilities.length > 1 ? responsibilities : DEMO_COMMAND_CENTER_RESPONSIBILITIES);
 
   const effectiveProviderEvents =
@@ -291,7 +293,7 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
           aria-label="Attention Metrics"
           className="mb-8 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-3.5"
         >
-          {/* 1. Outstanding: 2 */}
+          {/* 1. Outstanding: 4 */}
           <button
             type="button"
             id="metric-card-outstanding"
@@ -299,10 +301,10 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
               setScopeMode('ALL_FELLOWS');
               setAttentionFilter('OUTSTANDING');
             }}
-            className={`p-3.5 sm:p-4 rounded-2xl border-2 border-b-4 text-left transition-all duration-150 cursor-pointer shadow-sm hover:-translate-y-1 hover:shadow-md active:translate-y-0.5 active:border-b-2 ${
+            className={`p-3.5 sm:p-4 rounded-2xl border-2 border-b-4 text-left transition-all duration-150 cursor-pointer shadow-sm hover:-translate-y-1 hover:shadow-md active:translate-y-0.5 active:border-b-2 backdrop-blur-md ${
               attentionFilter === 'OUTSTANDING'
-                ? 'border-[#B77620] ring-2 ring-[#B77620]/50 bg-[#FFF0D4] dark:bg-[#4E270A] shadow-md'
-                : 'border-[#5A2D0C]/20 dark:border-[#C88D3A]/30 bg-[#FFF9EE] dark:bg-[#2A1305] hover:border-[#B77620]'
+                ? 'border-[#B77620] ring-2 ring-[#B77620]/50 bg-amber-100/60 dark:bg-amber-950/50 shadow-md'
+                : 'border-[#5A2D0C]/20 dark:border-[#C88D3A]/30 bg-white/60 dark:bg-[rgba(23,21,19,0.55)] hover:border-[#B77620]'
             }`}
           >
             <div className="flex items-center justify-between text-xs mb-1.5">
@@ -321,10 +323,10 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
               setScopeMode('ALL_FELLOWS');
               setAttentionFilter('PARTIALLY_FULFILLED');
             }}
-            className={`p-3.5 sm:p-4 rounded-2xl border-2 border-b-4 text-left transition-all duration-150 cursor-pointer shadow-sm hover:-translate-y-1 hover:shadow-md active:translate-y-0.5 active:border-b-2 ${
+            className={`p-3.5 sm:p-4 rounded-2xl border-2 border-b-4 text-left transition-all duration-150 cursor-pointer shadow-sm hover:-translate-y-1 hover:shadow-md active:translate-y-0.5 active:border-b-2 backdrop-blur-md ${
               attentionFilter === 'PARTIALLY_FULFILLED'
-                ? 'border-amber-500 ring-2 ring-amber-500/50 bg-amber-50 dark:bg-[#4A2E05] shadow-md'
-                : 'border-[#5A2D0C]/20 dark:border-[#C88D3A]/30 bg-[#FFF9EE] dark:bg-[#2A1305] hover:border-amber-500'
+                ? 'border-amber-500 ring-2 ring-amber-500/50 bg-amber-100/60 dark:bg-amber-950/50 shadow-md'
+                : 'border-[#5A2D0C]/20 dark:border-[#C88D3A]/30 bg-white/60 dark:bg-[rgba(23,21,19,0.55)] hover:border-amber-500'
             }`}
           >
             <div className="flex items-center justify-between text-xs mb-1.5">
@@ -343,10 +345,10 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
               setScopeMode('ALL_FELLOWS');
               setAttentionFilter('AWAITING_RECONCILIATION');
             }}
-            className={`p-3.5 sm:p-4 rounded-2xl border-2 border-b-4 text-left transition-all duration-150 cursor-pointer shadow-sm hover:-translate-y-1 hover:shadow-md active:translate-y-0.5 active:border-b-2 ${
+            className={`p-3.5 sm:p-4 rounded-2xl border-2 border-b-4 text-left transition-all duration-150 cursor-pointer shadow-sm hover:-translate-y-1 hover:shadow-md active:translate-y-0.5 active:border-b-2 backdrop-blur-md ${
               attentionFilter === 'AWAITING_RECONCILIATION'
-                ? 'border-blue-500 ring-2 ring-blue-500/50 bg-blue-50 dark:bg-[#0E2A47] shadow-md'
-                : 'border-[#5A2D0C]/20 dark:border-[#C88D3A]/30 bg-[#FFF9EE] dark:bg-[#2A1305] hover:border-blue-500'
+                ? 'border-blue-500 ring-2 ring-blue-500/50 bg-blue-100/60 dark:bg-blue-950/50 shadow-md'
+                : 'border-[#5A2D0C]/20 dark:border-[#C88D3A]/30 bg-white/60 dark:bg-[rgba(23,21,19,0.55)] hover:border-blue-500'
             }`}
           >
             <div className="flex items-center justify-between text-xs mb-1.5">
@@ -365,10 +367,10 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
               setScopeMode('ALL_FELLOWS');
               setAttentionFilter('MISMATCH');
             }}
-            className={`p-3.5 sm:p-4 rounded-2xl border-2 border-b-4 text-left transition-all duration-150 cursor-pointer shadow-sm hover:-translate-y-1 hover:shadow-md active:translate-y-0.5 active:border-b-2 ${
+            className={`p-3.5 sm:p-4 rounded-2xl border-2 border-b-4 text-left transition-all duration-150 cursor-pointer shadow-sm hover:-translate-y-1 hover:shadow-md active:translate-y-0.5 active:border-b-2 backdrop-blur-md ${
               attentionFilter === 'MISMATCH'
-                ? 'border-red-500 ring-2 ring-red-500/50 bg-red-50 dark:bg-[#471313] shadow-md'
-                : 'border-[#5A2D0C]/20 dark:border-[#C88D3A]/30 bg-[#FFF9EE] dark:bg-[#2A1305] hover:border-red-500'
+                ? 'border-red-500 ring-2 ring-red-500/50 bg-red-100/60 dark:bg-red-950/50 shadow-md'
+                : 'border-[#5A2D0C]/20 dark:border-[#C88D3A]/30 bg-white/60 dark:bg-[rgba(23,21,19,0.55)] hover:border-red-500'
             }`}
           >
             <div className="flex items-center justify-between text-xs mb-1.5">
@@ -387,10 +389,10 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
               setScopeMode('ALL_FELLOWS');
               setAttentionFilter('FULFILLED');
             }}
-            className={`p-3.5 sm:p-4 rounded-2xl border-2 border-b-4 text-left transition-all duration-150 cursor-pointer shadow-sm hover:-translate-y-1 hover:shadow-md active:translate-y-0.5 active:border-b-2 ${
+            className={`p-3.5 sm:p-4 rounded-2xl border-2 border-b-4 text-left transition-all duration-150 cursor-pointer shadow-sm hover:-translate-y-1 hover:shadow-md active:translate-y-0.5 active:border-b-2 backdrop-blur-md ${
               attentionFilter === 'FULFILLED'
-                ? 'border-emerald-600 ring-2 ring-emerald-600/50 bg-emerald-50 dark:bg-[#0A3D22] shadow-md'
-                : 'border-[#5A2D0C]/20 dark:border-[#C88D3A]/30 bg-[#FFF9EE] dark:bg-[#2A1305] hover:border-emerald-600'
+                ? 'border-emerald-600 ring-2 ring-emerald-600/50 bg-emerald-100/60 dark:bg-emerald-950/50 shadow-md'
+                : 'border-[#5A2D0C]/20 dark:border-[#C88D3A]/30 bg-white/60 dark:bg-[rgba(23,21,19,0.55)] hover:border-emerald-600'
             }`}
           >
             <div className="flex items-center justify-between text-xs mb-1.5">
@@ -409,10 +411,10 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
               setScopeMode('ALL_FELLOWS');
               setAttentionFilter('ALL');
             }}
-            className={`p-3.5 sm:p-4 rounded-2xl border-2 border-b-4 text-left transition-all duration-150 cursor-pointer shadow-sm hover:-translate-y-1 hover:shadow-md active:translate-y-0.5 active:border-b-2 ${
+            className={`p-3.5 sm:p-4 rounded-2xl border-2 border-b-4 text-left transition-all duration-150 cursor-pointer shadow-sm hover:-translate-y-1 hover:shadow-md active:translate-y-0.5 active:border-b-2 backdrop-blur-md ${
               attentionFilter === 'ALL'
-                ? 'border-[#5A2D0C] dark:border-[#C88D3A] ring-2 ring-[#C88D3A]/50 bg-[#EAE0D0] dark:bg-[#5A2D0C] shadow-md'
-                : 'border-[#5A2D0C]/20 dark:border-[#C88D3A]/30 bg-[#FFF9EE] dark:bg-[#2A1305] hover:border-[#5A2D0C]'
+                ? 'border-[#5A2D0C] dark:border-[#C88D3A] ring-2 ring-[#C88D3A]/50 bg-stone-200/70 dark:bg-[rgba(42,34,28,0.7)] shadow-md'
+                : 'border-[#5A2D0C]/20 dark:border-[#C88D3A]/30 bg-white/60 dark:bg-[rgba(23,21,19,0.55)] hover:border-[#5A2D0C]'
             }`}
           >
             <div className="flex items-center justify-between text-xs mb-1.5">
@@ -427,19 +429,19 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
         {/* Multi-Property Contextual Rates */}
         <section
           aria-labelledby="properties-rates-heading"
-          className="mb-6 bg-white/40 border border-[#C88D3A]/25 rounded-2xl p-4 sm:p-5 shadow-xs"
+          className="mb-6 bg-white/40 dark:bg-black/30 backdrop-blur-md border border-[#5A2D0C]/20 dark:border-[#C88D3A]/30 rounded-2xl p-4 sm:p-5 shadow-xs"
         >
-          <div className="flex items-center justify-between mb-3 border-b border-[#5A2D0C]/10 pb-2">
+          <div className="flex items-center justify-between mb-3 border-b border-[#5A2D0C]/10 dark:border-[#C88D3A]/15 pb-2">
             <div className="flex items-center gap-2">
               <Building2 className="w-4 h-4 text-[#C88D3A]" />
               <h2
                 id="properties-rates-heading"
-                className="text-xs font-bold uppercase tracking-wider text-[#5A2D0C]"
+                className="text-xs font-bold uppercase tracking-wider text-[#5A2D0C] dark:text-[#FFF9EE]"
               >
                 Accredited Property Commitments (Multi-Property Architecture)
               </h2>
             </div>
-            <span className="text-[10px] text-[#5A2D0C]/60 font-mono">
+            <span className="text-[10px] text-[#5A2D0C]/60 dark:text-[#FFF9EE]/60 font-mono">
               Rates Vary By Property Scope
             </span>
           </div>
@@ -448,14 +450,14 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
             {ACCOMMODATION_PROPERTIES.map((prop) => (
               <div
                 key={prop.id}
-                className="p-3 bg-[#FFF9EE] border border-[#C88D3A]/20 rounded-xl flex flex-col justify-between text-xs"
+                className="p-3 bg-[rgba(255,249,238,0.65)] dark:bg-[rgba(30,27,24,0.45)] backdrop-blur-xs border border-[#5A2D0C]/15 dark:border-[#C88D3A]/20 rounded-xl flex flex-col justify-between text-xs shadow-xs"
               >
                 <div>
-                  <div className="font-bold text-[#5A2D0C]">{prop.name}</div>
-                  <div className="text-[10px] text-[#5A2D0C]/60 mt-0.5">{prop.location}</div>
+                  <div className="font-bold text-[#5A2D0C] dark:text-[#FFF9EE]">{prop.name}</div>
+                  <div className="text-[10px] text-[#5A2D0C]/60 dark:text-[#FFF9EE]/60 mt-0.5">{prop.location}</div>
                 </div>
-                <div className="mt-2 pt-2 border-t border-[#5A2D0C]/10 flex items-center justify-between">
-                  <span className="text-[10px] uppercase font-semibold text-[#5A2D0C]/60">Required</span>
+                <div className="mt-2 pt-2 border-t border-[#5A2D0C]/10 dark:border-[#C88D3A]/15 flex items-center justify-between">
+                  <span className="text-[10px] uppercase font-semibold text-[#5A2D0C]/60 dark:text-[#FFF9EE]/60">Required</span>
                   <span className="font-extrabold text-[#B77620]">
                     ₦{prop.monthlyCommitment.toLocaleString()}/mo
                   </span>
@@ -468,15 +470,15 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
         {/* Operational Summary Grid (Required Test Selectors) */}
         <section
           aria-labelledby="operational-summary-heading"
-          className="rounded-2xl p-5 sm:p-7 border mb-6 transition-colors duration-200"
+          className="rounded-2xl p-5 sm:p-7 border mb-6 transition-all duration-200 shadow-md backdrop-blur-md"
           style={{
-            backgroundColor: isDark ? '#3E200C' : '#FFF9EE',
-            borderColor: isDark ? '#623416' : '#EAE0D0',
+            backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : 'rgba(255, 253, 248, 0.65)',
+            borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : 'rgba(90, 45, 12, 0.25)',
           }}
         >
           <div
             className="flex items-center justify-between border-b pb-4 mb-5"
-            style={{ borderColor: isDark ? '#4B2710' : '#EAE0D0' }}
+            style={{ borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : 'rgba(90, 45, 12, 0.15)' }}
           >
             <h2
               id="operational-summary-heading"
@@ -486,9 +488,9 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
               Operational Summary
             </h2>
             <span
-              className="text-[11px] font-mono uppercase px-2 py-0.5 rounded"
+              className="text-[11px] font-mono uppercase px-2 py-0.5 rounded shadow-xs"
               style={{
-                backgroundColor: isDark ? '#2F1707' : '#F7F1E7',
+                backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : 'rgba(247, 241, 231, 0.7)',
                 color: isDark ? '#C88D3A' : '#B77620',
               }}
             >
@@ -499,10 +501,10 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             <div
               id="summary-properties-count"
-              className="p-4 rounded-xl border"
+              className="p-4 rounded-xl border backdrop-blur-xs"
               style={{
-                backgroundColor: isDark ? '#2F1707' : '#F7F1E7',
-                borderColor: isDark ? '#4B2710' : '#E7D6C1',
+                backgroundColor: isDark ? 'rgba(30, 27, 24, 0.45)' : 'rgba(247, 241, 231, 0.50)',
+                borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : 'rgba(90, 45, 12, 0.15)',
               }}
             >
               <div className="flex items-center gap-2 mb-1.5">
@@ -516,10 +518,10 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
 
             <div
               id="summary-rooms-count"
-              className="p-4 rounded-xl border"
+              className="p-4 rounded-xl border backdrop-blur-xs"
               style={{
-                backgroundColor: isDark ? '#2F1707' : '#F7F1E7',
-                borderColor: isDark ? '#4B2710' : '#E7D6C1',
+                backgroundColor: isDark ? 'rgba(30, 27, 24, 0.45)' : 'rgba(247, 241, 231, 0.50)',
+                borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : 'rgba(90, 45, 12, 0.15)',
               }}
             >
               <div className="flex items-center gap-2 mb-1.5">
@@ -533,10 +535,10 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
 
             <div
               id="summary-fellows-count"
-              className="p-4 rounded-xl border"
+              className="p-4 rounded-xl border backdrop-blur-xs"
               style={{
-                backgroundColor: isDark ? '#2F1707' : '#F7F1E7',
-                borderColor: isDark ? '#4B2710' : '#E7D6C1',
+                backgroundColor: isDark ? 'rgba(30, 27, 24, 0.45)' : 'rgba(247, 241, 231, 0.50)',
+                borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : 'rgba(90, 45, 12, 0.15)',
               }}
             >
               <div className="flex items-center gap-2 mb-1.5">
@@ -550,10 +552,10 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
 
             <div
               id="summary-outstanding-count"
-              className="p-4 rounded-xl border"
+              className="p-4 rounded-xl border backdrop-blur-xs"
               style={{
-                backgroundColor: isDark ? '#2F1707' : '#F7F1E7',
-                borderColor: isDark ? '#4B2710' : '#E7D6C1',
+                backgroundColor: isDark ? 'rgba(30, 27, 24, 0.45)' : 'rgba(247, 241, 231, 0.50)',
+                borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : 'rgba(90, 45, 12, 0.15)',
               }}
             >
               <div className="flex items-center gap-2 mb-1.5">
@@ -568,15 +570,15 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
         </section>
 
         {/* Attention-First Filter Bar */}
-        <section className="mb-6 bg-white border border-[#5A2D0C]/15 rounded-2xl p-4 shadow-xs">
-          <div className="flex items-center justify-between mb-3 border-b border-[#5A2D0C]/10 pb-2">
+        <section className="mb-6 bg-white/50 dark:bg-black/40 backdrop-blur-md border border-[#5A2D0C]/20 dark:border-[#C88D3A]/30 rounded-2xl p-4 shadow-xs">
+          <div className="flex items-center justify-between mb-3 border-b border-[#5A2D0C]/10 dark:border-[#C88D3A]/15 pb-2">
             <div className="flex items-center gap-2">
               <Filter className="w-4 h-4 text-[#C88D3A]" />
-              <h3 className="text-xs font-bold uppercase tracking-wider text-[#5A2D0C]">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-[#5A2D0C] dark:text-[#FFF9EE]">
                 Attention Queue Filter
               </h3>
             </div>
-            <span className="text-[11px] text-[#5A2D0C]/70">
+            <span className="text-[11px] text-[#5A2D0C]/70 dark:text-[#FFF9EE]/70 font-mono">
               Showing {filteredResponsibilities.length} of {effectiveResponsibilities.length}
             </span>
           </div>
@@ -589,7 +591,7 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
               className={`px-3.5 py-1.5 text-xs font-medium rounded-xl border-b-2 shadow-xs transition-all duration-150 cursor-pointer hover:-translate-y-0.5 active:translate-y-0.5 ${
                 attentionFilter === 'ALL'
                   ? 'bg-[#5A2D0C] text-[#FFF9EE] border-[#3E200C]'
-                  : 'bg-[#F7F1E7] text-[#5A2D0C] border-[#5A2D0C]/20 hover:border-[#C88D3A]'
+                  : 'bg-[#F7F1E7]/80 dark:bg-[#2A221C]/80 text-[#5A2D0C] dark:text-[#FFF9EE] border-[#5A2D0C]/20 hover:border-[#C88D3A]'
               }`}
             >
               All Records ({effectiveResponsibilities.length})
@@ -602,7 +604,7 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
               className={`px-3.5 py-1.5 text-xs font-medium rounded-xl border-b-2 shadow-xs transition-all duration-150 cursor-pointer hover:-translate-y-0.5 active:translate-y-0.5 ${
                 attentionFilter === 'OUTSTANDING'
                   ? 'bg-[#B77620] text-white border-[#8A5D3B]'
-                  : 'bg-[#FFF9EE] text-[#B77620] border-[#B77620]/30 hover:border-[#B77620]'
+                  : 'bg-[#FFF9EE]/80 dark:bg-[#2A221C]/80 text-[#B77620] border-[#B77620]/30 hover:border-[#B77620]'
               }`}
             >
               Outstanding ({outstandingCount})
@@ -615,7 +617,7 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
               className={`px-3.5 py-1.5 text-xs font-medium rounded-xl border-b-2 shadow-xs transition-all duration-150 cursor-pointer hover:-translate-y-0.5 active:translate-y-0.5 ${
                 attentionFilter === 'PARTIALLY_FULFILLED'
                   ? 'bg-amber-600 text-white border-amber-800'
-                  : 'bg-amber-50 text-amber-800 border-amber-300 hover:border-amber-500'
+                  : 'bg-amber-50/80 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300 border-amber-300 hover:border-amber-500'
               }`}
             >
               Partially Fulfilled ({partiallyFulfilledCount})
@@ -628,7 +630,7 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
               className={`px-3.5 py-1.5 text-xs font-medium rounded-xl border-b-2 shadow-xs transition-all duration-150 cursor-pointer hover:-translate-y-0.5 active:translate-y-0.5 ${
                 attentionFilter === 'AWAITING_RECONCILIATION'
                   ? 'bg-blue-600 text-white border-blue-800'
-                  : 'bg-blue-50 text-blue-800 border-blue-300 hover:border-blue-500'
+                  : 'bg-blue-50/80 dark:bg-blue-950/40 text-blue-800 dark:text-blue-300 border-blue-300 hover:border-blue-500'
               }`}
             >
               Awaiting Reconciliation ({awaitingReconciliationCount})
@@ -641,7 +643,7 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
               className={`px-3.5 py-1.5 text-xs font-medium rounded-xl border-b-2 shadow-xs transition-all duration-150 cursor-pointer hover:-translate-y-0.5 active:translate-y-0.5 ${
                 attentionFilter === 'MISMATCH'
                   ? 'bg-red-600 text-white border-red-800'
-                  : 'bg-red-50 text-red-800 border-red-300 hover:border-red-500'
+                  : 'bg-red-50/80 dark:bg-red-950/40 text-red-800 dark:text-red-300 border-red-300 hover:border-red-500'
               }`}
             >
               Mismatch / Requires Review ({mismatchCount})
@@ -654,7 +656,7 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
               className={`px-3.5 py-1.5 text-xs font-medium rounded-xl border-b-2 shadow-xs transition-all duration-150 cursor-pointer hover:-translate-y-0.5 active:translate-y-0.5 ${
                 attentionFilter === 'FULFILLED'
                   ? 'bg-emerald-700 text-white border-emerald-900'
-                  : 'bg-emerald-50 text-emerald-800 border-emerald-300 hover:border-emerald-500'
+                  : 'bg-emerald-50/80 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border-emerald-300 hover:border-emerald-500'
               }`}
             >
               Fulfilled ({fulfilledCount})
@@ -686,10 +688,10 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
               <article
                 key={resp.id}
                 id={`admin-record-${resp.id}`}
-                className="rounded-2xl p-6 sm:p-8 border transition-colors duration-200"
+                className="rounded-2xl p-6 sm:p-8 border transition-all duration-200 shadow-md backdrop-blur-md"
                 style={{
-                  backgroundColor: isDark ? '#3E200C' : '#FFF9EE',
-                  borderColor: isDark ? '#623416' : '#EAE0D0',
+                  backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : 'rgba(255, 253, 248, 0.65)',
+                  borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : 'rgba(90, 45, 12, 0.25)',
                 }}
               >
                 {/* Structural Hierarchy: Property → Floor → Room → Fellow → Responsibility */}
@@ -702,10 +704,10 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
                   </span>
 
                   <div
-                    className="rounded-xl p-4 sm:p-5 border font-mono text-sm leading-relaxed"
+                    className="rounded-xl p-4 sm:p-5 border font-mono text-sm leading-relaxed backdrop-blur-xs"
                     style={{
-                      backgroundColor: isDark ? '#2F1707' : '#F7F1E7',
-                      borderColor: isDark ? '#4B2710' : '#E7D6C1',
+                      backgroundColor: isDark ? 'rgba(30, 27, 24, 0.45)' : 'rgba(247, 241, 231, 0.50)',
+                      borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : 'rgba(90, 45, 12, 0.15)',
                     }}
                   >
                     <div className="flex items-center gap-2 font-semibold">
@@ -751,22 +753,22 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
 
                 {/* Financial State Breakdown */}
                 <div
-                  className="grid grid-cols-2 sm:grid-cols-4 gap-4 p-4 rounded-xl border mb-6"
+                  className="grid grid-cols-2 sm:grid-cols-4 gap-4 p-4 rounded-xl border mb-6 backdrop-blur-xs"
                   style={{
-                    backgroundColor: isDark ? '#2F1707' : '#F7F1E7',
-                    borderColor: isDark ? '#4B2710' : '#E7D6C1',
+                    backgroundColor: isDark ? 'rgba(30, 27, 24, 0.45)' : 'rgba(247, 241, 231, 0.50)',
+                    borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : 'rgba(90, 45, 12, 0.15)',
                   }}
                 >
                   <div>
-                    <span className="text-xs block mb-1 text-stone-600">Required:</span>
-                    <p className="text-base sm:text-lg font-semibold text-[#5A2D0C]">
+                    <span className="text-xs block mb-1 text-stone-600 dark:text-stone-400">Required:</span>
+                    <p className="text-base sm:text-lg font-semibold text-[#5A2D0C] dark:text-[#FFF9EE]">
                       {formatNaira(resp.requiredAmount)}
                     </p>
                   </div>
 
                   <div>
-                    <span className="text-xs block mb-1 text-stone-600">Verified:</span>
-                    <p className="text-base sm:text-lg font-medium text-[#704728]">
+                    <span className="text-xs block mb-1 text-stone-600 dark:text-stone-400">Verified:</span>
+                    <p className="text-base sm:text-lg font-medium text-[#704728] dark:text-[#D9C4AC]">
                       {formatNaira(resp.verifiedAmount)}
                     </p>
                   </div>
@@ -779,9 +781,9 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
                   </div>
 
                   <div>
-                    <span className="text-xs block mb-1 text-stone-600">Status:</span>
+                    <span className="text-xs block mb-1 text-stone-600 dark:text-stone-400">Status:</span>
                     <span
-                      className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold uppercase tracking-wide bg-[#F7F1E7] text-[#B77620] border border-[#E7D6C1]"
+                      className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold uppercase tracking-wide bg-[rgba(247,241,231,0.8)] dark:bg-[rgba(42,34,28,0.7)] text-[#B77620] border border-[#5A2D0C]/15 dark:border-[#C88D3A]/25"
                     >
                       <span className="w-1.5 h-1.5 rounded-full mr-1.5 bg-[#B77620]" />
                       {statusLabel}
@@ -913,7 +915,7 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
         {providerEvents && providerEvents.length > 0 && (
           <div
             id="admin-provider-events-section"
-            className="mt-6 p-4 rounded-xl border flex flex-col gap-3 text-xs bg-[#F9F5EE] border-[#E7D6C1]"
+            className="mt-6 p-4 rounded-xl border flex flex-col gap-3 text-xs bg-[rgba(249,245,238,0.65)] dark:bg-[rgba(30,27,24,0.55)] backdrop-blur-md border-[#5A2D0C]/15 dark:border-[#C88D3A]/25 shadow-xs"
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
@@ -922,7 +924,7 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
                   Provider Ingestion Audit &bull; Provider Events Received
                 </span>
               </div>
-              <span className="font-mono text-[10px] text-stone-500">
+              <span className="font-mono text-[10px] text-stone-500 dark:text-stone-400">
                 Total Ingested: {providerEvents.length} (Authoritative PostgreSQL Store)
               </span>
             </div>
@@ -931,19 +933,19 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
                 <div
                   key={evt.id || evt.providerEventId || idx}
                   id={`admin-provider-event-${evt.providerEventId || idx}`}
-                  className="p-3 rounded-lg border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 bg-[#FFFDF9] border-[#EAE0D0]"
+                  className="p-3 rounded-lg border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 bg-[rgba(255,253,249,0.7)] dark:bg-[rgba(42,34,28,0.6)] backdrop-blur-xs border-[#5A2D0C]/15 dark:border-[#C88D3A]/20"
                 >
                   <div className="flex flex-col gap-1">
                     <div className="flex flex-wrap items-center gap-2 font-mono text-[11px]">
-                      <span className="font-semibold text-[#5A2D0C]">
+                      <span className="font-semibold text-[#5A2D0C] dark:text-[#FFF9EE]">
                         Provider: {evt.provider}
                       </span>
                       <span className="text-stone-400">&bull;</span>
-                      <span className="text-stone-500">Event: {evt.eventType}</span>
+                      <span className="text-stone-500 dark:text-stone-400">Event: {evt.eventType}</span>
                       <span className="text-stone-400">&bull;</span>
                       <span className="text-stone-400 text-[10px]">ID: {evt.providerEventId}</span>
                     </div>
-                    <div className="text-[11px] text-stone-500">
+                    <div className="text-[11px] text-stone-500 dark:text-stone-400">
                       Provider Status: <strong className="font-semibold">{evt.providerStatus}</strong>
                       {evt.providerProposalId && (
                         <span> &bull; Proposal: {evt.providerProposalId}</span>
@@ -979,7 +981,7 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
                             <button
                               type="button"
                               onClick={() => onReconcileEvent(evt.providerEventId)}
-                              className="mt-1 px-2 py-0.5 rounded text-[10px] font-semibold border transition-colors bg-[#F2E8D8] border-[#B77620] text-[#5A2D0C]"
+                              className="mt-1 px-2 py-0.5 rounded text-[10px] font-semibold border transition-colors bg-[#F2E8D8] border-[#B77620] text-[#5A2D0C] hover:bg-[#EAE0D0]"
                             >
                               Trigger Reconcile
                             </button>
@@ -987,7 +989,7 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
                         </>
                       );
                     })()}
-                    <span className="text-[10px] italic text-stone-500">
+                    <span className="text-[10px] italic text-stone-500 dark:text-stone-400">
                       * Provider event received. Not verified. Awaiting reconciliation.
                     </span>
                   </div>
@@ -1001,7 +1003,7 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
         {reconciliations && reconciliations.length > 0 && (
           <div
             id="admin-reconciliations-section"
-            className="mt-6 p-4 rounded-xl border flex flex-col gap-3 text-xs bg-[#F9F5EE] border-[#E7D6C1]"
+            className="mt-6 p-4 rounded-xl border flex flex-col gap-3 text-xs bg-[rgba(249,245,238,0.65)] dark:bg-[rgba(30,27,24,0.55)] backdrop-blur-md border-[#5A2D0C]/15 dark:border-[#C88D3A]/25 shadow-xs"
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
@@ -1010,7 +1012,7 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
                   Authoritative Payment Reconciliations &bull; Evidence Chain Audit
                 </span>
               </div>
-              <span className="font-mono text-[10px] text-stone-500">
+              <span className="font-mono text-[10px] text-stone-500 dark:text-stone-400">
                 Total Reconciled Records: {reconciliations.length}
               </span>
             </div>
@@ -1019,19 +1021,19 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
                 <div
                   key={rec.id || idx}
                   id={`admin-reconciliation-${rec.id || idx}`}
-                  className="p-3 rounded-lg border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 bg-[#FFFDF9] border-[#EAE0D0]"
+                  className="p-3 rounded-lg border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 bg-[rgba(255,253,249,0.7)] dark:bg-[rgba(42,34,28,0.6)] backdrop-blur-xs border-[#5A2D0C]/15 dark:border-[#C88D3A]/20"
                 >
                   <div className="flex flex-col gap-1">
                     <div className="flex flex-wrap items-center gap-2 font-mono text-[11px]">
-                      <span className="font-semibold text-[#5A2D0C]">
+                      <span className="font-semibold text-[#5A2D0C] dark:text-[#FFF9EE]">
                         Amount: {formatNaira(rec.amount)}
                       </span>
                       <span className="text-stone-400">&bull;</span>
-                      <span className="text-stone-500">Provider: {rec.provider}</span>
+                      <span className="text-stone-500 dark:text-stone-400">Provider: {rec.provider}</span>
                       <span className="text-stone-400">&bull;</span>
                       <span className="text-stone-400 text-[10px]">Event ID: {rec.providerEventId}</span>
                     </div>
-                    <div className="text-[11px] text-stone-500">
+                    <div className="text-[11px] text-stone-500 dark:text-stone-400">
                       Reason: <strong className="font-semibold">{rec.reasonCode}</strong>
                       {rec.reconciledAt && <span> &bull; Verified At: {new Date(rec.reconciledAt).toLocaleString()}</span>}
                     </div>
@@ -1046,7 +1048,7 @@ export const AccommodationAdminView: React.FC<AccommodationAdminViewProps> = ({
                     >
                       Status: {rec.reconciliationStatus === 'VERIFIED' ? 'VERIFIED' : 'Requires Review'}
                     </span>
-                    <span className="text-[10px] italic text-stone-500">
+                    <span className="text-[10px] italic text-stone-500 dark:text-stone-400">
                       {rec.reconciliationStatus === 'VERIFIED'
                         ? 'Evidence Chain Matched & Reconciled Atomically.'
                         : 'Financial State: Unchanged. Requires Administrative Review.'}
