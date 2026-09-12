@@ -38,11 +38,14 @@ interface CommunityFeedbackTriageViewProps {
 
 type TriageFilter =
   | 'ALL'
-  | 'NEW'
+  | 'PENDING_REVIEW'
+  | 'UNDER_REVIEW'
+  | 'IN_PROGRESS'
+  | 'IMPLEMENTED'
   | 'NEEDS_CLARIFICATION'
   | 'WILLING_TO_TEST'
   | 'WILLING_TO_CONTRIBUTE'
-  | 'IN_PROGRESS'
+  | 'NEW'
   | 'RESOLVED';
 
 export const CommunityFeedbackTriageView: React.FC<CommunityFeedbackTriageViewProps> = ({
@@ -90,10 +93,20 @@ export const CommunityFeedbackTriageView: React.FC<CommunityFeedbackTriageViewPr
   }, [reports]);
 
   // Filter calculations (Attention-First)
-  const newReportsCount = reports.filter((r) => r.status === 'OPEN').length;
+  const pendingReviewCount = reports.filter(
+    (r) => r.status === 'PENDING_REVIEW' || r.status === 'OPEN'
+  ).length;
+  const underReviewCount = reports.filter(
+    (r) => r.status === 'UNDER_REVIEW' || r.status === 'ACKNOWLEDGED'
+  ).length;
+  const inProgressCount = reports.filter((r) => r.status === 'IN_PROGRESS').length;
+  const implementedCount = reports.filter(
+    (r) => r.status === 'IMPLEMENTED' || r.status === 'RESOLVED' || r.status === 'CLOSED'
+  ).length;
   const needsClarificationCount = reports.filter(
     (r) =>
       r.events?.some((e) => e.eventType === 'CLARIFICATION_REQUESTED') &&
+      r.status !== 'IMPLEMENTED' &&
       r.status !== 'RESOLVED' &&
       r.status !== 'CLOSED'
   ).length;
@@ -101,10 +114,6 @@ export const CommunityFeedbackTriageView: React.FC<CommunityFeedbackTriageViewPr
   const willingToContributeCount = reports.filter(
     (r) => r.involvementPreference === 'CONTRIBUTE_FIX'
   ).length;
-  const inProgressCount = reports.filter(
-    (r) => r.status === 'IN_PROGRESS' || r.status === 'ACKNOWLEDGED'
-  ).length;
-  const resolvedCount = reports.filter((r) => r.status === 'RESOLVED' || r.status === 'CLOSED').length;
 
   const categories = ['ALL', ...Array.from(new Set(reports.map((r) => r.category)))];
 
@@ -126,11 +135,20 @@ export const CommunityFeedbackTriageView: React.FC<CommunityFeedbackTriageViewPr
 
     // Filter type match
     switch (activeFilter) {
+      case 'PENDING_REVIEW':
       case 'NEW':
-        return r.status === 'OPEN';
+        return r.status === 'PENDING_REVIEW' || r.status === 'OPEN';
+      case 'UNDER_REVIEW':
+        return r.status === 'UNDER_REVIEW' || r.status === 'ACKNOWLEDGED';
+      case 'IN_PROGRESS':
+        return r.status === 'IN_PROGRESS';
+      case 'IMPLEMENTED':
+      case 'RESOLVED':
+        return r.status === 'IMPLEMENTED' || r.status === 'RESOLVED' || r.status === 'CLOSED';
       case 'NEEDS_CLARIFICATION':
         return (
           r.events?.some((e) => e.eventType === 'CLARIFICATION_REQUESTED') &&
+          r.status !== 'IMPLEMENTED' &&
           r.status !== 'RESOLVED' &&
           r.status !== 'CLOSED'
         );
@@ -138,10 +156,6 @@ export const CommunityFeedbackTriageView: React.FC<CommunityFeedbackTriageViewPr
         return r.involvementPreference === 'HELP_TEST';
       case 'WILLING_TO_CONTRIBUTE':
         return r.involvementPreference === 'CONTRIBUTE_FIX';
-      case 'IN_PROGRESS':
-        return r.status === 'IN_PROGRESS' || r.status === 'ACKNOWLEDGED';
-      case 'RESOLVED':
-        return r.status === 'RESOLVED' || r.status === 'CLOSED';
       case 'ALL':
       default:
         return true;
@@ -155,10 +169,10 @@ export const CommunityFeedbackTriageView: React.FC<CommunityFeedbackTriageViewPr
       const updated = await puzzleFeedbackStore.acknowledgeFeedback(
         reportId,
         currentMember,
-        'Report logged for review by Accommodation Fellows Coordination team.'
+        'Report moved to Under Review by Accommodation Fellows Coordination team.'
       );
       setSelectedReport(updated);
-      setActionSuccess('Report acknowledged. Reporter has been notified.');
+      setActionSuccess('Report moved to Under Review. Reporter has been notified.');
     } catch (err: any) {
       setActionError(err?.message || 'Failed to acknowledge report.');
     }
@@ -209,17 +223,54 @@ export const CommunityFeedbackTriageView: React.FC<CommunityFeedbackTriageViewPr
     setActionError('');
     setActionSuccess('');
     try {
-      const updated = await puzzleFeedbackStore.updateStatus(
+      const updated = await puzzleFeedbackStore.resolveFeedback(
         reportId,
         currentMember,
-        'RESOLVED',
-        resolutionNote.trim() || 'Issue addressed and resolved.'
+        resolutionNote.trim() || 'Missing puzzle piece implemented and verified.'
       );
       setSelectedReport(updated);
       setResolutionNote('');
-      setActionSuccess('Issue resolved. Reporter notified.');
+      setActionSuccess('Issue marked as Implemented. Reporter notified.');
     } catch (err: any) {
       setActionError(err?.message || 'Failed to resolve report.');
+    }
+  };
+
+  const getStatusBadge = (status: string) => {
+    switch (status) {
+      case 'PENDING_REVIEW':
+      case 'OPEN':
+        return {
+          label: 'Pending Review',
+          className: 'bg-amber-500/20 text-amber-700 dark:text-amber-400 border border-amber-500/30',
+        };
+      case 'UNDER_REVIEW':
+      case 'ACKNOWLEDGED':
+        return {
+          label: 'Under Review',
+          className: 'bg-blue-500/20 text-blue-700 dark:text-blue-400 border border-blue-500/30',
+        };
+      case 'IN_PROGRESS':
+        return {
+          label: 'In Progress',
+          className: 'bg-purple-500/20 text-purple-700 dark:text-purple-400 border border-purple-500/30',
+        };
+      case 'IMPLEMENTED':
+      case 'RESOLVED':
+        return {
+          label: 'Implemented',
+          className: 'bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30',
+        };
+      case 'CLOSED':
+        return {
+          label: 'Closed',
+          className: 'bg-zinc-500/20 text-zinc-700 dark:text-zinc-400 border border-zinc-500/30',
+        };
+      default:
+        return {
+          label: status,
+          className: 'bg-zinc-500/20 text-zinc-700 dark:text-zinc-400',
+        };
     }
   };
 
@@ -240,7 +291,7 @@ export const CommunityFeedbackTriageView: React.FC<CommunityFeedbackTriageViewPr
       case 'STATUS_CHANGED':
         return 'Status Updated';
       case 'RESOLVED':
-        return 'Issue Resolved';
+        return 'Issue Resolved / Implemented';
       case 'CLOSED':
         return 'Report Closed';
       default:
@@ -324,9 +375,9 @@ export const CommunityFeedbackTriageView: React.FC<CommunityFeedbackTriageViewPr
 
           <button
             type="button"
-            onClick={() => setActiveFilter('NEW')}
+            onClick={() => setActiveFilter('PENDING_REVIEW')}
             className={`p-3 rounded-xl border text-left transition-all ${
-              activeFilter === 'NEW'
+              activeFilter === 'PENDING_REVIEW' || activeFilter === 'NEW'
                 ? isDark
                   ? 'bg-amber-950/40 border-amber-500 ring-1 ring-amber-500'
                   : 'bg-amber-50 border-amber-500 ring-1 ring-amber-500'
@@ -336,12 +387,78 @@ export const CommunityFeedbackTriageView: React.FC<CommunityFeedbackTriageViewPr
             }`}
           >
             <div className="text-[10px] font-bold uppercase tracking-wide text-amber-600 dark:text-amber-400">
-              New / Needs Review
+              Pending Review
             </div>
             <div className="text-xl font-serif font-bold text-amber-600 dark:text-amber-400 mt-0.5">
-              {newReportsCount}
+              {pendingReviewCount}
             </div>
-            <div className="text-[9px] opacity-60 mt-0.5">Awaiting first response</div>
+            <div className="text-[9px] opacity-60 mt-0.5">Awaiting evaluation</div>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setActiveFilter('UNDER_REVIEW')}
+            className={`p-3 rounded-xl border text-left transition-all ${
+              activeFilter === 'UNDER_REVIEW'
+                ? isDark
+                  ? 'bg-blue-950/40 border-blue-500 ring-1 ring-blue-500'
+                  : 'bg-blue-50 border-blue-500 ring-1 ring-blue-500'
+                : isDark
+                ? 'bg-[#241205] border-[#C88D3A]/20 hover:border-blue-500/50'
+                : 'bg-white border-[#5A2D0C]/10 hover:border-blue-500/40'
+            }`}
+          >
+            <div className="text-[10px] font-bold uppercase tracking-wide text-blue-600 dark:text-blue-400">
+              Under Review
+            </div>
+            <div className="text-xl font-serif font-bold text-blue-600 dark:text-blue-400 mt-0.5">
+              {underReviewCount}
+            </div>
+            <div className="text-[9px] opacity-60 mt-0.5">Actively evaluating</div>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setActiveFilter('IN_PROGRESS')}
+            className={`p-3 rounded-xl border text-left transition-all ${
+              activeFilter === 'IN_PROGRESS'
+                ? isDark
+                  ? 'bg-purple-950/40 border-purple-500 ring-1 ring-purple-500'
+                  : 'bg-purple-50 border-purple-500 ring-1 ring-purple-500'
+                : isDark
+                ? 'bg-[#241205] border-[#C88D3A]/20 hover:border-purple-500/50'
+                : 'bg-white border-[#5A2D0C]/10 hover:border-purple-500/40'
+            }`}
+          >
+            <div className="text-[10px] font-bold uppercase tracking-wide text-purple-600 dark:text-purple-400">
+              In Progress
+            </div>
+            <div className="text-xl font-serif font-bold text-purple-600 dark:text-purple-400 mt-0.5">
+              {inProgressCount}
+            </div>
+            <div className="text-[9px] opacity-60 mt-0.5">Being implemented</div>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setActiveFilter('IMPLEMENTED')}
+            className={`p-3 rounded-xl border text-left transition-all ${
+              activeFilter === 'IMPLEMENTED' || activeFilter === 'RESOLVED'
+                ? isDark
+                  ? 'bg-emerald-950/40 border-emerald-500 ring-1 ring-emerald-500'
+                  : 'bg-emerald-50 border-emerald-500 ring-1 ring-emerald-500'
+                : isDark
+                ? 'bg-[#241205] border-[#C88D3A]/20 hover:border-emerald-500/50'
+                : 'bg-white border-[#5A2D0C]/10 hover:border-emerald-500/40'
+            }`}
+          >
+            <div className="text-[10px] font-bold uppercase tracking-wide text-emerald-600 dark:text-emerald-400">
+              Implemented
+            </div>
+            <div className="text-xl font-serif font-bold text-emerald-600 dark:text-emerald-400 mt-0.5">
+              {implementedCount}
+            </div>
+            <div className="text-[9px] opacity-60 mt-0.5">Completed & deployed</div>
           </button>
 
           <button
@@ -364,72 +481,6 @@ export const CommunityFeedbackTriageView: React.FC<CommunityFeedbackTriageViewPr
               {needsClarificationCount}
             </div>
             <div className="text-[9px] opacity-60 mt-0.5">Thread in discussion</div>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setActiveFilter('WILLING_TO_TEST')}
-            className={`p-3 rounded-xl border text-left transition-all ${
-              activeFilter === 'WILLING_TO_TEST'
-                ? isDark
-                  ? 'bg-emerald-950/40 border-emerald-500 ring-1 ring-emerald-500'
-                  : 'bg-emerald-50 border-emerald-500 ring-1 ring-emerald-500'
-                : isDark
-                ? 'bg-[#241205] border-[#C88D3A]/20 hover:border-emerald-500/50'
-                : 'bg-white border-[#5A2D0C]/10 hover:border-emerald-500/40'
-            }`}
-          >
-            <div className="text-[10px] font-bold uppercase tracking-wide text-emerald-600 dark:text-emerald-400">
-              Willing to Test
-            </div>
-            <div className="text-xl font-serif font-bold text-emerald-600 dark:text-emerald-400 mt-0.5">
-              {willingToTestCount}
-            </div>
-            <div className="text-[9px] opacity-60 mt-0.5">Ready for verification</div>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setActiveFilter('WILLING_TO_CONTRIBUTE')}
-            className={`p-3 rounded-xl border text-left transition-all ${
-              activeFilter === 'WILLING_TO_CONTRIBUTE'
-                ? isDark
-                  ? 'bg-purple-950/40 border-purple-500 ring-1 ring-purple-500'
-                  : 'bg-purple-50 border-purple-500 ring-1 ring-purple-500'
-                : isDark
-                ? 'bg-[#241205] border-[#C88D3A]/20 hover:border-purple-500/50'
-                : 'bg-white border-[#5A2D0C]/10 hover:border-purple-500/40'
-            }`}
-          >
-            <div className="text-[10px] font-bold uppercase tracking-wide text-purple-600 dark:text-purple-400">
-              Wants to Fix
-            </div>
-            <div className="text-xl font-serif font-bold text-purple-600 dark:text-purple-400 mt-0.5">
-              {willingToContributeCount}
-            </div>
-            <div className="text-[9px] opacity-60 mt-0.5">Community code repair</div>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setActiveFilter('RESOLVED')}
-            className={`p-3 rounded-xl border text-left transition-all ${
-              activeFilter === 'RESOLVED'
-                ? isDark
-                  ? 'bg-teal-950/40 border-teal-500 ring-1 ring-teal-500'
-                  : 'bg-teal-50 border-teal-500 ring-1 ring-teal-500'
-                : isDark
-                ? 'bg-[#241205] border-[#C88D3A]/20 hover:border-teal-500/50'
-                : 'bg-white border-[#5A2D0C]/10 hover:border-teal-500/40'
-            }`}
-          >
-            <div className="text-[10px] font-bold uppercase tracking-wide text-teal-600 dark:text-teal-400">
-              Resolved / Closed
-            </div>
-            <div className="text-xl font-serif font-bold text-teal-600 dark:text-teal-400 mt-0.5">
-              {resolvedCount}
-            </div>
-            <div className="text-[9px] opacity-60 mt-0.5">Facts closed in history</div>
           </button>
         </div>
       </div>
@@ -528,18 +579,10 @@ export const CommunityFeedbackTriageView: React.FC<CommunityFeedbackTriageViewPr
                       </span>
                       <span
                         className={`px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider ${
-                          report.status === 'OPEN'
-                            ? 'bg-amber-500/20 text-amber-700 dark:text-amber-400'
-                            : report.status === 'ACKNOWLEDGED'
-                            ? 'bg-blue-500/20 text-blue-700 dark:text-blue-400'
-                            : report.status === 'IN_PROGRESS'
-                            ? 'bg-indigo-500/20 text-indigo-700 dark:text-indigo-400'
-                            : report.status === 'RESOLVED'
-                            ? 'bg-emerald-500/20 text-emerald-700 dark:text-emerald-400'
-                            : 'bg-zinc-500/20 text-zinc-700 dark:text-zinc-400'
+                          getStatusBadge(report.status).className
                         }`}
                       >
-                        {report.status}
+                        {getStatusBadge(report.status).label}
                       </span>
                       {report.involvementPreference === 'HELP_TEST' && (
                         <span className="px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
@@ -606,23 +649,23 @@ export const CommunityFeedbackTriageView: React.FC<CommunityFeedbackTriageViewPr
                       <ChevronRight className="w-3.5 h-3.5" />
                     </button>
 
-                    {report.status === 'OPEN' && (
+                    {(report.status === 'PENDING_REVIEW' || report.status === 'OPEN') && (
                       <button
                         type="button"
                         onClick={() => handleAcknowledge(report.id)}
                         className="px-3 py-1.5 text-[11px] font-semibold rounded-lg bg-blue-500/15 text-blue-700 dark:text-blue-400 hover:bg-blue-500/25 transition-all"
                       >
-                        Acknowledge
+                        Review & Ack
                       </button>
                     )}
 
-                    {report.status !== 'RESOLVED' && report.status !== 'CLOSED' && (
+                    {report.status !== 'IMPLEMENTED' && report.status !== 'RESOLVED' && report.status !== 'CLOSED' && (
                       <button
                         type="button"
                         onClick={() => handleQuickResolve(report.id)}
                         className="px-3 py-1.5 text-[11px] font-semibold rounded-lg bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-500/25 transition-all"
                       >
-                        Resolve
+                        Mark Implemented
                       </button>
                     )}
                   </div>
@@ -659,18 +702,10 @@ export const CommunityFeedbackTriageView: React.FC<CommunityFeedbackTriageViewPr
                   </span>
                   <span
                     className={`px-2.5 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider ${
-                      selectedReport.status === 'OPEN'
-                        ? 'bg-amber-500/20 text-amber-700 dark:text-amber-400'
-                        : selectedReport.status === 'ACKNOWLEDGED'
-                        ? 'bg-blue-500/20 text-blue-700 dark:text-blue-400'
-                        : selectedReport.status === 'IN_PROGRESS'
-                        ? 'bg-indigo-500/20 text-indigo-700 dark:text-indigo-400'
-                        : selectedReport.status === 'RESOLVED'
-                        ? 'bg-emerald-500/20 text-emerald-700 dark:text-emerald-400'
-                        : 'bg-zinc-500/20 text-zinc-700 dark:text-zinc-400'
+                      getStatusBadge(selectedReport.status).className
                     }`}
                   >
-                    STATUS: {selectedReport.status}
+                    STATUS: {getStatusBadge(selectedReport.status).label}
                   </span>
                   <span className="text-[10px] font-mono opacity-60">ID: {selectedReport.id}</span>
                 </div>
@@ -840,24 +875,28 @@ export const CommunityFeedbackTriageView: React.FC<CommunityFeedbackTriageViewPr
               <div className="space-y-2 pt-2 border-t border-[#C88D3A]/20">
                 <label className="block text-xs font-bold">Transition Report Status:</label>
                 <div className="flex flex-wrap items-center gap-2">
-                  {(['OPEN', 'ACKNOWLEDGED', 'IN_PROGRESS', 'RESOLVED', 'CLOSED'] as FeedbackStatus[]).map(
-                    (st) => (
-                      <button
-                        key={st}
-                        type="button"
-                        onClick={() => setTargetStatus(st)}
-                        className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
-                          targetStatus === st
-                            ? 'bg-[#C88D3A] text-white shadow-xs'
-                            : isDark
-                            ? 'bg-[#2F1707] text-[#FFF9EE]/70 hover:bg-[#3E1F0B] border border-[#C88D3A]/20'
-                            : 'bg-white text-[#5A2D0C]/70 hover:bg-[#F7F1E7] border border-[#5A2D0C]/10'
-                        }`}
-                      >
-                        {st}
-                      </button>
-                    )
-                  )}
+                  {([
+                    { id: 'PENDING_REVIEW', label: 'Pending Review' },
+                    { id: 'UNDER_REVIEW', label: 'Under Review' },
+                    { id: 'IN_PROGRESS', label: 'In Progress' },
+                    { id: 'IMPLEMENTED', label: 'Implemented' },
+                    { id: 'CLOSED', label: 'Closed' },
+                  ] as { id: FeedbackStatus; label: string }[]).map((item) => (
+                    <button
+                      key={item.id}
+                      type="button"
+                      onClick={() => setTargetStatus(item.id)}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                        targetStatus === item.id
+                          ? 'bg-[#C88D3A] text-white shadow-xs'
+                          : isDark
+                          ? 'bg-[#2F1707] text-[#FFF9EE]/70 hover:bg-[#3E1F0B] border border-[#C88D3A]/20'
+                          : 'bg-white text-[#5A2D0C]/70 hover:bg-[#F7F1E7] border border-[#5A2D0C]/10'
+                      }`}
+                    >
+                      {item.label}
+                    </button>
+                  ))}
                 </div>
 
                 <div className="flex gap-2 mt-2">

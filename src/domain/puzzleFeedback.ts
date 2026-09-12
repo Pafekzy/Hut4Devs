@@ -8,9 +8,12 @@
  */
 
 export type FeedbackStatus =
+  | 'PENDING_REVIEW'
+  | 'UNDER_REVIEW'
+  | 'IN_PROGRESS'
+  | 'IMPLEMENTED'
   | 'OPEN'
   | 'ACKNOWLEDGED'
-  | 'IN_PROGRESS'
   | 'RESOLVED'
   | 'CLOSED';
 

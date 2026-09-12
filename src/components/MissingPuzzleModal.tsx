@@ -280,6 +280,44 @@ export const MissingPuzzleModal: React.FC<MissingPuzzleModalProps> = ({
     }
   };
 
+  const getStatusBadge = (status: string) => {
+    switch (status) {
+      case 'PENDING_REVIEW':
+      case 'OPEN':
+        return {
+          label: 'Pending Review',
+          className: 'bg-amber-500/20 text-amber-700 dark:text-amber-400 border border-amber-500/30',
+        };
+      case 'UNDER_REVIEW':
+      case 'ACKNOWLEDGED':
+        return {
+          label: 'Under Review',
+          className: 'bg-blue-500/20 text-blue-700 dark:text-blue-400 border border-blue-500/30',
+        };
+      case 'IN_PROGRESS':
+        return {
+          label: 'In Progress',
+          className: 'bg-purple-500/20 text-purple-700 dark:text-purple-400 border border-purple-500/30',
+        };
+      case 'IMPLEMENTED':
+      case 'RESOLVED':
+        return {
+          label: 'Implemented',
+          className: 'bg-emerald-500/20 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30',
+        };
+      case 'CLOSED':
+        return {
+          label: 'Closed',
+          className: 'bg-zinc-500/20 text-zinc-700 dark:text-zinc-400 border border-zinc-500/30',
+        };
+      default:
+        return {
+          label: status,
+          className: 'bg-zinc-500/20 text-zinc-700 dark:text-zinc-400',
+        };
+    }
+  };
+
   const myReports = allReports.filter((r) => r.reporterMemberId === currentMember.id);
   const displayReports = ledgerFilter === 'MY_REPORTS' ? myReports : allReports;
 
@@ -776,18 +814,10 @@ export const MissingPuzzleModal: React.FC<MissingPuzzleModalProps> = ({
                           </span>
                           <span
                             className={`px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider ${
-                              item.status === 'OPEN'
-                                ? 'bg-amber-500/20 text-amber-700 dark:text-amber-400'
-                                : item.status === 'ACKNOWLEDGED'
-                                ? 'bg-blue-500/20 text-blue-700 dark:text-blue-400'
-                                : item.status === 'IN_PROGRESS'
-                                ? 'bg-indigo-500/20 text-indigo-700 dark:text-indigo-400'
-                                : item.status === 'RESOLVED'
-                                ? 'bg-emerald-500/20 text-emerald-700 dark:text-emerald-400'
-                                : 'bg-zinc-500/20 text-zinc-700 dark:text-zinc-400'
+                              getStatusBadge(item.status).className
                             }`}
                           >
-                            {item.status}
+                            {getStatusBadge(item.status).label}
                           </span>
                           {item.involvementPreference && (
                             <span className="text-[10px] opacity-75">
@@ -856,7 +886,7 @@ export const MissingPuzzleModal: React.FC<MissingPuzzleModalProps> = ({
                         </div>
 
                         {/* If Clarification was requested, show reply box for reporter */}
-                        {isReporter && item.status !== 'RESOLVED' && item.status !== 'CLOSED' && (
+                        {isReporter && item.status !== 'IMPLEMENTED' && item.status !== 'RESOLVED' && item.status !== 'CLOSED' && (
                           <div
                             className={`p-3 rounded-xl border space-y-2 ${
                               isDark ? 'bg-[#2F1707] border-[#C88D3A]/30' : 'bg-[#FFF9EE] border-[#C88D3A]/30'

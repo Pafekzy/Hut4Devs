@@ -62,7 +62,7 @@ const INITIAL_SEEDED_REPORTS: SharedMissingPuzzleReport[] = [
     updatedAt: '2026-09-08T14:30:00.000Z',
     puzzleCompleted: true,
     involvementPreference: 'HELP_TEST',
-    status: 'ACKNOWLEDGED',
+    status: 'UNDER_REVIEW',
     persistenceClassification: 'DEMO_LOCAL_FALLBACK',
     events: [
       {
@@ -109,7 +109,7 @@ const INITIAL_SEEDED_REPORTS: SharedMissingPuzzleReport[] = [
     updatedAt: '2026-09-09T09:15:00.000Z',
     puzzleCompleted: true,
     involvementPreference: 'CONTRIBUTE_FIX',
-    status: 'OPEN',
+    status: 'PENDING_REVIEW',
     persistenceClassification: 'DEMO_LOCAL_FALLBACK',
     events: [
       {
@@ -130,6 +130,53 @@ const INITIAL_SEEDED_REPORTS: SharedMissingPuzzleReport[] = [
     },
     timestamp: '2026-09-09T09:15:00.000Z',
     involvement: 'CONTRIBUTE_FIX',
+  },
+  {
+    id: 'puz-003',
+    title: 'Institution-Controlled Branding & Payment Infrastructure',
+    description:
+      'Allow institutions and campuses to configure their own visual theme, custom logos, and pluggable payment provider adapters (e.g. BMONI, Sui, Stellar, or direct bank rails) with scoped authority without altering core accounting rules.',
+    category: 'Idea / Missing Feature',
+    locationContext: 'Governance / Institution Switcher',
+    pageContext: 'Institution Governance',
+    routeContext: '/governance',
+    reporterMemberId: 'mem-3',
+    reporterDisplayName: 'Amina Bello',
+    reporterEmail: 'amina.bello@mainbase.local',
+    createdAt: '2026-09-10T11:00:00.000Z',
+    updatedAt: '2026-09-10T14:30:00.000Z',
+    puzzleCompleted: true,
+    involvementPreference: 'CONSULT_DESIGN',
+    status: 'UNDER_REVIEW',
+    persistenceClassification: 'DEMO_LOCAL_FALLBACK',
+    events: [
+      {
+        eventId: 'evt-003-1',
+        feedbackId: 'puz-003',
+        actorMemberId: 'mem-3',
+        actorDisplayName: 'Amina Bello',
+        eventType: 'FEEDBACK_CREATED',
+        timestamp: '2026-09-10T11:00:00.000Z',
+        message: 'Report logged with CONSULT_DESIGN preference.',
+      },
+      {
+        eventId: 'evt-003-2',
+        feedbackId: 'puz-003',
+        actorMemberId: 'coord-1',
+        actorDisplayName: 'L2E Accommodation Fellows Coordinator',
+        eventType: 'FEEDBACK_ACKNOWLEDGED',
+        timestamp: '2026-09-10T14:30:00.000Z',
+        message: 'Evaluated by Coordinator. Deferred for post-demo architecture roadmap to maintain BMONI provider boundary stability.',
+      },
+    ],
+    loggedBy: {
+      id: 'mem-3',
+      displayName: 'Amina Bello',
+      h4dMemberId: 'H4D-00088',
+      email: 'amina.bello@mainbase.local',
+    },
+    timestamp: '2026-09-10T11:00:00.000Z',
+    involvement: 'CONSULT_DESIGN',
   },
 ];
 
@@ -256,7 +303,7 @@ class PuzzleFeedbackStore {
       updatedAt: now,
       puzzleCompleted: !!reportInput.puzzleCompleted,
       involvementPreference: involvement,
-      status: 'OPEN',
+      status: 'PENDING_REVIEW',
       events: [initialEvent],
       persistenceClassification: 'DEMO_LOCAL_FALLBACK',
       loggedBy: reportInput.loggedBy || {
@@ -331,7 +378,7 @@ class PuzzleFeedbackStore {
         description: data.description,
         puzzleCompleted: !!data.puzzleCompleted,
         involvementPreference: involvement,
-        status: 'OPEN',
+        status: 'PENDING_REVIEW',
         events: [createEvent],
       });
 
@@ -360,7 +407,7 @@ class PuzzleFeedbackStore {
       description: data.description,
       puzzleCompleted: !!data.puzzleCompleted,
       involvementPreference: involvement,
-      status: 'OPEN',
+      status: 'PENDING_REVIEW',
       events: [createEvent],
       persistenceClassification: persistence,
       loggedBy: {
@@ -505,13 +552,13 @@ class PuzzleFeedbackStore {
       message: note || 'Report acknowledged by Accommodation Fellows Coordinator.',
     };
 
-    report.status = 'ACKNOWLEDGED';
+    report.status = 'UNDER_REVIEW';
     report.updatedAt = now;
     report.events.push(event);
 
     try {
       await updateDoc(doc(db, 'puzzleFeedback', feedbackId), {
-        status: 'ACKNOWLEDGED',
+        status: 'UNDER_REVIEW',
         updatedAt: now,
         events: report.events,
       });
@@ -672,7 +719,7 @@ class PuzzleFeedbackStore {
 
     const now = new Date().toISOString();
     let eventType: FeedbackEventType = 'STATUS_CHANGED';
-    if (newStatus === 'RESOLVED') eventType = 'RESOLVED';
+    if (newStatus === 'IMPLEMENTED' || newStatus === 'RESOLVED') eventType = 'RESOLVED';
     if (newStatus === 'CLOSED') eventType = 'CLOSED';
 
     const event: FeedbackEvent = {
@@ -706,10 +753,10 @@ class PuzzleFeedbackStore {
     // Invariant: notify reporter on status change / resolution
     notificationStore.addNotification({
       memberId: report.reporterMemberId,
-      title: newStatus === 'RESOLVED' ? 'Missing Puzzle Resolved' : `Puzzle Status: ${newStatus}`,
+      title: (newStatus === 'IMPLEMENTED' || newStatus === 'RESOLVED') ? 'Missing Puzzle Resolved' : `Puzzle Status: ${newStatus}`,
       message: `Your report "${report.title}" is now ${newStatus}.${note ? ` ${note}` : ''}`,
       feedbackId: report.id,
-      type: newStatus === 'RESOLVED' ? 'RESOLVED' : 'STATUS_CHANGED',
+      type: (newStatus === 'IMPLEMENTED' || newStatus === 'RESOLVED') ? 'RESOLVED' : 'STATUS_CHANGED',
     });
 
     return report;
@@ -723,7 +770,7 @@ class PuzzleFeedbackStore {
     actor: Member,
     note?: string
   ): Promise<SharedMissingPuzzleReport> {
-    return this.updateStatus(feedbackId, actor, 'RESOLVED', note);
+    return this.updateStatus(feedbackId, actor, 'IMPLEMENTED', note);
   }
 
   /**
