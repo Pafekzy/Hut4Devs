@@ -69,7 +69,7 @@ export const LANDING_STORY_SLIDES: LandingStorySlide[] = [
       'Room-level, coordination and financial conversations stay connected to the responsibility that created them.',
     imageSrc: '/story/slide-04-role-coordination.webp',
     imageAlt:
-      'A Fellow, a Muslim Room Captain, and a Financial Admin coordinating through Hut4Devs',
+      'A Fellow, a Muslim Room Captain, an Accommodation Coordinator, and a Financial Admin coordinating around an accommodation responsibility',
     plannedSceneDescription:
       'African Members interacting through relevant room / coordinator / Financial Admin communication.',
   },

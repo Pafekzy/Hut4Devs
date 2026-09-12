@@ -87,7 +87,7 @@ describe('Hut4Devs Landing Story Carousel Framework (Checkpoint 01)', () => {
     fireEvent.click(dot4);
     expect(screen.getByText('Story 4 of 6')).toBeInTheDocument();
     const slide4Img = screen.getByRole('img', {
-      name: /A Fellow, a Muslim Room Captain, and a Financial Admin coordinating through Hut4Devs/i,
+      name: /A Fellow, a Muslim Room Captain, an Accommodation Coordinator, and a Financial Admin/i,
     });
     expect(slide4Img).toBeInTheDocument();
     expect(slide4Img).toHaveAttribute('src', '/story/slide-04-role-coordination.webp');
