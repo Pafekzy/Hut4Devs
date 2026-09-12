@@ -44,28 +44,28 @@ export const VouchSection: React.FC<VouchSectionProps> = ({
       case 'high':
         return (
           <span
-            className="animate-badge-shine inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold tracking-tight border transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md select-none bg-gradient-to-r from-[#3F8F76]/15 via-[#5CA98C]/25 to-[#78C2A4]/15 text-[#175240] border-[#3F8F76]/45 shadow-xs shadow-[#3F8F76]/10 dark:from-[#3F8F76]/35 dark:via-[#5CA98C]/40 dark:to-[#78C2A4]/30 dark:text-[#B4EFE0] dark:border-[#5CA98C]/55 dark:shadow-[#3F8F76]/25"
+            className="animate-badge-shine inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold tracking-tight border transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md select-none bg-gradient-to-r from-[#3F8F76]/20 via-[#5CA98C]/30 to-[#78C2A4]/20 text-[#0F3D2E] border-[#3F8F76]/60 shadow-xs shadow-[#3F8F76]/15 dark:from-[#3F8F76]/40 dark:via-[#5CA98C]/45 dark:to-[#78C2A4]/35 dark:text-[#C1F5E8] dark:border-[#5CA98C]/70 dark:shadow-[#3F8F76]/30"
           >
-            <CheckCircle2 className="w-3.5 h-3.5 text-[#2A755E] dark:text-[#78C2A4] shrink-0" />
-            <span>High Confidence</span>
+            <CheckCircle2 className="w-3.5 h-3.5 text-[#0F3D2E] dark:text-[#C1F5E8] shrink-0" strokeWidth={2.5} />
+            <span className="font-bold">High Confidence</span>
           </span>
         );
       case 'moderate':
         return (
           <span
-            className="animate-badge-shine inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold tracking-tight border transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md select-none bg-gradient-to-r from-[#6F7FBF]/15 via-[#8190CF]/25 to-[#9AA5DE]/15 text-[#2E3C73] border-[#6F7FBF]/45 shadow-xs shadow-[#6F7FBF]/10 dark:from-[#6F7FBF]/35 dark:via-[#8190CF]/40 dark:to-[#9AA5DE]/30 dark:text-[#D4DCFC] dark:border-[#8190CF]/55 dark:shadow-[#6F7FBF]/25"
+            className="animate-badge-shine inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold tracking-tight border transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md select-none bg-gradient-to-r from-[#6F7FBF]/20 via-[#8190CF]/30 to-[#9AA5DE]/20 text-[#24345F] border-[#6F7FBF]/60 shadow-xs shadow-[#6F7FBF]/15 dark:from-[#6F7FBF]/40 dark:via-[#8190CF]/45 dark:to-[#9AA5DE]/35 dark:text-[#D8E0FF] dark:border-[#8190CF]/70 dark:shadow-[#6F7FBF]/30"
           >
-            <Info className="w-3.5 h-3.5 text-[#5566A8] dark:text-[#9AA5DE] shrink-0" />
-            <span>Moderate Confidence</span>
+            <Info className="w-3.5 h-3.5 text-[#24345F] dark:text-[#D8E0FF] shrink-0" strokeWidth={2.5} />
+            <span className="font-bold">Moderate Confidence</span>
           </span>
         );
       case 'cautious':
         return (
           <span
-            className="animate-badge-shine inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold tracking-tight border transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md select-none bg-gradient-to-r from-[#D97706]/15 via-[#F59E0B]/25 to-[#FBBF24]/15 text-[#853B0A] border-[#D97706]/45 shadow-xs shadow-[#D97706]/10 dark:from-[#D97706]/35 dark:via-[#F59E0B]/40 dark:to-[#FBBF24]/30 dark:text-[#FDE68A] dark:border-[#F59E0B]/55 dark:shadow-[#D97706]/25"
+            className="animate-badge-shine inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold tracking-tight border transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md select-none bg-gradient-to-r from-[#D97706]/20 via-[#F59E0B]/30 to-[#FBBF24]/20 text-[#78350F] border-[#D97706]/60 shadow-xs shadow-[#D97706]/15 dark:from-[#D97706]/40 dark:via-[#F59E0B]/45 dark:to-[#FBBF24]/35 dark:text-[#FDE68A] dark:border-[#F59E0B]/70 dark:shadow-[#D97706]/30"
           >
-            <AlertCircle className="w-3.5 h-3.5 text-[#B45309] dark:text-[#FBBF24] shrink-0" />
-            <span>Cautious / Bounded</span>
+            <AlertCircle className="w-3.5 h-3.5 text-[#78350F] dark:text-[#FDE68A] shrink-0" strokeWidth={2.5} />
+            <span className="font-bold">Cautious / Bounded</span>
           </span>
         );
     }

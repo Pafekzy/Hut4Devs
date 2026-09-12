@@ -103,9 +103,9 @@ export const VouchModal: React.FC<VouchModalProps> = ({
               <button
                 type="button"
                 onClick={() => setConfidence('high')}
-                className={`p-2 rounded-xl border-2 text-xs font-semibold text-center transition-all cursor-pointer ${
+                className={`p-2 rounded-xl border-2 text-xs font-bold text-center transition-all cursor-pointer ${
                   confidence === 'high'
-                    ? 'border-[#3F8F76] bg-[#3F8F76]/15 text-[#175240] dark:bg-[#3F8F76]/30 dark:text-[#B4EFE0] dark:border-[#5CA98C]'
+                    ? 'border-[#3F8F76] bg-[#3F8F76]/20 text-[#0F3D2E] dark:bg-[#3F8F76]/40 dark:text-[#C1F5E8] dark:border-[#5CA98C]'
                     : 'border-stone-200 dark:border-[#C88D3A]/30 bg-white dark:bg-[#1E1B18] text-stone-600 dark:text-[#D9C4AC] hover:bg-stone-50 dark:hover:bg-[#292522]'
                 }`}
               >
@@ -114,9 +114,9 @@ export const VouchModal: React.FC<VouchModalProps> = ({
               <button
                 type="button"
                 onClick={() => setConfidence('moderate')}
-                className={`p-2 rounded-xl border-2 text-xs font-semibold text-center transition-all cursor-pointer ${
+                className={`p-2 rounded-xl border-2 text-xs font-bold text-center transition-all cursor-pointer ${
                   confidence === 'moderate'
-                    ? 'border-[#6F7FBF] bg-[#6F7FBF]/15 text-[#2E3C73] dark:bg-[#6F7FBF]/30 dark:text-[#D4DCFC] dark:border-[#8190CF]'
+                    ? 'border-[#6F7FBF] bg-[#6F7FBF]/20 text-[#24345F] dark:bg-[#6F7FBF]/40 dark:text-[#D8E0FF] dark:border-[#8190CF]'
                     : 'border-stone-200 dark:border-[#C88D3A]/30 bg-white dark:bg-[#1E1B18] text-stone-600 dark:text-[#D9C4AC] hover:bg-stone-50 dark:hover:bg-[#292522]'
                 }`}
               >
@@ -125,9 +125,9 @@ export const VouchModal: React.FC<VouchModalProps> = ({
               <button
                 type="button"
                 onClick={() => setConfidence('cautious')}
-                className={`p-2 rounded-xl border-2 text-xs font-semibold text-center transition-all cursor-pointer ${
+                className={`p-2 rounded-xl border-2 text-xs font-bold text-center transition-all cursor-pointer ${
                   confidence === 'cautious'
-                    ? 'border-[#D97706] bg-[#D97706]/15 text-[#853B0A] dark:bg-[#D97706]/30 dark:text-[#FDE68A] dark:border-[#F59E0B]'
+                    ? 'border-[#D97706] bg-[#D97706]/20 text-[#78350F] dark:bg-[#D97706]/40 dark:text-[#FDE68A] dark:border-[#F59E0B]'
                     : 'border-stone-200 dark:border-[#C88D3A]/30 bg-white dark:bg-[#1E1B18] text-stone-600 dark:text-[#D9C4AC] hover:bg-stone-50 dark:hover:bg-[#292522]'
                 }`}
               >
