@@ -1,46 +1,84 @@
 import React from 'react';
-import { RecognitionBadge, Fellow } from '../types';
-import { Award, ShieldAlert, Heart, Calendar, Sparkles, UserCheck } from 'lucide-react';
+import { CommunityRecognition } from '../domain/peerSupport';
+import { Member } from '../domain/auth';
+import { Award, ShieldAlert, Heart, Calendar, UserCheck, Sparkles } from 'lucide-react';
 
 interface RecognitionViewProps {
-  recognitions: RecognitionBadge[];
-  fellows: Fellow[];
-  currentFellowId: string;
+  recognitions: CommunityRecognition[];
+  availableMembers: Member[];
+  currentMember: Member;
+  isDark?: boolean;
 }
 
 export const RecognitionView: React.FC<RecognitionViewProps> = ({
   recognitions,
-  fellows,
-  currentFellowId,
+  availableMembers,
+  currentMember,
+  isDark = false,
 }) => {
-  const getFellow = (id: string) => fellows.find((f) => f.id === id) || fellows[0];
-
   return (
     <div className="space-y-6">
       {/* Anti-Scoring Philosophy Banner */}
-      <div className="bg-white rounded-xl border border-stone-200/80 p-6 shadow-xs">
-        <div className="flex items-center gap-2">
-          <span className="bg-amber-100 text-amber-800 text-xs font-semibold px-2.5 py-0.5 rounded-md">
+      <section
+        className="rounded-2xl p-5 sm:p-7 border-2 border-b-4 transition-all duration-200 shadow-md backdrop-blur-md"
+        style={{
+          backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : 'rgba(255, 253, 248, 0.65)',
+          borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : 'rgba(90, 45, 12, 0.25)',
+        }}
+      >
+        <div className="flex items-center gap-2 mb-1">
+          <span
+            className="text-xs font-bold uppercase tracking-wider block"
+            style={{ color: isDark ? '#E5A955' : '#B77620' }}
+          >
             Human Dignity First
           </span>
-          <span className="text-xs text-stone-500">No universal scores • No humiliation walls</span>
+          <span
+            className="text-xs font-medium"
+            style={{ color: isDark ? '#C49B75' : '#8A5D3B' }}
+          >
+            &bull; No Universal Scores &bull; No Humiliation Registries
+          </span>
         </div>
-        <h1 className="text-xl font-bold text-stone-900 mt-1.5">Recognition Without Human Scoring</h1>
-        <p className="text-xs text-stone-600 mt-0.5 max-w-3xl leading-relaxed">
-          Recognition should say: <strong className="text-stone-900">"We noticed what you repeatedly demonstrated here."</strong>{' '}
-          It should never pretend to say: <strong className="text-stone-900">"We have calculated who you are."</strong>{' '}
+        <h1
+          className="font-serif text-xl sm:text-2xl font-bold tracking-tight"
+          style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+        >
+          Recognition Without Human Scoring
+        </h1>
+        <p
+          className="text-xs mt-1.5 max-w-3xl leading-relaxed"
+          style={{ color: isDark ? '#EAD6C0' : '#5A2D0C' }}
+        >
+          Recognition should say: <strong style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}>"We noticed what you repeatedly demonstrated here."</strong>{' '}
+          It should never pretend to say: <strong style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}>"We have calculated who you are."</strong>{' '}
           Hut4Devs explicitly bans universal credit scores, popularity leaderboards, wealth rankings,
           and permanent negative scarlet letters.
         </p>
 
-        {/* Anti-Slop / Anti-Credit Bureau Callout */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-5 pt-5 border-t border-stone-100 text-xs">
-          <div className="p-3 bg-rose-50/60 border border-rose-200/70 rounded-lg">
-            <div className="font-semibold text-rose-900 flex items-center gap-1.5 mb-1">
-              <ShieldAlert className="w-4 h-4 text-rose-700" />
-              What Hut4Devs Will Never Build
+        {/* Anti-Credit Bureau Callout */}
+        <div
+          className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6 pt-5 border-t-2 text-xs"
+          style={{ borderColor: isDark ? '#421E06' : '#EAE0D0' }}
+        >
+          <div
+            className="p-4 rounded-xl border shadow-xs"
+            style={{
+              backgroundColor: isDark ? 'rgba(45, 20, 20, 0.4)' : 'rgba(255, 243, 243, 0.65)',
+              borderColor: isDark ? 'rgba(244, 63, 94, 0.3)' : 'rgba(244, 63, 94, 0.25)',
+            }}
+          >
+            <div
+              className="font-bold flex items-center gap-2 mb-2 text-xs sm:text-sm"
+              style={{ color: isDark ? '#FDA4AF' : '#9F1239' }}
+            >
+              <ShieldAlert className="w-4 h-4 shrink-0 text-rose-600 dark:text-rose-400" />
+              <span>What Hut4Devs Will Never Build</span>
             </div>
-            <ul className="space-y-1 text-rose-800/80 text-[11px] list-disc list-inside">
+            <ul
+              className="space-y-1.5 text-xs font-medium list-disc list-inside leading-relaxed"
+              style={{ color: isDark ? '#FECDD3' : '#881337' }}
+            >
               <li>No 0–100 universal trust credit scores</li>
               <li>No public debt walls or shaming registries</li>
               <li>No popularity or wealth competition leaderboards</li>
@@ -48,12 +86,24 @@ export const RecognitionView: React.FC<RecognitionViewProps> = ({
             </ul>
           </div>
 
-          <div className="p-3 bg-emerald-50/60 border border-emerald-200/70 rounded-lg">
-            <div className="font-semibold text-emerald-900 flex items-center gap-1.5 mb-1">
-              <Sparkles className="w-4 h-4 text-emerald-700" />
-              What Hut4Devs Recognizes
+          <div
+            className="p-4 rounded-xl border shadow-xs"
+            style={{
+              backgroundColor: isDark ? 'rgba(16, 37, 24, 0.4)' : 'rgba(240, 253, 244, 0.65)',
+              borderColor: isDark ? 'rgba(16, 185, 129, 0.3)' : 'rgba(16, 185, 129, 0.25)',
+            }}
+          >
+            <div
+              className="font-bold flex items-center gap-2 mb-2 text-xs sm:text-sm"
+              style={{ color: isDark ? '#6EE7B7' : '#065F46' }}
+            >
+              <span className="text-base shrink-0" aria-hidden="true">🛖</span>
+              <span>What Hut4Devs Recognizes</span>
             </div>
-            <ul className="space-y-1 text-emerald-800/80 text-[11px] list-disc list-inside">
+            <ul
+              className="space-y-1.5 text-xs font-medium list-disc list-inside leading-relaxed"
+              style={{ color: isDark ? '#A7F3D0' : '#064E3B' }}
+            >
               <li>Honoured shared accommodation commitments</li>
               <li>Proactive, honest communication when stipend is late</li>
               <li>Generous peer support and Debt-to-Gift forgiveness</li>
@@ -61,72 +111,142 @@ export const RecognitionView: React.FC<RecognitionViewProps> = ({
             </ul>
           </div>
         </div>
-      </div>
+      </section>
 
       {/* Recognitions Grid */}
-      <div className="bg-white rounded-xl border border-stone-200/80 p-6 shadow-xs">
-        <h2 className="text-base font-bold text-stone-900 mb-1">Demonstrated Community Recognitions</h2>
-        <p className="text-xs text-stone-500 mb-5">
-          Contextual statements generated from verified trust trails
-        </p>
+      <section
+        className="rounded-2xl p-5 sm:p-7 border-2 border-b-4 transition-all duration-200 shadow-md backdrop-blur-md"
+        style={{
+          backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : 'rgba(255, 253, 248, 0.65)',
+          borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : 'rgba(90, 45, 12, 0.25)',
+        }}
+      >
+        <div className="mb-6">
+          <span
+            className="text-xs font-bold uppercase tracking-wider block mb-1"
+            style={{ color: isDark ? '#E5A955' : '#B77620' }}
+          >
+            Verifiable Cooperative Milestones
+          </span>
+          <h2
+            className="font-serif font-bold text-xl sm:text-2xl tracking-tight"
+            style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+          >
+            Demonstrated Community Recognitions
+          </h2>
+          <p
+            className="text-xs mt-1 leading-relaxed"
+            style={{ color: isDark ? '#C49B75' : '#8A5D3B' }}
+          >
+            Contextual statements derived from verifiable cooperative actions
+          </p>
+        </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {recognitions.map((badge) => {
-            const fellow = getFellow(badge.fellowId);
-            const isCurrent = badge.fellowId === currentFellowId;
+            const isCurrent = badge.memberId === currentMember.id;
 
             return (
-              <div
+              <article
                 key={badge.id}
                 id={`badge-card-${badge.id}`}
-                className={`p-5 rounded-xl border transition-all ${
-                  isCurrent
-                    ? 'border-amber-400/80 bg-amber-50/30'
-                    : 'border-stone-200/80 bg-stone-50/50 hover:bg-stone-50'
-                }`}
+                className="rounded-2xl p-5 sm:p-6 border-2 border-b-4 transition-all duration-200 shadow-md flex flex-col justify-between"
+                style={{
+                  backgroundColor: isCurrent
+                    ? isDark
+                      ? 'rgba(42, 34, 28, 0.65)'
+                      : 'rgba(255, 250, 240, 0.85)'
+                    : isDark
+                    ? 'rgba(23, 21, 19, 0.55)'
+                    : 'rgba(255, 253, 248, 0.65)',
+                  borderColor: isCurrent
+                    ? isDark
+                      ? 'rgba(200, 141, 58, 0.65)'
+                      : 'rgba(183, 118, 32, 0.55)'
+                    : isDark
+                    ? 'rgba(200, 141, 58, 0.35)'
+                    : 'rgba(90, 45, 12, 0.25)',
+                }}
               >
-                <div className="flex items-start gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-white border border-stone-200 shadow-2xs flex items-center justify-center text-xl shrink-0">
+                <div className="flex items-start gap-4">
+                  <div
+                    className="w-12 h-12 rounded-xl border flex items-center justify-center text-2xl shrink-0 shadow-xs"
+                    style={{
+                      backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : 'rgba(247, 241, 231, 0.7)',
+                      borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : 'rgba(90, 45, 12, 0.2)',
+                    }}
+                  >
                     {badge.symbol}
                   </div>
 
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center justify-between gap-2">
-                      <h3 className="font-bold text-sm text-stone-900 truncate">{badge.title}</h3>
-                      <span className="bg-stone-200/70 text-stone-700 text-[10px] font-medium px-2 py-0.5 rounded capitalize">
-                        {badge.category}
+                    <div className="flex items-center justify-between gap-2 mb-1">
+                      <h3
+                        className="font-serif font-bold text-base sm:text-lg truncate"
+                        style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+                      >
+                        {badge.title}
+                      </h3>
+                      <span
+                        className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold tracking-wide uppercase border shadow-xs"
+                        style={{
+                          backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : 'rgba(247, 241, 231, 0.7)',
+                          color: isDark ? '#F5C678' : '#8C4D11',
+                          borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : 'rgba(90, 45, 12, 0.2)',
+                        }}
+                      >
+                        <span
+                          className="w-1.5 h-1.5 rounded-full mr-1.5 shadow-xs"
+                          style={{ backgroundColor: isDark ? '#C88D3A' : '#B77620' }}
+                          aria-hidden="true"
+                        />
+                        {badge.category.replace('_', ' ')}
                       </span>
                     </div>
 
-                    <p className="text-xs text-stone-600 mt-1 leading-relaxed">{badge.description}</p>
+                    <div
+                      className="text-xs font-medium"
+                      style={{ color: isDark ? '#C49B75' : '#8A5D3B' }}
+                    >
+                      Earned by <strong style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}>{badge.memberName}</strong>
+                    </div>
 
-                    <div className="mt-4 pt-3 border-t border-stone-200/50 flex items-center justify-between text-[11px] text-stone-500">
-                      <div className="flex items-center gap-1.5">
-                        <img
-                          src={fellow.avatar}
-                          alt={fellow.name}
-                          className="w-4 h-4 rounded-full object-cover"
-                        />
-                        <span className="font-medium text-stone-800">{fellow.name}</span>
-                        {isCurrent && (
-                          <span className="text-[10px] text-amber-700 font-semibold bg-amber-100 px-1.5 py-0.2 rounded">
-                            You
-                          </span>
-                        )}
-                      </div>
+                    <p
+                      className="text-xs mt-2.5 leading-relaxed p-3 rounded-xl border italic"
+                      style={{
+                        backgroundColor: isDark ? 'rgba(30, 27, 24, 0.45)' : 'rgba(247, 241, 231, 0.50)',
+                        borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : 'rgba(90, 45, 12, 0.15)',
+                        color: isDark ? '#EAD6C0' : '#5A2D0C',
+                      }}
+                    >
+                      "{badge.description}"
+                    </p>
 
-                      <div className="flex items-center gap-1">
-                        <Calendar className="w-3 h-3" />
+                    <div
+                      className="mt-3.5 flex items-center justify-between text-xs pt-2.5 border-t-2"
+                      style={{ borderColor: isDark ? '#421E06' : '#EAE0D0' }}
+                    >
+                      <span
+                        className="italic text-[11px] font-medium"
+                        style={{ color: isDark ? '#C49B75' : '#8A5D3B' }}
+                      >
+                        {badge.principle}
+                      </span>
+                      <span
+                        className="flex items-center gap-1 font-mono text-[11px] font-semibold"
+                        style={{ color: isDark ? '#F5C678' : '#B77620' }}
+                      >
+                        <Calendar className="w-3.5 h-3.5" />
                         {badge.earnedAt}
-                      </div>
+                      </span>
                     </div>
                   </div>
                 </div>
-              </div>
+              </article>
             );
           })}
         </div>
-      </div>
+      </section>
     </div>
   );
 };

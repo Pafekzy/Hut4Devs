@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { TrustTrailEvent, Fellow } from '../types';
+import { TrustTrailEvent } from '../domain/peerSupport';
+import { Member } from '../domain/auth';
 import {
   Footprints,
   CheckCircle2,
@@ -11,32 +12,51 @@ import {
   Search,
   Filter,
   ExternalLink,
-  Sparkles,
   Layers,
+  Sparkles,
+  HeartHandshake,
+  Calendar,
 } from 'lucide-react';
 
 interface TrustTrailFeedProps {
   trailEvents: TrustTrailEvent[];
-  fellows: Fellow[];
+  availableMembers: Member[];
+  isDark?: boolean;
 }
 
-export const TrustTrailFeed: React.FC<TrustTrailFeedProps> = ({ trailEvents, fellows }) => {
+export const TrustTrailFeed: React.FC<TrustTrailFeedProps> = ({ trailEvents, availableMembers, isDark = false }) => {
   const [filterType, setFilterType] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
 
-  const getFellow = (id: string) => fellows.find((f) => f.id === id);
+  const getMember = (id: string, fallbackName: string) => {
+    return availableMembers.find((m) => m.id === id) || {
+      id,
+      displayName: fallbackName,
+      email: '',
+      role: 'FELLOW',
+      h4dMemberId: 'H4D-MEMBER',
+      createdAt: '',
+    };
+  };
 
   const getEventIcon = (type: TrustTrailEvent['type']) => {
     switch (type) {
       case 'payment_recorded':
+      case 'repayment_recorded':
         return <CheckCircle2 className="w-4 h-4 text-emerald-600" />;
       case 'part_payment':
         return <Clock className="w-4 h-4 text-amber-600" />;
       case 'peer_loan':
+      case 'loan_requested':
+      case 'loan_accepted':
         return <HandCoins className="w-4 h-4 text-blue-600" />;
-      case 'peer_gift':
+      case 'gift_created':
       case 'debt_to_gift':
         return <Gift className="w-4 h-4 text-purple-600" />;
+      case 'contribution_created':
+      case 'contribution_received':
+      case 'contribution_completed':
+        return <HeartHandshake className="w-4 h-4 text-purple-700" />;
       case 'vouch_issued':
         return <Shield className="w-4 h-4 text-indigo-600" />;
       case 'repair_logged':
@@ -49,42 +69,47 @@ export const TrustTrailFeed: React.FC<TrustTrailFeedProps> = ({ trailEvents, fel
   const getEventTypeLabel = (type: TrustTrailEvent['type']) => {
     switch (type) {
       case 'payment_recorded':
-        return 'Settlement Honoured';
+        return 'Accommodation Verified';
       case 'part_payment':
-        return 'Partial Payment';
+        return 'Partial Repayment';
       case 'peer_loan':
         return 'Peer Loan';
-      case 'peer_gift':
+      case 'gift_created':
         return 'Voluntary Gift';
       case 'debt_to_gift':
-        return 'Debt Forgiven (Gift)';
+        return 'Debt-to-Gift Forgiveness';
       case 'repayment_recorded':
-        return 'Loan Repaid';
+        return 'Loan Repaid in Full';
+      case 'contribution_created':
+        return 'Campaign Initiated';
+      case 'contribution_received':
+        return 'Contribution Added';
+      case 'contribution_completed':
+        return 'Campaign Target Met';
       case 'vouch_issued':
         return 'Contextual Vouch';
       case 'repair_logged':
-        return 'Hardship Communicated';
+        return 'Delay Communicated';
+      case 'support_declined':
+        return 'Request Declined (Valid No)';
       default:
-        return 'Colony Event';
+        return 'Community Event';
     }
   };
 
   const filteredEvents = trailEvents.filter((event) => {
     // Type filter
     if (filterType !== 'all') {
-      if (filterType === 'payments' && !['payment_recorded', 'part_payment'].includes(event.type)) {
+      if (filterType === 'payments' && !['payment_recorded', 'part_payment', 'repayment_recorded'].includes(event.type)) {
         return false;
       }
       if (
         filterType === 'support' &&
-        !['peer_loan', 'peer_gift', 'debt_to_gift', 'repayment_recorded'].includes(event.type)
+        !['peer_loan', 'gift_created', 'debt_to_gift', 'contribution_created', 'contribution_received', 'contribution_completed'].includes(event.type)
       ) {
         return false;
       }
       if (filterType === 'vouches' && event.type !== 'vouch_issued') {
-        return false;
-      }
-      if (filterType === 'repairs' && event.type !== 'repair_logged') {
         return false;
       }
     }
@@ -92,14 +117,12 @@ export const TrustTrailFeed: React.FC<TrustTrailFeedProps> = ({ trailEvents, fel
     // Search query
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
-      const actor = getFellow(event.actorId);
-      const recipient = event.recipientId ? getFellow(event.recipientId) : null;
       return (
         event.title.toLowerCase().includes(q) ||
         event.description.toLowerCase().includes(q) ||
         event.evidenceRef.toLowerCase().includes(q) ||
-        (actor && actor.name.toLowerCase().includes(q)) ||
-        (recipient && recipient.name.toLowerCase().includes(q))
+        event.actorName.toLowerCase().includes(q) ||
+        (event.recipientName && event.recipientName.toLowerCase().includes(q))
       );
     }
 
@@ -109,159 +132,239 @@ export const TrustTrailFeed: React.FC<TrustTrailFeedProps> = ({ trailEvents, fel
   return (
     <div className="space-y-6">
       {/* Header Banner */}
-      <div className="bg-white rounded-xl border border-stone-200/80 p-6 shadow-xs">
+      <section
+        className="rounded-2xl p-5 sm:p-7 border-2 border-b-4 transition-all duration-200 shadow-md backdrop-blur-md"
+        style={{
+          backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : 'rgba(255, 253, 248, 0.65)',
+          borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : 'rgba(90, 45, 12, 0.25)',
+        }}
+      >
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <div className="flex items-center gap-2">
-              <span className="bg-amber-100 text-amber-800 text-xs font-semibold px-2.5 py-0.5 rounded-md">
-                Verifiable Ledger
+            <div className="flex items-center gap-2 mb-1">
+              <span
+                className="text-xs font-bold uppercase tracking-wider block"
+                style={{ color: isDark ? '#E5A955' : '#B77620' }}
+              >
+                Append-Only Proof of Trust
               </span>
-              <span className="text-xs text-stone-500">Immutable chronological activity</span>
+              <span
+                className="text-xs font-medium"
+                style={{ color: isDark ? '#C49B75' : '#8A5D3B' }}
+              >
+                &bull; Human Accountability
+              </span>
             </div>
-            <h1 className="text-xl font-bold text-stone-900 mt-1.5">Trails of Trust</h1>
-            <p className="text-xs text-stone-600 mt-0.5 max-w-2xl leading-relaxed">
-              "A payment is an event. A commitment gives that event meaning. A trust trail connects
-              the two." Every accommodation payment, partial fulfillment, peer support, debt-to-gift
-              forgiveness, and honest repair creates verifiable evidence over time.
+            <h1
+              className="font-serif text-xl sm:text-2xl font-bold tracking-tight"
+              style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+            >
+              Trails of Trust Ledger
+            </h1>
+            <p
+              className="text-xs mt-1.5 max-w-2xl leading-relaxed"
+              style={{ color: isDark ? '#EAD6C0' : '#5A2D0C' }}
+            >
+              "People present narratives. The platform preserves facts." Every verified accommodation settlement,
+              peer loan, voluntary gift, forgiven balance, and shared contribution creates an immutable trail of dignity and reliability.
             </p>
           </div>
 
-          <div className="flex items-center gap-2 bg-stone-50 border border-stone-200 px-3.5 py-2 rounded-lg text-xs">
-            <Layers className="w-4 h-4 text-amber-600" />
+          <div
+            className="flex items-center gap-3 p-3.5 rounded-xl border shrink-0 shadow-xs"
+            style={{
+              backgroundColor: isDark ? 'rgba(30, 27, 24, 0.45)' : 'rgba(247, 241, 231, 0.50)',
+              borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : 'rgba(90, 45, 12, 0.15)',
+              color: isDark ? '#FFF9EE' : '#5A2D0C',
+            }}
+          >
+            <Layers className="w-5 h-5 text-[#B77620] shrink-0" />
             <div>
-              <span className="font-bold text-stone-900">{trailEvents.length}</span>
-              <span className="text-stone-500 ml-1">Total Trail Events</span>
+              <span className="font-bold block text-sm sm:text-base">{trailEvents.length} Verified Records</span>
+              <span className="text-xs font-medium" style={{ color: isDark ? '#C49B75' : '#8A5D3B' }}>
+                Append-only audit trail
+              </span>
             </div>
           </div>
         </div>
 
         {/* Filters and Search Bar */}
-        <div className="mt-6 pt-5 border-t border-stone-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <div className="flex flex-wrap items-center gap-1.5 text-xs">
+        <div
+          className="mt-6 pt-5 border-t-2 flex flex-col sm:flex-row gap-3"
+          style={{ borderColor: isDark ? '#421E06' : '#EAE0D0' }}
+        >
+          <div className="relative flex-1">
+            <Search className="w-4 h-4 text-[#B77620] absolute left-3.5 top-3" />
+            <input
+              type="text"
+              placeholder="Search by fellow name, evidence hash, or event details..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-10 pr-4 py-2.5 text-xs rounded-xl border outline-none font-medium transition-all"
+              style={{
+                backgroundColor: isDark ? 'rgba(30, 27, 24, 0.6)' : 'rgba(255, 255, 255, 0.85)',
+                borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : 'rgba(90, 45, 12, 0.25)',
+                color: isDark ? '#FFF9EE' : '#5A2D0C',
+              }}
+            />
+          </div>
+
+          <div
+            className="flex items-center gap-1 p-1 rounded-xl border text-xs"
+            style={{
+              backgroundColor: isDark ? 'rgba(30, 27, 24, 0.45)' : 'rgba(247, 241, 231, 0.50)',
+              borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : 'rgba(90, 45, 12, 0.15)',
+            }}
+          >
             {[
-              { id: 'all', label: 'All Trails' },
-              { id: 'payments', label: 'Accommodation Payments' },
-              { id: 'support', label: 'Peer Support & Loans' },
+              { id: 'all', label: 'All Records' },
+              { id: 'payments', label: 'Settlements' },
+              { id: 'support', label: 'Peer Support' },
               { id: 'vouches', label: 'Vouches' },
-              { id: 'repairs', label: 'Repairs & Communications' },
-            ].map((f) => (
+            ].map((tab) => (
               <button
-                key={f.id}
-                onClick={() => setFilterType(f.id)}
-                className={`px-3 py-1.5 rounded-lg font-medium transition-all ${
-                  filterType === f.id
-                    ? 'bg-stone-900 text-white shadow-xs'
-                    : 'bg-stone-100 text-stone-600 hover:bg-stone-200'
+                key={tab.id}
+                onClick={() => setFilterType(tab.id)}
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                  filterType === tab.id
+                    ? isDark
+                      ? 'bg-[#C88D3A] text-[#241104] shadow-xs'
+                      : 'bg-[#5A2D0C] text-[#FFF9EE] shadow-xs'
+                    : isDark
+                    ? 'text-[#D9C4AC] hover:text-[#FFF9EE]'
+                    : 'text-[#6D4223] hover:text-[#5A2D0C]'
                 }`}
               >
-                {f.label}
+                {tab.label}
               </button>
             ))}
           </div>
-
-          <div className="relative min-w-[220px]">
-            <Search className="w-3.5 h-3.5 text-stone-400 absolute left-3 top-1/2 -translate-y-1/2" />
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search trail or proof ref..."
-              className="w-full pl-8 pr-3 py-1.5 text-xs border border-stone-300 rounded-lg outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 bg-white"
-            />
-          </div>
         </div>
-      </div>
+      </section>
 
-      {/* Events Timeline */}
-      <div className="bg-white rounded-xl border border-stone-200/80 p-6 shadow-xs">
-        <h2 className="text-base font-bold text-stone-900 mb-4">Trail Chronology</h2>
-
-        <div className="relative pl-6 border-l-2 border-stone-200 space-y-6">
-          {filteredEvents.length === 0 ? (
-            <div className="text-center py-10 text-xs text-stone-400">
-              No trust trail events found matching the criteria.
-            </div>
-          ) : (
-            filteredEvents.map((event) => {
-              const actor = getFellow(event.actorId);
-              const recipient = event.recipientId ? getFellow(event.recipientId) : null;
-
-              return (
-                <div
-                  key={event.id}
-                  id={`trail-event-${event.id}`}
-                  className="relative group"
-                >
-                  {/* Timeline Dot */}
-                  <div className="absolute -left-[31px] top-1 w-5 h-5 rounded-full bg-white border-2 border-stone-300 group-hover:border-amber-500 flex items-center justify-center transition-colors shadow-2xs">
-                    <div className="w-2 h-2 rounded-full bg-stone-400 group-hover:bg-amber-500" />
+      {/* Events Timeline Feed */}
+      <div className="space-y-4">
+        {filteredEvents.length === 0 ? (
+          <div
+            className="text-center py-12 text-xs rounded-xl border border-dashed"
+            style={{
+              backgroundColor: isDark ? 'rgba(30, 27, 24, 0.45)' : 'rgba(247, 241, 231, 0.50)',
+              borderColor: isDark ? 'rgba(200, 141, 58, 0.25)' : 'rgba(90, 45, 12, 0.2)',
+              color: isDark ? '#D9C4AC' : '#8A5D3B',
+            }}
+          >
+            No trust trail events matching your search filter.
+          </div>
+        ) : (
+          filteredEvents.map((event) => {
+            return (
+              <article
+                key={event.id}
+                id={`trail-event-${event.id}`}
+                className="rounded-2xl p-5 sm:p-6 border-2 border-b-4 transition-all duration-200 shadow-md flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+                style={{
+                  backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : 'rgba(255, 253, 248, 0.65)',
+                  borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : 'rgba(90, 45, 12, 0.25)',
+                }}
+              >
+                <div className="flex items-start gap-3.5">
+                  <div
+                    className="p-2.5 rounded-xl border shrink-0 mt-0.5 shadow-xs"
+                    style={{
+                      backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : 'rgba(247, 241, 231, 0.7)',
+                      borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : 'rgba(90, 45, 12, 0.2)',
+                    }}
+                  >
+                    {getEventIcon(event.type)}
                   </div>
 
-                  <div className="bg-stone-50/70 hover:bg-stone-50 border border-stone-200/80 rounded-xl p-4 transition-colors">
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-stone-100 pb-2.5">
-                      <div className="flex items-center gap-2">
-                        {getEventIcon(event.type)}
-                        <span className="text-xs font-semibold text-stone-900">{event.title}</span>
-                        <span className="bg-stone-200/70 text-stone-700 text-[10px] font-mono px-2 py-0.5 rounded">
-                          {getEventTypeLabel(event.type)}
-                        </span>
-                      </div>
-
-                      <div className="text-[11px] text-stone-400 font-mono">
-                        {new Date(event.timestamp).toLocaleString(undefined, {
-                          dateStyle: 'medium',
-                          timeStyle: 'short',
-                        })}
-                      </div>
+                  <div>
+                    <div className="flex flex-wrap items-center gap-2 mb-1">
+                      <span
+                        className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wide uppercase border shadow-xs"
+                        style={{
+                          backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : 'rgba(247, 241, 231, 0.7)',
+                          color: isDark ? '#F5C678' : '#8C4D11',
+                          borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : 'rgba(90, 45, 12, 0.2)',
+                        }}
+                      >
+                        <span
+                          className="w-1.5 h-1.5 rounded-full mr-1.5 shadow-xs"
+                          style={{ backgroundColor: isDark ? '#C88D3A' : '#B77620' }}
+                          aria-hidden="true"
+                        />
+                        {getEventTypeLabel(event.type)}
+                      </span>
+                      <h3
+                        className="font-serif font-bold text-sm sm:text-base"
+                        style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+                      >
+                        {event.title}
+                      </h3>
                     </div>
 
-                    <p className="text-xs text-stone-700 mt-2 leading-relaxed">{event.description}</p>
+                    <p
+                      className="text-xs leading-relaxed"
+                      style={{ color: isDark ? '#EAD6C0' : '#5A2D0C' }}
+                    >
+                      {event.description}
+                    </p>
 
-                    {/* Parties and Verification Footer */}
-                    <div className="mt-3 pt-2.5 border-t border-stone-200/50 flex flex-wrap items-center justify-between gap-2 text-[11px]">
-                      <div className="flex items-center gap-2 text-stone-600">
-                        {actor && (
-                          <span className="flex items-center gap-1 font-medium text-stone-900">
-                            <img
-                              src={actor.avatar}
-                              alt={actor.name}
-                              className="w-4 h-4 rounded-full object-cover"
-                            />
-                            {actor.name}
+                    <div
+                      className="mt-2.5 flex flex-wrap items-center gap-2 text-xs font-medium"
+                      style={{ color: isDark ? '#C49B75' : '#8A5D3B' }}
+                    >
+                      <span>
+                        Actor: <strong style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}>{event.actorName}</strong>
+                      </span>
+                      {event.recipientName && (
+                        <>
+                          <span>&bull;</span>
+                          <span>
+                            Recipient: <strong style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}>{event.recipientName}</strong>
                           </span>
-                        )}
-                        {recipient && (
-                          <>
-                            <span className="text-stone-400">→</span>
-                            <span className="flex items-center gap-1 font-medium text-stone-900">
-                              <img
-                                src={recipient.avatar}
-                                alt={recipient.name}
-                                className="w-4 h-4 rounded-full object-cover"
-                              />
-                              {recipient.name}
-                            </span>
-                          </>
-                        )}
-                      </div>
-
-                      <div className="flex items-center gap-3">
-                        <span className="text-stone-500 font-mono bg-white px-2 py-0.5 rounded border border-stone-200 text-[10px] flex items-center gap-1">
-                          Ref: {event.evidenceRef}
-                        </span>
-
-                        <span className="inline-flex items-center gap-1 text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded text-[10px] font-medium border border-emerald-200/60">
-                          <CheckCircle2 className="w-3 h-3" />
-                          {event.verificationStatus === 'verified' ? 'Verified Proof' : 'Acknowledged'}
-                        </span>
-                      </div>
+                        </>
+                      )}
+                      <span>&bull;</span>
+                      <span className="font-mono text-[11px]" style={{ color: isDark ? '#F5C678' : '#B77620' }}>
+                        Ref: {event.evidenceRef}
+                      </span>
                     </div>
                   </div>
                 </div>
-              );
-            })
-          )}
-        </div>
+
+                <div
+                  className="sm:text-right shrink-0 border-t sm:border-t-0 pt-2 sm:pt-0 flex sm:flex-col justify-between items-center sm:items-end"
+                  style={{ borderColor: isDark ? '#421E06' : '#EAE0D0' }}
+                >
+                  {event.amount ? (
+                    <span
+                      className="text-base sm:text-lg font-bold"
+                      style={{ color: isDark ? '#F5C678' : '#5A2D0C' }}
+                    >
+                      {event.currency || '₦'}
+                      {event.amount.toLocaleString()}
+                    </span>
+                  ) : (
+                    <span
+                      className="text-xs font-bold"
+                      style={{ color: isDark ? '#C49B75' : '#8A5D3B' }}
+                    >
+                      Documented
+                    </span>
+                  )}
+                  <span
+                    className="text-xs font-medium mt-0.5 flex items-center gap-1"
+                    style={{ color: isDark ? '#C49B75' : '#8A5D3B' }}
+                  >
+                    <Calendar className="w-3.5 h-3.5" />
+                    {new Date(event.timestamp).toLocaleDateString()}
+                  </span>
+                </div>
+              </article>
+            );
+          })
+        )}
       </div>
     </div>
   );

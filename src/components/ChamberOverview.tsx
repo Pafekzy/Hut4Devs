@@ -11,7 +11,6 @@ import {
   ShieldCheck,
   CreditCard,
   MessageSquareShare,
-  Sparkles,
   Zap,
 } from 'lucide-react';
 
@@ -156,7 +155,7 @@ export const ChamberOverview: React.FC<ChamberOverviewProps> = ({
               <span className="text-lg font-bold text-stone-900">{chamber.dueDate}</span>
             </div>
             <p className="text-[11px] text-amber-700 mt-0.5 flex items-center gap-1">
-              <Sparkles className="w-3 h-3" /> Direct peer settlement (No gatekeeper)
+              <span className="text-xs" aria-hidden="true">🛖</span> Direct peer settlement (No gatekeeper)
             </p>
           </div>
         </div>

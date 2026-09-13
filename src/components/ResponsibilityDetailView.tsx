@@ -10,7 +10,7 @@ import {
 import { ExternalPaymentProposal } from '../domain/payments';
 import { Hut4DevsLogo } from './Hut4DevsLogo';
 import { ThemeToggle } from './ThemeToggle';
-import { ArrowLeft, Building2, MapPin, Layers, DoorClosed, Sparkles } from 'lucide-react';
+import { ArrowLeft, Building2, MapPin, Layers, DoorClosed } from 'lucide-react';
 import { FulfilmentFlow } from './FulfilmentFlow';
 
 interface ResponsibilityDetailViewProps {
@@ -115,14 +115,14 @@ export const ResponsibilityDetailView: React.FC<ResponsibilityDetailViewProps> =
         {/* Detail Article Card */}
         <article
           id="responsibility-detail-card"
-          className="rounded-2xl p-6 sm:p-10 border transition-colors duration-200 shadow-sm"
+          className="rounded-2xl p-6 sm:p-10 border transition-all duration-200 shadow-md backdrop-blur-md"
           style={{
-            backgroundColor: isDark ? '#3E200C' : '#FFF9EE',
-            borderColor: isDark ? '#623416' : '#EAE0D0',
+            backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : 'rgba(255, 253, 248, 0.65)',
+            borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : 'rgba(90, 45, 12, 0.25)',
           }}
         >
           {/* Section Header */}
-          <div className="border-b pb-6 mb-8" style={{ borderColor: isDark ? '#4B2710' : '#EAE0D0' }}>
+          <div className="border-b pb-6 mb-8" style={{ borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : 'rgba(90, 45, 12, 0.15)' }}>
             <span
               className="text-xs sm:text-sm font-semibold uppercase tracking-wider block mb-2"
               style={{ color: isDark ? '#C88D3A' : '#B77620' }}
@@ -144,11 +144,11 @@ export const ResponsibilityDetailView: React.FC<ResponsibilityDetailViewProps> =
               <div className="self-start sm:self-auto">
                 <span className="text-xs block text-stone-500 mb-0.5">Status:</span>
                 <span
-                  className="inline-flex items-center px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wide uppercase"
+                  className="inline-flex items-center px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wide uppercase shadow-xs"
                   style={{
-                    backgroundColor: isDark ? '#4B2710' : '#F7F1E7',
+                    backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : 'rgba(247, 241, 231, 0.7)',
                     color: isDark ? '#E2AB5D' : '#B77620',
-                    border: `1px solid ${isDark ? '#623416' : '#E7D6C1'}`,
+                    border: `1px solid ${isDark ? 'rgba(200, 141, 58, 0.3)' : 'rgba(90, 45, 12, 0.2)'}`,
                   }}
                 >
                   <span
@@ -171,10 +171,10 @@ export const ResponsibilityDetailView: React.FC<ResponsibilityDetailViewProps> =
               Accommodation Context
             </h2>
             <div
-              className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 p-4 rounded-xl border"
+              className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 p-4 rounded-xl border backdrop-blur-xs"
               style={{
-                backgroundColor: isDark ? '#2F1707' : '#F7F1E7',
-                borderColor: isDark ? '#4B2710' : '#E7D6C1',
+                backgroundColor: isDark ? 'rgba(30, 27, 24, 0.45)' : 'rgba(247, 241, 231, 0.50)',
+                borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : 'rgba(90, 45, 12, 0.15)',
               }}
             >
               {/* Property */}
@@ -239,15 +239,15 @@ export const ResponsibilityDetailView: React.FC<ResponsibilityDetailViewProps> =
               Responsibility Breakdown
             </h2>
             <div
-              className="grid grid-cols-1 sm:grid-cols-3 gap-4 p-5 rounded-xl border"
+              className="grid grid-cols-1 sm:grid-cols-3 gap-4 p-5 rounded-xl border backdrop-blur-xs"
               style={{
-                backgroundColor: isDark ? '#2F1707' : '#F7F1E7',
-                borderColor: isDark ? '#4B2710' : '#E7D6C1',
+                backgroundColor: isDark ? 'rgba(30, 27, 24, 0.45)' : 'rgba(247, 241, 231, 0.50)',
+                borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : 'rgba(90, 45, 12, 0.15)',
               }}
             >
               {/* Required */}
               <div className="border-b sm:border-b-0 sm:border-r pb-3 sm:pb-0 sm:pr-4"
-                style={{ borderColor: isDark ? '#4B2710' : '#EAE0D0' }}
+                style={{ borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : 'rgba(90, 45, 12, 0.15)' }}
               >
                 <span className="text-xs block mb-1" style={{ color: isDark ? '#A67B54' : '#8A5D3B' }}>
                   Required:
@@ -262,7 +262,7 @@ export const ResponsibilityDetailView: React.FC<ResponsibilityDetailViewProps> =
 
               {/* Verified */}
               <div className="border-b sm:border-b-0 sm:border-r pb-3 sm:pb-0 sm:pr-4"
-                style={{ borderColor: isDark ? '#4B2710' : '#EAE0D0' }}
+                style={{ borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : 'rgba(90, 45, 12, 0.15)' }}
               >
                 <span className="text-xs block mb-1" style={{ color: isDark ? '#A67B54' : '#8A5D3B' }}>
                   Verified:
@@ -294,25 +294,25 @@ export const ResponsibilityDetailView: React.FC<ResponsibilityDetailViewProps> =
           {preparedIntents && preparedIntents.length > 0 && (
             <div
               id="prepared-intent-summary"
-              className="mb-6 p-5 rounded-xl border space-y-2.5 transition-colors"
+              className="mb-6 p-5 rounded-xl border space-y-2.5 transition-colors backdrop-blur-xs"
               style={{
-                backgroundColor: isDark ? '#2F1707' : '#F7F1E7',
-                borderColor: isDark ? '#4B2710' : '#E7D6C1',
+                backgroundColor: isDark ? 'rgba(30, 27, 24, 0.45)' : 'rgba(247, 241, 231, 0.50)',
+                borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : 'rgba(90, 45, 12, 0.15)',
               }}
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <Sparkles className="w-4 h-4 text-[#C88D3A]" aria-hidden="true" />
+                  <span className="text-sm" aria-hidden="true">🛖</span>
                   <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: isDark ? '#C88D3A' : '#B77620' }}>
                     Prepared Intent
                   </span>
                 </div>
                 <span
-                  className="px-2.5 py-0.5 rounded-full text-xs font-semibold uppercase tracking-wider font-mono"
+                  className="px-2.5 py-0.5 rounded-full text-xs font-semibold uppercase tracking-wider font-mono shadow-xs"
                   style={{
-                    backgroundColor: isDark ? '#4B2710' : '#FFF9EE',
+                    backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : 'rgba(255, 253, 248, 0.8)',
                     color: isDark ? '#C88D3A' : '#B77620',
-                    border: `1px solid ${isDark ? '#623416' : '#EAE0D0'}`,
+                    border: `1px solid ${isDark ? 'rgba(200, 141, 58, 0.3)' : 'rgba(90, 45, 12, 0.15)'}`,
                   }}
                 >
                   Prepared — Not Verified
@@ -337,10 +337,10 @@ export const ResponsibilityDetailView: React.FC<ResponsibilityDetailViewProps> =
           {latestProposal && (
             <div
               id="bmoni-proposal-summary"
-              className="mb-8 p-5 rounded-xl border space-y-2.5 transition-colors"
+              className="mb-8 p-5 rounded-xl border space-y-2.5 transition-colors backdrop-blur-xs"
               style={{
-                backgroundColor: isDark ? '#2A170A' : '#F9F5EE',
-                borderColor: isDark ? '#4B2710' : '#E7D6C1',
+                backgroundColor: isDark ? 'rgba(30, 27, 24, 0.45)' : 'rgba(247, 241, 231, 0.50)',
+                borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : 'rgba(90, 45, 12, 0.15)',
               }}
             >
               {latestProposal.isSimulated || latestProposal.provider === 'SIMULATED' ? (
