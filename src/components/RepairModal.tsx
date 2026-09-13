@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Commitment, Fellow } from '../types';
-import { X, MessageSquareShare, Calendar, Sparkles } from 'lucide-react';
+import { X, MessageSquareShare, Calendar } from 'lucide-react';
 
 interface RepairModalProps {
   commitment: Commitment;
@@ -49,7 +49,7 @@ export const RepairModal: React.FC<RepairModalProps> = ({
 
         <div className="mt-3 p-3 bg-amber-50/70 border border-amber-200/80 rounded-lg text-xs text-amber-900 leading-relaxed">
           <div className="font-semibold flex items-center gap-1 text-amber-950 mb-1">
-            <Sparkles className="w-3.5 h-3.5 text-amber-700" /> Colony Principle
+            <span className="text-xs" aria-hidden="true">🛖</span> Colony Principle
           </div>
           <p>
             "A missed commitment or unexpected difficulty does not permanently define a fellow.
