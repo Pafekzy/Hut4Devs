@@ -111,7 +111,7 @@ describe('Hut4Devs Landing Story Carousel Framework (Checkpoint 01)', () => {
     fireEvent.click(dot6);
     expect(screen.getByText('Story 6 of 6')).toBeInTheDocument();
     const slide6Img = screen.getByRole('img', {
-      name: /An African Accommodation Welfare and Mediation Officer reviewing Member concerns/i,
+      name: /An African Accommodation Coordinator logging a room concern from a lodge kitchen/i,
     });
     expect(slide6Img).toBeInTheDocument();
     expect(slide6Img).toHaveAttribute('src', '/story/slide-06-welfare-mediation.webp');

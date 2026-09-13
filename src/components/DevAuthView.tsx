@@ -219,44 +219,70 @@ export const DevAuthView: React.FC<DevAuthViewProps> = ({
       {/* Main Authentication Card */}
       <main className="flex-1 flex items-center justify-center px-4 sm:px-6 py-8 sm:py-12">
         <div
-          className={`w-full ${showDevTools ? 'max-w-4xl' : 'max-w-lg'} rounded-2xl border p-5 sm:p-8 shadow-md transition-all duration-300`}
+          className={`w-full ${showDevTools ? 'max-w-4xl' : 'max-w-lg'} rounded-2xl p-5 sm:p-8 border-2 border-b-4 transition-all duration-300 shadow-md backdrop-blur-md`}
           style={{
-            backgroundColor: isDark ? '#3A1E0B' : '#FFFFFF',
-            borderColor: isDark ? '#4B2710' : '#E7D6C1',
+            backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : 'rgba(255, 253, 248, 0.75)',
+            borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : 'rgba(90, 45, 12, 0.25)',
           }}
         >
           {/* Header Title & Concept Note */}
           <div className="text-center mb-6">
-            <h1 className="font-serif text-2xl sm:text-3xl font-bold tracking-tight mb-2">
+            <div className="flex items-center justify-center gap-2 mb-1.5">
+              <span
+                className="text-xs font-bold uppercase tracking-wider block"
+                style={{ color: isDark ? '#E5A955' : '#B77620' }}
+              >
+                Community Access
+              </span>
+              <span
+                className="text-xs font-medium"
+                style={{ color: isDark ? '#C49B75' : '#8A5D3B' }}
+              >
+                &bull; Scoped Authority &bull; Human-Centered
+              </span>
+            </div>
+            <h1
+              className="font-serif text-2xl sm:text-3xl font-bold tracking-tight mb-2"
+              style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+            >
               Sign In to Hut4Devs
             </h1>
-            <p className="text-xs sm:text-sm opacity-80 max-w-md mx-auto">
+            <p
+              className="text-xs sm:text-sm max-w-md mx-auto leading-relaxed"
+              style={{ color: isDark ? '#EAD6C0' : '#5A2D0C' }}
+            >
               Trusted community coordination & accommodation accountability.
             </p>
           </div>
 
           {/* Principle Banner */}
           <div
-            className="mb-6 rounded-xl border p-3.5 text-xs font-mono transition-colors duration-200"
+            className="mb-6 rounded-xl border p-3.5 text-xs font-mono transition-colors duration-200 shadow-xs"
             style={{
-              backgroundColor: isDark ? '#4B2710' : '#FBF7EE',
-              borderColor: isDark ? '#5C3115' : '#E0D2BE',
-              color: isDark ? '#E2AB5D' : '#7C4A1E',
+              backgroundColor: isDark ? 'rgba(30, 27, 24, 0.45)' : 'rgba(247, 241, 231, 0.50)',
+              borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : 'rgba(90, 45, 12, 0.15)',
+              color: isDark ? '#EAD6C0' : '#5A2D0C',
             }}
           >
             <div className="flex items-center gap-2 mb-1">
               <span
                 className="px-2 py-0.5 rounded font-bold uppercase tracking-wider text-[10px]"
                 style={{
-                  backgroundColor: isDark ? '#5C3115' : '#EAE0D0',
-                  color: isDark ? '#C88D3A' : '#5A2D0C',
+                  backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : 'rgba(247, 241, 231, 0.7)',
+                  color: isDark ? '#E5A955' : '#B77620',
+                  border: isDark ? '1px solid rgba(200, 141, 58, 0.3)' : '1px solid rgba(90, 45, 12, 0.2)',
                 }}
               >
                 AUTHORITY MODEL
               </span>
-              <span className="font-semibold text-[11px]">Identity ≠ Role Selection</span>
+              <span
+                className="font-semibold text-[11px]"
+                style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+              >
+                Identity ≠ Role Selection
+              </span>
             </div>
-            <p className="leading-relaxed text-[11px]">
+            <p className="leading-relaxed text-[11px] opacity-90">
               Authentication establishes <em>Identity</em>. Coordinator verification establishes <em>Membership</em>. Scoped delegation establishes <em>Authority</em>.
             </p>
           </div>
@@ -304,19 +330,30 @@ export const DevAuthView: React.FC<DevAuthViewProps> = ({
             </button>
 
             <div className="relative flex items-center justify-center">
-              <div className="border-t border-stone-200 dark:border-stone-800 w-full" />
-              <span className="bg-white dark:bg-[#3A1E0B] px-3 text-[11px] text-stone-400 uppercase font-mono tracking-wider">
+              <div
+                className="border-t w-full"
+                style={{ borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : 'rgba(90, 45, 12, 0.15)' }}
+              />
+              <span
+                className="px-3 text-[11px] uppercase font-mono tracking-wider"
+                style={{
+                  backgroundColor: isDark ? 'rgba(23, 21, 19, 0.9)' : 'rgba(255, 253, 248, 0.9)',
+                  color: isDark ? '#E5A955' : '#8A5D3B',
+                }}
+              >
                 or email
               </span>
             </div>
 
             {/* Mode switch */}
-            <div className="flex items-center justify-center gap-4 text-xs">
+            <div className="flex items-center justify-center gap-4 text-xs font-semibold">
               <button
                 type="button"
                 onClick={() => setAuthMode('signin')}
-                className={`font-semibold transition-colors cursor-pointer ${
-                  authMode === 'signin' ? 'text-[#C88D3A] underline' : 'text-stone-500'
+                className={`transition-colors cursor-pointer ${
+                  authMode === 'signin'
+                    ? isDark ? 'text-[#E5A955] underline underline-offset-4' : 'text-[#B77620] underline underline-offset-4'
+                    : 'text-stone-400 hover:text-stone-600 dark:hover:text-stone-200'
                 }`}
               >
                 Sign In
@@ -325,8 +362,10 @@ export const DevAuthView: React.FC<DevAuthViewProps> = ({
               <button
                 type="button"
                 onClick={() => setAuthMode('signup')}
-                className={`font-semibold transition-colors cursor-pointer ${
-                  authMode === 'signup' ? 'text-[#C88D3A] underline' : 'text-stone-500'
+                className={`transition-colors cursor-pointer ${
+                  authMode === 'signup'
+                    ? isDark ? 'text-[#E5A955] underline underline-offset-4' : 'text-[#B77620] underline underline-offset-4'
+                    : 'text-stone-400 hover:text-stone-600 dark:hover:text-stone-200'
                 }`}
               >
                 Create Account
@@ -336,11 +375,14 @@ export const DevAuthView: React.FC<DevAuthViewProps> = ({
             {/* Email/Password Form */}
             <form onSubmit={handleEmailAuth} className="space-y-3.5">
               <div>
-                <label className="block text-xs font-semibold mb-1 text-stone-700 dark:text-stone-300">
+                <label
+                  className="block text-xs font-semibold mb-1"
+                  style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+                >
                   Email Address
                 </label>
                 <div className="relative">
-                  <Mail className="w-4 h-4 absolute left-3 top-3 text-stone-400" />
+                  <Mail className="w-4 h-4 absolute left-3 top-3 text-[#C88D3A]" />
                   <input
                     id="input-firebase-email"
                     type="email"
@@ -348,17 +390,25 @@ export const DevAuthView: React.FC<DevAuthViewProps> = ({
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="fellow@example.com"
-                    className="w-full pl-9 pr-3 py-2 text-xs rounded-lg border border-stone-300 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 focus:ring-2 focus:ring-[#C88D3A]/20 focus:border-[#C88D3A] outline-none"
+                    className="w-full pl-9 pr-3 py-2 text-xs rounded-xl border outline-none transition-all shadow-xs"
+                    style={{
+                      backgroundColor: isDark ? 'rgba(30, 27, 24, 0.45)' : 'rgba(255, 255, 255, 0.75)',
+                      borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : 'rgba(90, 45, 12, 0.2)',
+                      color: isDark ? '#FFF9EE' : '#5A2D0C',
+                    }}
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-semibold mb-1 text-stone-700 dark:text-stone-300">
+                <label
+                  className="block text-xs font-semibold mb-1"
+                  style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+                >
                   Password
                 </label>
                 <div className="relative">
-                  <Lock className="w-4 h-4 absolute left-3 top-3 text-stone-400" />
+                  <Lock className="w-4 h-4 absolute left-3 top-3 text-[#C88D3A]" />
                   <input
                     id="input-firebase-password"
                     type="password"
@@ -366,7 +416,12 @@ export const DevAuthView: React.FC<DevAuthViewProps> = ({
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="••••••••"
-                    className="w-full pl-9 pr-3 py-2 text-xs rounded-lg border border-stone-300 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 focus:ring-2 focus:ring-[#C88D3A]/20 focus:border-[#C88D3A] outline-none"
+                    className="w-full pl-9 pr-3 py-2 text-xs rounded-xl border outline-none transition-all shadow-xs"
+                    style={{
+                      backgroundColor: isDark ? 'rgba(30, 27, 24, 0.45)' : 'rgba(255, 255, 255, 0.75)',
+                      borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : 'rgba(90, 45, 12, 0.2)',
+                      color: isDark ? '#FFF9EE' : '#5A2D0C',
+                    }}
                   />
                 </div>
               </div>
@@ -375,7 +430,11 @@ export const DevAuthView: React.FC<DevAuthViewProps> = ({
                 type="submit"
                 id="btn-firebase-submit-auth"
                 disabled={authenticating || isLoading}
-                className="w-full py-2.5 px-4 bg-[#5A2D0C] hover:bg-[#432108] text-[#FFF9EE] text-xs font-semibold rounded-lg shadow-xs transition-colors flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+                className={`inline-flex items-center justify-center gap-2 px-4 py-2.5 min-h-[44px] w-full rounded-xl text-xs font-bold transition-all duration-150 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 border-b-3 active:border-b active:translate-y-[1px] shadow-sm ${
+                  isDark
+                    ? 'bg-[#C88D3A] text-[#241104] hover:bg-[#DDA250] border-[#915B15] focus-visible:ring-[#C88D3A] focus-visible:ring-offset-[#261205]'
+                    : 'bg-[#5A2D0C] text-[#FFF9EE] hover:bg-[#432108] border-[#381B07] focus-visible:ring-[#5A2D0C] focus-visible:ring-offset-[#FFF9EE]'
+                }`}
               >
                 {authenticating ? (
                   <>
@@ -393,13 +452,25 @@ export const DevAuthView: React.FC<DevAuthViewProps> = ({
           </div>
 
           {/* New Membership Registration Callout */}
-          <div className="mt-6 p-4 bg-[#F7F1E7] dark:bg-[#2F1707] border border-[#C88D3A]/30 rounded-xl flex flex-col sm:flex-row items-center justify-between gap-3">
+          <div
+            className="mt-6 p-4 rounded-xl border flex flex-col sm:flex-row items-center justify-between gap-3 shadow-xs"
+            style={{
+              backgroundColor: isDark ? 'rgba(30, 27, 24, 0.45)' : 'rgba(247, 241, 231, 0.50)',
+              borderColor: isDark ? 'rgba(200, 141, 58, 0.25)' : 'rgba(90, 45, 12, 0.2)',
+            }}
+          >
             <div>
-              <div className="flex items-center gap-1.5 text-xs font-bold text-[#5A2D0C] dark:text-[#FFF9EE]">
+              <div
+                className="flex items-center gap-1.5 text-xs font-bold"
+                style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+              >
                 <span className="text-sm" aria-hidden="true">🛖</span>
                 New Fellow or Residency Transfer?
               </div>
-              <p className="text-[11px] text-[#5A2D0C]/70 dark:text-[#FFF9EE]/70 mt-0.5">
+              <p
+                className="text-[11px] mt-0.5"
+                style={{ color: isDark ? '#EAD6C0' : '#5A2D0C' }}
+              >
                 Submit an Accommodation Membership Request without choosing administrative roles.
               </p>
             </div>
@@ -408,7 +479,7 @@ export const DevAuthView: React.FC<DevAuthViewProps> = ({
                 id="btn-open-registration-from-auth"
                 type="button"
                 onClick={onOpenRegistrationModal}
-                className="whitespace-nowrap px-3.5 py-1.5 bg-[#C88D3A] hover:bg-[#B77620] text-white text-xs font-semibold rounded-lg shadow-xs transition-colors cursor-pointer"
+                className="whitespace-nowrap px-3.5 py-2 min-h-[40px] bg-[#B77620] hover:bg-[#A36618] border-b-2 border-[#8A5D3B] text-white text-xs font-semibold rounded-xl shadow-xs transition-all cursor-pointer hover:-translate-y-0.5 active:translate-y-0.5"
               >
                 Submit Membership Request
               </button>
@@ -416,18 +487,26 @@ export const DevAuthView: React.FC<DevAuthViewProps> = ({
           </div>
 
           {/* DEVELOPMENT TOOLS & SEED FIXTURES (DEV-ONLY COLLAPSIBLE) */}
-          <div className="mt-6 pt-4 border-t border-[#5A2D0C]/15 dark:border-[#C88D3A]/25">
+          <div
+            className="mt-6 pt-4 border-t"
+            style={{ borderColor: isDark ? 'rgba(200, 141, 58, 0.25)' : 'rgba(90, 45, 12, 0.15)' }}
+          >
             <button
               type="button"
               id="dev-tools-toggle-btn"
               onClick={() => setShowDevTools(!showDevTools)}
-              className="w-full flex items-center justify-between text-xs py-2 px-3 rounded-xl border border-[#C88D3A]/30 bg-[#FFF9EE] dark:bg-[#2F1707] text-[#5A2D0C] dark:text-[#FFF9EE] hover:border-[#C88D3A]/60 transition-all cursor-pointer shadow-xs"
+              className="w-full flex items-center justify-between text-xs py-2.5 px-3.5 rounded-xl border transition-all cursor-pointer shadow-xs"
+              style={{
+                backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : 'rgba(255, 253, 248, 0.65)',
+                borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : 'rgba(90, 45, 12, 0.25)',
+                color: isDark ? '#FFF9EE' : '#5A2D0C',
+              }}
             >
               <div className="flex items-center gap-2">
                 <div className="w-6 h-6 rounded-lg bg-[#5A2D0C] border border-[#C88D3A]/50 flex items-center justify-center shadow-inner">
                   <Code2 className="w-3.5 h-3.5 text-[#C88D3A]" />
                 </div>
-                <span className="font-semibold text-xs tracking-tight text-[#5A2D0C] dark:text-[#FFF9EE]">
+                <span className="font-semibold text-xs tracking-tight">
                   Development Tools &amp; Seed Fixtures (Dev-Only)
                 </span>
               </div>

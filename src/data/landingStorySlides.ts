@@ -95,7 +95,7 @@ export const LANDING_STORY_SLIDES: LandingStorySlide[] = [
       'Feedback and welfare concerns can reach the right support role before small problems grow.',
     imageSrc: '/story/slide-06-welfare-mediation.webp',
     imageAlt:
-      'An African Accommodation Welfare and Mediation Officer reviewing Member concerns and providing support',
+      'An African Accommodation Coordinator logging a room concern from a lodge kitchen, routed directly to a Welfare and Mediation Officer at dinner',
     plannedSceneDescription:
       'African Accommodation Welfare & Mediation Officer reviewing concise concerns and support signals.',
   },
