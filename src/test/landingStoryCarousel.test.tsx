@@ -105,6 +105,18 @@ describe('Hut4Devs Landing Story Carousel Framework (Checkpoint 01)', () => {
     expect(slide5Img).toHaveAttribute('src', '/story/slide-05-financial-accountability.webp');
     expect(screen.getByRole('heading', { name: /Problems should surface themselves/i })).toBeInTheDocument();
     expect(onSlideChange).toHaveBeenCalledWith(4);
+
+    // Check clicking dot 6 navigates to slide 6 with image and heading
+    const dot6 = screen.getByRole('tab', { name: /Go to story 6/i });
+    fireEvent.click(dot6);
+    expect(screen.getByText('Story 6 of 6')).toBeInTheDocument();
+    const slide6Img = screen.getByRole('img', {
+      name: /An African Accommodation Welfare and Mediation Officer reviewing Member concerns/i,
+    });
+    expect(slide6Img).toBeInTheDocument();
+    expect(slide6Img).toHaveAttribute('src', '/story/slide-06-welfare-mediation.webp');
+    expect(screen.getByRole('heading', { name: /See where help is needed/i })).toBeInTheDocument();
+    expect(onSlideChange).toHaveBeenCalledWith(5);
   });
 
   it('supports pause and resume of slideshow', () => {
