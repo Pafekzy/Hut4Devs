@@ -5,6 +5,7 @@ import { ResponsibilityDetailView } from './components/ResponsibilityDetailView'
 import { AccommodationAdminView, AdminProviderEventDisplay } from './components/AccommodationAdminView';
 import { CoordinatorWorkspaceView } from './components/CoordinatorWorkspaceView';
 import { CaptainWorkspaceView } from './components/CaptainWorkspaceView';
+import { WelfareMediationWorkspaceView } from './components/WelfareMediationWorkspaceView';
 import { DevAuthView } from './components/DevAuthView';
 import { PendingMembershipView } from './components/PendingMembershipView';
 import { RegistrationModal } from './components/RegistrationModal';
@@ -51,7 +52,8 @@ type AppView =
   | 'responsibility-detail'
   | 'accommodation-admin'
   | 'coordinator'
-  | 'room-captain';
+  | 'room-captain'
+  | 'welfare-workspace';
 
 type AppTheme = 'light' | 'dark';
 
@@ -313,6 +315,9 @@ export default function App() {
       case 'FINANCIAL_COVERAGE':
         setView('accommodation-admin');
         break;
+      case 'WELFARE_OFFICER':
+        setView('welfare-workspace');
+        break;
     }
   };
 
@@ -346,6 +351,8 @@ export default function App() {
         } else if (defMode === 'FINANCIAL_ADMIN') {
           setView('accommodation-admin');
           loadAdminAuditData();
+        } else if (defMode === 'WELFARE_OFFICER') {
+          setView('welfare-workspace');
         } else {
           setView('member-home');
         }
@@ -434,6 +441,8 @@ export default function App() {
       } else if (defMode === 'FINANCIAL_ADMIN') {
         setView('accommodation-admin');
         loadAdminAuditData();
+      } else if (defMode === 'WELFARE_OFFICER') {
+        setView('welfare-workspace');
       } else {
         setView('member-home');
       }
@@ -714,6 +723,58 @@ export default function App() {
           </header>
           <main className="max-w-6xl mx-auto p-4 sm:p-6 lg:p-8 space-y-6">
             <CaptainWorkspaceView member={member} activeMode={activeMode} />
+          </main>
+        </div>
+      )}
+
+      {/* Accommodation Welfare & Mediation Workspace View */}
+      {view === 'welfare-workspace' && member && (
+        <div
+          className={`min-h-screen transition-colors duration-200 ${
+            isDark ? 'bg-[#2F1707] text-[#FFF9EE]' : 'bg-[#F7F1E7] text-[#5A2D0C]'
+          }`}
+        >
+          <header
+            className="border-b transition-colors duration-200"
+            style={{
+              borderColor: isDark ? '#3E200C' : '#EAE0D0',
+              backgroundColor: isDark ? 'rgba(47, 23, 7, 0.95)' : 'rgba(247, 241, 231, 0.95)',
+            }}
+          >
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
+              <button
+                type="button"
+                onClick={() => setView('landing')}
+                className="inline-flex items-center text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C88D3A] rounded-lg cursor-pointer"
+                title="Return to Public Landing"
+              >
+                <Hut4DevsLogo isDark={isDark} size="sm" showWordmark={true} />
+              </button>
+
+              <div className="flex items-center gap-2.5">
+                <ModeSwitcher
+                  member={member}
+                  scopedRoles={scopedRoles}
+                  currentMode={activeMode}
+                  onModeChange={handleModeChange}
+                  isDark={isDark}
+                />
+                <button
+                  type="button"
+                  id="welfare-logout-btn"
+                  onClick={handleLogout}
+                  aria-label="Log Out"
+                  className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium transition-colors cursor-pointer ${
+                    isDark ? 'text-[#C88D3A] hover:text-[#FFF9EE]' : 'text-[#8A5D3B] hover:text-[#5A2D0C]'
+                  }`}
+                >
+                  Log Out
+                </button>
+              </div>
+            </div>
+          </header>
+          <main className="max-w-6xl mx-auto p-4 sm:p-6 lg:p-8 space-y-6">
+            <WelfareMediationWorkspaceView member={member} activeMode={activeMode} isDark={isDark} />
           </main>
         </div>
       )}

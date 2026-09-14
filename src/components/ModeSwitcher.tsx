@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Member } from '../domain/auth';
 import { ActiveMode, getAvailableModesForMember, ScopedRoleAssignment, formatActionAttribution } from '../domain/membership';
-import { ShieldCheck, User, Users, Home, Briefcase, ChevronDown, Check } from 'lucide-react';
+import { ShieldCheck, User, Users, Home, Briefcase, ChevronDown, Check, HeartHandshake } from 'lucide-react';
 
 export interface ModeSwitcherProps {
   member: Member;
@@ -52,6 +52,8 @@ export const ModeSwitcher: React.FC<ModeSwitcherProps> = ({
         return 'Financial Coverage';
       case 'FINANCIAL_ADMIN':
         return 'Financial Admin';
+      case 'WELFARE_OFFICER':
+        return 'Welfare Officer';
       default:
         return mode;
     }
@@ -71,6 +73,8 @@ export const ModeSwitcher: React.FC<ModeSwitcherProps> = ({
         return 'Interim financial admin coverage';
       case 'FINANCIAL_ADMIN':
         return 'Accommodation financial accountability';
+      case 'WELFARE_OFFICER':
+        return 'Resident wellbeing & restorative mediation';
       default:
         return '';
     }
@@ -88,6 +92,8 @@ export const ModeSwitcher: React.FC<ModeSwitcherProps> = ({
       case 'FINANCIAL_COVERAGE':
       case 'FINANCIAL_ADMIN':
         return <ShieldCheck className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />;
+      case 'WELFARE_OFFICER':
+        return <HeartHandshake className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />;
       default:
         return <Briefcase className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />;
     }
