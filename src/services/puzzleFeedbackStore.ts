@@ -178,6 +178,140 @@ const INITIAL_SEEDED_REPORTS: SharedMissingPuzzleReport[] = [
     timestamp: '2026-09-10T11:00:00.000Z',
     involvement: 'CONSULT_DESIGN',
   },
+  {
+    id: 'puz-welfare-001',
+    title: 'Room 304 quiet-study hours conflict and desk arrangement',
+    description:
+      'Chamber fellows in Room 304 have overlapping sprint schedules and remote standup calls at night, creating mutual disruption and friction over lighting and quiet study hours.',
+    category: 'Roommate Mediation',
+    locationContext: 'Room 304 Living Space',
+    pageContext: 'Living Space / Welfare',
+    routeContext: '/accommodation',
+    reporterMemberId: 'mem-fellow-current',
+    reporterDisplayName: 'Emmanuel (Fellow)',
+    reporterEmail: 'fellow@infinitegrace.local',
+    createdAt: '2026-09-11T10:00:00.000Z',
+    updatedAt: '2026-09-11T16:30:00.000Z',
+    puzzleCompleted: true,
+    involvementPreference: 'CONTACT_ME',
+    status: 'IN_PROGRESS',
+    persistenceClassification: 'DEMO_LOCAL_FALLBACK',
+    events: [
+      {
+        eventId: 'evt-w01-1',
+        feedbackId: 'puz-welfare-001',
+        actorMemberId: 'mem-fellow-current',
+        actorDisplayName: 'Emmanuel (Fellow)',
+        eventType: 'FEEDBACK_CREATED',
+        timestamp: '2026-09-11T10:00:00.000Z',
+        message: 'Welfare concern logged requesting mediation support for Room 304 study hours.',
+      },
+      {
+        eventId: 'evt-w01-2',
+        feedbackId: 'puz-welfare-001',
+        actorMemberId: 'member-welfare-mediation-officer',
+        actorDisplayName: 'Arc. Olumide Adeleke',
+        actorCapacity: 'Accommodation Welfare & Mediation Officer',
+        eventType: 'CLARIFICATION_REQUESTED',
+        timestamp: '2026-09-11T16:30:00.000Z',
+        message: 'Held preliminary check-in with Room Captain Chinedu Okeke. Scheduling restorative mediation circle for mutual agreement on quiet zones from 10 PM.',
+      },
+    ],
+    loggedBy: {
+      id: 'mem-fellow-current',
+      displayName: 'Emmanuel (Fellow)',
+      h4dMemberId: 'H4D-00021',
+      email: 'fellow@infinitegrace.local',
+    },
+    timestamp: '2026-09-11T10:00:00.000Z',
+    involvement: 'CONTACT_ME',
+  },
+  {
+    id: 'puz-welfare-002',
+    title: 'Block B corridor lighting and ventilation duct repair',
+    description:
+      'Persistent flickering of corridor safety lighting outside chambers 201-206 and poor ventilation airflow in the stairwell requires facility escalation.',
+    category: 'Facility & Living Conditions',
+    locationContext: 'Block B Second Floor Corridor',
+    pageContext: 'Facility Maintenance',
+    routeContext: '/accommodation',
+    reporterMemberId: 'mem-chinedu-captain',
+    reporterDisplayName: 'Chinedu Okeke (Room Captain)',
+    reporterEmail: 'chinedu@infinitegrace.local',
+    createdAt: '2026-09-12T08:20:00.000Z',
+    updatedAt: '2026-09-12T11:45:00.000Z',
+    puzzleCompleted: true,
+    involvementPreference: 'JUST_LOG',
+    status: 'UNDER_REVIEW',
+    persistenceClassification: 'DEMO_LOCAL_FALLBACK',
+    events: [
+      {
+        eventId: 'evt-w02-1',
+        feedbackId: 'puz-welfare-002',
+        actorMemberId: 'mem-chinedu-captain',
+        actorDisplayName: 'Chinedu Okeke (Room Captain)',
+        eventType: 'FEEDBACK_CREATED',
+        timestamp: '2026-09-12T08:20:00.000Z',
+        message: 'Facility condition report raised from room inspection checklist.',
+      },
+      {
+        eventId: 'evt-w02-2',
+        feedbackId: 'puz-welfare-002',
+        actorMemberId: 'member-welfare-mediation-officer',
+        actorDisplayName: 'Arc. Olumide Adeleke',
+        actorCapacity: 'Accommodation Welfare & Mediation Officer',
+        eventType: 'FEEDBACK_ACKNOWLEDGED',
+        timestamp: '2026-09-12T11:45:00.000Z',
+        message: 'Escalated to Yaba Campus estate management contractor with priority tag for electrical inspection.',
+      },
+    ],
+    loggedBy: {
+      id: 'mem-chinedu-captain',
+      displayName: 'Chinedu Okeke (Room Captain)',
+      h4dMemberId: 'H4D-00034',
+      email: 'chinedu@infinitegrace.local',
+    },
+    timestamp: '2026-09-12T08:20:00.000Z',
+    involvement: 'JUST_LOG',
+  },
+  {
+    id: 'puz-welfare-003',
+    title: 'Exhaustion and late-night commute stress support request',
+    description:
+      'Resident fellow experiencing academic workload strain and sleep disruption; requested guidance on peer support circles and rest routines.',
+    category: 'Wellbeing & Personal Support',
+    locationContext: 'Yaba Residence Quarters',
+    pageContext: 'Peer Support & Wellbeing',
+    routeContext: '/peer-support',
+    reporterMemberId: 'mem-2',
+    reporterDisplayName: 'Nonso Okafor',
+    reporterEmail: 'nonso.okafor@bedrock.local',
+    createdAt: '2026-09-13T07:15:00.000Z',
+    updatedAt: '2026-09-13T07:15:00.000Z',
+    puzzleCompleted: true,
+    involvementPreference: 'CONTACT_ME',
+    status: 'PENDING_REVIEW',
+    persistenceClassification: 'DEMO_LOCAL_FALLBACK',
+    events: [
+      {
+        eventId: 'evt-w03-1',
+        feedbackId: 'puz-welfare-003',
+        actorMemberId: 'mem-2',
+        actorDisplayName: 'Nonso Okafor',
+        eventType: 'FEEDBACK_CREATED',
+        timestamp: '2026-09-13T07:15:00.000Z',
+        message: 'Confidential support request submitted via chamber welfare signal.',
+      },
+    ],
+    loggedBy: {
+      id: 'mem-2',
+      displayName: 'Nonso Okafor',
+      h4dMemberId: 'H4D-00045',
+      email: 'nonso.okafor@bedrock.local',
+    },
+    timestamp: '2026-09-13T07:15:00.000Z',
+    involvement: 'CONTACT_ME',
+  },
 ];
 
 class PuzzleFeedbackStore {
@@ -244,6 +378,18 @@ class PuzzleFeedbackStore {
       member.roles.includes(MemberRole.ACCOMMODATION_FELLOWS_COORDINATOR) ||
       member.roles.some((r) => String(r).includes('COORDINATOR')) ||
       member.id.includes('coord')
+    );
+  }
+
+  /**
+   * Helper to determine if a Member holds Welfare & Mediation capacity
+   */
+  public isWelfareOfficer(member?: Member | null): boolean {
+    if (!member) return false;
+    return (
+      member.roles.includes(MemberRole.ACCOMMODATION_WELFARE_OFFICER) ||
+      member.roles.some((r) => String(r).includes('WELFARE')) ||
+      member.id.includes('welfare')
     );
   }
 
@@ -521,6 +667,174 @@ class PuzzleFeedbackStore {
     }
 
     return [...this.reports];
+  }
+
+  /**
+   * Scoped Welfare Feedback getter:
+   * Returns reports matching welfare/mediation/living condition categories,
+   * or all operational reports if authorized Welfare Officer is reviewing.
+   */
+  public async getWelfareReports(officer?: Member | null): Promise<SharedMissingPuzzleReport[]> {
+    if (!officer) {
+      throw new Error('Authentication required for welfare operational review.');
+    }
+
+    if (!this.isWelfareOfficer(officer) && !this.isCoordinator(officer)) {
+      throw new Error('Authorization denied: Only Welfare Officer or Coordinator can access welfare records.');
+    }
+
+    const all = await this.getTriageFeedback(
+      this.isCoordinator(officer)
+        ? officer
+        : ({ ...officer, roles: [...officer.roles, MemberRole.ACCOMMODATION_FELLOWS_COORDINATOR] } as Member)
+    );
+
+    const welfareKeywords = [
+      'welfare',
+      'mediation',
+      'roommate',
+      'living',
+      'facility',
+      'condition',
+      'support',
+      'noise',
+      'ventilation',
+      'light',
+      'repair',
+      'conflict',
+      'exhaustion',
+      'stress',
+      'wellbeing',
+    ];
+
+    return all.filter((r) => {
+      if (r.id.startsWith('puz-welfare-')) return true;
+      const text = `${r.title} ${r.description} ${r.category} ${r.locationContext || ''}`.toLowerCase();
+      return welfareKeywords.some((kw) => text.includes(kw));
+    });
+  }
+
+  /**
+   * Scoped Welfare Note / Mediation Follow-up action:
+   * Records restorative mediation or welfare follow-up notes without Coordinator powers.
+   */
+  public async recordWelfareMediationNote(
+    feedbackId: string,
+    actor: Member,
+    noteMessage: string,
+    eventType: FeedbackEventType = 'CLARIFICATION_REQUESTED'
+  ): Promise<SharedMissingPuzzleReport> {
+    if (!this.isWelfareOfficer(actor) && !this.isCoordinator(actor)) {
+      throw new Error('Authorization denied: Welfare officer capacity required to record mediation note.');
+    }
+
+    const report = this.reports.find((r) => r.id === feedbackId);
+    if (!report) {
+      throw new Error(`Feedback report not found: ${feedbackId}`);
+    }
+
+    const now = new Date().toISOString();
+    const event: FeedbackEvent = {
+      eventId: `evt-welfare-${Date.now().toString(36)}-${Math.random().toString(36).substring(2, 5)}`,
+      feedbackId,
+      actorMemberId: actor.id,
+      actorDisplayName: actor.displayName,
+      actorCapacity: 'Accommodation Welfare & Mediation Officer',
+      eventType,
+      timestamp: now,
+      message: noteMessage.trim(),
+    };
+
+    report.updatedAt = now;
+    report.events.push(event);
+
+    try {
+      await updateDoc(doc(db, 'puzzleFeedback', feedbackId), {
+        updatedAt: now,
+        events: report.events,
+      });
+      await setDoc(doc(db, 'puzzleFeedback', feedbackId, 'events', event.eventId), event).catch(() => {});
+    } catch {
+      // Local fallback preserved
+    }
+
+    this.saveLocal();
+    this.notify();
+
+    notificationStore.addNotification({
+      memberId: report.reporterMemberId,
+      title: 'Welfare & Mediation Note Added',
+      message: `${actor.displayName} (Welfare Officer) added a note on "${report.title}": "${noteMessage.trim()}"`,
+      feedbackId: report.id,
+      type: 'CLARIFICATION_REQUESTED',
+    });
+
+    return report;
+  }
+
+  /**
+   * Scoped Welfare Status update:
+   * Transitions welfare concerns across operational lifecycle:
+   * PENDING_REVIEW -> UNDER_REVIEW -> IN_PROGRESS -> IMPLEMENTED / RESOLVED
+   */
+  public async updateWelfareStatus(
+    feedbackId: string,
+    actor: Member,
+    newStatus: FeedbackStatus,
+    note?: string
+  ): Promise<SharedMissingPuzzleReport> {
+    if (!this.isWelfareOfficer(actor) && !this.isCoordinator(actor)) {
+      throw new Error('Authorization denied: Welfare officer capacity required to transition welfare status.');
+    }
+
+    const report = this.reports.find((r) => r.id === feedbackId);
+    if (!report) {
+      throw new Error(`Feedback report not found: ${feedbackId}`);
+    }
+
+    const now = new Date().toISOString();
+    let eventType: FeedbackEventType = 'STATUS_CHANGED';
+    if (newStatus === 'IMPLEMENTED' || newStatus === 'RESOLVED') eventType = 'RESOLVED';
+    if (newStatus === 'CLOSED') eventType = 'CLOSED';
+
+    const event: FeedbackEvent = {
+      eventId: `evt-welfare-${Date.now().toString(36)}-${Math.random().toString(36).substring(2, 5)}`,
+      feedbackId,
+      actorMemberId: actor.id,
+      actorDisplayName: actor.displayName,
+      actorCapacity: 'Accommodation Welfare & Mediation Officer',
+      eventType,
+      timestamp: now,
+      message: note || `Welfare status transitioned to ${newStatus} by Accommodation Welfare & Mediation Officer.`,
+    };
+
+    report.status = newStatus;
+    report.updatedAt = now;
+    report.events.push(event);
+
+    try {
+      await updateDoc(doc(db, 'puzzleFeedback', feedbackId), {
+        status: newStatus,
+        updatedAt: now,
+        events: report.events,
+      });
+      await setDoc(doc(db, 'puzzleFeedback', feedbackId, 'events', event.eventId), event).catch(() => {});
+    } catch {
+      // Local fallback preserved
+    }
+
+    this.saveLocal();
+    this.notify();
+
+    notificationStore.addNotification({
+      memberId: report.reporterMemberId,
+      title: (newStatus === 'IMPLEMENTED' || newStatus === 'RESOLVED') ? 'Welfare Concern Resolved' : `Welfare Status: ${newStatus}`,
+      message: `Your welfare record "${report.title}" was updated to ${newStatus} by ${actor.displayName}.${note ? ` Note: ${note}` : ''}`,
+      feedbackId: report.id,
+      type: (newStatus === 'IMPLEMENTED' || newStatus === 'RESOLVED') ? 'RESOLVED' : 'STATUS_CHANGED',
+    });
+
+    return report;
   }
 
   /**

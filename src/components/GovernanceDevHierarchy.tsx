@@ -982,7 +982,7 @@ export const GovernanceDevHierarchy: React.FC<GovernanceDevHierarchyProps> = ({
                       disabled={isLoading || authenticating}
                       onClick={() =>
                         handleLaunchPreview(
-                          MemberRole.ACCOMMODATION_FELLOWS_COORDINATOR,
+                          MemberRole.ACCOMMODATION_WELFARE_OFFICER,
                           `${adm.memberName} (${adm.roleTitle})`
                         )
                       }

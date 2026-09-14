@@ -181,7 +181,8 @@ export type ActiveMode =
   | 'COORDINATOR'
   | 'CAPTAIN_COVERAGE'
   | 'FINANCIAL_COVERAGE'
-  | 'FINANCIAL_ADMIN';
+  | 'FINANCIAL_ADMIN'
+  | 'WELFARE_OFFICER';
 
 /**
  * Derives available modes from: member roles + scoped assignments.
@@ -192,6 +193,11 @@ export function getAvailableModesForMember(
   roleAssignments: ScopedRoleAssignment[] = []
 ): ActiveMode[] {
   if (!member) return [];
+
+  // Welfare & Mediation Officer lands directly in Welfare & Mediation workspace with NO Coordinator authority
+  if (member.roles.includes(MemberRole.ACCOMMODATION_WELFARE_OFFICER)) {
+    return ['WELFARE_OFFICER'];
+  }
 
   // Financial Admin role lands directly in Financial Admin workspace with NO mode switcher
   if (
@@ -279,6 +285,15 @@ export function formatActionAttribution(
       actorName: member.displayName,
       displayLabel: `${member.displayName} (Accommodation Financial Admin)`,
       actingCapacity: 'Accommodation Financial Admin',
+      isCoverage: false,
+    };
+  }
+
+  if (activeMode === 'WELFARE_OFFICER') {
+    return {
+      actorName: member.displayName,
+      displayLabel: `${member.displayName} (Accommodation Welfare & Mediation Officer)`,
+      actingCapacity: 'Accommodation Welfare & Mediation Officer',
       isCoverage: false,
     };
   }
