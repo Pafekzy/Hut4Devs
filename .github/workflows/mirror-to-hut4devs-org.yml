@@ -1,0 +1,53 @@
+name: Mirror canonical Hut4Devs to organization
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  mirror:
+    # Prevent the mirrored copy from trying to mirror itself.
+    if: github.repository == 'Pafekzy/Hut4Devs'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout canonical Hut4Devs
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Configure Hut4Devs organization mirror key
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.ORG_H4D_MIRROR_SSH_KEY }}
+        shell: bash
+        run: |
+          install -m 700 -d ~/.ssh
+
+          printf '%s\n' "$SSH_PRIVATE_KEY" > ~/.ssh/hut4devs_org_mirror
+          chmod 600 ~/.ssh/hut4devs_org_mirror
+
+          ssh-keyscan -H github.com >> ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/known_hosts
+
+      - name: Mirror canonical main
+        env:
+          GIT_SSH_COMMAND: ssh -i ~/.ssh/hut4devs_org_mirror -o IdentitiesOnly=yes
+        shell: bash
+        run: |
+          git remote remove hut4devs-org 2>/dev/null || true
+
+          git remote add hut4devs-org \
+            git@github.com:hut4devs/pafekzy-fullstack-hut4devs.git
+
+          echo "Canonical commit:"
+          git rev-parse HEAD
+
+          git push hut4devs-org HEAD:main --force
+
+          echo "✅ hut4devs/pafekzy-fullstack-hut4devs main mirrored successfully."
