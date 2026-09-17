@@ -29,30 +29,30 @@ export const RoommateCards: React.FC<RoommateCardsProps> = ({
       <div
         className="h4d-card-static p-4 sm:p-5 rounded-2xl border-2 border-b-4 shadow-xs backdrop-blur-md flex flex-col sm:flex-row sm:items-center justify-between gap-3"
         style={{
-          backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : 'rgba(255, 253, 248, 0.75)',
-          borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : 'rgba(90, 45, 12, 0.20)',
+          backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : '#FFF0D6',
+          borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : '#CF9F68',
         }}
       >
         <div className="flex items-center gap-3">
           <div
             className="w-10 h-10 rounded-xl border-2 border-b-3 flex items-center justify-center shrink-0 shadow-xs"
             style={{
-              backgroundColor: isDark ? 'rgba(42, 34, 28, 0.7)' : 'rgba(247, 241, 231, 0.9)',
-              borderColor: isDark ? 'rgba(200, 141, 58, 0.4)' : 'rgba(90, 45, 12, 0.25)',
+              backgroundColor: isDark ? 'rgba(42, 34, 28, 0.7)' : '#FAE5C5',
+              borderColor: isDark ? 'rgba(200, 141, 58, 0.4)' : '#CF9F68',
             }}
           >
-            <Users className="w-5 h-5 text-[#B77620] dark:text-[#C88D3A]" />
+            <Users className="w-5 h-5 text-[#C46F18] dark:text-[#C88D3A]" />
           </div>
           <div>
             <h3
               className="font-serif font-bold text-sm sm:text-base"
-              style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+              style={{ color: isDark ? '#FFF9EE' : '#432006' }}
             >
               Current Roommates
             </h3>
             <p
               className="text-xs mt-0.5"
-              style={{ color: isDark ? '#D9C4AC' : '#704728' }}
+              style={{ color: isDark ? '#D9C4AC' : '#5A3013' }}
             >
               Public community profiles &bull; Respecting privacy boundaries &bull; {roommates.length} active residents
             </p>
@@ -62,9 +62,9 @@ export const RoommateCards: React.FC<RoommateCardsProps> = ({
         <span
           className="text-[10px] font-mono uppercase px-2.5 py-1 rounded-md font-semibold border self-start sm:self-auto"
           style={{
-            backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : 'rgba(247, 241, 231, 0.7)',
-            borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : 'rgba(90, 45, 12, 0.15)',
-            color: isDark ? '#C88D3A' : '#B77620',
+            backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : '#FAE5C5',
+            borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : '#CF9F68',
+            color: isDark ? '#C88D3A' : '#C46F18',
           }}
         >
           Co-living Trust
@@ -91,8 +91,8 @@ export const RoommateCards: React.FC<RoommateCardsProps> = ({
               }}
               className="h4d-card-interactive group p-5 rounded-2xl border-2 border-b-4 flex flex-col justify-between"
               style={{
-                backgroundColor: isDark ? 'rgba(30, 27, 24, 0.55)' : 'rgba(255, 253, 248, 0.85)',
-                borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : 'rgba(90, 45, 12, 0.20)',
+                backgroundColor: isDark ? 'rgba(30, 27, 24, 0.55)' : '#FFF8EE',
+                borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : '#CF9F68',
               }}
             >
               <div>
@@ -102,7 +102,7 @@ export const RoommateCards: React.FC<RoommateCardsProps> = ({
                     <div
                       className={`w-12 h-12 rounded-xl font-bold flex items-center justify-center text-sm shadow-xs ${mate.avatarBgColor} border-2`}
                       style={{
-                        borderColor: isDark ? 'rgba(200, 141, 58, 0.4)' : 'rgba(90, 45, 12, 0.25)',
+                        borderColor: isDark ? 'rgba(200, 141, 58, 0.4)' : '#CF9F68',
                       }}
                     >
                       {mate.avatarInitials}
@@ -111,7 +111,7 @@ export const RoommateCards: React.FC<RoommateCardsProps> = ({
                       <div className="flex items-center gap-1.5 flex-wrap">
                         <h4
                           className="font-bold text-sm leading-tight"
-                          style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+                          style={{ color: isDark ? '#FFF9EE' : '#432006' }}
                         >
                           {mate.displayName}
                         </h4>
@@ -123,7 +123,7 @@ export const RoommateCards: React.FC<RoommateCardsProps> = ({
                       </div>
                       <p
                         className="text-xs font-medium mt-0.5"
-                        style={{ color: isDark ? '#D9C4AC' : '#704728' }}
+                        style={{ color: isDark ? '#D9C4AC' : '#5A3013' }}
                       >
                         {mate.bedLabel}
                       </p>
@@ -147,7 +147,7 @@ export const RoommateCards: React.FC<RoommateCardsProps> = ({
                 <div className="mb-3">
                   <div
                     className="text-xs font-semibold"
-                    style={{ color: isDark ? '#C88D3A' : '#B77620' }}
+                    style={{ color: isDark ? '#C88D3A' : '#C46F18' }}
                   >
                     {mate.track}
                   </div>
@@ -162,7 +162,7 @@ export const RoommateCards: React.FC<RoommateCardsProps> = ({
                 {/* Short Bio */}
                 <p
                   className="text-xs leading-relaxed line-clamp-3 mb-4"
-                  style={{ color: isDark ? '#E5D6C5' : '#5A2D0C' }}
+                  style={{ color: isDark ? '#E5D6C5' : '#432006' }}
                 >
                   &ldquo;{mate.bio}&rdquo;
                 </p>
@@ -174,9 +174,9 @@ export const RoommateCards: React.FC<RoommateCardsProps> = ({
                       key={skill}
                       className="text-[10px] px-2 py-0.5 rounded-md font-medium border"
                       style={{
-                        backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : 'rgba(247, 241, 231, 0.8)',
-                        borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : 'rgba(90, 45, 12, 0.15)',
-                        color: isDark ? '#D9C4AC' : '#704728',
+                        backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : '#FAE5C5',
+                        borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : '#CF9F68',
+                        color: isDark ? '#D9C4AC' : '#5A3013',
                       }}
                     >
                       {skill}
@@ -186,9 +186,9 @@ export const RoommateCards: React.FC<RoommateCardsProps> = ({
                     <span
                       className="text-[10px] px-1.5 py-0.5 rounded-md font-medium border"
                       style={{
-                        backgroundColor: isDark ? 'rgba(42, 34, 28, 0.4)' : 'rgba(247, 241, 231, 0.5)',
-                        borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : 'rgba(90, 45, 12, 0.1)',
-                        color: isDark ? '#C88D3A' : '#B77620',
+                        backgroundColor: isDark ? 'rgba(42, 34, 28, 0.4)' : '#FFF0D6',
+                        borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : '#CF9F68',
+                        color: isDark ? '#C88D3A' : '#C46F18',
                       }}
                     >
                       +{mate.skills.length - 3}
@@ -201,15 +201,15 @@ export const RoommateCards: React.FC<RoommateCardsProps> = ({
               <div
                 className="pt-3 border-t flex items-center justify-between text-[11px]"
                 style={{
-                  borderColor: isDark ? 'rgba(200, 141, 58, 0.20)' : 'rgba(90, 45, 12, 0.12)',
+                  borderColor: isDark ? 'rgba(200, 141, 58, 0.20)' : '#CF9F68',
                 }}
               >
                 {mate.publicBirthday ? (
                   <span
                     className="inline-flex items-center gap-1 font-medium"
-                    style={{ color: isDark ? '#D9C4AC' : '#704728' }}
+                    style={{ color: isDark ? '#D9C4AC' : '#5A3013' }}
                   >
-                    <Calendar className="w-3.5 h-3.5 text-[#B77620] dark:text-[#C88D3A]" />
+                    <Calendar className="w-3.5 h-3.5 text-[#C46F18] dark:text-[#C88D3A]" />
                     <span>Birthday: {mate.publicBirthday}</span>
                   </span>
                 ) : (
@@ -222,8 +222,8 @@ export const RoommateCards: React.FC<RoommateCardsProps> = ({
                 )}
 
                 <span
-                  className="font-bold text-[10px] underline underline-offset-2 group-hover:text-[#B77620] dark:group-hover:text-[#C88D3A] transition-colors"
-                  style={{ color: isDark ? '#C88D3A' : '#5A2D0C' }}
+                  className="font-bold text-[10px] underline underline-offset-2 group-hover:text-[#C46F18] dark:group-hover:text-[#C88D3A] transition-colors"
+                  style={{ color: isDark ? '#C88D3A' : '#432006' }}
                 >
                   View Profile &rarr;
                 </span>
@@ -245,22 +245,22 @@ export const RoommateCards: React.FC<RoommateCardsProps> = ({
           <div
             className="w-full max-w-lg rounded-2xl border-2 border-b-4 shadow-xl p-6 sm:p-7 transition-all backdrop-blur-md"
             style={{
-              backgroundColor: isDark ? '#241206' : '#FFFDF8',
-              borderColor: isDark ? '#C88D3A' : '#5A2D0C',
+              backgroundColor: isDark ? '#241206' : '#FFF0D6',
+              borderColor: isDark ? '#C88D3A' : '#CF9F68',
             }}
             onClick={(e) => e.stopPropagation()}
           >
             {/* Header */}
             <div className="flex items-start justify-between gap-4 pb-4 border-b-2"
               style={{
-                borderColor: isDark ? 'rgba(200, 141, 58, 0.25)' : 'rgba(90, 45, 12, 0.15)',
+                borderColor: isDark ? 'rgba(200, 141, 58, 0.25)' : '#CF9F68',
               }}
             >
               <div className="flex items-center gap-3.5">
                 <div
                   className={`w-14 h-14 rounded-2xl font-bold flex items-center justify-center text-lg shadow-xs ${selectedRoommate.avatarBgColor} border-2`}
                   style={{
-                    borderColor: isDark ? 'rgba(200, 141, 58, 0.4)' : 'rgba(90, 45, 12, 0.25)',
+                    borderColor: isDark ? 'rgba(200, 141, 58, 0.4)' : '#CF9F68',
                   }}
                 >
                   {selectedRoommate.avatarInitials}
@@ -270,7 +270,7 @@ export const RoommateCards: React.FC<RoommateCardsProps> = ({
                     <h3
                       id="roommate-dialog-title"
                       className="font-serif font-bold text-lg"
-                      style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+                      style={{ color: isDark ? '#FFF9EE' : '#432006' }}
                     >
                       {selectedRoommate.displayName}
                     </h3>
@@ -282,7 +282,7 @@ export const RoommateCards: React.FC<RoommateCardsProps> = ({
                   </div>
                   <p
                     className="text-xs font-semibold"
-                    style={{ color: isDark ? '#C88D3A' : '#B77620' }}
+                    style={{ color: isDark ? '#C88D3A' : '#C46F18' }}
                   >
                     {selectedRoommate.track} &bull; {selectedRoommate.bedLabel}
                   </p>
@@ -296,8 +296,8 @@ export const RoommateCards: React.FC<RoommateCardsProps> = ({
                 aria-label="Close modal"
                 className="p-1.5 rounded-lg border transition-colors cursor-pointer hover:bg-black/5 dark:hover:bg-white/10"
                 style={{
-                  borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : 'rgba(90, 45, 12, 0.2)',
-                  color: isDark ? '#FFF9EE' : '#5A2D0C',
+                  borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : '#CF9F68',
+                  color: isDark ? '#FFF9EE' : '#432006',
                 }}
               >
                 <X className="w-4 h-4" />
@@ -310,24 +310,24 @@ export const RoommateCards: React.FC<RoommateCardsProps> = ({
               <div
                 className="p-3.5 rounded-xl border flex items-center justify-between gap-3 text-xs"
                 style={{
-                  backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : 'rgba(247, 241, 231, 0.7)',
-                  borderColor: isDark ? 'rgba(200, 141, 58, 0.25)' : 'rgba(90, 45, 12, 0.15)',
+                  backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : '#FAE5C5',
+                  borderColor: isDark ? 'rgba(200, 141, 58, 0.25)' : '#CF9F68',
                 }}
               >
                 <div>
-                  <span className="font-bold uppercase text-[10px] tracking-wider text-[#B77620] dark:text-[#C88D3A] block">
+                  <span className="font-bold uppercase text-[10px] tracking-wider text-[#C46F18] dark:text-[#C88D3A] block">
                     Program &amp; Residency
                   </span>
-                  <span className="font-medium" style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}>
+                  <span className="font-medium" style={{ color: isDark ? '#FFF9EE' : '#432006' }}>
                     {selectedRoommate.cohort}
                   </span>
                 </div>
 
                 <div className="text-right">
-                  <span className="font-bold uppercase text-[10px] tracking-wider text-[#B77620] dark:text-[#C88D3A] block">
+                  <span className="font-bold uppercase text-[10px] tracking-wider text-[#C46F18] dark:text-[#C88D3A] block">
                     Room Capacity
                   </span>
-                  <span className="font-semibold" style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}>
+                  <span className="font-semibold" style={{ color: isDark ? '#FFF9EE' : '#432006' }}>
                     {selectedRoommate.roomRole || 'Resident Fellow'}
                   </span>
                 </div>
@@ -337,13 +337,13 @@ export const RoommateCards: React.FC<RoommateCardsProps> = ({
               <div>
                 <span
                   className="font-bold uppercase text-[10px] tracking-wider block mb-1"
-                  style={{ color: isDark ? '#C88D3A' : '#B77620' }}
+                  style={{ color: isDark ? '#C88D3A' : '#C46F18' }}
                 >
                   Public Bio
                 </span>
                 <p
                   className="text-xs sm:text-sm leading-relaxed"
-                  style={{ color: isDark ? '#E5D6C5' : '#5A2D0C' }}
+                  style={{ color: isDark ? '#E5D6C5' : '#432006' }}
                 >
                   {selectedRoommate.bio}
                 </p>
@@ -353,9 +353,9 @@ export const RoommateCards: React.FC<RoommateCardsProps> = ({
               <div>
                 <span
                   className="font-bold uppercase text-[10px] tracking-wider flex items-center gap-1.5 mb-2"
-                  style={{ color: isDark ? '#C88D3A' : '#B77620' }}
+                  style={{ color: isDark ? '#C88D3A' : '#C46F18' }}
                 >
-                  <Code2 className="w-3.5 h-3.5 text-[#B77620] dark:text-[#C88D3A]" />
+                  <Code2 className="w-3.5 h-3.5 text-[#C46F18] dark:text-[#C88D3A]" />
                   <span>Public Technical Skills</span>
                 </span>
                 <div className="flex flex-wrap gap-1.5">
@@ -364,9 +364,9 @@ export const RoommateCards: React.FC<RoommateCardsProps> = ({
                       key={skill}
                       className="text-xs px-2.5 py-1 rounded-lg font-medium border"
                       style={{
-                        backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : 'rgba(247, 241, 231, 0.8)',
-                        borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : 'rgba(90, 45, 12, 0.15)',
-                        color: isDark ? '#FFF9EE' : '#5A2D0C',
+                        backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : '#FAE5C5',
+                        borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : '#CF9F68',
+                        color: isDark ? '#FFF9EE' : '#432006',
                       }}
                     >
                       {skill}
@@ -380,9 +380,9 @@ export const RoommateCards: React.FC<RoommateCardsProps> = ({
                 <div>
                   <span
                     className="font-bold uppercase text-[10px] tracking-wider flex items-center gap-1.5 mb-2"
-                    style={{ color: isDark ? '#C88D3A' : '#B77620' }}
+                    style={{ color: isDark ? '#C88D3A' : '#C46F18' }}
                   >
-                    <Heart className="w-3.5 h-3.5 text-[#B77620] dark:text-[#C88D3A]" />
+                    <Heart className="w-3.5 h-3.5 text-[#C46F18] dark:text-[#C88D3A]" />
                     <span>Personal Interests</span>
                   </span>
                   <div className="flex flex-wrap gap-1.5">
@@ -391,9 +391,9 @@ export const RoommateCards: React.FC<RoommateCardsProps> = ({
                         key={interest}
                         className="text-xs px-2.5 py-1 rounded-lg font-medium border"
                         style={{
-                          backgroundColor: isDark ? 'rgba(42, 34, 28, 0.4)' : 'rgba(247, 241, 231, 0.5)',
-                          borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : 'rgba(90, 45, 12, 0.1)',
-                          color: isDark ? '#D9C4AC' : '#704728',
+                          backgroundColor: isDark ? 'rgba(42, 34, 28, 0.4)' : '#FFF0D6',
+                          borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : '#CF9F68',
+                          color: isDark ? '#D9C4AC' : '#5A3013',
                         }}
                       >
                         {interest}
@@ -408,13 +408,13 @@ export const RoommateCards: React.FC<RoommateCardsProps> = ({
                 <div
                   className="p-3 rounded-xl border flex items-center gap-2.5 text-xs"
                   style={{
-                    backgroundColor: isDark ? 'rgba(42, 34, 28, 0.4)' : 'rgba(247, 241, 231, 0.5)',
-                    borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : 'rgba(90, 45, 12, 0.12)',
+                    backgroundColor: isDark ? 'rgba(42, 34, 28, 0.4)' : '#FFF0D6',
+                    borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : '#CF9F68',
                   }}
                 >
-                  <Calendar className="w-4 h-4 text-[#B77620] dark:text-[#C88D3A] shrink-0" />
-                  <span style={{ color: isDark ? '#D9C4AC' : '#704728' }}>
-                    Birthday: <strong className="font-semibold text-[#5A2D0C] dark:text-[#FFF9EE]">{selectedRoommate.publicBirthday}</strong> (Celebrated with the room)
+                  <Calendar className="w-4 h-4 text-[#C46F18] dark:text-[#C88D3A] shrink-0" />
+                  <span style={{ color: isDark ? '#D9C4AC' : '#5A3013' }}>
+                    Birthday: <strong className="font-semibold text-[#432006] dark:text-[#FFF9EE]">{selectedRoommate.publicBirthday}</strong> (Celebrated with the room)
                   </span>
                 </div>
               )}
@@ -424,7 +424,7 @@ export const RoommateCards: React.FC<RoommateCardsProps> = ({
             <div
               className="pt-4 border-t flex items-center justify-between"
               style={{
-                borderColor: isDark ? 'rgba(200, 141, 58, 0.25)' : 'rgba(90, 45, 12, 0.15)',
+                borderColor: isDark ? 'rgba(200, 141, 58, 0.25)' : '#CF9F68',
               }}
             >
               <span
@@ -439,9 +439,9 @@ export const RoommateCards: React.FC<RoommateCardsProps> = ({
                 onClick={() => setSelectedRoommate(null)}
                 className="px-4 py-2 text-xs font-bold rounded-xl border-2 border-b-3 transition-all duration-150 cursor-pointer shadow-xs active:translate-y-0.5"
                 style={{
-                  backgroundColor: isDark ? '#C88D3A' : '#5A2D0C',
+                  backgroundColor: isDark ? '#C88D3A' : '#432006',
                   borderColor: isDark ? '#915B15' : '#381B07',
-                  color: isDark ? '#241104' : '#FFF9EE',
+                  color: isDark ? '#241104' : '#FFF0D6',
                 }}
               >
                 Close

@@ -264,12 +264,12 @@ export const CommunityFeedbackTriageView: React.FC<CommunityFeedbackTriageViewPr
       case 'CLOSED':
         return {
           label: 'Closed',
-          className: 'bg-zinc-500/20 text-zinc-700 dark:text-zinc-400 border border-zinc-500/30',
+          className: 'bg-[#C27622]/15 text-[#784A28] dark:text-[#E5D3BA] border border-[#C27622]/30',
         };
       default:
         return {
           label: status,
-          className: 'bg-zinc-500/20 text-zinc-700 dark:text-zinc-400',
+          className: 'bg-[#C27622]/15 text-[#784A28] dark:text-[#E5D3BA]',
         };
     }
   };
@@ -305,14 +305,14 @@ export const CommunityFeedbackTriageView: React.FC<CommunityFeedbackTriageViewPr
       <div
         className={`p-6 rounded-2xl border transition-colors shadow-xs ${
           isDark
-            ? 'bg-[#2F1707] border-[#C88D3A]/30 text-[#FFF9EE]'
-            : 'bg-[#FFF9EE] border-[#C88D3A]/30 text-[#5A2D0C]'
+            ? 'bg-[#2F1707] border-[#623416] text-[#FFF9EE]'
+            : 'bg-[#FAE5C5] border-[#CF9F68] text-[#432006]'
         }`}
       >
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <div className="flex flex-wrap items-center gap-2">
-              <span className="px-2.5 py-0.5 rounded-md text-[11px] font-bold uppercase tracking-wider bg-[#C88D3A]/20 text-[#C88D3A]">
+              <span className="px-2.5 py-0.5 rounded-md text-[11px] font-bold uppercase tracking-wider bg-[#C46F18]/20 text-[#C46F18]">
                 Missing Puzzle Feedback Triage
               </span>
               <span
@@ -329,11 +329,11 @@ export const CommunityFeedbackTriageView: React.FC<CommunityFeedbackTriageViewPr
                   : '▲ DEMO LOCAL FALLBACK'}
               </span>
             </div>
-            <h1 className="font-serif text-2xl font-bold mt-1.5 flex items-center gap-2">
-              <Puzzle className="w-6 h-6 text-[#C88D3A]" />
+            <h1 className="font-serif text-2xl font-bold mt-1.5 flex items-center gap-2 text-[#432006] dark:text-[#FFF9EE]">
+              <Puzzle className="w-6 h-6 text-[#C46F18]" />
               Community Feedback & Issue Triage
             </h1>
-            <p className={`text-xs mt-1 max-w-2xl ${isDark ? 'text-[#FFF9EE]/70' : 'text-[#5A2D0C]/70'}`}>
+            <p className={`text-xs mt-1 max-w-2xl ${isDark ? 'text-[#FFF9EE]/70' : 'text-[#5A3013]'}`}>
               Review missing pieces, UX obstacles, and product gaps identified by fellows. Coordinate
               clarifications, track volunteer engineers, and resolve issues with append-only truth.
             </p>
@@ -342,11 +342,11 @@ export const CommunityFeedbackTriageView: React.FC<CommunityFeedbackTriageViewPr
           <div
             className={`text-right text-xs rounded-xl px-4 py-2.5 border ${
               isDark
-                ? 'bg-[#1E0E04] border-[#C88D3A]/20 text-[#FFF9EE]'
-                : 'bg-[#F7F1E7] border-[#5A2D0C]/10 text-[#5A2D0C]'
+                ? 'bg-[#1E0E04] border-[#623416] text-[#FFF9EE]'
+                : 'bg-[#FFF0D6] border-[#CF9F68] text-[#432006]'
             }`}
           >
-            <span className="block text-[10px] uppercase font-semibold text-[#C88D3A]">
+            <span className="block text-[10px] uppercase font-semibold text-[#C46F18]">
               Active Triage Capacity
             </span>
             <span className="font-bold">{attribution.displayLabel}</span>
@@ -361,11 +361,11 @@ export const CommunityFeedbackTriageView: React.FC<CommunityFeedbackTriageViewPr
             className={`p-3 rounded-xl border text-left transition-all ${
               activeFilter === 'ALL'
                 ? isDark
-                  ? 'bg-[#3E1F0B] border-[#C88D3A] ring-1 ring-[#C88D3A]'
-                  : 'bg-[#F7F1E7] border-[#C88D3A] ring-1 ring-[#C88D3A]'
+                  ? 'bg-[#3E1F0B] border-[#C46F18] ring-1 ring-[#C46F18]'
+                  : 'bg-[#FFF0D6] border-[#C46F18] ring-1 ring-[#C46F18] text-[#432006]'
                 : isDark
-                ? 'bg-[#241205] border-[#C88D3A]/20 hover:border-[#C88D3A]/50'
-                : 'bg-white border-[#5A2D0C]/10 hover:border-[#C88D3A]/40'
+                ? 'bg-[#241205] border-[#623416] hover:border-[#C46F18]/50 text-[#FFF9EE]'
+                : 'bg-[#FAE5C5] border-[#CF9F68] hover:border-[#C46F18]/60 text-[#432006]'
             }`}
           >
             <div className="text-[10px] font-bold uppercase tracking-wide opacity-70">Total Reports</div>
@@ -382,8 +382,8 @@ export const CommunityFeedbackTriageView: React.FC<CommunityFeedbackTriageViewPr
                   ? 'bg-amber-950/40 border-amber-500 ring-1 ring-amber-500'
                   : 'bg-amber-50 border-amber-500 ring-1 ring-amber-500'
                 : isDark
-                ? 'bg-[#241205] border-[#C88D3A]/20 hover:border-amber-500/50'
-                : 'bg-white border-[#5A2D0C]/10 hover:border-amber-500/40'
+                ? 'bg-[#241205] border-[#623416] hover:border-amber-500/50'
+                : 'bg-[#FAE5C5] border-[#CF9F68] hover:border-amber-500/40 text-[#432006]'
             }`}
           >
             <div className="text-[10px] font-bold uppercase tracking-wide text-amber-600 dark:text-amber-400">
@@ -404,8 +404,8 @@ export const CommunityFeedbackTriageView: React.FC<CommunityFeedbackTriageViewPr
                   ? 'bg-blue-950/40 border-blue-500 ring-1 ring-blue-500'
                   : 'bg-blue-50 border-blue-500 ring-1 ring-blue-500'
                 : isDark
-                ? 'bg-[#241205] border-[#C88D3A]/20 hover:border-blue-500/50'
-                : 'bg-white border-[#5A2D0C]/10 hover:border-blue-500/40'
+                ? 'bg-[#241205] border-[#623416] hover:border-blue-500/50'
+                : 'bg-[#FAE5C5] border-[#CF9F68] hover:border-blue-500/40 text-[#432006]'
             }`}
           >
             <div className="text-[10px] font-bold uppercase tracking-wide text-blue-600 dark:text-blue-400">
@@ -426,8 +426,8 @@ export const CommunityFeedbackTriageView: React.FC<CommunityFeedbackTriageViewPr
                   ? 'bg-purple-950/40 border-purple-500 ring-1 ring-purple-500'
                   : 'bg-purple-50 border-purple-500 ring-1 ring-purple-500'
                 : isDark
-                ? 'bg-[#241205] border-[#C88D3A]/20 hover:border-purple-500/50'
-                : 'bg-white border-[#5A2D0C]/10 hover:border-purple-500/40'
+                ? 'bg-[#241205] border-[#623416] hover:border-purple-500/50'
+                : 'bg-[#FAE5C5] border-[#CF9F68] hover:border-purple-500/40 text-[#432006]'
             }`}
           >
             <div className="text-[10px] font-bold uppercase tracking-wide text-purple-600 dark:text-purple-400">
@@ -448,8 +448,8 @@ export const CommunityFeedbackTriageView: React.FC<CommunityFeedbackTriageViewPr
                   ? 'bg-emerald-950/40 border-emerald-500 ring-1 ring-emerald-500'
                   : 'bg-emerald-50 border-emerald-500 ring-1 ring-emerald-500'
                 : isDark
-                ? 'bg-[#241205] border-[#C88D3A]/20 hover:border-emerald-500/50'
-                : 'bg-white border-[#5A2D0C]/10 hover:border-emerald-500/40'
+                ? 'bg-[#241205] border-[#623416] hover:border-emerald-500/50'
+                : 'bg-[#FAE5C5] border-[#CF9F68] hover:border-emerald-500/40 text-[#432006]'
             }`}
           >
             <div className="text-[10px] font-bold uppercase tracking-wide text-emerald-600 dark:text-emerald-400">
@@ -470,8 +470,8 @@ export const CommunityFeedbackTriageView: React.FC<CommunityFeedbackTriageViewPr
                   ? 'bg-sky-950/40 border-sky-500 ring-1 ring-sky-500'
                   : 'bg-sky-50 border-sky-500 ring-1 ring-sky-500'
                 : isDark
-                ? 'bg-[#241205] border-[#C88D3A]/20 hover:border-sky-500/50'
-                : 'bg-white border-[#5A2D0C]/10 hover:border-sky-500/40'
+                ? 'bg-[#241205] border-[#623416] hover:border-sky-500/50'
+                : 'bg-[#FAE5C5] border-[#CF9F68] hover:border-sky-500/40 text-[#432006]'
             }`}
           >
             <div className="text-[10px] font-bold uppercase tracking-wide text-sky-600 dark:text-sky-400">
@@ -491,7 +491,7 @@ export const CommunityFeedbackTriageView: React.FC<CommunityFeedbackTriageViewPr
           <div className="relative flex-1">
             <Search
               className={`w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 ${
-                isDark ? 'text-[#FFF9EE]/40' : 'text-[#5A2D0C]/40'
+                isDark ? 'text-[#FFF9EE]/40' : 'text-[#72451F]'
               }`}
             />
             <input
@@ -501,8 +501,8 @@ export const CommunityFeedbackTriageView: React.FC<CommunityFeedbackTriageViewPr
               placeholder="Search reports by title, reporter, or description..."
               className={`w-full pl-9 pr-3 py-2 text-xs rounded-xl border transition-all ${
                 isDark
-                  ? 'bg-[#2F1707] border-[#C88D3A]/30 text-[#FFF9EE] focus:border-[#C88D3A] focus:outline-hidden'
-                  : 'bg-white border-[#5A2D0C]/15 text-[#5A2D0C] focus:border-[#C88D3A] focus:outline-hidden'
+                  ? 'bg-[#2F1707] border-[#623416] text-[#FFF9EE] focus:border-[#C46F18] focus:outline-hidden'
+                  : 'bg-[#FFF0D6] border-[#CF9F68] text-[#432006] placeholder:text-[#72451F]/60 focus:border-[#C46F18] focus:outline-hidden'
               }`}
             />
             {searchQuery && (
@@ -518,7 +518,7 @@ export const CommunityFeedbackTriageView: React.FC<CommunityFeedbackTriageViewPr
         </div>
 
         <div className="flex items-center gap-2 overflow-x-auto pb-1 sm:pb-0">
-          <span className={`text-[11px] font-bold uppercase tracking-wider ${isDark ? 'text-[#FFF9EE]/50' : 'text-[#5A2D0C]/50'}`}>
+          <span className={`text-[11px] font-bold uppercase tracking-wider ${isDark ? 'text-[#FFF9EE]/50' : 'text-[#72451F]'}`}>
             Category:
           </span>
           {categories.map((cat) => (
@@ -528,10 +528,10 @@ export const CommunityFeedbackTriageView: React.FC<CommunityFeedbackTriageViewPr
               onClick={() => setSelectedCategory(cat)}
               className={`px-2.5 py-1 rounded-lg text-xs font-semibold whitespace-nowrap transition-all ${
                 selectedCategory === cat
-                  ? 'bg-[#C88D3A] text-white shadow-xs'
+                  ? 'bg-[#C46F18] text-white shadow-xs'
                   : isDark
-                  ? 'bg-[#2F1707] text-[#FFF9EE]/80 hover:bg-[#3E1F0B] border border-[#C88D3A]/20'
-                  : 'bg-white text-[#5A2D0C]/80 hover:bg-[#F7F1E7] border border-[#5A2D0C]/10'
+                  ? 'bg-[#2F1707] text-[#FFF9EE]/80 hover:bg-[#3E1F0B] border border-[#623416]'
+                  : 'bg-[#FAE5C5] text-[#432006] hover:bg-[#F3D5AB] border border-[#CF9F68]'
               }`}
             >
               {cat === 'ALL' ? 'All Categories' : cat}
@@ -545,10 +545,10 @@ export const CommunityFeedbackTriageView: React.FC<CommunityFeedbackTriageViewPr
         {filteredReports.length === 0 ? (
           <div
             className={`text-center py-12 rounded-2xl border ${
-              isDark ? 'bg-[#2F1707] border-[#C88D3A]/20 text-[#FFF9EE]' : 'bg-white border-[#5A2D0C]/10 text-[#5A2D0C]'
+              isDark ? 'bg-[#2F1707] border-[#623416] text-[#FFF9EE]' : 'bg-[#FAE5C5] border-[#CF9F68] text-[#432006]'
             }`}
           >
-            <Puzzle className="w-10 h-10 mx-auto text-[#C88D3A]/60 mb-2" />
+            <Puzzle className="w-10 h-10 mx-auto text-[#C46F18]/60 mb-2" />
             <p className="font-serif font-bold text-base">No Missing Puzzle reports match this filter</p>
             <p className="text-xs opacity-60 mt-1">All reports in this category have been addressed.</p>
           </div>
@@ -564,17 +564,17 @@ export const CommunityFeedbackTriageView: React.FC<CommunityFeedbackTriageViewPr
                 className={`p-5 rounded-2xl border transition-all ${
                   isDark
                     ? isSelected
-                      ? 'bg-[#3E1F0B] border-[#C88D3A] shadow-md ring-1 ring-[#C88D3A]'
-                      : 'bg-[#2F1707] border-[#C88D3A]/20 hover:border-[#C88D3A]/50'
+                      ? 'bg-[#3E1F0B] border-[#C46F18] shadow-md ring-1 ring-[#C46F18]'
+                      : 'bg-[#2F1707] border-[#623416] hover:border-[#C46F18]/50'
                     : isSelected
-                    ? 'bg-[#FFF9EE] border-[#C88D3A] shadow-md ring-1 ring-[#C88D3A]'
-                    : 'bg-white border-[#5A2D0C]/10 hover:border-[#C88D3A]/40'
+                    ? 'bg-[#FFF0D6] border-[#C46F18] shadow-md ring-1 ring-[#C46F18]'
+                    : 'bg-[#FAE5C5] border-[#CF9F68] hover:border-[#C46F18]/40'
                 }`}
               >
                 <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
                   <div className="space-y-1.5 flex-1">
                     <div className="flex flex-wrap items-center gap-2">
-                      <span className="px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-[#C88D3A]/20 text-[#C88D3A]">
+                      <span className="px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-[#C46F18]/20 text-[#C46F18]">
                         {report.category}
                       </span>
                       <span
@@ -596,10 +596,10 @@ export const CommunityFeedbackTriageView: React.FC<CommunityFeedbackTriageViewPr
                       )}
                     </div>
 
-                    <h3 className="font-serif font-bold text-base mt-1 text-[#5A2D0C] dark:text-[#FFF9EE]">
+                    <h3 className="font-serif font-bold text-base mt-1 text-[#432006] dark:text-[#FFF9EE]">
                       {report.title}
                     </h3>
-                    <p className="text-xs line-clamp-2 text-[#5A2D0C]/80 dark:text-[#FFF9EE]/80">
+                    <p className="text-xs line-clamp-2 text-[#5A3013] dark:text-[#FFF9EE]/80">
                       {report.description}
                     </p>
 
@@ -620,12 +620,12 @@ export const CommunityFeedbackTriageView: React.FC<CommunityFeedbackTriageViewPr
                       <div
                         className={`text-[11px] p-2 rounded-lg border mt-2 flex items-center gap-2 ${
                           isDark
-                            ? 'bg-[#1E0E04] border-[#C88D3A]/15 text-[#FFF9EE]/80'
-                            : 'bg-[#F7F1E7] border-[#5A2D0C]/10 text-[#5A2D0C]/80'
+                            ? 'bg-[#1E0E04] border-[#623416] text-[#FFF9EE]/80'
+                            : 'bg-[#FFF0D6] border-[#DDB985] text-[#432006]'
                         }`}
                       >
-                        <Activity className="w-3.5 h-3.5 text-[#C88D3A] shrink-0" />
-                        <span className="font-semibold text-[#C88D3A]">
+                        <Activity className="w-3.5 h-3.5 text-[#C46F18] shrink-0" />
+                        <span className="font-semibold text-[#C46F18]">
                           Latest Fact ({formatEventName(lastEvent.eventType)}):
                         </span>
                         <span className="truncate">{lastEvent.message || lastEvent.actorDisplayName}</span>
@@ -643,7 +643,7 @@ export const CommunityFeedbackTriageView: React.FC<CommunityFeedbackTriageViewPr
                         setActionError('');
                         setActionSuccess('');
                       }}
-                      className="px-3.5 py-2 text-xs font-bold rounded-xl bg-[#C88D3A] text-white hover:bg-[#B77620] shadow-sm flex items-center gap-1.5 transition-all"
+                      className="px-3.5 py-2 text-xs font-bold rounded-xl bg-[#C46F18] text-white hover:bg-[#D18125] shadow-sm flex items-center gap-1.5 transition-all cursor-pointer"
                     >
                       <span>Inspect & Triage</span>
                       <ChevronRight className="w-3.5 h-3.5" />
@@ -653,7 +653,7 @@ export const CommunityFeedbackTriageView: React.FC<CommunityFeedbackTriageViewPr
                       <button
                         type="button"
                         onClick={() => handleAcknowledge(report.id)}
-                        className="px-3 py-1.5 text-[11px] font-semibold rounded-lg bg-blue-500/15 text-blue-700 dark:text-blue-400 hover:bg-blue-500/25 transition-all"
+                        className="px-3 py-1.5 text-[11px] font-semibold rounded-lg bg-blue-500/15 text-blue-700 dark:text-blue-400 hover:bg-blue-500/25 transition-all cursor-pointer"
                       >
                         Review & Ack
                       </button>
@@ -663,7 +663,7 @@ export const CommunityFeedbackTriageView: React.FC<CommunityFeedbackTriageViewPr
                       <button
                         type="button"
                         onClick={() => handleQuickResolve(report.id)}
-                        className="px-3 py-1.5 text-[11px] font-semibold rounded-lg bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-500/25 transition-all"
+                        className="px-3 py-1.5 text-[11px] font-semibold rounded-lg bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-500/25 transition-all cursor-pointer"
                       >
                         Mark Implemented
                       </button>
@@ -689,15 +689,15 @@ export const CommunityFeedbackTriageView: React.FC<CommunityFeedbackTriageViewPr
             onClick={(e) => e.stopPropagation()}
             className={`w-full max-w-3xl rounded-2xl border p-6 shadow-2xl space-y-5 my-8 max-h-[90vh] overflow-y-auto transition-colors ${
               isDark
-                ? 'bg-[#2F1707] border-[#C88D3A]/40 text-[#FFF9EE]'
-                : 'bg-[#FFF9EE] border-[#C88D3A]/40 text-[#5A2D0C]'
+                ? 'bg-[#2F1707] border-[#623416] text-[#FFF9EE]'
+                : 'bg-[#FAE5C5] border-[#CF9F68] text-[#432006]'
             }`}
           >
             {/* Modal Header */}
-            <div className="flex items-start justify-between gap-3 border-b pb-4 border-[#C88D3A]/20">
+            <div className="flex items-start justify-between gap-3 border-b pb-4 border-[#CF9F68]/30 dark:border-[#623416]">
               <div>
                 <div className="flex flex-wrap items-center gap-2">
-                  <span className="px-2.5 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-[#C88D3A]/20 text-[#C88D3A]">
+                  <span className="px-2.5 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-[#C46F18]/20 text-[#C46F18]">
                     {selectedReport.category}
                   </span>
                   <span
@@ -709,14 +709,14 @@ export const CommunityFeedbackTriageView: React.FC<CommunityFeedbackTriageViewPr
                   </span>
                   <span className="text-[10px] font-mono opacity-60">ID: {selectedReport.id}</span>
                 </div>
-                <h2 id="triage-modal-title" className="font-serif text-xl font-bold mt-1.5">
+                <h2 id="triage-modal-title" className="font-serif text-xl font-bold mt-1.5 text-[#432006] dark:text-[#FFF9EE]">
                   {selectedReport.title}
                 </h2>
               </div>
               <button
                 type="button"
                 onClick={() => setSelectedReport(null)}
-                className="p-1.5 rounded-lg hover:bg-black/10 dark:hover:bg-white/10 transition-colors"
+                className="p-1.5 rounded-lg hover:bg-black/10 dark:hover:bg-white/10 transition-colors cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -740,13 +740,13 @@ export const CommunityFeedbackTriageView: React.FC<CommunityFeedbackTriageViewPr
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div
                 className={`p-4 rounded-xl border ${
-                  isDark ? 'bg-[#1E0E04] border-[#C88D3A]/20' : 'bg-[#F7F1E7] border-[#5A2D0C]/10'
+                  isDark ? 'bg-[#1E0E04] border-[#623416]' : 'bg-[#FFF0D6] border-[#CF9F68]'
                 }`}
               >
-                <div className="text-[10px] font-bold uppercase tracking-wider text-[#C88D3A] mb-1">
+                <div className="text-[10px] font-bold uppercase tracking-wider text-[#C46F18] mb-1">
                   Reporter Identity
                 </div>
-                <div className="font-bold text-sm">{selectedReport.reporterDisplayName}</div>
+                <div className="font-bold text-sm text-[#432006] dark:text-[#FFF9EE]">{selectedReport.reporterDisplayName}</div>
                 <div className="text-xs opacity-70">{selectedReport.reporterEmail || 'Fellow'}</div>
                 <div className="text-[11px] opacity-60 mt-1">
                   Member ID: {selectedReport.loggedBy?.h4dMemberId || selectedReport.reporterMemberId}
@@ -755,10 +755,10 @@ export const CommunityFeedbackTriageView: React.FC<CommunityFeedbackTriageViewPr
 
               <div
                 className={`p-4 rounded-xl border ${
-                  isDark ? 'bg-[#1E0E04] border-[#C88D3A]/20' : 'bg-[#F7F1E7] border-[#5A2D0C]/10'
+                  isDark ? 'bg-[#1E0E04] border-[#623416]' : 'bg-[#FFF0D6] border-[#CF9F68]'
                 }`}
               >
-                <div className="text-[10px] font-bold uppercase tracking-wider text-[#C88D3A] mb-1">
+                <div className="text-[10px] font-bold uppercase tracking-wider text-[#C46F18] mb-1">
                   Context & Involvement Preference
                 </div>
                 <div className="text-xs">
@@ -766,7 +766,7 @@ export const CommunityFeedbackTriageView: React.FC<CommunityFeedbackTriageViewPr
                 </div>
                 <div className="text-xs mt-1">
                   <span className="font-semibold">Preference:</span>{' '}
-                  <span className="font-bold text-[#C88D3A]">
+                  <span className="font-bold text-[#C46F18]">
                     {selectedReport.involvementPreference}
                   </span>
                 </div>
@@ -780,10 +780,10 @@ export const CommunityFeedbackTriageView: React.FC<CommunityFeedbackTriageViewPr
             {/* Description Card */}
             <div
               className={`p-4 rounded-xl border ${
-                isDark ? 'bg-[#1E0E04] border-[#C88D3A]/20' : 'bg-white border-[#5A2D0C]/10'
+                isDark ? 'bg-[#1E0E04] border-[#623416]' : 'bg-[#FFF0D6] border-[#CF9F68]'
               }`}
             >
-              <div className="text-[10px] font-bold uppercase tracking-wider text-[#C88D3A] mb-1">
+              <div className="text-[10px] font-bold uppercase tracking-wider text-[#C46F18] mb-1">
                 Report Description
               </div>
               <p className="text-xs leading-relaxed whitespace-pre-wrap">{selectedReport.description}</p>
@@ -792,8 +792,8 @@ export const CommunityFeedbackTriageView: React.FC<CommunityFeedbackTriageViewPr
             {/* Factual Audit Trail / History */}
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <h4 className="font-serif font-bold text-sm flex items-center gap-1.5">
-                  <ShieldCheck className="w-4 h-4 text-[#C88D3A]" />
+                <h4 className="font-serif font-bold text-sm flex items-center gap-1.5 text-[#432006] dark:text-[#FFF9EE]">
+                  <ShieldCheck className="w-4 h-4 text-[#C46F18]" />
                   Factual Audit Trail ({selectedReport.events?.length || 0} facts appended)
                 </h4>
                 <span className="text-[10px] opacity-60">Append-only • Immutable</span>
@@ -801,18 +801,18 @@ export const CommunityFeedbackTriageView: React.FC<CommunityFeedbackTriageViewPr
 
               <div
                 className={`p-4 rounded-xl border space-y-3 max-h-56 overflow-y-auto ${
-                  isDark ? 'bg-[#1E0E04] border-[#C88D3A]/20' : 'bg-white border-[#5A2D0C]/10'
+                  isDark ? 'bg-[#1E0E04] border-[#623416]' : 'bg-[#FFF0D6] border-[#CF9F68]'
                 }`}
               >
                 {selectedReport.events?.map((evt, idx) => (
                   <div
                     key={evt.eventId || idx}
-                    className="flex items-start gap-3 text-xs border-b border-[#C88D3A]/10 pb-2.5 last:border-b-0 last:pb-0"
+                    className="flex items-start gap-3 text-xs border-b border-[#CF9F68]/20 dark:border-[#623416]/50 pb-2.5 last:border-b-0 last:pb-0"
                   >
-                    <div className="w-2 h-2 rounded-full bg-[#C88D3A] mt-1.5 shrink-0" />
+                    <div className="w-2 h-2 rounded-full bg-[#C46F18] mt-1.5 shrink-0" />
                     <div className="space-y-0.5 flex-1">
                       <div className="flex flex-wrap items-center justify-between gap-1">
-                        <span className="font-bold text-[11px] text-[#C88D3A]">
+                        <span className="font-bold text-[11px] text-[#C46F18]">
                           {formatEventName(evt.eventType)}
                         </span>
                         <span className="text-[10px] opacity-60">
@@ -835,17 +835,17 @@ export const CommunityFeedbackTriageView: React.FC<CommunityFeedbackTriageViewPr
             {/* Coordinator Triage Operations */}
             <div
               className={`p-4 rounded-xl border space-y-4 ${
-                isDark ? 'bg-[#1E0E04] border-[#C88D3A]/30' : 'bg-[#F7F1E7] border-[#C88D3A]/30'
+                isDark ? 'bg-[#1E0E04] border-[#623416]' : 'bg-[#FFF0D6] border-[#CF9F68]'
               }`}
             >
-              <h4 className="font-serif font-bold text-sm text-[#C88D3A] flex items-center gap-1.5">
+              <h4 className="font-serif font-bold text-sm text-[#C46F18] flex items-center gap-1.5">
                 <Sparkles className="w-4 h-4" />
                 Coordinator Triage Actions
               </h4>
 
               {/* Request Clarification Section */}
               <div className="space-y-1.5">
-                <label className="block text-xs font-bold">
+                <label className="block text-xs font-bold text-[#432006] dark:text-[#FFF9EE]">
                   Ask Reporter for Clarification:
                 </label>
                 <div className="flex gap-2">
@@ -856,14 +856,14 @@ export const CommunityFeedbackTriageView: React.FC<CommunityFeedbackTriageViewPr
                     placeholder="e.g. Could you confirm which browser version and device this occurred on?"
                     className={`flex-1 px-3 py-2 text-xs rounded-xl border ${
                       isDark
-                        ? 'bg-[#2F1707] border-[#C88D3A]/30 text-[#FFF9EE]'
-                        : 'bg-white border-[#5A2D0C]/15 text-[#5A2D0C]'
+                        ? 'bg-[#2F1707] border-[#623416] text-[#FFF9EE]'
+                        : 'bg-[#FAE5C5] border-[#CF9F68] text-[#432006]'
                     }`}
                   />
                   <button
                     type="button"
                     onClick={handleSendClarification}
-                    className="px-4 py-2 text-xs font-bold rounded-xl bg-[#C88D3A] text-white hover:bg-[#B77620] transition-all flex items-center gap-1.5 shrink-0"
+                    className="px-4 py-2 text-xs font-bold rounded-xl bg-[#C46F18] text-white hover:bg-[#D18125] transition-all flex items-center gap-1.5 shrink-0 cursor-pointer"
                   >
                     <Send className="w-3.5 h-3.5" />
                     <span>Send Query</span>
@@ -872,8 +872,8 @@ export const CommunityFeedbackTriageView: React.FC<CommunityFeedbackTriageViewPr
               </div>
 
               {/* Status Transition Section */}
-              <div className="space-y-2 pt-2 border-t border-[#C88D3A]/20">
-                <label className="block text-xs font-bold">Transition Report Status:</label>
+              <div className="space-y-2 pt-2 border-t border-[#CF9F68]/30 dark:border-[#623416]">
+                <label className="block text-xs font-bold text-[#432006] dark:text-[#FFF9EE]">Transition Report Status:</label>
                 <div className="flex flex-wrap items-center gap-2">
                   {([
                     { id: 'PENDING_REVIEW', label: 'Pending Review' },
@@ -886,12 +886,12 @@ export const CommunityFeedbackTriageView: React.FC<CommunityFeedbackTriageViewPr
                       key={item.id}
                       type="button"
                       onClick={() => setTargetStatus(item.id)}
-                      className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                      className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                         targetStatus === item.id
-                          ? 'bg-[#C88D3A] text-white shadow-xs'
+                          ? 'bg-[#C46F18] text-white shadow-xs'
                           : isDark
-                          ? 'bg-[#2F1707] text-[#FFF9EE]/70 hover:bg-[#3E1F0B] border border-[#C88D3A]/20'
-                          : 'bg-white text-[#5A2D0C]/70 hover:bg-[#F7F1E7] border border-[#5A2D0C]/10'
+                          ? 'bg-[#2F1707] text-[#FFF9EE]/70 hover:bg-[#3E1F0B] border border-[#623416]'
+                          : 'bg-[#FAE5C5] text-[#432006] hover:bg-[#F3D5AB] border border-[#CF9F68]'
                       }`}
                     >
                       {item.label}
@@ -907,14 +907,14 @@ export const CommunityFeedbackTriageView: React.FC<CommunityFeedbackTriageViewPr
                     placeholder="Optional note for status transition..."
                     className={`flex-1 px-3 py-2 text-xs rounded-xl border ${
                       isDark
-                        ? 'bg-[#2F1707] border-[#C88D3A]/30 text-[#FFF9EE]'
-                        : 'bg-white border-[#5A2D0C]/15 text-[#5A2D0C]'
+                        ? 'bg-[#2F1707] border-[#623416] text-[#FFF9EE]'
+                        : 'bg-[#FAE5C5] border-[#CF9F68] text-[#432006]'
                     }`}
                   />
                   <button
                     type="button"
                     onClick={handleUpdateStatus}
-                    className="px-4 py-2 text-xs font-bold rounded-xl bg-[#5A2D0C] text-white hover:bg-[#3E1F0B] dark:bg-[#C88D3A] dark:hover:bg-[#B77620] transition-all shrink-0"
+                    className="px-4 py-2 text-xs font-bold rounded-xl bg-[#432006] text-[#FFF0D6] hover:bg-[#341905] dark:bg-[#C46F18] dark:hover:bg-[#D18125] dark:text-white transition-all shrink-0 cursor-pointer"
                   >
                     Apply Status
                   </button>
@@ -927,10 +927,10 @@ export const CommunityFeedbackTriageView: React.FC<CommunityFeedbackTriageViewPr
               <button
                 type="button"
                 onClick={() => setSelectedReport(null)}
-                className={`px-5 py-2 text-xs font-bold rounded-xl border ${
+                className={`px-5 py-2 text-xs font-bold rounded-xl border transition-colors cursor-pointer ${
                   isDark
-                    ? 'border-[#C88D3A]/30 text-[#FFF9EE] hover:bg-[#1E0E04]'
-                    : 'border-[#5A2D0C]/20 text-[#5A2D0C] hover:bg-[#F7F1E7]'
+                    ? 'border-[#623416] text-[#FFF9EE] hover:bg-[#1E0E04]'
+                    : 'border-[#CF9F68] text-[#432006] hover:bg-[#F3D5AB]'
                 }`}
               >
                 Close Inspection

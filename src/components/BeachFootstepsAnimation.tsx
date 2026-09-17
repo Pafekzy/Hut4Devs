@@ -157,7 +157,7 @@ export const BeachFootstepsAnimation: React.FC<BeachFootstepsAnimationProps> = (
       </svg>
 
       {/* Floating Micro-Badge */}
-      <div className="absolute top-2 right-2.5 flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-white/75 dark:bg-[#2A1C12]/85 border border-[#5A2D0C]/15 dark:border-[#C88D3A]/30 backdrop-blur-xs text-[9px] font-bold tracking-tight text-[#5A2D0C] dark:text-[#F5C678]">
+      <div className="absolute top-2 right-2.5 flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-[#FFF8EE]/90 dark:bg-[#2A1C12]/85 border border-[#CF9F68] dark:border-[#C88D3A]/30 backdrop-blur-xs text-[9px] font-bold tracking-tight text-[#432006] dark:text-[#F5C678]">
         <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
         <span>Live Trail</span>
       </div>

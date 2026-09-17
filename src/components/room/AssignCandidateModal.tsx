@@ -63,20 +63,20 @@ export const AssignCandidateModal: React.FC<AssignCandidateModalProps> = ({
       <div
         className="w-full max-w-xl rounded-2xl border-2 border-b-4 shadow-2xl p-6 sm:p-7 my-8 transition-all backdrop-blur-md"
         style={{
-          backgroundColor: isDark ? 'rgba(23, 21, 19, 0.95)' : 'rgba(255, 253, 248, 0.95)',
-          borderColor: isDark ? 'rgba(200, 141, 58, 0.40)' : 'rgba(90, 45, 12, 0.30)',
+          backgroundColor: isDark ? 'rgba(23, 21, 19, 0.95)' : '#FFF0D6',
+          borderColor: isDark ? 'rgba(200, 141, 58, 0.40)' : '#CF9F68',
         }}
       >
         <div
           className="flex items-center justify-between pb-4 mb-4 border-b"
-          style={{ borderColor: isDark ? 'rgba(200, 141, 58, 0.20)' : 'rgba(90, 45, 12, 0.12)' }}
+          style={{ borderColor: isDark ? 'rgba(200, 141, 58, 0.20)' : '#CF9F68' }}
         >
           <div className="flex items-center gap-2">
             <UserCheck className="w-5 h-5 text-emerald-600" />
             <h2
               id="assign-modal-title"
               className="font-serif font-bold text-base sm:text-lg"
-              style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+              style={{ color: isDark ? '#FFF9EE' : '#432006' }}
             >
               Direct Bed Assignment &bull; {room.roomNumber}
             </h2>
@@ -84,7 +84,7 @@ export const AssignCandidateModal: React.FC<AssignCandidateModalProps> = ({
           <button
             type="button"
             onClick={onClose}
-            className="p-1 rounded-lg border border-transparent hover:border-stone-400 cursor-pointer"
+            className="p-1 rounded-lg border border-transparent hover:border-[#CF9F68] cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
@@ -94,8 +94,8 @@ export const AssignCandidateModal: React.FC<AssignCandidateModalProps> = ({
         <div
           className="p-3.5 rounded-xl border-2 border-b-3 mb-4 flex items-center justify-between text-xs"
           style={{
-            backgroundColor: isDark ? 'rgba(30, 27, 24, 0.50)' : 'rgba(247, 241, 231, 0.60)',
-            borderColor: isDark ? 'rgba(200, 141, 58, 0.30)' : 'rgba(90, 45, 12, 0.15)',
+            backgroundColor: isDark ? 'rgba(30, 27, 24, 0.50)' : '#FAE5C5',
+            borderColor: isDark ? 'rgba(200, 141, 58, 0.30)' : '#CF9F68',
           }}
         >
           <span>
@@ -117,7 +117,7 @@ export const AssignCandidateModal: React.FC<AssignCandidateModalProps> = ({
           <div>
             <label
               className="block text-xs font-bold uppercase tracking-wider mb-2"
-              style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+              style={{ color: isDark ? '#FFF9EE' : '#432006' }}
             >
               Select Candidate from 13 Demo Candidates
             </label>
@@ -125,8 +125,8 @@ export const AssignCandidateModal: React.FC<AssignCandidateModalProps> = ({
             <div
               className="max-h-60 overflow-y-auto rounded-xl border-2 border-b-3 p-3 space-y-2"
               style={{
-                backgroundColor: isDark ? 'rgba(23, 21, 19, 0.70)' : 'rgba(255, 255, 255, 0.80)',
-                borderColor: isDark ? 'rgba(200, 141, 58, 0.25)' : 'rgba(90, 45, 12, 0.15)',
+                backgroundColor: isDark ? 'rgba(23, 21, 19, 0.70)' : '#FFF8EE',
+                borderColor: isDark ? 'rgba(200, 141, 58, 0.25)' : '#DDB985',
               }}
             >
               {candidates.map((cand) => {
@@ -139,22 +139,22 @@ export const AssignCandidateModal: React.FC<AssignCandidateModalProps> = ({
                     className={`p-3 rounded-lg border-2 transition-all cursor-pointer flex items-center justify-between ${
                       isSelected
                         ? 'border-emerald-600 bg-emerald-50 dark:bg-emerald-950/40'
-                        : 'border-transparent hover:bg-stone-100 dark:hover:bg-stone-800/40'
+                        : 'border-transparent hover:bg-[#FAE5C5] dark:hover:bg-[#2F1707]'
                     }`}
                   >
                     <div>
                       <div
                         className="font-bold text-xs"
-                        style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+                        style={{ color: isDark ? '#FFF9EE' : '#432006' }}
                       >
                         {cand.fullName}
                       </div>
-                      <div className="text-[11px] text-[#B77620] dark:text-[#C88D3A]">
+                      <div className="text-[11px] text-[#C46F18] dark:text-[#C88D3A]">
                         {cand.track} &bull; Prefers {cand.preferredPropertyName}
                       </div>
                     </div>
 
-                    <span className="text-[10px] font-mono text-stone-500">
+                    <span className="text-[10px] font-mono text-[#5A3013] dark:text-[#E5D3BA]/75">
                       {cand.admissionNumber}
                     </span>
                   </div>
@@ -165,11 +165,11 @@ export const AssignCandidateModal: React.FC<AssignCandidateModalProps> = ({
 
           <div
             className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-3 border-t"
-            style={{ borderColor: isDark ? 'rgba(200, 141, 58, 0.20)' : 'rgba(90, 45, 12, 0.12)' }}
+            style={{ borderColor: isDark ? 'rgba(200, 141, 58, 0.20)' : '#CF9F68' }}
           >
             <div
               className="text-[11px]"
-              style={{ color: isDark ? '#D9C4AC' : '#704728' }}
+              style={{ color: isDark ? '#D9C4AC' : '#5A3013' }}
             >
               Authority: Direct Coordinator Allocation
             </div>
@@ -180,9 +180,9 @@ export const AssignCandidateModal: React.FC<AssignCandidateModalProps> = ({
                 onClick={onClose}
                 className="flex-1 sm:flex-none px-4 py-2 text-xs font-medium rounded-lg border-2 border-b-3"
                 style={{
-                  backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : 'rgba(255, 253, 248, 0.8)',
-                  borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : 'rgba(90, 45, 12, 0.2)',
-                  color: isDark ? '#FFF9EE' : '#5A2D0C',
+                  backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : '#FFF0D6',
+                  borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : '#CF9F68',
+                  color: isDark ? '#FFF9EE' : '#432006',
                 }}
               >
                 Cancel
@@ -194,7 +194,7 @@ export const AssignCandidateModal: React.FC<AssignCandidateModalProps> = ({
                 className={`flex-1 sm:flex-none px-5 py-2 text-xs font-bold rounded-lg border-2 border-b-3 transition-all duration-150 cursor-pointer active:translate-y-[1px] disabled:opacity-50 ${
                   isDark
                     ? 'bg-[#C88D3A] text-[#241104] border-[#915B15]'
-                    : 'bg-[#5A2D0C] text-[#FFF9EE] border-[#381B07]'
+                    : 'bg-[#432006] text-[#FFF0D6] border-[#381B07]'
                 }`}
               >
                 Assign Fellow

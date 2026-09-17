@@ -170,24 +170,24 @@ export const PeerSupportSection: React.FC<PeerSupportSectionProps> = ({
           id="card-action-choose-path"
           className="h4d-card-static rounded-2xl p-5 sm:p-6 border-2 border-b-4 shadow-md flex flex-col justify-between"
           style={{
-            backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : 'rgba(255, 253, 248, 0.75)',
-            borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : 'rgba(90, 45, 12, 0.25)',
+            backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : '#FAE5C5',
+            borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : '#CF9F68',
           }}
         >
           <div>
             <div className="flex items-center justify-between gap-2 mb-3">
               <span
                 className="text-xs font-bold uppercase tracking-wider block"
-                style={{ color: isDark ? '#E5A955' : '#B77620' }}
+                style={{ color: isDark ? '#E5A955' : '#9F520B' }}
               >
                 Voluntary Support
               </span>
               <span
                 className="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold tracking-wide uppercase border shadow-xs"
                 style={{
-                  backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : 'rgba(247, 241, 231, 0.7)',
+                  backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : '#F3D5AB',
                   color: isDark ? '#D8B4E2' : '#6B21A8',
-                  borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : 'rgba(90, 45, 12, 0.2)',
+                  borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : '#CF9F68',
                 }}
               >
                 <span
@@ -201,7 +201,7 @@ export const PeerSupportSection: React.FC<PeerSupportSectionProps> = ({
 
             <h3
               className="font-serif text-xl sm:text-2xl font-bold tracking-tight mb-2"
-              style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+              style={{ color: isDark ? '#FFF9EE' : '#432006' }}
             >
               Choose Support Path
             </h3>
@@ -210,48 +210,48 @@ export const PeerSupportSection: React.FC<PeerSupportSectionProps> = ({
               <div
                 className="p-2.5 rounded-xl border flex items-start gap-2 text-xs"
                 style={{
-                  backgroundColor: isDark ? 'rgba(42, 34, 28, 0.4)' : '#FFFDF8',
-                  borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : 'rgba(90, 45, 12, 0.12)',
+                  backgroundColor: isDark ? 'rgba(42, 34, 28, 0.4)' : '#FFF0D6',
+                  borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : '#CF9F68',
                 }}
               >
                 <Gift className="w-3.5 h-3.5 mt-0.5 text-purple-600 shrink-0" />
                 <div>
-                  <strong className="block text-[11px]" style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}>
+                  <strong className="block text-[11px]" style={{ color: isDark ? '#FFF9EE' : '#432006' }}>
                     1. Gift
                   </strong>
-                  <span style={{ color: isDark ? '#D9C4AC' : '#704728' }}>Zero repayment obligation</span>
+                  <span style={{ color: isDark ? '#D9C4AC' : '#72451F' }}>Zero repayment obligation</span>
                 </div>
               </div>
 
               <div
                 className="p-2.5 rounded-xl border flex items-start gap-2 text-xs"
                 style={{
-                  backgroundColor: isDark ? 'rgba(42, 34, 28, 0.4)' : '#FFFDF8',
-                  borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : 'rgba(90, 45, 12, 0.12)',
+                  backgroundColor: isDark ? 'rgba(42, 34, 28, 0.4)' : '#FFF0D6',
+                  borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : '#CF9F68',
                 }}
               >
                 <HandCoins className="w-3.5 h-3.5 mt-0.5 text-amber-600 shrink-0" />
                 <div>
-                  <strong className="block text-[11px]" style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}>
+                  <strong className="block text-[11px]" style={{ color: isDark ? '#FFF9EE' : '#432006' }}>
                     2. Lend
                   </strong>
-                  <span style={{ color: isDark ? '#D9C4AC' : '#704728' }}>Clear repayment timeline &amp; forgiveness</span>
+                  <span style={{ color: isDark ? '#D9C4AC' : '#72451F' }}>Clear repayment timeline &amp; forgiveness</span>
                 </div>
               </div>
 
               <div
                 className="p-2.5 rounded-xl border flex items-start gap-2 text-xs"
                 style={{
-                  backgroundColor: isDark ? 'rgba(42, 34, 28, 0.4)' : '#FFFDF8',
-                  borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : 'rgba(90, 45, 12, 0.12)',
+                  backgroundColor: isDark ? 'rgba(42, 34, 28, 0.4)' : '#FFF0D6',
+                  borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : '#CF9F68',
                 }}
               >
                 <HeartHandshake className="w-3.5 h-3.5 mt-0.5 text-emerald-600 shrink-0" />
                 <div>
-                  <strong className="block text-[11px]" style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}>
+                  <strong className="block text-[11px]" style={{ color: isDark ? '#FFF9EE' : '#432006' }}>
                     3. Contribute
                   </strong>
-                  <span style={{ color: isDark ? '#D9C4AC' : '#704728' }}>Shared community need &amp; chamber fund</span>
+                  <span style={{ color: isDark ? '#D9C4AC' : '#72451F' }}>Shared community need &amp; chamber fund</span>
                 </div>
               </div>
             </div>
@@ -264,8 +264,8 @@ export const PeerSupportSection: React.FC<PeerSupportSectionProps> = ({
               onClick={() => handleOpenCreate('gift')}
               className={`h4d-btn-soft inline-flex items-center justify-center gap-2 px-4 py-2.5 min-h-[44px] w-full rounded-xl text-sm font-bold transition-all duration-150 cursor-pointer border-b-3 active:border-b active:translate-y-[1px] shadow-sm ${
                 isDark
-                  ? 'bg-[#C88D3A] text-[#241104] hover:bg-[#DDA250] border-[#915B15]'
-                  : 'bg-[#5A2D0C] text-[#FFF9EE] hover:bg-[#432108] border-[#381B07]'
+                  ? 'bg-[#C46F18] text-[#241104] hover:bg-[#D18125] border-[#915B15]'
+                  : 'bg-[#432006] text-[#FFF0D6] hover:bg-[#341905] border-[#241104]'
               }`}
             >
               <Plus className="w-4 h-4 shrink-0" aria-hidden="true" />
@@ -280,9 +280,9 @@ export const PeerSupportSection: React.FC<PeerSupportSectionProps> = ({
                 onClick={() => handleOpenCreate('gift')}
                 className="flex-1 py-1 px-2 rounded-lg text-[10px] font-bold border text-center transition-colors cursor-pointer"
                 style={{
-                  backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : '#FFFDF8',
-                  borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : 'rgba(90, 45, 12, 0.2)',
-                  color: isDark ? '#FCD34D' : '#5A2D0C',
+                  backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : '#FFF0D6',
+                  borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : '#CF9F68',
+                  color: isDark ? '#FCD34D' : '#432006',
                 }}
               >
                 + Gift
@@ -293,9 +293,9 @@ export const PeerSupportSection: React.FC<PeerSupportSectionProps> = ({
                 onClick={() => handleOpenCreate('loan')}
                 className="flex-1 py-1 px-2 rounded-lg text-[10px] font-bold border text-center transition-colors cursor-pointer"
                 style={{
-                  backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : '#FFFDF8',
-                  borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : 'rgba(90, 45, 12, 0.2)',
-                  color: isDark ? '#FCD34D' : '#5A2D0C',
+                  backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : '#FFF0D6',
+                  borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : '#CF9F68',
+                  color: isDark ? '#FCD34D' : '#432006',
                 }}
               >
                 + Lend
@@ -306,9 +306,9 @@ export const PeerSupportSection: React.FC<PeerSupportSectionProps> = ({
                 onClick={() => handleOpenCreate('contribution')}
                 className="flex-1 py-1 px-2 rounded-lg text-[10px] font-bold border text-center transition-colors cursor-pointer"
                 style={{
-                  backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : '#FFFDF8',
-                  borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : 'rgba(90, 45, 12, 0.2)',
-                  color: isDark ? '#FCD34D' : '#5A2D0C',
+                  backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : '#FFF0D6',
+                  borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : '#CF9F68',
+                  color: isDark ? '#FCD34D' : '#432006',
                 }}
               >
                 + Campaign
@@ -322,41 +322,41 @@ export const PeerSupportSection: React.FC<PeerSupportSectionProps> = ({
           id="card-action-trust-trails"
           className="h4d-card-static rounded-2xl p-5 sm:p-6 border-2 border-b-4 shadow-md flex flex-col justify-between"
           style={{
-            backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : 'rgba(255, 253, 248, 0.75)',
-            borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : 'rgba(90, 45, 12, 0.25)',
+            backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : '#FAE5C5',
+            borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : '#CF9F68',
           }}
         >
           <div>
             <div className="flex items-center justify-between gap-2 mb-3">
               <span
                 className="text-xs font-bold uppercase tracking-wider block"
-                style={{ color: isDark ? '#E5A955' : '#B77620' }}
+                style={{ color: isDark ? '#E5A955' : '#9F520B' }}
               >
                 Immutable Ledger
               </span>
               <span
                 className="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold tracking-wide uppercase border shadow-xs"
                 style={{
-                  backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : 'rgba(247, 241, 231, 0.7)',
-                  color: isDark ? '#F5C678' : '#8C4D11',
-                  borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : 'rgba(90, 45, 12, 0.2)',
+                  backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : '#F3D5AB',
+                  color: isDark ? '#F5C678' : '#9F520B',
+                  borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : '#CF9F68',
                 }}
               >
-                <Footprints className="w-3 h-3 mr-1 text-[#B77620] dark:text-[#C88D3A]" />
+                <Footprints className="w-3 h-3 mr-1 text-[#9F520B] dark:text-[#C46F18]" />
                 Integrity
               </span>
             </div>
 
             <h3
               className="font-serif text-xl sm:text-2xl font-bold tracking-tight mb-2"
-              style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+              style={{ color: isDark ? '#FFF9EE' : '#432006' }}
             >
               Trails of Trust
             </h3>
 
             <p
               className="text-xs leading-relaxed mb-4"
-              style={{ color: isDark ? '#EAD6C0' : '#5A2D0C' }}
+              style={{ color: isDark ? '#EAD6C0' : '#5A3013' }}
             >
               Append-only chronological audit trail capturing every gift, repayment, and pooled chamber contribution with transparent receipts.
             </p>
@@ -364,14 +364,14 @@ export const PeerSupportSection: React.FC<PeerSupportSectionProps> = ({
             <div
               className="p-3 rounded-xl border mb-3 flex items-center justify-between"
               style={{
-                backgroundColor: isDark ? 'rgba(42, 34, 28, 0.4)' : '#FFFDF8',
-                borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : 'rgba(90, 45, 12, 0.12)',
+                backgroundColor: isDark ? 'rgba(42, 34, 28, 0.4)' : '#FFF0D6',
+                borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : '#CF9F68',
               }}
             >
-              <span className="text-xs font-medium" style={{ color: isDark ? '#D9C4AC' : '#704728' }}>
+              <span className="text-xs font-medium" style={{ color: isDark ? '#D9C4AC' : '#72451F' }}>
                 Recorded Events
               </span>
-              <span className="font-mono font-bold text-xs" style={{ color: isDark ? '#FCD34D' : '#5A2D0C' }}>
+              <span className="font-mono font-bold text-xs" style={{ color: isDark ? '#FCD34D' : '#432006' }}>
                 {trailEvents.length} Verifiable Events
               </span>
             </div>
@@ -389,11 +389,11 @@ export const PeerSupportSection: React.FC<PeerSupportSectionProps> = ({
             className={`h4d-btn-soft inline-flex items-center justify-center gap-2 px-4 py-2.5 min-h-[44px] w-full rounded-xl text-sm font-bold transition-all duration-150 cursor-pointer border-b-3 active:border-b active:translate-y-[1px] shadow-sm ${
               hubSubTab === 'trust-trails'
                 ? isDark
-                  ? 'bg-[#C88D3A] text-[#241104] border-[#915B15]'
-                  : 'bg-[#5A2D0C] text-[#FFF9EE] border-[#381B07]'
+                  ? 'bg-[#C46F18] text-[#241104] border-[#915B15]'
+                  : 'bg-[#432006] text-[#FFF0D6] border-[#241104]'
                 : isDark
                 ? 'bg-[#2E1809] text-[#FFF9EE] hover:bg-[#3E200C] border-[#4A240A]'
-                : 'bg-[#F7F1E7] text-[#5A2D0C] hover:bg-[#EFE5D5] border-[#D9C4AC]'
+                : 'bg-[#F3D5AB] text-[#432006] hover:bg-[#E8BF88] border-[#CF9F68]'
             }`}
           >
             <Footprints className="w-4 h-4 shrink-0" aria-hidden="true" />
@@ -407,24 +407,24 @@ export const PeerSupportSection: React.FC<PeerSupportSectionProps> = ({
           id="card-action-vouches"
           className="h4d-card-static rounded-2xl p-5 sm:p-6 border-2 border-b-4 shadow-md flex flex-col justify-between"
           style={{
-            backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : 'rgba(255, 253, 248, 0.75)',
-            borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : 'rgba(90, 45, 12, 0.25)',
+            backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : '#FAE5C5',
+            borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : '#CF9F68',
           }}
         >
           <div>
             <div className="flex items-center justify-between gap-2 mb-3">
               <span
                 className="text-xs font-bold uppercase tracking-wider block"
-                style={{ color: isDark ? '#E5A955' : '#B77620' }}
+                style={{ color: isDark ? '#E5A955' : '#9F520B' }}
               >
                 Peer Attestation
               </span>
               <span
                 className="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold tracking-wide uppercase border shadow-xs"
                 style={{
-                  backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : 'rgba(247, 241, 231, 0.7)',
+                  backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : '#F3D5AB',
                   color: isDark ? '#86EFAC' : '#166534',
-                  borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : 'rgba(90, 45, 12, 0.2)',
+                  borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : '#CF9F68',
                 }}
               >
                 <ShieldCheck className="w-3 h-3 mr-1 text-emerald-600" />
@@ -434,14 +434,14 @@ export const PeerSupportSection: React.FC<PeerSupportSectionProps> = ({
 
             <h3
               className="font-serif text-xl sm:text-2xl font-bold tracking-tight mb-2"
-              style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+              style={{ color: isDark ? '#FFF9EE' : '#432006' }}
             >
               Contextual Vouches
             </h3>
 
             <p
               className="text-xs leading-relaxed mb-4"
-              style={{ color: isDark ? '#EAD6C0' : '#5A2D0C' }}
+              style={{ color: isDark ? '#EAD6C0' : '#5A3013' }}
             >
               Vouch for fellows across specific character and skill domains (craft, living harmony, reliability) without financial liability or debt risk.
             </p>
@@ -449,14 +449,14 @@ export const PeerSupportSection: React.FC<PeerSupportSectionProps> = ({
             <div
               className="p-3 rounded-xl border mb-3 flex items-center justify-between"
               style={{
-                backgroundColor: isDark ? 'rgba(42, 34, 28, 0.4)' : '#FFFDF8',
-                borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : 'rgba(90, 45, 12, 0.12)',
+                backgroundColor: isDark ? 'rgba(42, 34, 28, 0.4)' : '#FFF0D6',
+                borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : '#CF9F68',
               }}
             >
-              <span className="text-xs font-medium" style={{ color: isDark ? '#D9C4AC' : '#704728' }}>
+              <span className="text-xs font-medium" style={{ color: isDark ? '#D9C4AC' : '#72451F' }}>
                 Active Peer Vouches
               </span>
-              <span className="font-mono font-bold text-xs" style={{ color: isDark ? '#FCD34D' : '#5A2D0C' }}>
+              <span className="font-mono font-bold text-xs" style={{ color: isDark ? '#FCD34D' : '#432006' }}>
                 {vouches.length} Attestations
               </span>
             </div>
@@ -474,11 +474,11 @@ export const PeerSupportSection: React.FC<PeerSupportSectionProps> = ({
             className={`h4d-btn-soft inline-flex items-center justify-center gap-2 px-4 py-2.5 min-h-[44px] w-full rounded-xl text-sm font-bold transition-all duration-150 cursor-pointer border-b-3 active:border-b active:translate-y-[1px] shadow-sm ${
               hubSubTab === 'vouches'
                 ? isDark
-                  ? 'bg-[#C88D3A] text-[#241104] border-[#915B15]'
-                  : 'bg-[#5A2D0C] text-[#FFF9EE] border-[#381B07]'
+                  ? 'bg-[#C46F18] text-[#241104] border-[#915B15]'
+                  : 'bg-[#432006] text-[#FFF0D6] border-[#241104]'
                 : isDark
                 ? 'bg-[#2E1809] text-[#FFF9EE] hover:bg-[#3E200C] border-[#4A240A]'
-                : 'bg-[#F7F1E7] text-[#5A2D0C] hover:bg-[#EFE5D5] border-[#D9C4AC]'
+                : 'bg-[#F3D5AB] text-[#432006] hover:bg-[#E8BF88] border-[#CF9F68]'
             }`}
           >
             <ShieldCheck className="w-4 h-4 shrink-0" aria-hidden="true" />
@@ -491,7 +491,7 @@ export const PeerSupportSection: React.FC<PeerSupportSectionProps> = ({
       {/* Nested Hub Sub-Tab Navigator */}
       <div
         className="flex items-center justify-between flex-wrap gap-3 pb-3 border-b-2"
-        style={{ borderColor: isDark ? '#3E200C' : '#EAE0D0' }}
+        style={{ borderColor: isDark ? '#3E200C' : '#DDB985' }}
       >
         <div className="flex items-center gap-2 overflow-x-auto py-1">
           <button
@@ -501,11 +501,11 @@ export const PeerSupportSection: React.FC<PeerSupportSectionProps> = ({
             className={`px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer border-b-3 active:border-b active:translate-y-[1px] shadow-xs ${
               hubSubTab === 'agreements'
                 ? isDark
-                  ? 'bg-[#C88D3A] text-[#241104] border-[#915B15]'
-                  : 'bg-[#5A2D0C] text-[#FFF9EE] border-[#381B07]'
+                  ? 'bg-[#C46F18] text-[#241104] border-[#915B15]'
+                  : 'bg-[#432006] text-[#FFF0D6] border-[#241104]'
                 : isDark
                 ? 'text-[#D9C4AC] hover:text-[#FFF9EE] hover:bg-[#3E200C] border-transparent'
-                : 'text-[#6D4223] hover:text-[#5A2D0C] hover:bg-[#EFE5D5] border-transparent'
+                : 'text-[#72451F] hover:text-[#432006] hover:bg-[#E8BF88] border-transparent'
             }`}
           >
             <HandCoins className="w-3.5 h-3.5" />
@@ -519,11 +519,11 @@ export const PeerSupportSection: React.FC<PeerSupportSectionProps> = ({
             className={`px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer border-b-3 active:border-b active:translate-y-[1px] shadow-xs ${
               hubSubTab === 'trust-trails'
                 ? isDark
-                  ? 'bg-[#C88D3A] text-[#241104] border-[#915B15]'
-                  : 'bg-[#5A2D0C] text-[#FFF9EE] border-[#381B07]'
+                  ? 'bg-[#C46F18] text-[#241104] border-[#915B15]'
+                  : 'bg-[#432006] text-[#FFF0D6] border-[#241104]'
                 : isDark
                 ? 'text-[#D9C4AC] hover:text-[#FFF9EE] hover:bg-[#3E200C] border-transparent'
-                : 'text-[#6D4223] hover:text-[#5A2D0C] hover:bg-[#EFE5D5] border-transparent'
+                : 'text-[#72451F] hover:text-[#432006] hover:bg-[#E8BF88] border-transparent'
             }`}
           >
             <Footprints className="w-3.5 h-3.5" />
@@ -537,11 +537,11 @@ export const PeerSupportSection: React.FC<PeerSupportSectionProps> = ({
             className={`px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer border-b-3 active:border-b active:translate-y-[1px] shadow-xs ${
               hubSubTab === 'vouches'
                 ? isDark
-                  ? 'bg-[#C88D3A] text-[#241104] border-[#915B15]'
-                  : 'bg-[#5A2D0C] text-[#FFF9EE] border-[#381B07]'
+                  ? 'bg-[#C46F18] text-[#241104] border-[#915B15]'
+                  : 'bg-[#432006] text-[#FFF0D6] border-[#241104]'
                 : isDark
                 ? 'text-[#D9C4AC] hover:text-[#FFF9EE] hover:bg-[#3E200C] border-transparent'
-                : 'text-[#6D4223] hover:text-[#5A2D0C] hover:bg-[#EFE5D5] border-transparent'
+                : 'text-[#72451F] hover:text-[#432006] hover:bg-[#E8BF88] border-transparent'
             }`}
           >
             <ShieldCheck className="w-3.5 h-3.5" />
@@ -555,23 +555,23 @@ export const PeerSupportSection: React.FC<PeerSupportSectionProps> = ({
         <section
           className="rounded-2xl p-5 sm:p-7 border-2 border-b-4 transition-all duration-200 shadow-md"
           style={{
-            backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : 'rgba(255, 253, 248, 0.65)',
-            borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : 'rgba(90, 45, 12, 0.25)',
+            backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : '#FAE5C5',
+            borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : '#CF9F68',
           }}
         >
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-4 border-b-2"
-            style={{ borderColor: isDark ? '#421E06' : '#EAE0D0' }}
+            style={{ borderColor: isDark ? '#421E06' : '#DDB985' }}
           >
             <div>
               <span
                 className="text-xs font-bold uppercase tracking-wider block mb-1"
-                style={{ color: isDark ? '#E5A955' : '#B77620' }}
+                style={{ color: isDark ? '#E5A955' : '#9F520B' }}
               >
                 Peer Support Agreements
               </span>
               <h2
                 className="font-serif text-xl sm:text-2xl font-bold tracking-tight"
-                style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+                style={{ color: isDark ? '#FFF9EE' : '#432006' }}
               >
                 Active Agreements &amp; Campaigns
               </h2>
@@ -581,8 +581,8 @@ export const PeerSupportSection: React.FC<PeerSupportSectionProps> = ({
             <div
               className="flex items-center gap-1 p-1 rounded-xl border"
               style={{
-                backgroundColor: isDark ? 'rgba(30, 27, 24, 0.45)' : 'rgba(247, 241, 231, 0.50)',
-                borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : 'rgba(90, 45, 12, 0.15)',
+                backgroundColor: isDark ? 'rgba(30, 27, 24, 0.45)' : '#F3D5AB',
+                borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : '#CF9F68',
               }}
             >
               {[
@@ -598,11 +598,11 @@ export const PeerSupportSection: React.FC<PeerSupportSectionProps> = ({
                   className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                     filterType === tab.id
                       ? isDark
-                        ? 'bg-[#C88D3A] text-[#241104] shadow-xs'
-                        : 'bg-[#5A2D0C] text-[#FFF9EE] shadow-xs'
+                        ? 'bg-[#C46F18] text-[#241104] shadow-xs'
+                        : 'bg-[#432006] text-[#FFF0D6] shadow-xs'
                       : isDark
                       ? 'text-[#D9C4AC] hover:text-[#FFF9EE]'
-                      : 'text-[#6D4223] hover:text-[#5A2D0C]'
+                      : 'text-[#72451F] hover:text-[#432006]'
                   }`}
                 >
                   {tab.label}
@@ -617,9 +617,9 @@ export const PeerSupportSection: React.FC<PeerSupportSectionProps> = ({
               <div
                 className="text-center py-12 text-xs rounded-xl border border-dashed"
                 style={{
-                  backgroundColor: isDark ? 'rgba(30, 27, 24, 0.45)' : 'rgba(247, 241, 231, 0.50)',
-                  borderColor: isDark ? 'rgba(200, 141, 58, 0.25)' : 'rgba(90, 45, 12, 0.2)',
-                  color: isDark ? '#D9C4AC' : '#8A5D3B',
+                  backgroundColor: isDark ? 'rgba(30, 27, 24, 0.45)' : '#F3D5AB',
+                  borderColor: isDark ? 'rgba(200, 141, 58, 0.25)' : '#CF9F68',
+                  color: isDark ? '#D9C4AC' : '#72451F',
                 }}
               >
                 No peer support agreements matching this filter.
@@ -638,28 +638,28 @@ export const PeerSupportSection: React.FC<PeerSupportSectionProps> = ({
                     id={`peer-support-${support.id}`}
                     className="rounded-2xl p-5 sm:p-6 border-2 border-b-4 transition-all duration-200 shadow-md space-y-4"
                     style={{
-                      backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : 'rgba(255, 253, 248, 0.65)',
-                      borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : 'rgba(90, 45, 12, 0.25)',
+                      backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : '#FFF0D6',
+                      borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : '#CF9F68',
                     }}
                   >
                     {/* Top Bar: Badges + Timestamp */}
                     <div
                       className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b"
-                      style={{ borderColor: isDark ? '#421E06' : '#EAE0D0' }}
+                      style={{ borderColor: isDark ? '#421E06' : '#DDB985' }}
                     >
                       <div className="flex flex-wrap items-center gap-2">
                         {support.type === 'loan' && (
                           <span
                             className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold tracking-wide uppercase border shadow-xs"
                             style={{
-                              backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : 'rgba(247, 241, 231, 0.7)',
-                              color: isDark ? '#F5C678' : '#8C4D11',
-                              borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : 'rgba(90, 45, 12, 0.2)',
+                              backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : '#F3D5AB',
+                              color: isDark ? '#F5C678' : '#9F520B',
+                              borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : '#CF9F68',
                             }}
                           >
                             <span
                               className="w-1.5 h-1.5 rounded-full mr-1.5 shadow-xs"
-                              style={{ backgroundColor: isDark ? '#C88D3A' : '#B77620' }}
+                              style={{ backgroundColor: isDark ? '#C46F18' : '#9F520B' }}
                               aria-hidden="true"
                             />
                             Peer Loan
@@ -669,9 +669,9 @@ export const PeerSupportSection: React.FC<PeerSupportSectionProps> = ({
                           <span
                             className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold tracking-wide uppercase border shadow-xs"
                             style={{
-                              backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : 'rgba(247, 241, 231, 0.7)',
+                              backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : '#F3D5AB',
                               color: isDark ? '#D8B4E2' : '#6B21A8',
-                              borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : 'rgba(90, 45, 12, 0.2)',
+                              borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : '#CF9F68',
                             }}
                           >
                             <span
@@ -686,9 +686,9 @@ export const PeerSupportSection: React.FC<PeerSupportSectionProps> = ({
                           <span
                             className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold tracking-wide uppercase border shadow-xs"
                             style={{
-                              backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : 'rgba(247, 241, 231, 0.7)',
+                              backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : '#F3D5AB',
                               color: isDark ? '#86EFAC' : '#166534',
-                              borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : 'rgba(90, 45, 12, 0.2)',
+                              borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : '#CF9F68',
                             }}
                           >
                             <span
@@ -723,7 +723,7 @@ export const PeerSupportSection: React.FC<PeerSupportSectionProps> = ({
 
                       <span
                         className="text-xs font-mono font-medium"
-                        style={{ color: isDark ? '#D9C4AC' : '#8A5D3B' }}
+                        style={{ color: isDark ? '#D9C4AC' : '#72451F' }}
                       >
                         {new Date(support.createdAt).toLocaleDateString(undefined, {
                           month: 'short',
@@ -739,19 +739,19 @@ export const PeerSupportSection: React.FC<PeerSupportSectionProps> = ({
                         <div className="flex items-center gap-2 mb-1">
                           <span
                             className="font-bold text-base"
-                            style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+                            style={{ color: isDark ? '#FFF9EE' : '#432006' }}
                           >
                             {support.fromMemberName}
                           </span>
                           <span
                             className="text-xs font-medium"
-                            style={{ color: isDark ? '#D9C4AC' : '#8A5D3B' }}
+                            style={{ color: isDark ? '#D9C4AC' : '#72451F' }}
                           >
                             →
                           </span>
                           <span
                             className="font-bold text-base"
-                            style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+                            style={{ color: isDark ? '#FFF9EE' : '#432006' }}
                           >
                             {support.type === 'contribution'
                               ? support.title || 'Chamber Campaign'
@@ -760,7 +760,7 @@ export const PeerSupportSection: React.FC<PeerSupportSectionProps> = ({
                         </div>
                         <p
                           className="text-xs leading-relaxed"
-                          style={{ color: isDark ? '#D9C4AC' : '#6F4E37' }}
+                          style={{ color: isDark ? '#D9C4AC' : '#5A3013' }}
                         >
                           {support.purpose}
                         </p>
@@ -770,14 +770,14 @@ export const PeerSupportSection: React.FC<PeerSupportSectionProps> = ({
                       <div className="text-left md:text-right shrink-0">
                         <div
                           className="font-mono font-bold text-xl sm:text-2xl"
-                          style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+                          style={{ color: isDark ? '#FFF9EE' : '#432006' }}
                         >
                           ₦{support.amount.toLocaleString()}
                         </div>
                         {support.type === 'loan' && (
                           <div
                             className="text-xs font-mono"
-                            style={{ color: isDark ? '#E5A955' : '#B77620' }}
+                            style={{ color: isDark ? '#E5A955' : '#9F520B' }}
                           >
                             Repaid: ₦{support.amountRepaid.toLocaleString()} / Remaining: ₦{remaining.toLocaleString()}
                           </div>
@@ -790,22 +790,22 @@ export const PeerSupportSection: React.FC<PeerSupportSectionProps> = ({
                       <div className="space-y-1">
                         <div
                           className="w-full h-2 rounded-full overflow-hidden"
-                          style={{ backgroundColor: isDark ? '#3E200C' : '#EAE0D0' }}
+                          style={{ backgroundColor: isDark ? '#3E200C' : '#F3D5AB' }}
                         >
                           <div
                             className="h-full rounded-full transition-all duration-300"
                             style={{
                               width: `${Math.min(100, Math.round((support.amountRepaid / support.amount) * 100))}%`,
-                              backgroundColor: isForgiven ? '#9333EA' : isRepaid ? '#16A34A' : '#C88D3A',
+                              backgroundColor: isForgiven ? '#9333EA' : isRepaid ? '#16A34A' : '#C46F18',
                             }}
                           />
                         </div>
                         <div className="flex justify-between text-[11px] font-mono">
-                          <span style={{ color: isDark ? '#D9C4AC' : '#8A5D3B' }}>
+                          <span style={{ color: isDark ? '#D9C4AC' : '#72451F' }}>
                             {Math.round((support.amountRepaid / support.amount) * 100)}% Repaid
                           </span>
                           {support.repaymentDate && (
-                            <span style={{ color: isDark ? '#D9C4AC' : '#8A5D3B' }}>
+                            <span style={{ color: isDark ? '#D9C4AC' : '#72451F' }}>
                               Due: {new Date(support.repaymentDate).toLocaleDateString()}
                             </span>
                           )}
@@ -816,7 +816,7 @@ export const PeerSupportSection: React.FC<PeerSupportSectionProps> = ({
                     {/* Action Buttons for Agreements */}
                     <div
                       className="pt-3 border-t flex flex-wrap items-center justify-end gap-2.5"
-                      style={{ borderColor: isDark ? '#421E06' : '#EAE0D0' }}
+                      style={{ borderColor: isDark ? '#421E06' : '#DDB985' }}
                     >
                       {support.type === 'loan' && !isRepaid && !isForgiven && (
                         <>
@@ -899,22 +899,22 @@ export const PeerSupportSection: React.FC<PeerSupportSectionProps> = ({
           <div
             className="w-full max-w-md rounded-2xl p-6 border-2 border-b-4 shadow-xl space-y-4"
             style={{
-              backgroundColor: isDark ? '#231206' : '#FFF9EE',
-              borderColor: isDark ? 'rgba(200, 141, 58, 0.4)' : 'rgba(90, 45, 12, 0.3)',
+              backgroundColor: isDark ? '#231206' : '#FAE5C5',
+              borderColor: isDark ? 'rgba(200, 141, 58, 0.4)' : '#CF9F68',
             }}
           >
             <h3
               className="font-serif text-lg font-bold"
-              style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+              style={{ color: isDark ? '#FFF9EE' : '#432006' }}
             >
               Record Loan Repayment
             </h3>
-            <p className="text-xs" style={{ color: isDark ? '#D9C4AC' : '#704728' }}>
+            <p className="text-xs" style={{ color: isDark ? '#D9C4AC' : '#5A3013' }}>
               Confirm repayment amount received from {repayModalSupport.toMemberName}.
             </p>
             <form onSubmit={handleConfirmRepay} className="space-y-3">
               <div>
-                <label className="block text-xs font-bold mb-1" style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}>
+                <label className="block text-xs font-bold mb-1" style={{ color: isDark ? '#FFF9EE' : '#432006' }}>
                   Amount (₦)
                 </label>
                 <input
@@ -925,9 +925,9 @@ export const PeerSupportSection: React.FC<PeerSupportSectionProps> = ({
                   onChange={(e) => setRepayAmount(Number(e.target.value))}
                   className="w-full px-3 py-2 rounded-xl text-sm border font-mono"
                   style={{
-                    backgroundColor: isDark ? 'rgba(42, 34, 28, 0.7)' : '#FFFDF8',
-                    borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : 'rgba(90, 45, 12, 0.2)',
-                    color: isDark ? '#FFF9EE' : '#5A2D0C',
+                    backgroundColor: isDark ? 'rgba(42, 34, 28, 0.7)' : '#FFF0D6',
+                    borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : '#CF9F68',
+                    color: isDark ? '#FFF9EE' : '#432006',
                   }}
                   required
                 />
@@ -938,9 +938,9 @@ export const PeerSupportSection: React.FC<PeerSupportSectionProps> = ({
                   onClick={() => setRepayModalSupport(null)}
                   className="px-4 py-2 rounded-xl text-xs font-bold border cursor-pointer"
                   style={{
-                    backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : '#F7F1E7',
-                    borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : 'rgba(90, 45, 12, 0.2)',
-                    color: isDark ? '#FFF9EE' : '#5A2D0C',
+                    backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : '#F3D5AB',
+                    borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : '#CF9F68',
+                    color: isDark ? '#FFF9EE' : '#432006',
                   }}
                 >
                   Cancel
@@ -963,22 +963,22 @@ export const PeerSupportSection: React.FC<PeerSupportSectionProps> = ({
           <div
             className="w-full max-w-md rounded-2xl p-6 border-2 border-b-4 shadow-xl space-y-4"
             style={{
-              backgroundColor: isDark ? '#231206' : '#FFF9EE',
-              borderColor: isDark ? 'rgba(200, 141, 58, 0.4)' : 'rgba(90, 45, 12, 0.3)',
+              backgroundColor: isDark ? '#231206' : '#FAE5C5',
+              borderColor: isDark ? 'rgba(200, 141, 58, 0.4)' : '#CF9F68',
             }}
           >
             <h3
               className="font-serif text-lg font-bold"
-              style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+              style={{ color: isDark ? '#FFF9EE' : '#432006' }}
             >
               Permanently Forgive Debt into Gift
             </h3>
-            <p className="text-xs" style={{ color: isDark ? '#D9C4AC' : '#704728' }}>
+            <p className="text-xs" style={{ color: isDark ? '#D9C4AC' : '#5A3013' }}>
               Converting this loan of ₦{forgiveModalSupport.amount.toLocaleString()} into a gift permanently extinguishes repayment liability.
             </p>
             <form onSubmit={handleConfirmForgive} className="space-y-3">
               <div>
-                <label className="block text-xs font-bold mb-1" style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}>
+                <label className="block text-xs font-bold mb-1" style={{ color: isDark ? '#FFF9EE' : '#432006' }}>
                   Solidarity Note
                 </label>
                 <textarea
@@ -987,9 +987,9 @@ export const PeerSupportSection: React.FC<PeerSupportSectionProps> = ({
                   rows={2}
                   className="w-full px-3 py-2 rounded-xl text-sm border"
                   style={{
-                    backgroundColor: isDark ? 'rgba(42, 34, 28, 0.7)' : '#FFFDF8',
-                    borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : 'rgba(90, 45, 12, 0.2)',
-                    color: isDark ? '#FFF9EE' : '#5A2D0C',
+                    backgroundColor: isDark ? 'rgba(42, 34, 28, 0.7)' : '#FFF0D6',
+                    borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : '#CF9F68',
+                    color: isDark ? '#FFF9EE' : '#432006',
                   }}
                   required
                 />
@@ -1000,9 +1000,9 @@ export const PeerSupportSection: React.FC<PeerSupportSectionProps> = ({
                   onClick={() => setForgiveModalSupport(null)}
                   className="px-4 py-2 rounded-xl text-xs font-bold border cursor-pointer"
                   style={{
-                    backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : '#F7F1E7',
-                    borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : 'rgba(90, 45, 12, 0.2)',
-                    color: isDark ? '#FFF9EE' : '#5A2D0C',
+                    backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : '#F3D5AB',
+                    borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : '#CF9F68',
+                    color: isDark ? '#FFF9EE' : '#432006',
                   }}
                 >
                   Cancel
@@ -1025,19 +1025,19 @@ export const PeerSupportSection: React.FC<PeerSupportSectionProps> = ({
           <div
             className="w-full max-w-md rounded-2xl p-6 border-2 border-b-4 shadow-xl space-y-4"
             style={{
-              backgroundColor: isDark ? '#231206' : '#FFF9EE',
-              borderColor: isDark ? 'rgba(200, 141, 58, 0.4)' : 'rgba(90, 45, 12, 0.3)',
+              backgroundColor: isDark ? '#231206' : '#FAE5C5',
+              borderColor: isDark ? 'rgba(200, 141, 58, 0.4)' : '#CF9F68',
             }}
           >
             <h3
               className="font-serif text-lg font-bold"
-              style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+              style={{ color: isDark ? '#FFF9EE' : '#432006' }}
             >
               Contribute to {campaignModal.title || 'Chamber Fund'}
             </h3>
             <form onSubmit={handleConfirmCampaignContrib} className="space-y-3">
               <div>
-                <label className="block text-xs font-bold mb-1" style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}>
+                <label className="block text-xs font-bold mb-1" style={{ color: isDark ? '#FFF9EE' : '#432006' }}>
                   Contribution Amount (₦)
                 </label>
                 <input
@@ -1048,15 +1048,15 @@ export const PeerSupportSection: React.FC<PeerSupportSectionProps> = ({
                   onChange={(e) => setCampaignContribAmount(Number(e.target.value))}
                   className="w-full px-3 py-2 rounded-xl text-sm border font-mono"
                   style={{
-                    backgroundColor: isDark ? 'rgba(42, 34, 28, 0.7)' : '#FFFDF8',
-                    borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : 'rgba(90, 45, 12, 0.2)',
-                    color: isDark ? '#FFF9EE' : '#5A2D0C',
+                    backgroundColor: isDark ? 'rgba(42, 34, 28, 0.7)' : '#FFF0D6',
+                    borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : '#CF9F68',
+                    color: isDark ? '#FFF9EE' : '#432006',
                   }}
                   required
                 />
               </div>
               <div>
-                <label className="block text-xs font-bold mb-1" style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}>
+                <label className="block text-xs font-bold mb-1" style={{ color: isDark ? '#FFF9EE' : '#432006' }}>
                   Note
                 </label>
                 <input
@@ -1065,9 +1065,9 @@ export const PeerSupportSection: React.FC<PeerSupportSectionProps> = ({
                   onChange={(e) => setCampaignContribNote(e.target.value)}
                   className="w-full px-3 py-2 rounded-xl text-sm border"
                   style={{
-                    backgroundColor: isDark ? 'rgba(42, 34, 28, 0.7)' : '#FFFDF8',
-                    borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : 'rgba(90, 45, 12, 0.2)',
-                    color: isDark ? '#FFF9EE' : '#5A2D0C',
+                    backgroundColor: isDark ? 'rgba(42, 34, 28, 0.7)' : '#FFF0D6',
+                    borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : '#CF9F68',
+                    color: isDark ? '#FFF9EE' : '#432006',
                   }}
                 />
               </div>
@@ -1077,9 +1077,9 @@ export const PeerSupportSection: React.FC<PeerSupportSectionProps> = ({
                   onClick={() => setCampaignModal(null)}
                   className="px-4 py-2 rounded-xl text-xs font-bold border cursor-pointer"
                   style={{
-                    backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : '#F7F1E7',
-                    borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : 'rgba(90, 45, 12, 0.2)',
-                    color: isDark ? '#FFF9EE' : '#5A2D0C',
+                    backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : '#F3D5AB',
+                    borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : '#CF9F68',
+                    color: isDark ? '#FFF9EE' : '#432006',
                   }}
                 >
                   Cancel

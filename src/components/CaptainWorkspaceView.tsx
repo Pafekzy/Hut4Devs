@@ -63,13 +63,13 @@ export const CaptainWorkspaceView: React.FC<CaptainWorkspaceViewProps> = ({
       {/* 1. Header & Room Authority Banner */}
       <header
         className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b-2"
-        style={{ borderColor: isDark ? 'rgba(200, 141, 58, 0.20)' : 'rgba(90, 45, 12, 0.12)' }}
+        style={{ borderColor: isDark ? 'rgba(200, 141, 58, 0.20)' : '#DDB985' }}
       >
         <div>
           <div className="flex items-center gap-2 mb-1">
             <span
               className="text-[11px] font-bold uppercase tracking-widest"
-              style={{ color: isDark ? '#C88D3A' : '#B77620' }}
+              style={{ color: isDark ? '#E5A955' : '#9F520B' }}
             >
               Lagos Yaba Campus &bull; {room.propertyName}
             </span>
@@ -80,14 +80,14 @@ export const CaptainWorkspaceView: React.FC<CaptainWorkspaceViewProps> = ({
 
           <h1
             className="font-serif text-2xl sm:text-3xl font-bold tracking-tight"
-            style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+            style={{ color: isDark ? '#FFF9EE' : '#432006' }}
           >
             {room.roomNumber} &bull; Room Captain Workspace
           </h1>
 
           <p
             className="text-xs sm:text-sm mt-1"
-            style={{ color: isDark ? '#D9C4AC' : '#704728' }}
+            style={{ color: isDark ? '#D9C4AC' : '#5A3013' }}
           >
             Delegated operational authority for {room.roomNumber} living space, peer guidelines, and in-person candidate verification.
           </p>
@@ -101,33 +101,33 @@ export const CaptainWorkspaceView: React.FC<CaptainWorkspaceViewProps> = ({
             onClick={() => setShowPuzzleModal(true)}
             className="px-3.5 py-2 text-xs font-bold rounded-xl border-2 border-b-3 transition-all duration-150 cursor-pointer flex items-center gap-1.5 shadow-xs active:translate-y-[1px]"
             style={{
-              backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : 'rgba(255, 253, 248, 0.8)',
-              borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : 'rgba(90, 45, 12, 0.2)',
-              color: isDark ? '#FFF9EE' : '#5A2D0C',
+              backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : '#FFF0D6',
+              borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : '#CF9F68',
+              color: isDark ? '#FFF9EE' : '#432006',
             }}
           >
-            <Puzzle className="w-3.5 h-3.5 text-[#B77620] dark:text-[#C88D3A]" />
+            <Puzzle className="w-3.5 h-3.5 text-[#9F520B] dark:text-[#C46F18]" />
             <span>Report Room Puzzle</span>
           </button>
 
           <div
             className="p-3 rounded-xl border-2 border-b-3 text-xs flex items-center gap-3 shadow-xs"
             style={{
-              backgroundColor: isDark ? 'rgba(23, 21, 19, 0.65)' : 'rgba(255, 253, 248, 0.75)',
-              borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : 'rgba(90, 45, 12, 0.25)',
+              backgroundColor: isDark ? 'rgba(23, 21, 19, 0.65)' : '#FAE5C5',
+              borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : '#CF9F68',
             }}
           >
-            <ShieldCheck className="w-5 h-5 text-[#B77620] dark:text-[#C88D3A] shrink-0" />
+            <ShieldCheck className="w-5 h-5 text-[#9F520B] dark:text-[#C46F18] shrink-0" />
             <div>
               <div
                 className="font-bold text-xs"
-                style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+                style={{ color: isDark ? '#FFF9EE' : '#432006' }}
               >
                 {member.displayName}
               </div>
               <div
                 className="text-[11px] font-medium"
-                style={{ color: isDark ? '#D9C4AC' : '#704728' }}
+                style={{ color: isDark ? '#D9C4AC' : '#72451F' }}
               >
                 {attribution.actingCapacity}
               </div>

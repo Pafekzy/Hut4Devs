@@ -146,20 +146,20 @@ export const RoomActions: React.FC<RoomActionsProps> = ({
         aria-labelledby="delegated-candidates-heading"
         className="rounded-2xl p-5 sm:p-7 border-2 border-b-4 transition-all duration-200 shadow-md backdrop-blur-md"
         style={{
-          backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : 'rgba(255, 253, 248, 0.65)',
-          borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : 'rgba(90, 45, 12, 0.25)',
+          backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : '#FFF0D6',
+          borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : '#CF9F68',
         }}
       >
         <div
           className="flex items-center justify-between pb-4 mb-5 border-b-2"
-          style={{ borderColor: isDark ? 'rgba(200, 141, 58, 0.20)' : 'rgba(90, 45, 12, 0.12)' }}
+          style={{ borderColor: isDark ? 'rgba(200, 141, 58, 0.20)' : '#CF9F68' }}
         >
           <div className="flex items-center gap-2">
             <Sparkles className="w-4 h-4 text-purple-600 dark:text-purple-400" />
             <h2
               id="delegated-candidates-heading"
               className="text-xs sm:text-sm font-semibold uppercase tracking-wider"
-              style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+              style={{ color: isDark ? '#FFF9EE' : '#432006' }}
             >
               Delegated Candidate Choice Flow
             </h2>
@@ -167,9 +167,9 @@ export const RoomActions: React.FC<RoomActionsProps> = ({
           <span
             className="text-[10px] font-mono uppercase px-2.5 py-1 rounded font-semibold border"
             style={{
-              backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : 'rgba(247, 241, 231, 0.7)',
-              borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : 'rgba(90, 45, 12, 0.15)',
-              color: isDark ? '#C88D3A' : '#B77620',
+              backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : '#FAE5C5',
+              borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : '#CF9F68',
+              color: isDark ? '#C88D3A' : '#C46F18',
             }}
           >
             {pendingChoices.length} Pending Choice
@@ -180,20 +180,20 @@ export const RoomActions: React.FC<RoomActionsProps> = ({
           <div
             className="p-6 rounded-xl border-2 border-dashed text-center"
             style={{
-              borderColor: isDark ? 'rgba(200, 141, 58, 0.25)' : 'rgba(90, 45, 12, 0.15)',
-              backgroundColor: isDark ? 'rgba(30, 27, 24, 0.30)' : 'rgba(247, 241, 231, 0.30)',
+              borderColor: isDark ? 'rgba(200, 141, 58, 0.25)' : '#CF9F68',
+              backgroundColor: isDark ? 'rgba(30, 27, 24, 0.30)' : '#FAE5C5',
             }}
           >
-            <ShieldCheck className="w-8 h-8 mx-auto text-[#B77620] dark:text-[#C88D3A] mb-2 opacity-80" />
+            <ShieldCheck className="w-8 h-8 mx-auto text-[#C46F18] dark:text-[#C88D3A] mb-2 opacity-80" />
             <h3
               className="font-bold text-sm"
-              style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+              style={{ color: isDark ? '#FFF9EE' : '#432006' }}
             >
               No Pending Candidate Choice Delegations
             </h3>
             <p
               className="text-xs mt-1 max-w-md mx-auto"
-              style={{ color: isDark ? '#D9C4AC' : '#704728' }}
+              style={{ color: isDark ? '#D9C4AC' : '#5A3013' }}
             >
               {isCoordinator
                 ? 'As Coordinator, you can explicitly delegate prospective fellow selection to the Room Captain from the Bed Spaces tab or Pending Assignments.'
@@ -213,7 +213,7 @@ export const RoomActions: React.FC<RoomActionsProps> = ({
                   id={`delegation-card-${choice.id}`}
                   className="p-5 sm:p-6 rounded-xl border-2 border-b-3 shadow-xs"
                   style={{
-                    backgroundColor: isDark ? 'rgba(30, 27, 24, 0.45)' : 'rgba(247, 241, 231, 0.50)',
+                    backgroundColor: isDark ? 'rgba(30, 27, 24, 0.45)' : '#FAE5C5',
                     borderColor: isDark ? '#9333EA' : '#7E22CE',
                   }}
                 >
@@ -230,13 +230,13 @@ export const RoomActions: React.FC<RoomActionsProps> = ({
                       </div>
                       <div
                         className="text-xs mt-1"
-                        style={{ color: isDark ? '#D9C4AC' : '#704728' }}
+                        style={{ color: isDark ? '#D9C4AC' : '#5A3013' }}
                       >
                         Delegated by: <strong className="font-semibold">{choice.delegatedBy}</strong>
                       </div>
                     </div>
 
-                    <div className="text-[11px] font-mono text-[#B77620] dark:text-[#C88D3A]">
+                    <div className="text-[11px] font-mono text-[#C46F18] dark:text-[#C88D3A]">
                       {new Date(choice.createdAt).toLocaleDateString('en-GB', {
                         day: 'numeric',
                         month: 'short',
@@ -259,7 +259,7 @@ export const RoomActions: React.FC<RoomActionsProps> = ({
                   <div className="space-y-3">
                     <div
                       className="text-xs font-bold uppercase tracking-wider"
-                      style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+                      style={{ color: isDark ? '#FFF9EE' : '#432006' }}
                     >
                       Eligible Candidate Pool ({delegatedPool.length} Candidates Provided)
                     </div>
@@ -283,12 +283,12 @@ export const RoomActions: React.FC<RoomActionsProps> = ({
                                 ? undefined
                                 : isDark
                                 ? 'rgba(38, 33, 28, 0.5)'
-                                : 'rgba(255, 253, 248, 0.7)',
+                                : '#FFF8EE',
                               borderColor: isSelected
                                 ? undefined
                                 : isDark
                                 ? 'rgba(200, 141, 58, 0.25)'
-                                : 'rgba(90, 45, 12, 0.15)',
+                                : '#CF9F68',
                             }}
                           >
                             <div className="flex items-start justify-between">
@@ -297,7 +297,7 @@ export const RoomActions: React.FC<RoomActionsProps> = ({
                                   className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
                                     isSelected
                                       ? 'border-purple-600 bg-purple-600 text-white'
-                                      : 'border-stone-400'
+                                      : 'border-[#CF9F68] dark:border-[#623416]'
                                   }`}
                                 >
                                   {isSelected && <Check className="w-3.5 h-3.5" />}
@@ -305,31 +305,31 @@ export const RoomActions: React.FC<RoomActionsProps> = ({
                                 <div>
                                   <div
                                     className="font-bold text-sm"
-                                    style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+                                    style={{ color: isDark ? '#FFF9EE' : '#432006' }}
                                   >
                                     {cand.fullName}
                                   </div>
                                   <div
-                                    className="text-xs font-medium text-[#B77620] dark:text-[#C88D3A]"
+                                    className="text-xs font-medium text-[#C46F18] dark:text-[#C88D3A]"
                                   >
                                     {cand.track}
                                   </div>
                                 </div>
                               </div>
 
-                              <span className="text-[10px] font-mono px-2 py-0.5 rounded border border-stone-300 dark:border-stone-700 text-stone-600 dark:text-stone-400">
+                              <span className="text-[10px] font-mono px-2 py-0.5 rounded border border-[#CF9F68] dark:border-[#623416] text-[#5A3013] dark:text-[#E5D3BA]/75">
                                 {cand.admissionNumber}
                               </span>
                             </div>
 
                             <p
                               className="text-xs mt-2 pl-8 leading-relaxed"
-                              style={{ color: isDark ? '#D9C4AC' : '#704728' }}
+                              style={{ color: isDark ? '#D9C4AC' : '#5A3013' }}
                             >
                               {cand.candidateBio}
                             </p>
 
-                            <div className="mt-2.5 pl-8 flex items-center gap-4 text-[11px] font-mono text-stone-500 dark:text-stone-400">
+                            <div className="mt-2.5 pl-8 flex items-center gap-4 text-[11px] font-mono text-[#5A3013] dark:text-[#E5D3BA]/75">
                               <span>GitHub: @{cand.githubHandle}</span>
                               <span>&bull;</span>
                               <span>{cand.phone}</span>
@@ -343,13 +343,13 @@ export const RoomActions: React.FC<RoomActionsProps> = ({
                   {/* Room Captain Action Confirmation Box */}
                   <div
                     className="mt-5 pt-4 border-t space-y-3"
-                    style={{ borderColor: isDark ? 'rgba(200, 141, 58, 0.20)' : 'rgba(90, 45, 12, 0.12)' }}
+                    style={{ borderColor: isDark ? 'rgba(200, 141, 58, 0.20)' : '#CF9F68' }}
                   >
                     <div>
                       <label
                         htmlFor={`captain-note-${choice.id}`}
                         className="block text-xs font-bold uppercase tracking-wider mb-1"
-                        style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+                        style={{ color: isDark ? '#FFF9EE' : '#432006' }}
                       >
                         Room Captain Verification &amp; Living Space Note
                       </label>
@@ -359,11 +359,11 @@ export const RoomActions: React.FC<RoomActionsProps> = ({
                         value={captainNote}
                         onChange={(e) => setCaptainNote(e.target.value)}
                         placeholder="e.g. Confirmed with room fellows; candidate study schedule aligns with quiet hours."
-                        className="w-full text-xs p-2.5 rounded-lg border-2 border-b-3 focus:outline-none focus:ring-2 focus:ring-[#B77620]"
+                        className="w-full text-xs p-2.5 rounded-lg border-2 border-b-3 focus:outline-none focus:ring-2 focus:ring-[#C46F18]"
                         style={{
-                          backgroundColor: isDark ? 'rgba(23, 21, 19, 0.8)' : 'rgba(255, 255, 255, 0.9)',
-                          borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : 'rgba(90, 45, 12, 0.2)',
-                          color: isDark ? '#FFF9EE' : '#5A2D0C',
+                          backgroundColor: isDark ? 'rgba(23, 21, 19, 0.8)' : '#FFF8EE',
+                          borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : '#CF9F68',
+                          color: isDark ? '#FFF9EE' : '#432006',
                         }}
                       />
                     </div>
@@ -371,7 +371,7 @@ export const RoomActions: React.FC<RoomActionsProps> = ({
                     <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
                       <div
                         className="text-[11px]"
-                        style={{ color: isDark ? '#D9C4AC' : '#704728' }}
+                        style={{ color: isDark ? '#D9C4AC' : '#5A3013' }}
                       >
                         Attributed actor: <strong>{activeMemberName}</strong> ({actingCapacity})
                       </div>
@@ -384,7 +384,7 @@ export const RoomActions: React.FC<RoomActionsProps> = ({
                         className={`w-full sm:w-auto px-5 py-2 text-xs font-bold rounded-lg border-2 border-b-3 transition-all duration-150 cursor-pointer flex items-center justify-center gap-2 active:translate-y-[1px] disabled:opacity-50 disabled:cursor-not-allowed ${
                           isDark
                             ? 'bg-[#C88D3A] text-[#241104] border-[#915B15]'
-                            : 'bg-[#5A2D0C] text-[#FFF9EE] border-[#381B07]'
+                            : 'bg-[#432006] text-[#FFF0D6] border-[#381B07]'
                         }`}
                       >
                         <CheckCircle2 className="w-4 h-4" />
@@ -404,20 +404,20 @@ export const RoomActions: React.FC<RoomActionsProps> = ({
         aria-labelledby="occupancy-verification-heading"
         className="rounded-2xl p-5 sm:p-7 border-2 border-b-4 transition-all duration-200 shadow-md backdrop-blur-md"
         style={{
-          backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : 'rgba(255, 253, 248, 0.65)',
-          borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : 'rgba(90, 45, 12, 0.25)',
+          backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : '#FFF0D6',
+          borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : '#CF9F68',
         }}
       >
         <div
           className="flex items-center justify-between pb-4 mb-5 border-b-2"
-          style={{ borderColor: isDark ? 'rgba(200, 141, 58, 0.20)' : 'rgba(90, 45, 12, 0.12)' }}
+          style={{ borderColor: isDark ? 'rgba(200, 141, 58, 0.20)' : '#CF9F68' }}
         >
           <div className="flex items-center gap-2">
-            <UserCheck className="w-4 h-4 text-[#B77620] dark:text-[#C88D3A]" />
+            <UserCheck className="w-4 h-4 text-[#C46F18] dark:text-[#C88D3A]" />
             <h2
               id="occupancy-verification-heading"
               className="text-xs sm:text-sm font-semibold uppercase tracking-wider"
-              style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+              style={{ color: isDark ? '#FFF9EE' : '#432006' }}
             >
               In-Person Occupancy Verification
             </h2>
@@ -425,9 +425,9 @@ export const RoomActions: React.FC<RoomActionsProps> = ({
           <span
             className="text-[10px] font-mono uppercase px-2.5 py-1 rounded font-semibold border"
             style={{
-              backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : 'rgba(247, 241, 231, 0.7)',
-              borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : 'rgba(90, 45, 12, 0.15)',
-              color: isDark ? '#C88D3A' : '#B77620',
+              backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : '#FAE5C5',
+              borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : '#CF9F68',
+              color: isDark ? '#C88D3A' : '#C46F18',
             }}
           >
             {verificationRequests.length} Requests
@@ -438,20 +438,20 @@ export const RoomActions: React.FC<RoomActionsProps> = ({
           <div
             className="p-6 rounded-xl border-2 border-dashed text-center"
             style={{
-              borderColor: isDark ? 'rgba(200, 141, 58, 0.25)' : 'rgba(90, 45, 12, 0.15)',
-              backgroundColor: isDark ? 'rgba(30, 27, 24, 0.30)' : 'rgba(247, 241, 231, 0.30)',
+              borderColor: isDark ? 'rgba(200, 141, 58, 0.25)' : '#CF9F68',
+              backgroundColor: isDark ? 'rgba(30, 27, 24, 0.30)' : '#FAE5C5',
             }}
           >
             <CheckCircle2 className="w-8 h-8 mx-auto text-emerald-600 mb-2 opacity-80" />
             <h3
               className="font-bold text-sm"
-              style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+              style={{ color: isDark ? '#FFF9EE' : '#432006' }}
             >
               All Occupancy Checks Completed
             </h3>
             <p
               className="text-xs mt-1 max-w-md mx-auto"
-              style={{ color: isDark ? '#D9C4AC' : '#704728' }}
+              style={{ color: isDark ? '#D9C4AC' : '#5A3013' }}
             >
               No fellows in {room.roomNumber} currently require in-person occupancy verification.
             </p>
@@ -464,21 +464,21 @@ export const RoomActions: React.FC<RoomActionsProps> = ({
                 id={`verif-card-${req.id}`}
                 className="p-4 sm:p-5 rounded-xl border-2 border-b-3 shadow-xs"
                 style={{
-                  backgroundColor: isDark ? 'rgba(30, 27, 24, 0.45)' : 'rgba(247, 241, 231, 0.50)',
-                  borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : 'rgba(90, 45, 12, 0.20)',
+                  backgroundColor: isDark ? 'rgba(30, 27, 24, 0.45)' : '#FAE5C5',
+                  borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : '#CF9F68',
                 }}
               >
                 <div className="flex items-start justify-between">
                   <div>
                     <h3
                       className="font-bold text-sm"
-                      style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+                      style={{ color: isDark ? '#FFF9EE' : '#432006' }}
                     >
                       {req.fullName}
                     </h3>
                     <div
                       className="text-xs mt-0.5"
-                      style={{ color: isDark ? '#D9C4AC' : '#704728' }}
+                      style={{ color: isDark ? '#D9C4AC' : '#5A3013' }}
                     >
                       {req.programCommunity} &bull; {req.email}
                     </div>
@@ -496,7 +496,7 @@ export const RoomActions: React.FC<RoomActionsProps> = ({
                 </div>
 
                 {req.delegation?.status === 'PENDING' && (
-                  <div className="mt-4 pt-3 border-t space-y-3" style={{ borderColor: isDark ? 'rgba(200, 141, 58, 0.15)' : 'rgba(90, 45, 12, 0.10)' }}>
+                  <div className="mt-4 pt-3 border-t space-y-3" style={{ borderColor: isDark ? 'rgba(200, 141, 58, 0.15)' : '#CF9F68' }}>
                     <input
                       type="text"
                       placeholder="Observation / verification note (optional)..."
@@ -506,9 +506,9 @@ export const RoomActions: React.FC<RoomActionsProps> = ({
                       }
                       className="w-full text-xs p-2 rounded-lg border-2 border-b-3"
                       style={{
-                        backgroundColor: isDark ? 'rgba(23, 21, 19, 0.8)' : 'rgba(255, 255, 255, 0.9)',
-                        borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : 'rgba(90, 45, 12, 0.2)',
-                        color: isDark ? '#FFF9EE' : '#5A2D0C',
+                        backgroundColor: isDark ? 'rgba(23, 21, 19, 0.8)' : '#FFF8EE',
+                        borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : '#CF9F68',
+                        color: isDark ? '#FFF9EE' : '#432006',
                       }}
                     />
 
@@ -520,7 +520,7 @@ export const RoomActions: React.FC<RoomActionsProps> = ({
                         className={`px-4 py-1.5 text-xs font-bold rounded-lg border-2 border-b-3 cursor-pointer active:translate-y-[1px] ${
                           isDark
                             ? 'bg-[#C88D3A] text-[#241104] border-[#915B15]'
-                            : 'bg-[#5A2D0C] text-[#FFF9EE] border-[#381B07]'
+                            : 'bg-[#432006] text-[#FFF0D6] border-[#381B07]'
                         }`}
                       >
                         Confirm Occupancy

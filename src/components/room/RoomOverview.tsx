@@ -41,28 +41,28 @@ export const RoomOverview: React.FC<RoomOverviewProps> = ({
         <div
           className="h4d-card-static p-4 sm:p-5 rounded-2xl border-2 border-b-4 shadow-md backdrop-blur-md"
           style={{
-            backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : 'rgba(255, 253, 248, 0.65)',
-            borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : 'rgba(90, 45, 12, 0.25)',
+            backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : '#FFF0D6',
+            borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : '#CF9F68',
           }}
         >
           <div className="flex items-center justify-between text-xs mb-1.5">
             <span
               className="font-bold uppercase tracking-wider text-[10px]"
-              style={{ color: isDark ? '#C88D3A' : '#B77620' }}
+              style={{ color: isDark ? '#C88D3A' : '#C46F18' }}
             >
               Occupancy
             </span>
-            <Users className="w-4 h-4 text-[#B77620] dark:text-[#C88D3A]" />
+            <Users className="w-4 h-4 text-[#C46F18] dark:text-[#C88D3A]" />
           </div>
           <div
             className="text-2xl sm:text-3xl font-bold font-mono tracking-tight"
-            style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+            style={{ color: isDark ? '#FFF9EE' : '#432006' }}
           >
             {room.occupiedBeds} / {room.totalBeds}
           </div>
           <div
             className="text-[11px] font-medium mt-1"
-            style={{ color: isDark ? '#D9C4AC' : '#704728' }}
+            style={{ color: isDark ? '#D9C4AC' : '#5A3013' }}
           >
             {room.occupiedBeds === room.totalBeds
               ? 'Room fully occupied'
@@ -74,8 +74,8 @@ export const RoomOverview: React.FC<RoomOverviewProps> = ({
         <div
           className="h4d-card-static p-4 sm:p-5 rounded-2xl border-2 border-b-4 shadow-md backdrop-blur-md"
           style={{
-            backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : 'rgba(255, 253, 248, 0.65)',
-            borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : 'rgba(90, 45, 12, 0.25)',
+            backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : '#FFF0D6',
+            borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : '#CF9F68',
           }}
         >
           <div className="flex items-center justify-between text-xs mb-1.5">
@@ -93,7 +93,7 @@ export const RoomOverview: React.FC<RoomOverviewProps> = ({
           </div>
           <div
             className="text-[11px] font-medium mt-1"
-            style={{ color: isDark ? '#D9C4AC' : '#704728' }}
+            style={{ color: isDark ? '#D9C4AC' : '#5A3013' }}
           >
             Immediate ready bunks
           </div>
@@ -105,8 +105,8 @@ export const RoomOverview: React.FC<RoomOverviewProps> = ({
             delegatedBedsCount > 0 ? 'ring-2 ring-purple-600/30' : ''
           }`}
           style={{
-            backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : 'rgba(255, 253, 248, 0.65)',
-            borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : 'rgba(90, 45, 12, 0.25)',
+            backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : '#FFF0D6',
+            borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : '#CF9F68',
           }}
         >
           <div className="flex items-center justify-between text-xs mb-1.5">
@@ -122,7 +122,7 @@ export const RoomOverview: React.FC<RoomOverviewProps> = ({
           </div>
           <div
             className="text-[11px] font-medium mt-1"
-            style={{ color: isDark ? '#D9C4AC' : '#704728' }}
+            style={{ color: isDark ? '#D9C4AC' : '#5A3013' }}
           >
             {delegatedBedsCount > 0
               ? 'Captain selection in flight'
@@ -134,27 +134,27 @@ export const RoomOverview: React.FC<RoomOverviewProps> = ({
         <div
           className="h4d-card-static p-4 sm:p-5 rounded-2xl border-2 border-b-4 shadow-md backdrop-blur-md"
           style={{
-            backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : 'rgba(255, 253, 248, 0.65)',
-            borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : 'rgba(90, 45, 12, 0.25)',
+            backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : '#FFF0D6',
+            borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : '#CF9F68',
           }}
         >
           <div className="flex items-center justify-between text-xs mb-1.5">
             <span
               className="font-bold uppercase tracking-wider text-[10px]"
-              style={{ color: isDark ? '#C88D3A' : '#B77620' }}
+              style={{ color: isDark ? '#C88D3A' : '#C46F18' }}
             >
               Rate / Fellow
             </span>
-            <Building2 className="w-4 h-4 text-[#B77620] dark:text-[#C88D3A]" />
+            <Building2 className="w-4 h-4 text-[#C46F18] dark:text-[#C88D3A]" />
           </div>
           <div
-            className="text-2xl sm:text-3xl font-bold font-mono tracking-tight text-[#B77620] dark:text-[#C88D3A]"
+            className="text-2xl sm:text-3xl font-bold font-mono tracking-tight text-[#C46F18] dark:text-[#C88D3A]"
           >
             ₦{room.monthlyCommitment.toLocaleString()}
           </div>
           <div
             className="text-[11px] font-medium mt-1"
-            style={{ color: isDark ? '#D9C4AC' : '#704728' }}
+            style={{ color: isDark ? '#D9C4AC' : '#5A3013' }}
           >
             Per month &bull; {room.campus}
           </div>
@@ -166,28 +166,28 @@ export const RoomOverview: React.FC<RoomOverviewProps> = ({
         aria-labelledby="bed-spaces-heading"
         className="rounded-2xl p-5 sm:p-7 border-2 border-b-4 transition-all duration-200 shadow-md backdrop-blur-md"
         style={{
-          backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : 'rgba(255, 253, 248, 0.65)',
-          borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : 'rgba(90, 45, 12, 0.25)',
+          backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : '#FFF0D6',
+          borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : '#CF9F68',
         }}
       >
         <div
           className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 mb-5 border-b-2 gap-2"
-          style={{ borderColor: isDark ? 'rgba(200, 141, 58, 0.20)' : 'rgba(90, 45, 12, 0.12)' }}
+          style={{ borderColor: isDark ? 'rgba(200, 141, 58, 0.20)' : '#CF9F68' }}
         >
           <div>
             <div className="flex items-center gap-2">
-              <Bed className="w-4 h-4 text-[#B77620] dark:text-[#C88D3A]" />
+              <Bed className="w-4 h-4 text-[#C46F18] dark:text-[#C88D3A]" />
               <h2
                 id="bed-spaces-heading"
                 className="text-xs sm:text-sm font-semibold uppercase tracking-wider"
-                style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+                style={{ color: isDark ? '#FFF9EE' : '#432006' }}
               >
                 Bed Space Allocation &bull; {room.roomNumber}
               </h2>
             </div>
             <p
               className="text-xs mt-0.5"
-              style={{ color: isDark ? '#D9C4AC' : '#704728' }}
+              style={{ color: isDark ? '#D9C4AC' : '#5A3013' }}
             >
               {room.propertyName} &bull; {room.floorName} &bull; Delegated Captain authority: {room.captainName || 'Coordinator Oversight'}
             </p>
@@ -196,9 +196,9 @@ export const RoomOverview: React.FC<RoomOverviewProps> = ({
           <span
             className="text-[10px] font-mono uppercase px-2.5 py-1 rounded-md font-semibold border self-start sm:self-auto"
             style={{
-              backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : 'rgba(247, 241, 231, 0.7)',
-              borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : 'rgba(90, 45, 12, 0.15)',
-              color: isDark ? '#C88D3A' : '#B77620',
+              backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : '#FAE5C5',
+              borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : '#CF9F68',
+              color: isDark ? '#C88D3A' : '#C46F18',
             }}
           >
             {room.beds.length} Total Spaces
@@ -218,23 +218,23 @@ export const RoomOverview: React.FC<RoomOverviewProps> = ({
                 id={`bed-card-${bed.id}`}
                 className="h4d-card-static p-4 sm:p-5 rounded-xl border-2 border-b-3 shadow-xs backdrop-blur-xs flex flex-col justify-between"
                 style={{
-                  backgroundColor: isDark ? 'rgba(30, 27, 24, 0.45)' : 'rgba(247, 241, 231, 0.50)',
+                  backgroundColor: isDark ? 'rgba(30, 27, 24, 0.45)' : '#FFF8EE',
                   borderColor: isDelegated
                     ? (isDark ? '#9333EA' : '#7E22CE')
                     : isOccupied
-                    ? (isDark ? 'rgba(200, 141, 58, 0.35)' : 'rgba(90, 45, 12, 0.20)')
-                    : (isDark ? 'rgba(200, 141, 58, 0.20)' : 'rgba(90, 45, 12, 0.12)'),
+                    ? (isDark ? 'rgba(200, 141, 58, 0.35)' : '#DDB985')
+                    : (isDark ? 'rgba(200, 141, 58, 0.20)' : '#CF9F68'),
                 }}
               >
                 <div>
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-2">
-                      <span className="text-xs font-mono font-bold text-[#B77620] dark:text-[#C88D3A]">
+                      <span className="text-xs font-mono font-bold text-[#C46F18] dark:text-[#C88D3A]">
                         #{idx + 1}
                       </span>
                       <h3
                         className="font-serif font-bold text-sm"
-                        style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+                        style={{ color: isDark ? '#FFF9EE' : '#432006' }}
                       >
                         {bed.bedLabel}
                       </h3>
@@ -263,7 +263,7 @@ export const RoomOverview: React.FC<RoomOverviewProps> = ({
                     <div className="mt-2 space-y-1">
                       <div
                         className="font-bold text-sm flex items-center gap-1.5"
-                        style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+                        style={{ color: isDark ? '#FFF9EE' : '#432006' }}
                       >
                         <UserCheck className="w-3.5 h-3.5 text-emerald-600" />
                         <span>{bed.occupantName}</span>
@@ -271,13 +271,13 @@ export const RoomOverview: React.FC<RoomOverviewProps> = ({
                       {bed.occupantTrack && (
                         <div
                           className="text-xs font-medium"
-                          style={{ color: isDark ? '#D9C4AC' : '#704728' }}
+                          style={{ color: isDark ? '#D9C4AC' : '#5A3013' }}
                         >
                           {bed.occupantTrack}
                         </div>
                       )}
                       {bed.occupantH4dId && (
-                        <div className="text-[10px] font-mono text-[#B77620] dark:text-[#C88D3A]">
+                        <div className="text-[10px] font-mono text-[#C46F18] dark:text-[#C88D3A]">
                           ID: {bed.occupantH4dId}
                         </div>
                       )}
@@ -297,7 +297,7 @@ export const RoomOverview: React.FC<RoomOverviewProps> = ({
                   )}
 
                   {isVacant && (
-                    <div className="mt-2 text-xs text-stone-600 dark:text-stone-300">
+                    <div className="mt-2 text-xs text-[#5A3013] dark:text-[#E5D3BA]">
                       <p>Open bunk space ready for assignment or captain-scoped candidate delegation.</p>
                     </div>
                   )}
@@ -307,7 +307,7 @@ export const RoomOverview: React.FC<RoomOverviewProps> = ({
                 {isCoordinatorView && isVacant && (
                   <div
                     className="mt-4 pt-3 border-t flex items-center gap-2"
-                    style={{ borderColor: isDark ? 'rgba(200, 141, 58, 0.15)' : 'rgba(90, 45, 12, 0.10)' }}
+                    style={{ borderColor: isDark ? 'rgba(200, 141, 58, 0.15)' : '#CF9F68' }}
                   >
                     {onOpenDelegateChoice && (
                       <button
@@ -317,7 +317,7 @@ export const RoomOverview: React.FC<RoomOverviewProps> = ({
                         className={`flex-1 px-3 py-1.5 text-xs font-bold rounded-lg border-2 border-b-3 transition-all duration-150 cursor-pointer text-center active:translate-y-[1px] ${
                           isDark
                             ? 'bg-[#C88D3A] text-[#241104] border-[#915B15]'
-                            : 'bg-[#5A2D0C] text-[#FFF9EE] border-[#381B07]'
+                            : 'bg-[#432006] text-[#FFF0D6] border-[#381B07]'
                         }`}
                       >
                         Delegate Choice
@@ -330,9 +330,9 @@ export const RoomOverview: React.FC<RoomOverviewProps> = ({
                         onClick={() => onOpenDirectAssign(bed.id)}
                         className="px-3 py-1.5 text-xs font-medium rounded-lg border-2 border-b-3 transition-all duration-150 cursor-pointer active:translate-y-[1px]"
                         style={{
-                          backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : 'rgba(255, 253, 248, 0.8)',
-                          borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : 'rgba(90, 45, 12, 0.2)',
-                          color: isDark ? '#FFF9EE' : '#5A2D0C',
+                          backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : '#FFF0D6',
+                          borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : '#CF9F68',
+                          color: isDark ? '#FFF9EE' : '#432006',
                         }}
                       >
                         Assign Directly
@@ -351,22 +351,22 @@ export const RoomOverview: React.FC<RoomOverviewProps> = ({
         aria-labelledby="room-authority-heading"
         className="rounded-2xl p-5 sm:p-6 border-2 border-b-4 transition-all duration-200 shadow-md backdrop-blur-md flex items-start gap-3.5"
         style={{
-          backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : 'rgba(255, 253, 248, 0.65)',
-          borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : 'rgba(90, 45, 12, 0.25)',
+          backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : '#FFF0D6',
+          borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : '#CF9F68',
         }}
       >
-        <ShieldCheck className="w-5 h-5 text-[#B77620] dark:text-[#C88D3A] shrink-0 mt-0.5" />
+        <ShieldCheck className="w-5 h-5 text-[#C46F18] dark:text-[#C88D3A] shrink-0 mt-0.5" />
         <div>
           <h2
             id="room-authority-heading"
             className="text-xs font-bold uppercase tracking-wider"
-            style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+            style={{ color: isDark ? '#FFF9EE' : '#432006' }}
           >
             Room Governance &amp; Authority Scope
           </h2>
           <p
             className="text-xs mt-1 leading-relaxed"
-            style={{ color: isDark ? '#D9C4AC' : '#704728' }}
+            style={{ color: isDark ? '#D9C4AC' : '#5A3013' }}
           >
             {room.captainName
               ? `Room Captain ${room.captainName} holds delegated room-level authority for ${room.roomNumber}. This authority is strictly room-scoped and includes in-person occupancy verification and explicitly delegated candidate selection.`

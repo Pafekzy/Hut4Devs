@@ -115,7 +115,7 @@ export const MemberNotificationsDropdown: React.FC<MemberNotificationsDropdownPr
         className={`p-2 min-h-[44px] min-w-[44px] relative flex items-center justify-center rounded-xl text-xs transition-colors cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C88D3A] ${
           isDark
             ? 'text-[#E5D3BA] hover:text-[#FFF9EE] hover:bg-[#3E200C]'
-            : 'text-[#6D4223] hover:text-[#5A2D0C] hover:bg-[#EFE5D5]'
+            : 'text-[#5A3013] hover:text-[#432006] hover:bg-[#F3D5AB]'
         }`}
       >
         <Bell className="w-4 h-4" aria-hidden="true" />
@@ -135,22 +135,22 @@ export const MemberNotificationsDropdown: React.FC<MemberNotificationsDropdownPr
           className={`absolute right-0 mt-2 w-80 sm:w-96 rounded-2xl border shadow-xl z-50 overflow-hidden transition-all ${
             isDark
               ? 'bg-[#2F1707] border-[#C88D3A]/40 text-[#FFF9EE]'
-              : 'bg-[#FFF9EE] border-[#C88D3A]/40 text-[#5A2D0C]'
+              : 'bg-[#FAE5C5] border-[#CF9F68] text-[#432006]'
           }`}
         >
           {/* Header */}
           <div
             className="p-3.5 border-b flex items-center justify-between"
             style={{
-              borderColor: isDark ? 'rgba(200, 141, 58, 0.25)' : 'rgba(90, 45, 12, 0.15)',
-              backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : 'rgba(247, 241, 231, 0.7)',
+              borderColor: isDark ? 'rgba(200, 141, 58, 0.25)' : '#CF9F68',
+              backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : '#FFF0D6',
             }}
           >
             <div className="flex items-center gap-2">
-              <Bell className="w-4 h-4 text-[#B77620] dark:text-[#C88D3A]" />
+              <Bell className="w-4 h-4 text-[#C46F18] dark:text-[#C88D3A]" />
               <span
                 className="font-serif font-bold text-sm"
-                style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+                style={{ color: isDark ? '#FFF9EE' : '#432006' }}
               >
                 Notifications
               </span>
@@ -158,9 +158,9 @@ export const MemberNotificationsDropdown: React.FC<MemberNotificationsDropdownPr
                 <span
                   className="px-2 py-0.5 rounded-full text-[10px] font-bold border"
                   style={{
-                    backgroundColor: isDark ? 'rgba(200, 141, 58, 0.25)' : '#FFFDF8',
-                    borderColor: isDark ? 'rgba(200, 141, 58, 0.40)' : 'rgba(90, 45, 12, 0.20)',
-                    color: isDark ? '#FCD34D' : '#5A2D0C',
+                    backgroundColor: isDark ? 'rgba(200, 141, 58, 0.25)' : '#FAE5C5',
+                    borderColor: isDark ? 'rgba(200, 141, 58, 0.40)' : '#CF9F68',
+                    color: isDark ? '#FCD34D' : '#C46F18',
                   }}
                 >
                   {unreadCount} unread
@@ -174,7 +174,7 @@ export const MemberNotificationsDropdown: React.FC<MemberNotificationsDropdownPr
                 id="notifications-mark-all-read-btn"
                 onClick={handleMarkAllAsRead}
                 className="text-[11px] font-bold hover:underline flex items-center gap-1 cursor-pointer transition-colors"
-                style={{ color: isDark ? '#C88D3A' : '#B77620' }}
+                style={{ color: isDark ? '#C88D3A' : '#C46F18' }}
               >
                 <CheckCheck className="w-3.5 h-3.5" />
                 <span>Mark all read</span>
@@ -185,12 +185,12 @@ export const MemberNotificationsDropdown: React.FC<MemberNotificationsDropdownPr
           {/* List */}
           <div
             className="max-h-80 overflow-y-auto divide-y"
-            style={{ borderColor: isDark ? 'rgba(200, 141, 58, 0.15)' : 'rgba(90, 45, 12, 0.10)' }}
+            style={{ borderColor: isDark ? 'rgba(200, 141, 58, 0.15)' : 'rgba(207, 159, 104, 0.35)' }}
           >
             {sortedNotifications.length === 0 ? (
               <div
                 className="p-6 text-center text-xs font-medium"
-                style={{ color: isDark ? '#D9C4AC' : '#704728' }}
+                style={{ color: isDark ? '#D9C4AC' : '#5A3013' }}
               >
                 No notifications yet. You&apos;re up to date!
               </div>
@@ -206,17 +206,17 @@ export const MemberNotificationsDropdown: React.FC<MemberNotificationsDropdownPr
                       !n.read
                         ? isDark
                           ? 'bg-[#3E1F0B]/80 hover:bg-[#3E1F0B]'
-                          : 'bg-[#F7F1E7] hover:bg-[#EFE5D5]'
+                          : 'bg-[#FFF0D6] hover:bg-[#F3D5AB]'
                         : isDark
                         ? 'hover:bg-[#231206]'
-                        : 'hover:bg-[#FAF4EB]'
+                        : 'hover:bg-[#FFF0D6]/60'
                     }`}
                   >
                     <div className="mt-1 shrink-0">
                       {!n.read ? (
-                        <div className="w-2.5 h-2.5 rounded-full bg-[#B77620] dark:bg-[#C88D3A] ring-2 ring-[#C88D3A]/30" />
+                        <div className="w-2.5 h-2.5 rounded-full bg-[#C27622] ring-2 ring-[#C27622]/30" />
                       ) : (
-                        <div className="w-2 h-2 rounded-full bg-stone-400/50" />
+                        <div className="w-2 h-2 rounded-full bg-[#C27622]/30 dark:bg-[#E5D3BA]/30" />
                       )}
                     </div>
 
@@ -224,16 +224,16 @@ export const MemberNotificationsDropdown: React.FC<MemberNotificationsDropdownPr
                       <div className="flex items-center justify-between gap-2">
                         <span
                           className="font-bold text-xs truncate"
-                          style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+                          style={{ color: isDark ? '#FFF9EE' : '#432006' }}
                         >
                           {n.title}
                         </span>
                         <span
                           className="text-[10px] font-mono font-bold shrink-0 px-1.5 py-0.5 rounded border"
                           style={{
-                            color: isDark ? '#FCD34D' : '#5A2D0C',
-                            backgroundColor: isDark ? 'rgba(42, 34, 28, 0.9)' : '#FFFDF8',
-                            borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : 'rgba(90, 45, 12, 0.20)',
+                            color: isDark ? '#FCD34D' : '#5A3013',
+                            backgroundColor: isDark ? 'rgba(42, 34, 28, 0.9)' : '#FAE5C5',
+                            borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : '#CF9F68',
                           }}
                         >
                           {new Date(n.createdAt).toLocaleTimeString([], {
@@ -244,7 +244,7 @@ export const MemberNotificationsDropdown: React.FC<MemberNotificationsDropdownPr
                       </div>
                       <p
                         className="text-xs leading-relaxed line-clamp-2"
-                        style={{ color: isDark ? '#E5D6C5' : '#5A2D0C' }}
+                        style={{ color: isDark ? '#E5D6C5' : '#5A3013' }}
                       >
                         {n.message}
                       </p>
@@ -254,9 +254,9 @@ export const MemberNotificationsDropdown: React.FC<MemberNotificationsDropdownPr
                           <span
                             className="inline-flex items-center gap-0.5 text-[10px] font-bold px-2 py-0.5 rounded border"
                             style={{
-                              backgroundColor: isDark ? 'rgba(200, 141, 58, 0.20)' : '#FFFDF8',
-                              color: isDark ? '#FCD34D' : '#5A2D0C',
-                              borderColor: isDark ? 'rgba(200, 141, 58, 0.40)' : 'rgba(90, 45, 12, 0.20)',
+                              backgroundColor: isDark ? 'rgba(200, 141, 58, 0.20)' : '#FFF0D6',
+                              color: isDark ? '#FCD34D' : '#C46F18',
+                              borderColor: isDark ? 'rgba(200, 141, 58, 0.40)' : '#CF9F68',
                             }}
                           >
                             {wsLabel} <ArrowUpRight className="w-2.5 h-2.5" />
@@ -266,9 +266,9 @@ export const MemberNotificationsDropdown: React.FC<MemberNotificationsDropdownPr
                           <span
                             className="inline-flex items-center gap-0.5 text-[10px] font-bold px-2 py-0.5 rounded border"
                             style={{
-                              backgroundColor: isDark ? 'rgba(42, 34, 28, 0.85)' : '#FFFDF8',
-                              color: isDark ? '#E5D3BA' : '#5A2D0C',
-                              borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : 'rgba(90, 45, 12, 0.20)',
+                              backgroundColor: isDark ? 'rgba(42, 34, 28, 0.85)' : '#FFF0D6',
+                              color: isDark ? '#E5D3BA' : '#5A3013',
+                              borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : '#CF9F68',
                             }}
                           >
                             Missing Puzzle #{n.feedbackId} &rarr;
@@ -285,9 +285,9 @@ export const MemberNotificationsDropdown: React.FC<MemberNotificationsDropdownPr
                         aria-label="Mark notification as read"
                         className="p-1 rounded-lg border transition-colors shrink-0 cursor-pointer"
                         style={{
-                          borderColor: isDark ? 'rgba(200, 141, 58, 0.30)' : 'rgba(90, 45, 12, 0.20)',
-                          backgroundColor: isDark ? 'rgba(42, 34, 28, 0.8)' : '#FFFDF8',
-                          color: isDark ? '#FCD34D' : '#5A2D0C',
+                          borderColor: isDark ? 'rgba(200, 141, 58, 0.30)' : '#CF9F68',
+                          backgroundColor: isDark ? 'rgba(42, 34, 28, 0.8)' : '#FFF0D6',
+                          color: isDark ? '#FCD34D' : '#C46F18',
                         }}
                       >
                         <Check className="w-3.5 h-3.5" />
@@ -303,9 +303,9 @@ export const MemberNotificationsDropdown: React.FC<MemberNotificationsDropdownPr
           <div
             className="p-2.5 border-t text-[10px] text-center font-mono font-semibold"
             style={{
-              borderColor: isDark ? 'rgba(200, 141, 58, 0.25)' : 'rgba(90, 45, 12, 0.15)',
-              backgroundColor: isDark ? 'rgba(20, 10, 3, 0.6)' : 'rgba(247, 241, 231, 0.8)',
-              color: isDark ? '#C88D3A' : '#704728',
+              borderColor: isDark ? 'rgba(200, 141, 58, 0.25)' : '#CF9F68',
+              backgroundColor: isDark ? 'rgba(20, 10, 3, 0.6)' : '#FFF0D6',
+              color: isDark ? '#C88D3A' : '#72451F',
             }}
           >
             Local browser persistence for this member session

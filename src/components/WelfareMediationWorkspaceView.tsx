@@ -176,8 +176,8 @@ export const WelfareMediationWorkspaceView: React.FC<WelfareMediationWorkspaceVi
         id="welfare-officer-banner"
         className="rounded-2xl p-5 sm:p-7 border-2 border-b-4 transition-all duration-200 shadow-md backdrop-blur-md"
         style={{
-          backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : 'rgba(255, 253, 248, 0.65)',
-          borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : 'rgba(90, 45, 12, 0.25)',
+          backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : '#FAE5C5',
+          borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : '#CF9F68',
         }}
       >
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
@@ -185,27 +185,27 @@ export const WelfareMediationWorkspaceView: React.FC<WelfareMediationWorkspaceVi
             <div
               className="p-3 sm:p-3.5 rounded-xl border-2 border-b-3 shadow-xs flex items-center justify-center shrink-0 transition-transform duration-150 hover:-translate-y-0.5"
               style={{
-                backgroundColor: isDark ? '#2F1707' : '#F7F1E7',
-                borderColor: isDark ? 'rgba(200, 141, 58, 0.4)' : 'rgba(90, 45, 12, 0.25)',
-                color: '#C88D3A',
+                backgroundColor: isDark ? '#2F1707' : '#F3D5AB',
+                borderColor: isDark ? 'rgba(200, 141, 58, 0.4)' : '#CF9F68',
+                color: isDark ? '#E5A955' : '#9F520B',
               }}
             >
-              <HeartHandshake className="w-6 h-6 text-[#C88D3A]" />
+              <HeartHandshake className="w-6 h-6 text-[#9F520B] dark:text-[#C46F18]" />
             </div>
             <div>
               <div className="flex flex-wrap items-center gap-2">
                 <h1
                   className="font-serif text-xl sm:text-2xl font-bold tracking-tight"
-                  style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+                  style={{ color: isDark ? '#FFF9EE' : '#432006' }}
                 >
                   Accommodation Welfare &amp; Mediation
                 </h1>
                 <span
                   className="px-2.5 py-0.5 rounded-full text-[11px] font-bold tracking-wide uppercase border shadow-xs"
                   style={{
-                    backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : 'rgba(247, 241, 231, 0.7)',
-                    borderColor: '#C88D3A',
-                    color: isDark ? '#F5C678' : '#8C4D11',
+                    backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : '#F3D5AB',
+                    borderColor: isDark ? '#C46F18' : '#CF9F68',
+                    color: isDark ? '#F5C678' : '#9F520B',
                   }}
                 >
                   Restorative Scope
@@ -213,7 +213,7 @@ export const WelfareMediationWorkspaceView: React.FC<WelfareMediationWorkspaceVi
               </div>
               <p
                 className="text-xs sm:text-sm mt-1 max-w-2xl font-normal leading-relaxed"
-                style={{ color: isDark ? '#D9C4AC' : '#704728' }}
+                style={{ color: isDark ? '#D9C4AC' : '#5A3013' }}
               >
                 Dedicated support workspace for resident wellbeing, roommate mediation, and facility living-condition escalations. Scoped strictly outside membership admission and financial reconciliation.
               </p>
@@ -223,20 +223,20 @@ export const WelfareMediationWorkspaceView: React.FC<WelfareMediationWorkspaceVi
           <div
             className="px-4 py-2.5 rounded-xl border-2 border-b-3 shadow-xs flex flex-col items-start sm:items-end justify-center self-start md:self-auto shrink-0"
             style={{
-              backgroundColor: isDark ? 'rgba(30, 27, 24, 0.45)' : 'rgba(247, 241, 231, 0.50)',
-              borderColor: isDark ? 'rgba(200, 141, 58, 0.25)' : 'rgba(90, 45, 12, 0.15)',
+              backgroundColor: isDark ? 'rgba(30, 27, 24, 0.45)' : '#F3D5AB',
+              borderColor: isDark ? 'rgba(200, 141, 58, 0.25)' : '#CF9F68',
             }}
           >
-            <span className="text-[10px] uppercase font-bold tracking-wider text-[#C88D3A]">
+            <span className="text-[10px] uppercase font-bold tracking-wider text-[#9F520B] dark:text-[#E5A955]">
               Acting Authority
             </span>
             <span
               className="text-xs font-bold"
-              style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+              style={{ color: isDark ? '#FFF9EE' : '#432006' }}
             >
               {attribution.displayLabel}
             </span>
-            <span className="text-[11px] font-medium" style={{ color: isDark ? '#D9C4AC' : '#704728' }}>
+            <span className="text-[11px] font-medium" style={{ color: isDark ? '#D9C4AC' : '#72451F' }}>
               Learn2Earn Lagos Yaba Campus
             </span>
           </div>
@@ -246,13 +246,13 @@ export const WelfareMediationWorkspaceView: React.FC<WelfareMediationWorkspaceVi
         <div
           className="mt-4 pt-3.5 border-t flex items-center gap-2 text-xs font-medium"
           style={{
-            borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : 'rgba(90, 45, 12, 0.15)',
-            color: isDark ? '#D9C4AC' : '#704728',
+            borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : '#DDB985',
+            color: isDark ? '#D9C4AC' : '#72451F',
           }}
         >
-          <Info className="w-4 h-4 text-[#C88D3A] shrink-0" />
+          <Info className="w-4 h-4 text-[#9F520B] dark:text-[#C46F18] shrink-0" />
           <span>
-            <strong className="font-bold" style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}>Authority Boundary:</strong> This workspace receives living-condition and mediation signals. It cannot approve membership admissions, reallocate rooms, or inspect private financial transactions.
+            <strong className="font-bold" style={{ color: isDark ? '#FFF9EE' : '#432006' }}>Authority Boundary:</strong> This workspace receives living-condition and mediation signals. It cannot approve membership admissions, reallocate rooms, or inspect private financial transactions.
           </span>
         </div>
       </div>
@@ -308,21 +308,21 @@ export const WelfareMediationWorkspaceView: React.FC<WelfareMediationWorkspaceVi
               className={`p-3.5 sm:p-4 rounded-2xl border-2 border-b-4 text-left transition-all duration-150 cursor-pointer shadow-sm hover:-translate-y-1 hover:shadow-md active:translate-y-0.5 active:border-b-2 backdrop-blur-md flex flex-col justify-between min-h-[92px] ${
                 isSelected
                   ? isDark
-                    ? 'border-[#C88D3A] ring-2 ring-[#C88D3A]/40 bg-[rgba(42,34,28,0.7)] shadow-md'
-                    : 'border-[#5A2D0C] ring-2 ring-[#C88D3A]/40 bg-[#FFF9EE] shadow-md'
+                    ? 'border-[#C46F18] ring-2 ring-[#C46F18]/40 bg-[rgba(42,34,28,0.7)] shadow-md'
+                    : 'border-[#432006] ring-2 ring-[#C46F18]/40 bg-[#FFF0D6] shadow-md'
                   : isDark
-                  ? 'border-[#C88D3A]/30 bg-[rgba(23,21,19,0.55)] hover:border-[#C88D3A]'
-                  : 'border-[#5A2D0C]/20 bg-white/60 hover:border-[#B77620]'
+                  ? 'border-[#C46F18]/30 bg-[rgba(23,21,19,0.55)] hover:border-[#C46F18]'
+                  : 'border-[#CF9F68] bg-[#FAE5C5] hover:border-[#9F520B]'
               }`}
             >
               <div className="flex items-center justify-between gap-1 mb-1.5">
                 <Icon
                   className={`w-4 h-4 transition-colors ${
                     isSelected
-                      ? 'text-[#C88D3A]'
+                      ? 'text-[#C46F18]'
                       : isDark
                       ? 'text-[#D9C4AC]'
-                      : 'text-[#8A5D3B]'
+                      : 'text-[#72451F]'
                   }`}
                 />
                 <span
@@ -331,10 +331,10 @@ export const WelfareMediationWorkspaceView: React.FC<WelfareMediationWorkspaceVi
                     color: isSelected
                       ? isDark
                         ? '#F5C678'
-                        : '#5A2D0C'
+                        : '#432006'
                       : isDark
                       ? '#FFF9EE'
-                      : '#5A2D0C',
+                      : '#5A3013',
                   }}
                 >
                   {item.count}
@@ -346,10 +346,10 @@ export const WelfareMediationWorkspaceView: React.FC<WelfareMediationWorkspaceVi
                   color: isSelected
                     ? isDark
                       ? '#FFF9EE'
-                      : '#5A2D0C'
+                      : '#432006'
                     : isDark
                     ? '#D9C4AC'
-                    : '#704728',
+                    : '#72451F',
                 }}
               >
                 {item.label}
@@ -365,12 +365,12 @@ export const WelfareMediationWorkspaceView: React.FC<WelfareMediationWorkspaceVi
         <div className="lg:col-span-5 space-y-3">
           <div className="flex items-center justify-between px-1">
             <span
-              className="text-xs font-bold uppercase tracking-wider text-[#C88D3A] flex items-center gap-1.5"
+              className="text-xs font-bold uppercase tracking-wider text-[#9F520B] dark:text-[#E5A955] flex items-center gap-1.5"
             >
               <Filter className="w-3.5 h-3.5" />
               Active Queue ({filteredReports.length})
             </span>
-            <span className="text-[11px] font-medium" style={{ color: isDark ? '#D9C4AC' : '#8A5D3B' }}>
+            <span className="text-[11px] font-medium" style={{ color: isDark ? '#D9C4AC' : '#72451F' }}>
               Select item to mediate
             </span>
           </div>
@@ -379,13 +379,13 @@ export const WelfareMediationWorkspaceView: React.FC<WelfareMediationWorkspaceVi
             <div
               className="p-8 rounded-2xl border-2 border-b-4 text-center backdrop-blur-md shadow-sm"
               style={{
-                backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : 'rgba(255, 253, 248, 0.65)',
-                borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : 'rgba(90, 45, 12, 0.25)',
-                color: isDark ? '#D9C4AC' : '#704728',
+                backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : '#FAE5C5',
+                borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : '#CF9F68',
+                color: isDark ? '#D9C4AC' : '#72451F',
               }}
             >
-              <CheckCircle2 className="w-8 h-8 text-[#C88D3A] mx-auto mb-2 opacity-80" />
-              <p className="text-sm font-bold" style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}>
+              <CheckCircle2 className="w-8 h-8 text-[#9F520B] dark:text-[#C46F18] mx-auto mb-2 opacity-80" />
+              <p className="text-sm font-bold" style={{ color: isDark ? '#FFF9EE' : '#432006' }}>
                 No active records in this queue
               </p>
               <p className="text-xs mt-1 font-medium">All concerns matching this filter are addressed or clear.</p>
@@ -402,20 +402,20 @@ export const WelfareMediationWorkspaceView: React.FC<WelfareMediationWorkspaceVi
                     className={`p-4 sm:p-5 rounded-2xl border-2 border-b-4 text-left cursor-pointer transition-all duration-150 shadow-sm hover:-translate-y-0.5 hover:shadow-md active:translate-y-0.5 backdrop-blur-md ${
                       isSelected
                         ? isDark
-                          ? 'border-[#C88D3A] ring-2 ring-[#C88D3A]/30 bg-[rgba(42,34,28,0.7)] shadow-md'
-                          : 'border-[#5A2D0C] ring-2 ring-[#C88D3A]/30 bg-[#FFFDF9] shadow-md'
+                          ? 'border-[#C46F18] ring-2 ring-[#C46F18]/30 bg-[rgba(42,34,28,0.7)] shadow-md'
+                          : 'border-[#432006] ring-2 ring-[#C46F18]/30 bg-[#FFF0D6] shadow-md'
                         : isDark
-                        ? 'border-[#C88D3A]/25 bg-[rgba(23,21,19,0.55)] hover:border-[#C88D3A]'
-                        : 'border-[#5A2D0C]/15 bg-white/65 hover:border-[#B77620]'
+                        ? 'border-[#C46F18]/25 bg-[rgba(23,21,19,0.55)] hover:border-[#C46F18]'
+                        : 'border-[#CF9F68] bg-[#FAE5C5] hover:border-[#9F520B]'
                     }`}
                   >
                     <div className="flex items-start justify-between gap-2 mb-2">
                       <span
                         className="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border shadow-xs"
                         style={{
-                          backgroundColor: isDark ? 'rgba(30, 27, 24, 0.6)' : 'rgba(247, 241, 231, 0.7)',
-                          borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : 'rgba(90, 45, 12, 0.2)',
-                          color: '#C88D3A',
+                          backgroundColor: isDark ? 'rgba(30, 27, 24, 0.6)' : '#F3D5AB',
+                          borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : '#CF9F68',
+                          color: isDark ? '#E5A955' : '#9F520B',
                         }}
                       >
                         {report.category}
@@ -430,17 +430,17 @@ export const WelfareMediationWorkspaceView: React.FC<WelfareMediationWorkspaceVi
                                 : '#EEF8EE'
                               : isDark
                               ? 'rgba(42, 34, 28, 0.6)'
-                              : 'rgba(247, 241, 231, 0.7)',
+                              : '#F3D5AB',
                           borderColor:
                             report.status === 'IMPLEMENTED' || report.status === 'RESOLVED'
                               ? '#4CAF50'
-                              : '#C88D3A',
+                              : '#CF9F68',
                           color:
                             report.status === 'IMPLEMENTED' || report.status === 'RESOLVED'
                               ? '#2E7D32'
                               : isDark
                               ? '#F5C678'
-                              : '#8C4D11',
+                              : '#9F520B',
                         }}
                       >
                         {report.status}
@@ -449,14 +449,14 @@ export const WelfareMediationWorkspaceView: React.FC<WelfareMediationWorkspaceVi
 
                     <h3
                       className="text-sm sm:text-base font-bold line-clamp-1"
-                      style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+                      style={{ color: isDark ? '#FFF9EE' : '#432006' }}
                     >
                       {report.title}
                     </h3>
 
                     <p
                       className="text-xs line-clamp-2 mt-1 leading-relaxed font-normal"
-                      style={{ color: isDark ? '#D9C4AC' : '#704728' }}
+                      style={{ color: isDark ? '#D9C4AC' : '#5A3013' }}
                     >
                       {report.description}
                     </p>
@@ -464,12 +464,12 @@ export const WelfareMediationWorkspaceView: React.FC<WelfareMediationWorkspaceVi
                     <div
                       className="flex items-center justify-between text-[11px] mt-3 pt-2.5 border-t"
                       style={{
-                        borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : 'rgba(90, 45, 12, 0.15)',
-                        color: isDark ? '#D9C4AC' : '#8A5D3B',
+                        borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : '#DDB985',
+                        color: isDark ? '#D9C4AC' : '#72451F',
                       }}
                     >
-                      <span className="flex items-center gap-1.5 font-bold" style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}>
-                        <User className="w-3.5 h-3.5 text-[#C88D3A]" />
+                      <span className="flex items-center gap-1.5 font-bold" style={{ color: isDark ? '#FFF9EE' : '#432006' }}>
+                        <User className="w-3.5 h-3.5 text-[#9F520B] dark:text-[#C46F18]" />
                         {report.reporterDisplayName}
                       </span>
                       <span className="flex items-center gap-1 font-mono text-[10px]">
@@ -491,8 +491,8 @@ export const WelfareMediationWorkspaceView: React.FC<WelfareMediationWorkspaceVi
               id="welfare-case-detail"
               className="rounded-2xl p-5 sm:p-7 border-2 border-b-4 transition-all duration-200 shadow-md backdrop-blur-md space-y-6"
               style={{
-                backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : 'rgba(255, 253, 248, 0.65)',
-                borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : 'rgba(90, 45, 12, 0.25)',
+                backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : '#FAE5C5',
+                borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : '#CF9F68',
               }}
             >
               {/* Case Header */}
@@ -502,16 +502,16 @@ export const WelfareMediationWorkspaceView: React.FC<WelfareMediationWorkspaceVi
                     <span
                       className="px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider border shadow-xs"
                       style={{
-                        backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : 'rgba(247, 241, 231, 0.7)',
-                        borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : 'rgba(90, 45, 12, 0.2)',
-                        color: '#C88D3A',
+                        backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : '#F3D5AB',
+                        borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : '#CF9F68',
+                        color: isDark ? '#E5A955' : '#9F520B',
                       }}
                     >
                       {selectedReport.category}
                     </span>
                     <span
                       className="text-xs font-mono font-medium"
-                      style={{ color: isDark ? '#D9C4AC' : '#8A5D3B' }}
+                      style={{ color: isDark ? '#D9C4AC' : '#72451F' }}
                     >
                       ID: {selectedReport.id}
                     </span>
@@ -526,17 +526,17 @@ export const WelfareMediationWorkspaceView: React.FC<WelfareMediationWorkspaceVi
                             : '#EEF8EE'
                           : isDark
                           ? 'rgba(42, 34, 28, 0.6)'
-                          : 'rgba(247, 241, 231, 0.7)',
+                          : '#F3D5AB',
                       borderColor:
                         selectedReport.status === 'IMPLEMENTED' || selectedReport.status === 'RESOLVED'
                           ? '#4CAF50'
-                          : '#C88D3A',
+                          : '#CF9F68',
                       color:
                         selectedReport.status === 'IMPLEMENTED' || selectedReport.status === 'RESOLVED'
                           ? '#2E7D32'
                           : isDark
                           ? '#F5C678'
-                          : '#8C4D11',
+                          : '#9F520B',
                     }}
                   >
                     Status: {selectedReport.status}
@@ -545,14 +545,14 @@ export const WelfareMediationWorkspaceView: React.FC<WelfareMediationWorkspaceVi
 
                 <h2
                   className="font-serif text-xl sm:text-2xl font-bold tracking-tight"
-                  style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+                  style={{ color: isDark ? '#FFF9EE' : '#432006' }}
                 >
                   {selectedReport.title}
                 </h2>
 
                 <p
                   className="text-sm mt-2 leading-relaxed whitespace-pre-wrap font-normal"
-                  style={{ color: isDark ? '#D9C4AC' : '#5A2D0C' }}
+                  style={{ color: isDark ? '#D9C4AC' : '#5A3013' }}
                 >
                   {selectedReport.description}
                 </p>
@@ -561,16 +561,16 @@ export const WelfareMediationWorkspaceView: React.FC<WelfareMediationWorkspaceVi
                 <div
                   className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4 p-3.5 sm:p-4 rounded-xl border-2 border-b-3 shadow-xs text-xs backdrop-blur-xs"
                   style={{
-                    backgroundColor: isDark ? 'rgba(30, 27, 24, 0.45)' : 'rgba(247, 241, 231, 0.50)',
-                    borderColor: isDark ? 'rgba(200, 141, 58, 0.25)' : 'rgba(90, 45, 12, 0.15)',
-                    color: isDark ? '#D9C4AC' : '#704728',
+                    backgroundColor: isDark ? 'rgba(30, 27, 24, 0.45)' : '#F3D5AB',
+                    borderColor: isDark ? 'rgba(200, 141, 58, 0.25)' : '#CF9F68',
+                    color: isDark ? '#D9C4AC' : '#72451F',
                   }}
                 >
                   <div>
-                    <span className="font-bold block text-[10px] uppercase tracking-wider text-[#C88D3A]">
+                    <span className="font-bold block text-[10px] uppercase tracking-wider text-[#9F520B] dark:text-[#E5A955]">
                       Resident Reporter
                     </span>
-                    <span className="font-bold text-sm" style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}>
+                    <span className="font-bold text-sm" style={{ color: isDark ? '#FFF9EE' : '#432006' }}>
                       {selectedReport.reporterDisplayName}
                     </span>
                     {selectedReport.reporterEmail && (
@@ -580,10 +580,10 @@ export const WelfareMediationWorkspaceView: React.FC<WelfareMediationWorkspaceVi
                     )}
                   </div>
                   <div>
-                    <span className="font-bold block text-[10px] uppercase tracking-wider text-[#C88D3A]">
+                    <span className="font-bold block text-[10px] uppercase tracking-wider text-[#9F520B] dark:text-[#E5A955]">
                       Living Context &amp; Scope
                     </span>
-                    <span className="font-semibold" style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}>
+                    <span className="font-semibold" style={{ color: isDark ? '#FFF9EE' : '#432006' }}>
                       {selectedReport.locationContext || selectedReport.pageContext || 'Living Quarters'}
                     </span>
                     <span className="block text-[11px] opacity-80 mt-0.5">
@@ -612,18 +612,18 @@ export const WelfareMediationWorkspaceView: React.FC<WelfareMediationWorkspaceVi
               <div
                 className="p-4 sm:p-5 rounded-xl border-2 border-b-3 shadow-xs space-y-4 backdrop-blur-xs"
                 style={{
-                  backgroundColor: isDark ? 'rgba(30, 27, 24, 0.45)' : 'rgba(247, 241, 231, 0.50)',
-                  borderColor: isDark ? 'rgba(200, 141, 58, 0.25)' : 'rgba(90, 45, 12, 0.15)',
+                  backgroundColor: isDark ? 'rgba(30, 27, 24, 0.45)' : '#F3D5AB',
+                  borderColor: isDark ? 'rgba(200, 141, 58, 0.25)' : '#CF9F68',
                 }}
               >
                 <div className="flex items-center justify-between">
                   <h4
-                    className="text-xs font-bold uppercase tracking-wider text-[#C88D3A] flex items-center gap-1.5"
+                    className="text-xs font-bold uppercase tracking-wider text-[#9F520B] dark:text-[#E5A955] flex items-center gap-1.5"
                   >
                     <Sparkles className="w-3.5 h-3.5" />
                     Welfare Officer Actions
                   </h4>
-                  <span className="text-[11px] font-medium" style={{ color: isDark ? '#D9C4AC' : '#8A5D3B' }}>
+                  <span className="text-[11px] font-medium" style={{ color: isDark ? '#D9C4AC' : '#72451F' }}>
                     Non-punitive restorative authority
                   </span>
                 </div>
@@ -641,12 +641,12 @@ export const WelfareMediationWorkspaceView: React.FC<WelfareMediationWorkspaceVi
                     }
                     className="px-3.5 py-2 min-h-[44px] rounded-xl text-xs font-bold flex items-center gap-2 border-2 border-b-3 active:border-b active:translate-y-[1px] shadow-xs transition-all duration-150 cursor-pointer disabled:opacity-50"
                     style={{
-                      backgroundColor: isDark ? '#3E200C' : '#FFF9EE',
-                      borderColor: '#C88D3A',
-                      color: isDark ? '#FFF9EE' : '#5A2D0C',
+                      backgroundColor: isDark ? '#3E200C' : '#FFF0D6',
+                      borderColor: '#C46F18',
+                      color: isDark ? '#FFF9EE' : '#432006',
                     }}
                   >
-                    <HeartHandshake className="w-4 h-4 text-[#C88D3A]" />
+                    <HeartHandshake className="w-4 h-4 text-[#C46F18]" />
                     <span>Open Mediation Circle</span>
                   </button>
 
@@ -662,12 +662,12 @@ export const WelfareMediationWorkspaceView: React.FC<WelfareMediationWorkspaceVi
                     }
                     className="px-3.5 py-2 min-h-[44px] rounded-xl text-xs font-bold flex items-center gap-2 border-2 border-b-3 active:border-b active:translate-y-[1px] shadow-xs transition-all duration-150 cursor-pointer disabled:opacity-50"
                     style={{
-                      backgroundColor: isDark ? '#2A1A0F' : '#F7F1E7',
-                      borderColor: isDark ? '#5A2D0C' : '#D5C4AF',
-                      color: isDark ? '#FFF9EE' : '#5A2D0C',
+                      backgroundColor: isDark ? '#2A1A0F' : '#FFF0D6',
+                      borderColor: isDark ? '#623416' : '#CF9F68',
+                      color: isDark ? '#FFF9EE' : '#432006',
                     }}
                   >
-                    <Building2 className="w-4 h-4 text-[#C88D3A]" />
+                    <Building2 className="w-4 h-4 text-[#9F520B] dark:text-[#C46F18]" />
                     <span>Escalate to Facility</span>
                   </button>
 
@@ -681,19 +681,19 @@ export const WelfareMediationWorkspaceView: React.FC<WelfareMediationWorkspaceVi
                         'Restorative agreement reached and welfare follow-up completed.'
                       )
                     }
-                    className="px-4 py-2 min-h-[44px] rounded-xl text-xs font-bold flex items-center gap-2 border-2 border-b-3 active:border-b active:translate-y-[1px] shadow-sm transition-all duration-150 cursor-pointer disabled:opacity-50 bg-[#5A2D0C] text-[#FFF9EE] border-[#381B07] hover:bg-[#432108]"
+                    className="px-4 py-2 min-h-[44px] rounded-xl text-xs font-bold flex items-center gap-2 border-2 border-b-3 active:border-b active:translate-y-[1px] shadow-sm transition-all duration-150 cursor-pointer disabled:opacity-50 bg-[#432006] text-[#FFF0D6] border-[#241104] hover:bg-[#341905]"
                   >
-                    <CheckCircle2 className="w-4 h-4 text-[#C88D3A]" />
+                    <CheckCircle2 className="w-4 h-4 text-[#E5A857]" />
                     <span>Mark Resolved &amp; Supported</span>
                   </button>
                 </div>
 
                 {/* Mediation Notes Form */}
-                <form onSubmit={handleAddMediationNote} className="space-y-2 pt-3 border-t" style={{ borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : 'rgba(90, 45, 12, 0.15)' }}>
+                <form onSubmit={handleAddMediationNote} className="space-y-2 pt-3 border-t" style={{ borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : '#DDB985' }}>
                   <label
                     htmlFor="welfare-note-input"
                     className="block text-xs font-bold"
-                    style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+                    style={{ color: isDark ? '#FFF9EE' : '#432006' }}
                   >
                     Record Mediation Note or Welfare Follow-up
                   </label>
@@ -704,19 +704,19 @@ export const WelfareMediationWorkspaceView: React.FC<WelfareMediationWorkspaceVi
                       value={noteInput}
                       onChange={(e) => setNoteInput(e.target.value)}
                       placeholder="e.g. Spoke with chamber members; agreed to silent study hours from 10 PM..."
-                      className="flex-1 px-3.5 py-2 min-h-[44px] rounded-xl text-xs border-2 shadow-xs focus:outline-none focus:ring-2 focus:ring-[#C88D3A]"
+                      className="flex-1 px-3.5 py-2 min-h-[44px] rounded-xl text-xs border-2 shadow-xs focus:outline-none focus:ring-2 focus:ring-[#C46F18]"
                       style={{
-                        backgroundColor: isDark ? '#2F1707' : '#FFF9EE',
-                        borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : 'rgba(90, 45, 12, 0.2)',
-                        color: isDark ? '#FFF9EE' : '#5A2D0C',
+                        backgroundColor: isDark ? '#2F1707' : '#FFF0D6',
+                        borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : '#CF9F68',
+                        color: isDark ? '#FFF9EE' : '#432006',
                       }}
                     />
                     <button
                       type="submit"
                       disabled={isSubmitting || !noteInput.trim()}
-                      className="px-4 py-2 min-h-[44px] rounded-xl text-xs font-bold flex items-center gap-1.5 bg-[#5A2D0C] text-[#FFF9EE] hover:bg-[#432108] border-2 border-b-3 border-[#381B07] active:border-b active:translate-y-[1px] shadow-sm transition-all duration-150 cursor-pointer disabled:opacity-50 shrink-0"
+                      className="px-4 py-2 min-h-[44px] rounded-xl text-xs font-bold flex items-center gap-1.5 bg-[#432006] text-[#FFF0D6] hover:bg-[#341905] border-2 border-b-3 border-[#241104] active:border-b active:translate-y-[1px] shadow-sm transition-all duration-150 cursor-pointer disabled:opacity-50 shrink-0"
                     >
-                      <Send className="w-3.5 h-3.5 text-[#C88D3A]" />
+                      <Send className="w-3.5 h-3.5 text-[#E5A857]" />
                       <span>Post Note</span>
                     </button>
                   </div>
@@ -726,7 +726,7 @@ export const WelfareMediationWorkspaceView: React.FC<WelfareMediationWorkspaceVi
               {/* Event Timeline (Tactile Cards) */}
               <div className="space-y-3">
                 <h4
-                  className="text-xs font-bold uppercase tracking-wider text-[#C88D3A] flex items-center gap-1.5"
+                  className="text-xs font-bold uppercase tracking-wider text-[#9F520B] dark:text-[#E5A955] flex items-center gap-1.5"
                 >
                   <Clock className="w-3.5 h-3.5" />
                   Chronological Record &amp; Mediation Trail
@@ -738,14 +738,14 @@ export const WelfareMediationWorkspaceView: React.FC<WelfareMediationWorkspaceVi
                       key={evt.eventId || idx}
                       className="p-3.5 sm:p-4 rounded-xl border-2 border-b-3 shadow-xs text-xs backdrop-blur-xs transition-all duration-150 hover:-translate-y-0.5"
                       style={{
-                        backgroundColor: isDark ? 'rgba(30, 27, 24, 0.45)' : 'rgba(247, 241, 231, 0.50)',
-                        borderColor: isDark ? 'rgba(200, 141, 58, 0.25)' : 'rgba(90, 45, 12, 0.15)',
+                        backgroundColor: isDark ? 'rgba(30, 27, 24, 0.45)' : '#F3D5AB',
+                        borderColor: isDark ? 'rgba(200, 141, 58, 0.25)' : '#CF9F68',
                       }}
                     >
                       <div className="flex items-center justify-between gap-2 mb-1.5">
                         <span
                           className="font-bold text-sm"
-                          style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+                          style={{ color: isDark ? '#FFF9EE' : '#432006' }}
                         >
                           {evt.actorDisplayName}{' '}
                           {evt.actorCapacity && (
@@ -754,14 +754,14 @@ export const WelfareMediationWorkspaceView: React.FC<WelfareMediationWorkspaceVi
                         </span>
                         <span
                           className="font-mono text-[10px]"
-                          style={{ color: isDark ? '#D9C4AC' : '#8A5D3B' }}
+                          style={{ color: isDark ? '#D9C4AC' : '#72451F' }}
                         >
                           {new Date(evt.timestamp).toLocaleString()}
                         </span>
                       </div>
                       <p
                         className="leading-relaxed font-normal"
-                        style={{ color: isDark ? '#D9C4AC' : '#5A2D0C' }}
+                        style={{ color: isDark ? '#D9C4AC' : '#5A3013' }}
                       >
                         {evt.message}
                       </p>
@@ -774,13 +774,13 @@ export const WelfareMediationWorkspaceView: React.FC<WelfareMediationWorkspaceVi
             <div
               className="p-12 rounded-2xl border-2 border-b-4 text-center backdrop-blur-md shadow-md"
               style={{
-                backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : 'rgba(255, 253, 248, 0.65)',
-                borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : 'rgba(90, 45, 12, 0.25)',
-                color: isDark ? '#D9C4AC' : '#704728',
+                backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : '#FAE5C5',
+                borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : '#CF9F68',
+                color: isDark ? '#D9C4AC' : '#72451F',
               }}
             >
-              <HeartHandshake className="w-10 h-10 text-[#C88D3A] mx-auto mb-3 opacity-70" />
-              <h3 className="font-serif text-lg font-bold" style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}>
+              <HeartHandshake className="w-10 h-10 text-[#9F520B] dark:text-[#C46F18] mx-auto mb-3 opacity-70" />
+              <h3 className="font-serif text-lg font-bold" style={{ color: isDark ? '#FFF9EE' : '#432006' }}>
                 No Welfare Case Selected
               </h3>
               <p className="text-xs mt-1 max-w-sm mx-auto font-medium">

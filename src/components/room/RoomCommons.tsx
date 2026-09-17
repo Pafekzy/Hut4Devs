@@ -113,28 +113,28 @@ export const RoomCommons: React.FC<RoomCommonsProps> = ({
         aria-labelledby="room-commons-heading"
         className="h4d-card-static rounded-2xl p-5 sm:p-7 border-2 border-b-4 shadow-md backdrop-blur-md"
         style={{
-          backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : 'rgba(255, 253, 248, 0.65)',
-          borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : 'rgba(90, 45, 12, 0.25)',
+          backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : '#FFF0D6',
+          borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : '#CF9F68',
         }}
       >
         <div
           className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 mb-5 border-b-2 gap-3"
-          style={{ borderColor: isDark ? 'rgba(200, 141, 58, 0.20)' : 'rgba(90, 45, 12, 0.12)' }}
+          style={{ borderColor: isDark ? 'rgba(200, 141, 58, 0.20)' : '#CF9F68' }}
         >
           <div>
             <div className="flex items-center gap-2">
-              <FileText className="w-4 h-4 text-[#B77620] dark:text-[#C88D3A]" />
+              <FileText className="w-4 h-4 text-[#C46F18] dark:text-[#C88D3A]" />
               <h2
                 id="room-commons-heading"
                 className="text-xs sm:text-sm font-semibold uppercase tracking-wider"
-                style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+                style={{ color: isDark ? '#FFF9EE' : '#432006' }}
               >
                 Room Commons &amp; Living Space Guidelines
               </h2>
             </div>
             <p
               className="text-xs mt-0.5"
-              style={{ color: isDark ? '#D9C4AC' : '#704728' }}
+              style={{ color: isDark ? '#D9C4AC' : '#5A3013' }}
             >
               Collaborative agreements, quiet hours, and facility protocols established for {room.roomNumber}.
             </p>
@@ -148,7 +148,7 @@ export const RoomCommons: React.FC<RoomCommonsProps> = ({
               className={`px-3.5 py-1.5 text-xs font-bold rounded-lg border-2 border-b-3 transition-all duration-150 cursor-pointer flex items-center gap-1.5 active:translate-y-[1px] self-start sm:self-auto ${
                 isDark
                   ? 'bg-[#C88D3A] text-[#241104] border-[#915B15]'
-                  : 'bg-[#5A2D0C] text-[#FFF9EE] border-[#381B07]'
+                  : 'bg-[#432006] text-[#FFF0D6] border-[#381B07]'
               }`}
             >
               <Plus className="w-3.5 h-3.5" />
@@ -163,8 +163,8 @@ export const RoomCommons: React.FC<RoomCommonsProps> = ({
             onSubmit={handleCreateNotice}
             className="p-5 mb-6 rounded-xl border-2 border-b-3 shadow-xs space-y-4"
             style={{
-              backgroundColor: isDark ? 'rgba(30, 27, 24, 0.50)' : 'rgba(247, 241, 231, 0.60)',
-              borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : 'rgba(90, 45, 12, 0.20)',
+              backgroundColor: isDark ? 'rgba(30, 27, 24, 0.50)' : '#FAE5C5',
+              borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : '#CF9F68',
             }}
           >
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -172,7 +172,7 @@ export const RoomCommons: React.FC<RoomCommonsProps> = ({
                 <label
                   htmlFor="notice-title"
                   className="block text-xs font-bold uppercase tracking-wider mb-1"
-                  style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+                  style={{ color: isDark ? '#FFF9EE' : '#432006' }}
                 >
                   Guideline Title
                 </label>
@@ -185,9 +185,9 @@ export const RoomCommons: React.FC<RoomCommonsProps> = ({
                   placeholder="e.g. Quiet Hours & Inverter Usage"
                   className="w-full text-xs p-2.5 rounded-lg border-2 border-b-3"
                   style={{
-                    backgroundColor: isDark ? 'rgba(23, 21, 19, 0.8)' : 'rgba(255, 255, 255, 0.9)',
-                    borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : 'rgba(90, 45, 12, 0.2)',
-                    color: isDark ? '#FFF9EE' : '#5A2D0C',
+                    backgroundColor: isDark ? 'rgba(23, 21, 19, 0.8)' : '#FFF8EE',
+                    borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : '#CF9F68',
+                    color: isDark ? '#FFF9EE' : '#432006',
                   }}
                 />
               </div>
@@ -196,7 +196,7 @@ export const RoomCommons: React.FC<RoomCommonsProps> = ({
                 <label
                   htmlFor="notice-category"
                   className="block text-xs font-bold uppercase tracking-wider mb-1"
-                  style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+                  style={{ color: isDark ? '#FFF9EE' : '#432006' }}
                 >
                   Category
                 </label>
@@ -206,9 +206,9 @@ export const RoomCommons: React.FC<RoomCommonsProps> = ({
                   onChange={(e) => setCategory(e.target.value as any)}
                   className="w-full text-xs p-2.5 rounded-lg border-2 border-b-3"
                   style={{
-                    backgroundColor: isDark ? 'rgba(23, 21, 19, 0.8)' : 'rgba(255, 255, 255, 0.9)',
-                    borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : 'rgba(90, 45, 12, 0.2)',
-                    color: isDark ? '#FFF9EE' : '#5A2D0C',
+                    backgroundColor: isDark ? 'rgba(23, 21, 19, 0.8)' : '#FFF8EE',
+                    borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : '#CF9F68',
+                    color: isDark ? '#FFF9EE' : '#432006',
                   }}
                 >
                   <option value="GUIDELINE">Living Guideline</option>
@@ -223,7 +223,7 @@ export const RoomCommons: React.FC<RoomCommonsProps> = ({
               <label
                 htmlFor="notice-content"
                 className="block text-xs font-bold uppercase tracking-wider mb-1"
-                style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+                style={{ color: isDark ? '#FFF9EE' : '#432006' }}
               >
                 Detailed Guidance
               </label>
@@ -236,9 +236,9 @@ export const RoomCommons: React.FC<RoomCommonsProps> = ({
                 placeholder="Specify community expectations, agreed times, or maintenance notes..."
                 className="w-full text-xs p-2.5 rounded-lg border-2 border-b-3"
                 style={{
-                  backgroundColor: isDark ? 'rgba(23, 21, 19, 0.8)' : 'rgba(255, 255, 255, 0.9)',
-                  borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : 'rgba(90, 45, 12, 0.2)',
-                  color: isDark ? '#FFF9EE' : '#5A2D0C',
+                  backgroundColor: isDark ? 'rgba(23, 21, 19, 0.8)' : '#FFF8EE',
+                  borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : '#CF9F68',
+                  color: isDark ? '#FFF9EE' : '#432006',
                 }}
               />
             </div>
@@ -249,9 +249,9 @@ export const RoomCommons: React.FC<RoomCommonsProps> = ({
                 onClick={() => setShowAddForm(false)}
                 className="px-3 py-1.5 text-xs font-medium rounded-lg border-2 border-b-3"
                 style={{
-                  backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : 'rgba(255, 253, 248, 0.8)',
-                  borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : 'rgba(90, 45, 12, 0.2)',
-                  color: isDark ? '#FFF9EE' : '#5A2D0C',
+                  backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : '#FFF0D6',
+                  borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : '#CF9F68',
+                  color: isDark ? '#FFF9EE' : '#432006',
                 }}
               >
                 Cancel
@@ -262,7 +262,7 @@ export const RoomCommons: React.FC<RoomCommonsProps> = ({
                 className={`px-4 py-1.5 text-xs font-bold rounded-lg border-2 border-b-3 cursor-pointer active:translate-y-[1px] ${
                   isDark
                     ? 'bg-[#C88D3A] text-[#241104] border-[#915B15]'
-                    : 'bg-[#5A2D0C] text-[#FFF9EE] border-[#381B07]'
+                    : 'bg-[#432006] text-[#FFF0D6] border-[#381B07]'
                 }`}
               >
                 Publish Guideline
@@ -282,12 +282,12 @@ export const RoomCommons: React.FC<RoomCommonsProps> = ({
                 id={`notice-card-${notice.id}`}
                 className="h4d-card-static p-5 sm:p-6 rounded-xl border-2 border-b-3 shadow-xs backdrop-blur-xs"
                 style={{
-                  backgroundColor: isDark ? 'rgba(30, 27, 24, 0.45)' : 'rgba(247, 241, 231, 0.50)',
-                  borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : 'rgba(90, 45, 12, 0.20)',
+                  backgroundColor: isDark ? 'rgba(30, 27, 24, 0.45)' : '#FFF8EE',
+                  borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : '#CF9F68',
                 }}
               >
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 mb-2 border-b"
-                  style={{ borderColor: isDark ? 'rgba(200, 141, 58, 0.15)' : 'rgba(90, 45, 12, 0.10)' }}
+                  style={{ borderColor: isDark ? 'rgba(200, 141, 58, 0.15)' : '#CF9F68' }}
                 >
                   <div className="flex items-center gap-2">
                     <span
@@ -298,13 +298,13 @@ export const RoomCommons: React.FC<RoomCommonsProps> = ({
                     </span>
                     <h3
                       className="font-serif font-bold text-sm sm:text-base"
-                      style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+                      style={{ color: isDark ? '#FFF9EE' : '#432006' }}
                     >
                       {notice.title}
                     </h3>
                   </div>
 
-                  <div className="flex items-center gap-1.5 text-[11px] font-mono text-[#B77620] dark:text-[#C88D3A]">
+                  <div className="flex items-center gap-1.5 text-[11px] font-mono text-[#C46F18] dark:text-[#C88D3A]">
                     <Clock className="w-3 h-3" />
                     <span>
                       {new Date(notice.postedAt).toLocaleDateString('en-GB', {
@@ -318,14 +318,14 @@ export const RoomCommons: React.FC<RoomCommonsProps> = ({
 
                 <p
                   className="text-xs sm:text-sm leading-relaxed"
-                  style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+                  style={{ color: isDark ? '#FFF9EE' : '#432006' }}
                 >
                   {notice.content}
                 </p>
 
                 <div
                   className="mt-3 text-[11px] font-medium"
-                  style={{ color: isDark ? '#D9C4AC' : '#704728' }}
+                  style={{ color: isDark ? '#D9C4AC' : '#5A3013' }}
                 >
                   Posted by: <strong className="font-semibold">{notice.postedBy}</strong>
                 </div>

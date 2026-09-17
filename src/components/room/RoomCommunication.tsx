@@ -88,28 +88,28 @@ export const RoomCommunication: React.FC<RoomCommunicationProps> = ({
         aria-labelledby="communication-heading"
         className="rounded-2xl p-5 sm:p-7 border-2 border-b-4 transition-all duration-200 shadow-md backdrop-blur-md"
         style={{
-          backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : 'rgba(255, 253, 248, 0.65)',
-          borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : 'rgba(90, 45, 12, 0.25)',
+          backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : '#FFF0D6',
+          borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : '#CF9F68',
         }}
       >
         <div
           className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 mb-5 border-b-2 gap-2"
-          style={{ borderColor: isDark ? 'rgba(200, 141, 58, 0.20)' : 'rgba(90, 45, 12, 0.12)' }}
+          style={{ borderColor: isDark ? 'rgba(200, 141, 58, 0.20)' : '#CF9F68' }}
         >
           <div>
             <div className="flex items-center gap-2">
-              <MessageSquare className="w-4 h-4 text-[#B77620] dark:text-[#C88D3A]" />
+              <MessageSquare className="w-4 h-4 text-[#C46F18] dark:text-[#C88D3A]" />
               <h2
                 id="communication-heading"
                 className="text-xs sm:text-sm font-semibold uppercase tracking-wider"
-                style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+                style={{ color: isDark ? '#FFF9EE' : '#432006' }}
               >
                 Room Communication &bull; {room.roomNumber}
               </h2>
             </div>
             <p
               className="text-xs mt-0.5"
-              style={{ color: isDark ? '#D9C4AC' : '#704728' }}
+              style={{ color: isDark ? '#D9C4AC' : '#5A3013' }}
             >
               Audited room channels with explicit sender role attribution.
             </p>
@@ -131,10 +131,10 @@ export const RoomCommunication: React.FC<RoomCommunicationProps> = ({
                   isActive
                     ? isDark
                       ? 'bg-[#C88D3A] text-[#241104] border-[#915B15]'
-                      : 'bg-[#5A2D0C] text-[#FFF9EE] border-[#381B07]'
+                      : 'bg-[#432006] text-[#FFF0D6] border-[#381B07]'
                     : isDark
                     ? 'bg-[rgba(30,27,24,0.5)] text-[#D9C4AC] border-[rgba(200,141,58,0.2)] hover:border-[rgba(200,141,58,0.4)]'
-                    : 'bg-[rgba(255,253,248,0.7)] text-[#704728] border-[rgba(90,45,12,0.15)] hover:border-[rgba(90,45,12,0.3)]'
+                    : 'bg-[#FAE5C5] text-[#5A3013] border-[#CF9F68] hover:border-[#C46F18]'
                 }`}
               >
                 {ch.icon}
@@ -148,16 +148,16 @@ export const RoomCommunication: React.FC<RoomCommunicationProps> = ({
         <div
           className="p-4 rounded-xl border-2 border-b-3 mb-4 max-h-96 overflow-y-auto space-y-3"
           style={{
-            backgroundColor: isDark ? 'rgba(30, 27, 24, 0.40)' : 'rgba(247, 241, 231, 0.40)',
-            borderColor: isDark ? 'rgba(200, 141, 58, 0.25)' : 'rgba(90, 45, 12, 0.15)',
+            backgroundColor: isDark ? 'rgba(30, 27, 24, 0.40)' : '#FFF8EE',
+            borderColor: isDark ? 'rgba(200, 141, 58, 0.25)' : '#CF9F68',
           }}
         >
           {messages.length === 0 ? (
             <div className="py-8 text-center">
-              <MessageSquare className="w-8 h-8 mx-auto text-[#B77620] dark:text-[#C88D3A] mb-2 opacity-60" />
+              <MessageSquare className="w-8 h-8 mx-auto text-[#C46F18] dark:text-[#C88D3A] mb-2 opacity-60" />
               <p
                 className="text-xs"
-                style={{ color: isDark ? '#D9C4AC' : '#704728' }}
+                style={{ color: isDark ? '#D9C4AC' : '#5A3013' }}
               >
                 No messages yet in this channel. Start the conversation below.
               </p>
@@ -177,29 +177,29 @@ export const RoomCommunication: React.FC<RoomCommunicationProps> = ({
                     backgroundColor: isMine
                       ? isDark
                         ? 'rgba(45, 37, 30, 0.70)'
-                        : 'rgba(255, 253, 248, 0.90)'
+                        : '#FFF0D6'
                       : isDark
                       ? 'rgba(30, 27, 24, 0.60)'
-                      : 'rgba(247, 241, 231, 0.70)',
+                      : '#FAE5C5',
                     borderColor: isMine
                       ? isDark
                         ? 'rgba(200, 141, 58, 0.40)'
-                        : 'rgba(90, 45, 12, 0.25)'
+                        : '#C46F18'
                       : isDark
                       ? 'rgba(200, 141, 58, 0.20)'
-                      : 'rgba(90, 45, 12, 0.12)',
+                      : '#CF9F68',
                   }}
                 >
                   <div className="flex items-center justify-between gap-3 mb-1.5 pb-1 border-b"
-                    style={{ borderColor: isDark ? 'rgba(200, 141, 58, 0.15)' : 'rgba(90, 45, 12, 0.10)' }}
+                    style={{ borderColor: isDark ? 'rgba(200, 141, 58, 0.15)' : '#CF9F68' }}
                   >
                     <span
                       className="font-bold text-xs"
-                      style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+                      style={{ color: isDark ? '#FFF9EE' : '#432006' }}
                     >
                       {msg.senderName}
                     </span>
-                    <span className="text-[10px] font-mono text-[#B77620] dark:text-[#C88D3A]">
+                    <span className="text-[10px] font-mono text-[#C46F18] dark:text-[#C88D3A]">
                       {new Date(msg.createdAt).toLocaleTimeString([], {
                         hour: '2-digit',
                         minute: '2-digit',
@@ -209,14 +209,14 @@ export const RoomCommunication: React.FC<RoomCommunicationProps> = ({
 
                   <p
                     className="text-xs sm:text-sm leading-relaxed"
-                    style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+                    style={{ color: isDark ? '#FFF9EE' : '#432006' }}
                   >
                     {msg.content}
                   </p>
 
                   <div
                     className="mt-2 text-[10px] font-mono"
-                    style={{ color: isDark ? '#D9C4AC' : '#704728' }}
+                    style={{ color: isDark ? '#D9C4AC' : '#5A3013' }}
                   >
                     {msg.senderCapacity}
                   </div>
@@ -234,11 +234,11 @@ export const RoomCommunication: React.FC<RoomCommunicationProps> = ({
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}
             placeholder={`Message ${channels.find((c) => c.id === activeChannel)?.label}...`}
-            className="flex-1 text-xs p-3 rounded-xl border-2 border-b-3 focus:outline-none focus:ring-2 focus:ring-[#B77620]"
+            className="flex-1 text-xs p-3 rounded-xl border-2 border-b-3 focus:outline-none focus:ring-2 focus:ring-[#C46F18]"
             style={{
-              backgroundColor: isDark ? 'rgba(23, 21, 19, 0.8)' : 'rgba(255, 255, 255, 0.9)',
-              borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : 'rgba(90, 45, 12, 0.2)',
-              color: isDark ? '#FFF9EE' : '#5A2D0C',
+              backgroundColor: isDark ? 'rgba(23, 21, 19, 0.8)' : '#FFF8EE',
+              borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : '#CF9F68',
+              color: isDark ? '#FFF9EE' : '#432006',
             }}
           />
           <button
@@ -248,7 +248,7 @@ export const RoomCommunication: React.FC<RoomCommunicationProps> = ({
             className={`px-5 py-3 text-xs font-bold rounded-xl border-2 border-b-3 transition-all duration-150 cursor-pointer flex items-center gap-1.5 active:translate-y-[1px] disabled:opacity-50 disabled:cursor-not-allowed ${
               isDark
                 ? 'bg-[#C88D3A] text-[#241104] border-[#915B15]'
-                : 'bg-[#5A2D0C] text-[#FFF9EE] border-[#381B07]'
+                : 'bg-[#432006] text-[#FFF0D6] border-[#381B07]'
             }`}
           >
             <Send className="w-3.5 h-3.5" />

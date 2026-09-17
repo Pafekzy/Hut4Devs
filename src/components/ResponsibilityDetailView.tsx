@@ -51,15 +51,15 @@ export const ResponsibilityDetailView: React.FC<ResponsibilityDetailViewProps> =
   return (
     <div
       className={`min-h-screen flex flex-col transition-colors duration-200 ${
-        isDark ? 'bg-[#2F1707] text-[#FFF9EE]' : 'bg-[#F7F1E7] text-[#5A2D0C]'
+        isDark ? 'bg-[#2F1707] text-[#FFF9EE]' : 'bg-[#FAE5C5] text-[#432006]'
       }`}
     >
       {/* Shell Header */}
       <header
         className="sticky top-0 z-30 w-full border-b transition-colors duration-200"
         style={{
-          borderColor: isDark ? '#3E200C' : '#EAE0D0',
-          backgroundColor: isDark ? 'rgba(47, 23, 7, 0.92)' : 'rgba(247, 241, 231, 0.92)',
+          borderColor: isDark ? '#3E200C' : '#CF9F68',
+          backgroundColor: isDark ? 'rgba(47, 23, 7, 0.92)' : 'rgba(250, 229, 197, 0.92)',
           backdropFilter: 'blur(8px)',
         }}
       >
@@ -83,7 +83,7 @@ export const ResponsibilityDetailView: React.FC<ResponsibilityDetailViewProps> =
               className={`inline-flex items-center gap-1.5 px-3 py-2 min-h-[44px] rounded-lg text-xs sm:text-sm font-medium transition-all duration-150 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C88D3A] ${
                 isDark
                   ? 'text-[#E5D3BA] hover:text-[#FFF9EE] hover:bg-[#3E200C]'
-                  : 'text-[#6D4223] hover:text-[#5A2D0C] hover:bg-[#EFE5D5]'
+                  : 'text-[#5A3013] hover:text-[#432006] hover:bg-[#F3D5AB]'
               }`}
             >
               <ArrowLeft className="w-4 h-4 shrink-0" aria-hidden="true" />
@@ -104,7 +104,7 @@ export const ResponsibilityDetailView: React.FC<ResponsibilityDetailViewProps> =
             className={`inline-flex items-center gap-2 px-3.5 py-2 min-h-[44px] rounded-lg text-sm font-medium transition-colors cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C88D3A] ${
               isDark
                 ? 'text-[#C88D3A] hover:bg-[#3E200C] hover:text-[#E2AB5D]'
-                : 'text-[#B77620] hover:bg-[#FFF9EE] hover:text-[#5A2D0C]'
+                : 'text-[#C46F18] hover:bg-[#FFF0D6] hover:text-[#432006]'
             }`}
           >
             <ArrowLeft className="w-4 h-4" aria-hidden="true" />
@@ -117,24 +117,24 @@ export const ResponsibilityDetailView: React.FC<ResponsibilityDetailViewProps> =
           id="responsibility-detail-card"
           className="rounded-2xl p-6 sm:p-10 border transition-all duration-200 shadow-md backdrop-blur-md"
           style={{
-            backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : 'rgba(255, 253, 248, 0.65)',
-            borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : 'rgba(90, 45, 12, 0.25)',
+            backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : '#FFF0D6',
+            borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : '#CF9F68',
           }}
         >
           {/* Section Header */}
-          <div className="border-b pb-6 mb-8" style={{ borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : 'rgba(90, 45, 12, 0.15)' }}>
+          <div className="border-b pb-6 mb-8" style={{ borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : '#CF9F68' }}>
             <span
               className="text-xs sm:text-sm font-semibold uppercase tracking-wider block mb-2"
-              style={{ color: isDark ? '#C88D3A' : '#B77620' }}
+              style={{ color: isDark ? '#C88D3A' : '#C46F18' }}
             >
               Accommodation Responsibility
             </span>
             <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-3">
               <div>
-                <span className="text-xs block text-stone-500 mb-0.5">Responsibility:</span>
+                <span className="text-xs block text-[#784A28] dark:text-[#E5D3BA]/75 mb-0.5">Responsibility:</span>
                 <h1
                   className="font-serif text-2xl sm:text-3xl font-semibold tracking-tight"
-                  style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+                  style={{ color: isDark ? '#FFF9EE' : '#432006' }}
                 >
                   {responsibility.title}
                 </h1>
@@ -142,18 +142,18 @@ export const ResponsibilityDetailView: React.FC<ResponsibilityDetailViewProps> =
 
               {/* Status Badge */}
               <div className="self-start sm:self-auto">
-                <span className="text-xs block text-stone-500 mb-0.5">Status:</span>
+                <span className="text-xs block text-[#784A28] dark:text-[#E5D3BA]/75 mb-0.5">Status:</span>
                 <span
                   className="inline-flex items-center px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wide uppercase shadow-xs"
                   style={{
-                    backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : 'rgba(247, 241, 231, 0.7)',
-                    color: isDark ? '#E2AB5D' : '#B77620',
-                    border: `1px solid ${isDark ? 'rgba(200, 141, 58, 0.3)' : 'rgba(90, 45, 12, 0.2)'}`,
+                    backgroundColor: isDark ? '#2F1707' : '#FAE5C5',
+                    color: isDark ? '#F8E4B8' : '#7B4708',
+                    border: `1px solid ${isDark ? '#C27622' : '#C27622'}`,
                   }}
                 >
                   <span
                     className="w-2 h-2 rounded-full mr-2"
-                    style={{ backgroundColor: isDark ? '#C88D3A' : '#B77620' }}
+                    style={{ backgroundColor: isDark ? '#C27622' : '#C27622' }}
                     aria-hidden="true"
                   />
                   {statusLabel}
@@ -166,29 +166,29 @@ export const ResponsibilityDetailView: React.FC<ResponsibilityDetailViewProps> =
           <div className="mb-8">
             <h2
               className="text-xs font-semibold uppercase tracking-wider mb-4"
-              style={{ color: isDark ? '#A67B54' : '#8A5D3B' }}
+              style={{ color: isDark ? '#A67B54' : '#72451F' }}
             >
               Accommodation Context
             </h2>
             <div
               className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 p-4 rounded-xl border backdrop-blur-xs"
               style={{
-                backgroundColor: isDark ? 'rgba(30, 27, 24, 0.45)' : 'rgba(247, 241, 231, 0.50)',
-                borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : 'rgba(90, 45, 12, 0.15)',
+                backgroundColor: isDark ? 'rgba(30, 27, 24, 0.45)' : '#FAE5C5',
+                borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : '#CF9F68',
               }}
             >
               {/* Property */}
               <div className="flex items-start gap-3">
                 <Building2
                   className="w-5 h-5 shrink-0 mt-0.5"
-                  style={{ color: isDark ? '#C88D3A' : '#B77620' }}
+                  style={{ color: isDark ? '#C88D3A' : '#C46F18' }}
                   aria-hidden="true"
                 />
                 <div>
-                  <span className="text-xs block" style={{ color: isDark ? '#A67B54' : '#8A5D3B' }}>
+                  <span className="text-xs block" style={{ color: isDark ? '#A67B54' : '#72451F' }}>
                     Property:
                   </span>
-                  <span className="text-sm font-semibold" style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}>
+                  <span className="text-sm font-semibold" style={{ color: isDark ? '#FFF9EE' : '#432006' }}>
                     {responsibility.accommodationContext.property.name}
                   </span>
                 </div>
@@ -198,14 +198,14 @@ export const ResponsibilityDetailView: React.FC<ResponsibilityDetailViewProps> =
               <div className="flex items-start gap-3">
                 <Layers
                   className="w-5 h-5 shrink-0 mt-0.5"
-                  style={{ color: isDark ? '#C88D3A' : '#B77620' }}
+                  style={{ color: isDark ? '#C88D3A' : '#C46F18' }}
                   aria-hidden="true"
                 />
                 <div>
-                  <span className="text-xs block" style={{ color: isDark ? '#A67B54' : '#8A5D3B' }}>
+                  <span className="text-xs block" style={{ color: isDark ? '#A67B54' : '#72451F' }}>
                     Floor:
                   </span>
-                  <span className="text-sm font-semibold" style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}>
+                  <span className="text-sm font-semibold" style={{ color: isDark ? '#FFF9EE' : '#432006' }}>
                     {responsibility.accommodationContext.floor.name}
                   </span>
                 </div>
@@ -215,14 +215,14 @@ export const ResponsibilityDetailView: React.FC<ResponsibilityDetailViewProps> =
               <div className="flex items-start gap-3">
                 <DoorClosed
                   className="w-5 h-5 shrink-0 mt-0.5"
-                  style={{ color: isDark ? '#C88D3A' : '#B77620' }}
+                  style={{ color: isDark ? '#C88D3A' : '#C46F18' }}
                   aria-hidden="true"
                 />
                 <div>
-                  <span className="text-xs block" style={{ color: isDark ? '#A67B54' : '#8A5D3B' }}>
+                  <span className="text-xs block" style={{ color: isDark ? '#A67B54' : '#72451F' }}>
                     Room:
                   </span>
-                  <span className="text-sm font-semibold" style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}>
+                  <span className="text-sm font-semibold" style={{ color: isDark ? '#FFF9EE' : '#432006' }}>
                     {responsibility.accommodationContext.room.name}
                   </span>
                 </div>
@@ -234,27 +234,27 @@ export const ResponsibilityDetailView: React.FC<ResponsibilityDetailViewProps> =
           <div className="mb-10">
             <h2
               className="text-xs font-semibold uppercase tracking-wider mb-4"
-              style={{ color: isDark ? '#A67B54' : '#8A5D3B' }}
+              style={{ color: isDark ? '#A67B54' : '#72451F' }}
             >
               Responsibility Breakdown
             </h2>
             <div
               className="grid grid-cols-1 sm:grid-cols-3 gap-4 p-5 rounded-xl border backdrop-blur-xs"
               style={{
-                backgroundColor: isDark ? 'rgba(30, 27, 24, 0.45)' : 'rgba(247, 241, 231, 0.50)',
-                borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : 'rgba(90, 45, 12, 0.15)',
+                backgroundColor: isDark ? 'rgba(30, 27, 24, 0.45)' : '#FAE5C5',
+                borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : '#CF9F68',
               }}
             >
               {/* Required */}
               <div className="border-b sm:border-b-0 sm:border-r pb-3 sm:pb-0 sm:pr-4"
-                style={{ borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : 'rgba(90, 45, 12, 0.15)' }}
+                style={{ borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : '#CF9F68' }}
               >
-                <span className="text-xs block mb-1" style={{ color: isDark ? '#A67B54' : '#8A5D3B' }}>
+                <span className="text-xs block mb-1" style={{ color: isDark ? '#A67B54' : '#72451F' }}>
                   Required:
                 </span>
                 <p
                   className="text-xl sm:text-2xl font-semibold"
-                  style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+                  style={{ color: isDark ? '#FFF9EE' : '#432006' }}
                 >
                   {formatNaira(responsibility.requiredAmount)}
                 </p>
@@ -262,14 +262,14 @@ export const ResponsibilityDetailView: React.FC<ResponsibilityDetailViewProps> =
 
               {/* Verified */}
               <div className="border-b sm:border-b-0 sm:border-r pb-3 sm:pb-0 sm:pr-4"
-                style={{ borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : 'rgba(90, 45, 12, 0.15)' }}
+                style={{ borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : '#CF9F68' }}
               >
-                <span className="text-xs block mb-1" style={{ color: isDark ? '#A67B54' : '#8A5D3B' }}>
+                <span className="text-xs block mb-1" style={{ color: isDark ? '#A67B54' : '#72451F' }}>
                   Verified:
                 </span>
                 <p
                   className="text-xl sm:text-2xl font-medium"
-                  style={{ color: isDark ? '#D9C4AC' : '#704728' }}
+                  style={{ color: isDark ? '#D9C4AC' : '#5A3013' }}
                 >
                   {formatNaira(responsibility.verifiedAmount)}
                 </p>
@@ -277,12 +277,12 @@ export const ResponsibilityDetailView: React.FC<ResponsibilityDetailViewProps> =
 
               {/* Remaining */}
               <div>
-                <span className="text-xs block mb-1 font-medium" style={{ color: isDark ? '#C88D3A' : '#B77620' }}>
+                <span className="text-xs block mb-1 font-medium" style={{ color: isDark ? '#C88D3A' : '#C46F18' }}>
                   Remaining:
                 </span>
                 <p
                   className="text-xl sm:text-2xl font-bold"
-                  style={{ color: isDark ? '#E2AB5D' : '#B77620' }}
+                  style={{ color: isDark ? '#E2AB5D' : '#C46F18' }}
                 >
                   {formatNaira(remainingAmount)}
                 </p>
@@ -296,23 +296,23 @@ export const ResponsibilityDetailView: React.FC<ResponsibilityDetailViewProps> =
               id="prepared-intent-summary"
               className="mb-6 p-5 rounded-xl border space-y-2.5 transition-colors backdrop-blur-xs"
               style={{
-                backgroundColor: isDark ? 'rgba(30, 27, 24, 0.45)' : 'rgba(247, 241, 231, 0.50)',
-                borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : 'rgba(90, 45, 12, 0.15)',
+                backgroundColor: isDark ? 'rgba(30, 27, 24, 0.45)' : '#FAE5C5',
+                borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : '#CF9F68',
               }}
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <span className="text-sm" aria-hidden="true">🛖</span>
-                  <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: isDark ? '#C88D3A' : '#B77620' }}>
+                  <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: isDark ? '#C88D3A' : '#C46F18' }}>
                     Prepared Intent
                   </span>
                 </div>
                 <span
                   className="px-2.5 py-0.5 rounded-full text-xs font-semibold uppercase tracking-wider font-mono shadow-xs"
                   style={{
-                    backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : 'rgba(255, 253, 248, 0.8)',
-                    color: isDark ? '#C88D3A' : '#B77620',
-                    border: `1px solid ${isDark ? 'rgba(200, 141, 58, 0.3)' : 'rgba(90, 45, 12, 0.15)'}`,
+                    backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : '#FFF0D6',
+                    color: isDark ? '#C88D3A' : '#C46F18',
+                    border: `1px solid ${isDark ? 'rgba(200, 141, 58, 0.3)' : '#CF9F68'}`,
                   }}
                 >
                   Prepared — Not Verified
@@ -320,14 +320,14 @@ export const ResponsibilityDetailView: React.FC<ResponsibilityDetailViewProps> =
               </div>
               <p className="text-sm">
                 Amount:{' '}
-                <strong className="font-mono text-base font-bold" style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}>
+                <strong className="font-mono text-base font-bold" style={{ color: isDark ? '#FFF9EE' : '#432006' }}>
                   {formatNaira(preparedIntents[preparedIntents.length - 1].amount)}
                 </strong>{' '}
-                <span className="text-xs text-stone-500">
+                <span className="text-xs text-[#784A28] dark:text-[#E5D3BA]/75">
                   ({preparedIntents[preparedIntents.length - 1].fulfilmentType === FulfilmentType.FULL ? 'Full' : 'Partial'})
                 </span>
               </p>
-              <p className="text-xs text-stone-500 leading-relaxed">
+              <p className="text-xs text-[#784A28] dark:text-[#E5D3BA]/75 leading-relaxed">
                 Payment execution is not connected in this build. Verified accommodation balance remains unchanged until execution and verification.
               </p>
             </div>
@@ -339,14 +339,14 @@ export const ResponsibilityDetailView: React.FC<ResponsibilityDetailViewProps> =
               id="bmoni-proposal-summary"
               className="mb-8 p-5 rounded-xl border space-y-2.5 transition-colors backdrop-blur-xs"
               style={{
-                backgroundColor: isDark ? 'rgba(30, 27, 24, 0.45)' : 'rgba(247, 241, 231, 0.50)',
-                borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : 'rgba(90, 45, 12, 0.15)',
+                backgroundColor: isDark ? '#2F1707' : '#FAE5C5',
+                borderColor: isDark ? '#623416' : '#CF9F68',
               }}
             >
               {latestProposal.isSimulated || latestProposal.provider === 'SIMULATED' ? (
                 <>
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold uppercase tracking-wider" style={{ color: isDark ? '#E2AB5D' : '#B77620' }}>
+                    <span className="text-xs font-bold uppercase tracking-wider" style={{ color: isDark ? '#E5A955' : '#C46F18' }}>
                       SIMULATED PROVIDER
                     </span>
                     <span
@@ -360,17 +360,17 @@ export const ResponsibilityDetailView: React.FC<ResponsibilityDetailViewProps> =
                       Proposal: Simulated
                     </span>
                   </div>
-                  <p className="text-xs font-medium" style={{ color: isDark ? '#E5D3BA' : '#5A2D0C' }}>
+                  <p className="text-xs font-medium" style={{ color: isDark ? '#E5D3BA' : '#432006' }}>
                     No request was sent to BMONI.
                   </p>
-                  <p className="text-xs text-stone-500 leading-relaxed">
+                  <p className="text-xs text-[#784A28] dark:text-[#E5D3BA]/75 leading-relaxed">
                     No money has moved yet. Your accommodation responsibility remains unverified.
                   </p>
                 </>
               ) : (
                 <>
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold uppercase tracking-wider" style={{ color: isDark ? '#E2AB5D' : '#B77620' }}>
+                    <span className="text-xs font-bold uppercase tracking-wider" style={{ color: isDark ? '#E5A955' : '#C46F18' }}>
                       BMONI
                     </span>
                     <span
@@ -378,14 +378,14 @@ export const ResponsibilityDetailView: React.FC<ResponsibilityDetailViewProps> =
                       style={{
                         backgroundColor: isDark ? '#382210' : '#EFF6FF',
                         borderColor: isDark ? '#5C381A' : '#BFDBFE',
-                        color: isDark ? '#E2AB5D' : '#1D4ED8',
+                        color: isDark ? '#E5A955' : '#1D4ED8',
                       }}
                     >
                       Proposal: Created
                     </span>
                   </div>
                   <div className="flex items-center justify-between text-xs">
-                    <span style={{ color: isDark ? '#A67B54' : '#8A5D3B' }}>Provider Status:</span>
+                    <span style={{ color: isDark ? '#E5D3BA' : '#784A28' }}>Provider Status:</span>
                     <span
                       className="px-2 py-0.5 rounded-full text-xs font-semibold font-mono border"
                       style={{
@@ -398,12 +398,12 @@ export const ResponsibilityDetailView: React.FC<ResponsibilityDetailViewProps> =
                     </span>
                   </div>
                   <div className="text-xs">
-                    <span style={{ color: isDark ? '#A67B54' : '#8A5D3B' }}>Provider Proposal Reference: </span>
-                    <span className="font-mono font-medium" style={{ color: isDark ? '#E5D3BA' : '#5A2D0C' }}>
+                    <span style={{ color: isDark ? '#E5D3BA' : '#784A28' }}>Provider Proposal Reference: </span>
+                    <span className="font-mono font-medium" style={{ color: isDark ? '#E5D3BA' : '#432006' }}>
                       {latestProposal.providerProposalId}
                     </span>
                   </div>
-                  <p className="text-xs text-stone-500 leading-relaxed">
+                  <p className="text-xs text-[#784A28] dark:text-[#E5D3BA]/75 leading-relaxed">
                     No money has moved yet. Your accommodation responsibility remains unverified.
                   </p>
                 </>
@@ -413,7 +413,7 @@ export const ResponsibilityDetailView: React.FC<ResponsibilityDetailViewProps> =
 
           {/* Action Footer: [ Fulfil Responsibility ] and [ Back to Home ] */}
           <div className="pt-6 border-t flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4"
-            style={{ borderColor: isDark ? '#4B2710' : '#EAE0D0' }}
+            style={{ borderColor: isDark ? '#623416' : '#CF9F68' }}
           >
             <div className="flex items-center gap-3">
               <button
@@ -422,8 +422,8 @@ export const ResponsibilityDetailView: React.FC<ResponsibilityDetailViewProps> =
                 onClick={() => setIsFulfilmentOpen(true)}
                 className={`inline-flex items-center justify-center gap-2 px-6 py-3 min-h-[44px] rounded-xl text-sm font-semibold transition-all duration-150 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 ${
                   isDark
-                    ? 'bg-[#C88D3A] text-[#2F1707] hover:bg-[#DDA250] focus-visible:ring-[#C88D3A] focus-visible:ring-offset-[#3E200C]'
-                    : 'bg-[#5A2D0C] text-[#FFF9EE] hover:bg-[#432108] focus-visible:ring-[#5A2D0C] focus-visible:ring-offset-[#FFF9EE]'
+                    ? 'bg-[#C27622] text-[#2F1707] hover:bg-[#D5A04B] focus-visible:ring-[#C27622] focus-visible:ring-offset-[#3E200C]'
+                    : 'bg-[#432006] text-[#FFF0D6] hover:bg-[#341905] focus-visible:ring-[#432006] focus-visible:ring-offset-[#FAE5C5]'
                 }`}
               >
                 <span>Fulfil Responsibility</span>
@@ -436,7 +436,7 @@ export const ResponsibilityDetailView: React.FC<ResponsibilityDetailViewProps> =
                 className={`inline-flex items-center justify-center gap-2 px-5 py-3 min-h-[44px] rounded-xl text-sm font-medium transition-all duration-150 cursor-pointer border ${
                   isDark
                     ? 'border-[#623416] text-[#E5D3BA] hover:bg-[#2F1707]'
-                    : 'border-[#EAE0D0] text-[#6D4223] hover:bg-[#F2E8D8]'
+                    : 'border-[#CF9F68] text-[#5A3013] hover:bg-[#F3D5AB]'
                 }`}
               >
                 <ArrowLeft className="w-4 h-4 shrink-0" aria-hidden="true" />
@@ -444,7 +444,7 @@ export const ResponsibilityDetailView: React.FC<ResponsibilityDetailViewProps> =
               </button>
             </div>
 
-            <p className="text-xs text-stone-500 italic">
+            <p className="text-xs text-[#784A28] dark:text-[#E5D3BA]/75 italic">
               * Payment intent preparation only. No money moves in this sequence.
             </p>
           </div>
@@ -466,8 +466,8 @@ export const ResponsibilityDetailView: React.FC<ResponsibilityDetailViewProps> =
       <footer
         className="w-full py-5 text-center text-xs tracking-wider uppercase border-t transition-colors duration-200 mt-auto"
         style={{
-          borderColor: isDark ? '#3E200C' : '#EAE0D0',
-          color: isDark ? '#A67B54' : '#8A5D3B',
+          borderColor: isDark ? '#3E200C' : '#CF9F68',
+          color: isDark ? '#A67B54' : '#72451F',
         }}
       >
         <p>Hut4Devs Accommodation Structure &bull; Canonical Foundation</p>

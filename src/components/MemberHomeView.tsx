@@ -254,18 +254,18 @@ export const MemberHomeView: React.FC<MemberHomeViewProps> = ({
   return (
     <div
       className={`min-h-screen flex flex-col transition-colors duration-200 ${
-        isDark ? 'bg-[#2F1707] text-[#FFF9EE]' : 'bg-[#F7F1E7] text-[#5A2D0C]'
+        isDark ? 'bg-[#2F1707] text-[#FFF9EE]' : 'bg-[#EFD3AD] text-[#432006]'
       }`}
     >
       {/* Active Delegated Responsibility Callout Banner for Captains / Coordinators */}
       {captainAssignment && currentMode === 'FELLOW' && onSwitchToCaptain && (
         <div
           id="captain-responsibility-alert-banner"
-          className="bg-amber-500/10 border-b border-amber-500/30 px-4 py-2.5 text-xs text-[#5A2D0C]"
+          className="bg-[#FDE8C7] border-b border-[#E8AB63] px-4 py-2.5 text-xs text-[#964700]"
         >
           <div className="max-w-5xl mx-auto flex items-center justify-between gap-2">
             <div className="flex items-center gap-2 font-medium">
-              <Shield className="w-4 h-4 text-[#B77620]" />
+              <Shield className="w-4 h-4 text-[#964700]" />
               <span>
                 You have an active delegated responsibility:{' '}
                 <strong>Room Captain — {captainAssignment.scope.roomName}</strong> (
@@ -276,7 +276,7 @@ export const MemberHomeView: React.FC<MemberHomeViewProps> = ({
               type="button"
               id="btn-switch-to-captain-banner"
               onClick={onSwitchToCaptain}
-              className="px-3 py-1 bg-[#5A2D0C] text-[#FFF9EE] hover:bg-[#2F1707] font-semibold rounded-lg text-xs transition-colors cursor-pointer"
+              className="px-3 py-1 bg-[#432006] text-[#FFF0D6] hover:bg-[#341905] font-semibold rounded-lg text-xs transition-colors cursor-pointer"
             >
               Switch to Room Captain Mode →
             </button>
@@ -287,11 +287,11 @@ export const MemberHomeView: React.FC<MemberHomeViewProps> = ({
       {coordinatorAssignment && currentMode === 'FELLOW' && onSwitchToCoordinator && (
         <div
           id="coordinator-responsibility-alert-banner"
-          className="bg-purple-500/10 border-b border-purple-500/30 px-4 py-2.5 text-xs text-[#5A2D0C]"
+          className="bg-[#EFE4E9] border-b border-[#D1AEBC] px-4 py-2.5 text-xs text-[#6D2E46]"
         >
           <div className="max-w-5xl mx-auto flex items-center justify-between gap-2">
             <div className="flex items-center gap-2 font-medium">
-              <Shield className="w-4 h-4 text-purple-700" />
+              <Shield className="w-4 h-4 text-[#6D2E46]" />
               <span>
                 You have an active administrative role:{' '}
                 <strong>L2E Accommodation Fellows Coordinator</strong>.
@@ -301,7 +301,7 @@ export const MemberHomeView: React.FC<MemberHomeViewProps> = ({
               type="button"
               id="btn-switch-to-coordinator-banner"
               onClick={onSwitchToCoordinator}
-              className="px-3 py-1 bg-[#5A2D0C] text-[#FFF9EE] hover:bg-[#2F1707] font-semibold rounded-lg text-xs transition-colors cursor-pointer"
+              className="px-3 py-1 bg-[#432006] text-[#FFF0D6] hover:bg-[#341905] font-semibold rounded-lg text-xs transition-colors cursor-pointer"
             >
               Switch to Coordinator Mode →
             </button>
@@ -313,8 +313,8 @@ export const MemberHomeView: React.FC<MemberHomeViewProps> = ({
       <header
         className="sticky top-0 z-30 w-full border-b transition-colors duration-200"
         style={{
-          borderColor: isDark ? '#3E200C' : '#EAE0D0',
-          backgroundColor: isDark ? 'rgba(47, 23, 7, 0.95)' : 'rgba(247, 241, 231, 0.95)',
+          borderColor: isDark ? '#3E200C' : '#CF9F68',
+          backgroundColor: isDark ? 'rgba(47, 23, 7, 0.95)' : 'rgba(239, 211, 173, 0.95)',
           backdropFilter: 'blur(8px)',
         }}
       >
@@ -324,7 +324,7 @@ export const MemberHomeView: React.FC<MemberHomeViewProps> = ({
             <button
               type="button"
               onClick={onExitToLanding}
-              className="inline-flex items-center text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C88D3A] rounded-lg cursor-pointer"
+              className="inline-flex items-center text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C46F18] rounded-lg cursor-pointer"
               title="Return to Public Landing"
             >
               <Hut4DevsLogo isDark={isDark} size="sm" showWordmark={true} />
@@ -340,13 +340,13 @@ export const MemberHomeView: React.FC<MemberHomeViewProps> = ({
               onClick={() => setIsPuzzleModalOpen(true)}
               aria-label="Fix a Missing Puzzle"
               title="Fix a Missing Puzzle (Feedback)"
-              className={`p-2 sm:px-3 sm:py-2 min-h-[44px] flex items-center gap-1.5 rounded-xl text-xs font-bold transition-all duration-150 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C88D3A] border-2 border-b-3 active:border-b active:translate-y-[1px] shadow-xs ${
+              className={`p-2 sm:px-3 sm:py-2 min-h-[44px] flex items-center gap-1.5 rounded-xl text-xs font-bold transition-all duration-150 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C46F18] border-2 border-b-3 active:border-b active:translate-y-[1px] shadow-xs ${
                 isDark
-                  ? 'bg-[#3E200C] text-[#FFF9EE] border-[#C88D3A]/50 hover:bg-[#52270A]'
-                  : 'bg-[#FFF9EE] text-[#5A2D0C] border-[#C88D3A]/60 hover:bg-[#F2E8D8]'
+                  ? 'bg-[#3E200C] text-[#FFF9EE] border-[#C46F18]/50 hover:bg-[#52270A]'
+                  : 'bg-[#FFF0D6] text-[#432006] border-[#CF9F68] hover:bg-[#FAE5C5]'
               }`}
             >
-              <Puzzle className="w-4 h-4 text-[#C88D3A] shrink-0" aria-hidden="true" />
+              <Puzzle className="w-4 h-4 text-[#C46F18] shrink-0" aria-hidden="true" />
               <span className="hidden lg:inline">Fix a Puzzle</span>
             </button>
 
@@ -368,10 +368,10 @@ export const MemberHomeView: React.FC<MemberHomeViewProps> = ({
               id="header-messages-btn"
               aria-label="Messages"
               title="Messages"
-              className={`p-2 sm:px-2.5 sm:py-2 min-h-[44px] flex items-center gap-1.5 rounded-xl text-xs font-medium transition-colors cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C88D3A] ${
+              className={`p-2 sm:px-2.5 sm:py-2 min-h-[44px] flex items-center gap-1.5 rounded-xl text-xs font-medium transition-colors cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C46F18] ${
                 isDark
                   ? 'text-[#E5D3BA] hover:text-[#FFF9EE] hover:bg-[#3E200C]'
-                  : 'text-[#6D4223] hover:text-[#5A2D0C] hover:bg-[#EFE5D5]'
+                  : 'text-[#72451F] hover:text-[#432006] hover:bg-[#F3D5AB]'
               }`}
             >
               <MessageSquare className="w-4 h-4 shrink-0" aria-hidden="true" />
@@ -399,10 +399,10 @@ export const MemberHomeView: React.FC<MemberHomeViewProps> = ({
                 onClick={onLogout}
                 aria-label="Log Out"
                 title="Log Out Session"
-                className={`inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-2 min-h-[44px] rounded-xl text-xs sm:text-sm font-medium transition-all duration-150 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C88D3A] ${
+                className={`inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-2 min-h-[44px] rounded-xl text-xs sm:text-sm font-medium transition-all duration-150 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C46F18] ${
                   isDark
-                    ? 'text-[#C88D3A] hover:text-[#FFF9EE] hover:bg-[#3E200C]'
-                    : 'text-[#8A5D3B] hover:text-[#5A2D0C] hover:bg-[#EFE5D5]'
+                    ? 'text-[#C46F18] hover:text-[#FFF9EE] hover:bg-[#3E200C]'
+                    : 'text-[#72451F] hover:text-[#432006] hover:bg-[#F3D5AB]'
                 }`}
               >
                 <LogOut className="w-4 h-4 shrink-0" aria-hidden="true" />
@@ -414,10 +414,10 @@ export const MemberHomeView: React.FC<MemberHomeViewProps> = ({
                 id="exit-landing-btn"
                 onClick={onExitToLanding}
                 aria-label="Exit to public landing"
-                className={`inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-2 min-h-[44px] rounded-xl text-xs sm:text-sm font-medium transition-all duration-150 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C88D3A] ${
+                className={`inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-2 min-h-[44px] rounded-xl text-xs sm:text-sm font-medium transition-all duration-150 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C46F18] ${
                   isDark
-                    ? 'text-[#C88D3A] hover:text-[#FFF9EE] hover:bg-[#3E200C]'
-                    : 'text-[#8A5D3B] hover:text-[#5A2D0C] hover:bg-[#EFE5D5]'
+                    ? 'text-[#C46F18] hover:text-[#FFF9EE] hover:bg-[#3E200C]'
+                    : 'text-[#72451F] hover:text-[#432006] hover:bg-[#F3D5AB]'
                 }`}
               >
                 <LogOut className="w-4 h-4 shrink-0" aria-hidden="true" />
@@ -429,7 +429,7 @@ export const MemberHomeView: React.FC<MemberHomeViewProps> = ({
 
         {/* Primary Workspace Navigation Tabs with 3D tactile buttons and dark mode styling */}
         <div className={`border-t transition-colors ${
-          isDark ? 'border-[#3E200C] bg-[#231004]/90' : 'border-[#5A2D0C]/15 bg-[#FFFDF9]/90'
+          isDark ? 'border-[#3E200C] bg-[#231004]/90' : 'border-[#CF9F68] bg-[#EFD3AD]/90'
         }`}>
           <div className="max-w-5xl mx-auto px-4 sm:px-6 flex items-center gap-1.5 overflow-x-auto py-2">
             {[
@@ -448,11 +448,11 @@ export const MemberHomeView: React.FC<MemberHomeViewProps> = ({
                   className={`px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5 whitespace-nowrap transition-all cursor-pointer border-b-3 active:border-b active:translate-y-[1px] shadow-xs ${
                     isActive
                       ? isDark
-                        ? 'bg-[#C88D3A] text-[#241104] border-[#915B15]'
-                        : 'bg-[#5A2D0C] text-[#FFF9EE] border-[#381B07]'
+                        ? 'bg-[#C46F18] text-[#241104] border-[#9F520B]'
+                        : 'bg-[#432006] text-[#FFF0D6] border-[#341905]'
                       : isDark
                       ? 'text-[#D9C4AC] hover:text-[#FFF9EE] hover:bg-[#3E200C] border-transparent'
-                      : 'text-[#6D4223] hover:text-[#5A2D0C] hover:bg-[#EFE5D5] border-transparent'
+                      : 'text-[#72451F] hover:text-[#432006] hover:bg-[#F3D5AB] border-transparent'
                   }`}
                 >
                   <Icon className="w-3.5 h-3.5" />
@@ -483,13 +483,13 @@ export const MemberHomeView: React.FC<MemberHomeViewProps> = ({
                 <div>
                   <p
                     className="text-xs sm:text-sm font-medium tracking-wide uppercase transition-colors duration-200"
-                    style={{ color: isDark ? '#C88D3A' : '#B77620' }}
+                    style={{ color: isDark ? '#C46F18' : '#9F520B' }}
                   >
                     Welcome, {currentMember.displayName}
                   </p>
                   <h1
                     className="font-serif text-2xl sm:text-3xl font-semibold tracking-tight mt-1 transition-colors duration-200"
-                    style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+                    style={{ color: isDark ? '#FFF9EE' : '#432006' }}
                   >
                     What needs your attention?
                   </h1>
@@ -512,35 +512,35 @@ export const MemberHomeView: React.FC<MemberHomeViewProps> = ({
                       id="fellow-room-entry-card"
                       className="h4d-card-static p-4 sm:p-5 rounded-2xl border-2 border-b-4 transition-all duration-150 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4"
                       style={{
-                        backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : 'rgba(255, 253, 248, 0.75)',
-                        borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : 'rgba(90, 45, 12, 0.20)',
+                        backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : '#FAE5C5',
+                        borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : '#CF9F68',
                       }}
                     >
                       <div className="flex items-center gap-3.5">
                         <div
                           className="w-11 h-11 rounded-xl border-2 border-b-3 flex items-center justify-center shrink-0 shadow-xs"
                           style={{
-                            backgroundColor: isDark ? 'rgba(42, 34, 28, 0.7)' : 'rgba(247, 241, 231, 0.9)',
-                            borderColor: isDark ? 'rgba(200, 141, 58, 0.4)' : 'rgba(90, 45, 12, 0.25)',
+                            backgroundColor: isDark ? 'rgba(42, 34, 28, 0.7)' : '#FFF0D6',
+                            borderColor: isDark ? 'rgba(200, 141, 58, 0.4)' : '#CF9F68',
                           }}
                         >
-                          <Home className="w-5 h-5 text-[#B77620] dark:text-[#C88D3A]" />
+                          <Home className="w-5 h-5 text-[#C46F18]" />
                         </div>
                         <div>
                           <div className="flex items-center gap-2 flex-wrap">
                             <h3
                               className="font-serif font-bold text-sm sm:text-base"
-                              style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+                              style={{ color: isDark ? '#FFF9EE' : '#432006' }}
                             >
                               {fellowRoom.roomNumber} &bull; {fellowRoom.propertyName}
                             </h3>
-                            <span className="text-[10px] font-mono px-2 py-0.5 rounded font-bold uppercase border bg-emerald-100 dark:bg-emerald-950/70 text-emerald-900 dark:text-emerald-200 border-emerald-300 dark:border-emerald-700">
+                            <span className="text-[10px] font-mono px-2 py-0.5 rounded font-bold uppercase border bg-[#EBF2DD] dark:bg-[#202E1B] text-[#3D5A1E] dark:text-[#C5DDA8] border-[#A8C782] dark:border-[#466923]">
                               Your Living Space
                             </span>
                           </div>
                           <p
                             className="text-xs mt-0.5"
-                            style={{ color: isDark ? '#D9C4AC' : '#704728' }}
+                            style={{ color: isDark ? '#D9C4AC' : '#72451F' }}
                           >
                             Roommates &bull; Room Story &bull; Alumni Memory &bull; Living Rhythms
                           </p>
@@ -561,11 +561,11 @@ export const MemberHomeView: React.FC<MemberHomeViewProps> = ({
                   )}
 
                   {/* Contextual Financial Notes Toggle & Section */}
-                  <div className="h4d-card-static bg-white/60 dark:bg-[#241004]/80 border border-[#C88D3A]/25 dark:border-[#C88D3A]/40 rounded-2xl p-4 shadow-xs">
+                  <div className="h4d-card-static bg-[#FAE5C5] dark:bg-[#241004]/80 border border-[#CF9F68] dark:border-[#C46F18]/40 rounded-2xl p-4 shadow-xs">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
-                        <MessageSquare className="w-4 h-4 text-[#C88D3A]" />
-                        <span className="font-serif font-bold text-sm text-[#5A2D0C] dark:text-[#FFF9EE]">
+                        <MessageSquare className="w-4 h-4 text-[#C46F18]" />
+                        <span className="font-serif font-bold text-sm text-[#432006] dark:text-[#FFF9EE]">
                           Accommodation Notes &amp; Clarifications
                         </span>
                       </div>
@@ -573,7 +573,7 @@ export const MemberHomeView: React.FC<MemberHomeViewProps> = ({
                         type="button"
                         id="toggle-fellow-notes-thread-btn"
                         onClick={() => setShowNotes(!showNotes)}
-                        className="inline-flex items-center gap-1 text-xs font-semibold text-[#5A2D0C] dark:text-[#FFF9EE] hover:text-[#B77620] px-3 py-1.5 rounded-xl bg-[#F7F1E7] dark:bg-[#3D1D08] border border-[#5A2D0C]/10 dark:border-[#C88D3A]/30 cursor-pointer"
+                        className="inline-flex items-center gap-1 text-xs font-semibold text-[#432006] dark:text-[#FFF9EE] hover:text-[#C46F18] px-3 py-1.5 rounded-xl bg-[#FFF0D6] dark:bg-[#3D1D08] border border-[#CF9F68] dark:border-[#C46F18]/30 cursor-pointer"
                       >
                         <span>{showNotes ? 'Hide Thread' : 'View Notes Thread'}</span>
                         {showNotes ? (
@@ -638,8 +638,8 @@ export const MemberHomeView: React.FC<MemberHomeViewProps> = ({
       <footer
         className="w-full py-5 text-center text-xs tracking-wider uppercase border-t transition-colors duration-200 mt-auto"
         style={{
-          borderColor: isDark ? '#3E200C' : '#EAE0D0',
-          color: isDark ? '#A67B54' : '#8A5D3B',
+          borderColor: isDark ? '#3E200C' : '#DDB985',
+          color: isDark ? '#A67B54' : '#72451F',
         }}
       >
         <div className="max-w-5xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
@@ -652,7 +652,7 @@ export const MemberHomeView: React.FC<MemberHomeViewProps> = ({
               id="fellow-switch-to-admin-banner-btn"
               onClick={onSwitchToAdmin}
               className={`font-medium normal-case tracking-normal underline underline-offset-2 cursor-pointer hover:opacity-80 transition-opacity text-xs ${
-                isDark ? 'text-[#C88D3A]' : 'text-[#B77620]'
+                isDark ? 'text-[#C46F18]' : 'text-[#9F520B]'
               }`}
             >
               Switch to Accommodation Admin →

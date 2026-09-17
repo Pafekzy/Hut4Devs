@@ -85,23 +85,23 @@ export const RegistrationModal: React.FC<RegistrationModalProps> = ({
   return (
     <div
       id="registration-modal-overlay"
-      className="fixed inset-0 z-50 flex items-center justify-center bg-[#2F1707]/60 backdrop-blur-xs p-4 overflow-y-auto"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-[#180A02]/60 backdrop-blur-xs p-4 overflow-y-auto"
     >
-      <div className="bg-[#FFF9EE] border border-[#C88D3A]/40 rounded-2xl shadow-2xl max-w-xl w-full overflow-hidden text-[#5A2D0C]">
+      <div className="bg-[#FFF0D6] border border-[#CF9F68] rounded-2xl shadow-2xl max-w-xl w-full overflow-hidden text-[#432006]">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-[#5A2D0C]/10 bg-[#F7F1E7]">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-[#DDB985] bg-[#FAE5C5]">
           <div>
-            <span className="text-[11px] font-bold uppercase tracking-wider text-[#B77620]">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-[#9F520B]">
               Hut4Devs Residency Onboarding
             </span>
-            <h2 className="font-serif text-xl font-bold text-[#5A2D0C]">
+            <h2 className="font-serif text-xl font-bold text-[#432006]">
               {step === 4 ? 'Request Submitted' : 'Submit Accommodation Membership Request'}
             </h2>
           </div>
           <button
             id="close-registration-modal-btn"
             onClick={handleReset}
-            className="p-1.5 rounded-lg text-[#5A2D0C]/60 hover:text-[#5A2D0C] hover:bg-[#5A2D0C]/10 transition-colors"
+            className="p-1.5 rounded-lg text-[#72451F] hover:text-[#432006] hover:bg-[#E8BF88] transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -110,16 +110,16 @@ export const RegistrationModal: React.FC<RegistrationModalProps> = ({
         {/* Progress indicator (Steps 1-3) */}
         {step < 4 && (
           <div className="px-6 pt-4 pb-2">
-            <div className="flex items-center justify-between text-xs font-medium text-[#5A2D0C]/70 mb-2">
-              <span className={step === 1 ? 'font-bold text-[#5A2D0C]' : ''}>1. Identity Details</span>
+            <div className="flex items-center justify-between text-xs font-medium text-[#72451F] mb-2">
+              <span className={step === 1 ? 'font-bold text-[#432006]' : ''}>1. Identity Details</span>
               <span>→</span>
-              <span className={step === 2 ? 'font-bold text-[#5A2D0C]' : ''}>2. Program & Property</span>
+              <span className={step === 2 ? 'font-bold text-[#432006]' : ''}>2. Program & Property</span>
               <span>→</span>
-              <span className={step === 3 ? 'font-bold text-[#5A2D0C]' : ''}>3. Room & Review</span>
+              <span className={step === 3 ? 'font-bold text-[#432006]' : ''}>3. Room & Review</span>
             </div>
-            <div className="w-full bg-[#5A2D0C]/10 h-1.5 rounded-full overflow-hidden">
+            <div className="w-full bg-[#432006]/10 h-1.5 rounded-full overflow-hidden">
               <div
-                className="bg-[#C88D3A] h-full transition-all duration-300"
+                className="bg-[#C46F18] h-full transition-all duration-300"
                 style={{ width: `${(step / 3) * 100}%` }}
               />
             </div>
@@ -137,14 +137,14 @@ export const RegistrationModal: React.FC<RegistrationModalProps> = ({
           {/* STEP 1: Personal Details */}
           {step === 1 && (
             <div className="space-y-4">
-              <div className="p-3 bg-[#F7F1E7] rounded-xl border border-[#C88D3A]/20 text-xs text-[#5A2D0C]/80">
-                <span className="font-semibold text-[#5A2D0C]">Core Principle: </span>
+              <div className="p-3 bg-[#FAE5C5] rounded-xl border border-[#CF9F68]/40 text-xs text-[#5A3013]">
+                <span className="font-semibold text-[#432006]">Core Principle: </span>
                 Registration establishes your <strong>Identity</strong> and accommodation application.
                 Roles and responsibilities are delegated authoritatively after membership verification.
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-[#5A2D0C] mb-1">
+                <label className="block text-xs font-semibold text-[#5A3013] mb-1">
                   Full Name <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -154,12 +154,12 @@ export const RegistrationModal: React.FC<RegistrationModalProps> = ({
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
                   placeholder="e.g. Ada Okafor"
-                  className="w-full px-3 py-2 text-sm bg-white border border-[#5A2D0C]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C88D3A]"
+                  className="w-full px-3 py-2 text-sm bg-[#FFF0D6] border border-[#CF9F68] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C46F18] text-[#432006]"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-[#5A2D0C] mb-1">
+                <label className="block text-xs font-semibold text-[#5A3013] mb-1">
                   Email Address <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -169,7 +169,7 @@ export const RegistrationModal: React.FC<RegistrationModalProps> = ({
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="e.g. ada.okafor@example.com"
-                  className="w-full px-3 py-2 text-sm bg-white border border-[#5A2D0C]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C88D3A]"
+                  className="w-full px-3 py-2 text-sm bg-[#FFF0D6] border border-[#CF9F68] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C46F18] text-[#432006]"
                 />
               </div>
 
@@ -194,25 +194,25 @@ export const RegistrationModal: React.FC<RegistrationModalProps> = ({
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-semibold text-[#5A2D0C] mb-1">Phone / WhatsApp</label>
+                  <label className="block text-xs font-semibold text-[#5A3013] mb-1">Phone / WhatsApp</label>
                   <input
                     id="reg-input-phone"
                     type="tel"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
                     placeholder="+234 803 000 0000"
-                    className="w-full px-3 py-2 text-sm bg-white border border-[#5A2D0C]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C88D3A]"
+                    className="w-full px-3 py-2 text-sm bg-[#FFF0D6] border border-[#CF9F68] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C46F18] text-[#432006]"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-[#5A2D0C] mb-1">GitHub Handle</label>
+                  <label className="block text-xs font-semibold text-[#5A3013] mb-1">GitHub Handle</label>
                   <input
                     id="reg-input-github"
                     type="text"
                     value={githubHandle}
                     onChange={(e) => setGithubHandle(e.target.value)}
                     placeholder="e.g. adadev"
-                    className="w-full px-3 py-2 text-sm bg-white border border-[#5A2D0C]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C88D3A]"
+                    className="w-full px-3 py-2 text-sm bg-[#FFF0D6] border border-[#CF9F68] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C46F18] text-[#432006]"
                   />
                 </div>
               </div>
@@ -229,7 +229,7 @@ export const RegistrationModal: React.FC<RegistrationModalProps> = ({
                     setError(null);
                     setStep(2);
                   }}
-                  className="inline-flex items-center gap-2 px-4 py-2 bg-[#5A2D0C] text-[#FFF9EE] rounded-lg text-sm font-medium hover:bg-[#2F1707] transition-colors"
+                  className="inline-flex items-center gap-2 px-4 py-2 bg-[#432006] text-[#FFF0D6] rounded-lg text-sm font-medium hover:bg-[#341905] transition-colors"
                 >
                   Next: Program & Property <ArrowRight className="w-4 h-4" />
                 </button>
@@ -241,14 +241,14 @@ export const RegistrationModal: React.FC<RegistrationModalProps> = ({
           {step === 2 && (
             <div className="space-y-4">
               <div>
-                <label className="block text-xs font-semibold text-[#5A2D0C] mb-1">
+                <label className="block text-xs font-semibold text-[#5A3013] mb-1">
                   Program or Sponsoring Community
                 </label>
                 <select
                   id="reg-select-program"
                   value={programCommunity}
                   onChange={(e) => setProgramCommunity(e.target.value)}
-                  className="w-full px-3 py-2 text-sm bg-white border border-[#5A2D0C]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C88D3A]"
+                  className="w-full px-3 py-2 text-sm bg-[#FFF0D6] border border-[#CF9F68] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C46F18] text-[#432006]"
                 >
                   <option value="L2E (Learn to Earn) Dev Cohort">L2E (Learn to Earn) Dev Cohort</option>
                   <option value="Hut4Devs Residency Interns 2026">Hut4Devs Residency Interns 2026</option>
@@ -258,7 +258,7 @@ export const RegistrationModal: React.FC<RegistrationModalProps> = ({
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-[#5A2D0C] mb-2">
+                <label className="block text-xs font-semibold text-[#5A3013] mb-2">
                   Select Accredited Accommodation Property
                 </label>
                 <div className="space-y-2">
@@ -267,8 +267,8 @@ export const RegistrationModal: React.FC<RegistrationModalProps> = ({
                       key={prop.id}
                       className={`flex items-start justify-between p-3 rounded-xl border cursor-pointer transition-all ${
                         selectedPropertyId === prop.id
-                          ? 'bg-[#F7F1E7] border-[#C88D3A] ring-1 ring-[#C88D3A]'
-                          : 'bg-white border-[#5A2D0C]/15 hover:border-[#C88D3A]/50'
+                          ? 'bg-[#FAE5C5] border-[#C46F18] ring-1 ring-[#C46F18]'
+                          : 'bg-[#FFF0D6] border-[#CF9F68]/60 hover:border-[#C46F18]/50'
                       }`}
                     >
                       <div className="flex items-start gap-2.5">
@@ -278,19 +278,19 @@ export const RegistrationModal: React.FC<RegistrationModalProps> = ({
                           value={prop.id}
                           checked={selectedPropertyId === prop.id}
                           onChange={() => setSelectedPropertyId(prop.id)}
-                          className="mt-1 text-[#C88D3A] focus:ring-[#C88D3A]"
+                          className="mt-1 text-[#C46F18] focus:ring-[#C46F18]"
                         />
                         <div>
-                          <div className="text-sm font-bold text-[#5A2D0C]">{prop.name}</div>
-                          <div className="text-xs text-[#5A2D0C]/70">{prop.description}</div>
-                          <div className="text-[11px] text-[#5A2D0C]/60 mt-0.5">{prop.location}</div>
+                          <div className="text-sm font-bold text-[#432006]">{prop.name}</div>
+                          <div className="text-xs text-[#72451F]">{prop.description}</div>
+                          <div className="text-[11px] text-[#72451F]/70 mt-0.5">{prop.location}</div>
                         </div>
                       </div>
                       <div className="text-right whitespace-nowrap pl-2">
-                        <span className="text-sm font-extrabold text-[#B77620]">
+                        <span className="text-sm font-extrabold text-[#9F520B]">
                           ₦{prop.monthlyCommitment.toLocaleString()}
                         </span>
-                        <div className="text-[10px] uppercase font-semibold text-[#5A2D0C]/60">monthly</div>
+                        <div className="text-[10px] uppercase font-semibold text-[#72451F]">monthly</div>
                       </div>
                     </label>
                   ))}
@@ -301,7 +301,7 @@ export const RegistrationModal: React.FC<RegistrationModalProps> = ({
                 <button
                   type="button"
                   onClick={() => setStep(1)}
-                  className="inline-flex items-center gap-2 px-3 py-2 text-xs font-medium text-[#5A2D0C] hover:bg-[#5A2D0C]/10 rounded-lg transition-colors"
+                  className="inline-flex items-center gap-2 px-3 py-2 text-xs font-medium text-[#72451F] hover:bg-[#E8BF88] rounded-lg transition-colors"
                 >
                   <ArrowLeft className="w-3.5 h-3.5" /> Back
                 </button>
@@ -309,7 +309,7 @@ export const RegistrationModal: React.FC<RegistrationModalProps> = ({
                   id="reg-step2-next-btn"
                   type="button"
                   onClick={() => setStep(3)}
-                  className="inline-flex items-center gap-2 px-4 py-2 bg-[#5A2D0C] text-[#FFF9EE] rounded-lg text-sm font-medium hover:bg-[#2F1707] transition-colors"
+                  className="inline-flex items-center gap-2 px-4 py-2 bg-[#432006] text-[#FFF0D6] rounded-lg text-sm font-medium hover:bg-[#341905] transition-colors"
                 >
                   Next: Room & Review <ArrowRight className="w-4 h-4" />
                 </button>
@@ -322,14 +322,14 @@ export const RegistrationModal: React.FC<RegistrationModalProps> = ({
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-semibold text-[#5A2D0C] mb-1">
+                  <label className="block text-xs font-semibold text-[#5A3013] mb-1">
                     Floor Name / Level
                   </label>
                   <select
                     id="reg-select-floor"
                     value={floorName}
                     onChange={(e) => setFloorName(e.target.value)}
-                    className="w-full px-3 py-2 text-sm bg-white border border-[#5A2D0C]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C88D3A]"
+                    className="w-full px-3 py-2 text-sm bg-[#FFF0D6] border border-[#CF9F68] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C46F18] text-[#432006]"
                   >
                     <option value="Floor 1">Floor 1</option>
                     <option value="Floor 2">Floor 2</option>
@@ -338,7 +338,7 @@ export const RegistrationModal: React.FC<RegistrationModalProps> = ({
                   </select>
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-[#5A2D0C] mb-1">
+                  <label className="block text-xs font-semibold text-[#5A3013] mb-1">
                     Assigned Room Number / Code <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -348,39 +348,39 @@ export const RegistrationModal: React.FC<RegistrationModalProps> = ({
                     value={roomName}
                     onChange={(e) => setRoomName(e.target.value)}
                     placeholder="e.g. Room 304"
-                    className="w-full px-3 py-2 text-sm bg-white border border-[#5A2D0C]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C88D3A]"
+                    className="w-full px-3 py-2 text-sm bg-[#FFF0D6] border border-[#CF9F68] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C46F18] text-[#432006]"
                   />
                 </div>
               </div>
 
               {/* Summary Card */}
-              <div className="p-4 bg-[#F7F1E7] border border-[#C88D3A]/30 rounded-xl space-y-2 text-xs">
-                <div className="font-bold text-[#5A2D0C] text-sm border-b border-[#5A2D0C]/10 pb-1">
+              <div className="p-4 bg-[#FAE5C5] border border-[#CF9F68] rounded-xl space-y-2 text-xs">
+                <div className="font-bold text-[#432006] text-sm border-b border-[#DDB985] pb-1">
                   Membership Request Summary
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-[#5A2D0C]/70">Candidate:</span>
-                  <span className="font-semibold text-[#5A2D0C]">{fullName}</span>
+                  <span className="text-[#72451F]">Candidate:</span>
+                  <span className="font-semibold text-[#432006]">{fullName}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-[#5A2D0C]/70">Email:</span>
-                  <span className="font-semibold text-[#5A2D0C]">{email}</span>
+                  <span className="text-[#72451F]">Email:</span>
+                  <span className="font-semibold text-[#432006]">{email}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-[#5A2D0C]/70">Program:</span>
-                  <span className="font-semibold text-[#5A2D0C]">{programCommunity}</span>
+                  <span className="text-[#72451F]">Program:</span>
+                  <span className="font-semibold text-[#432006]">{programCommunity}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-[#5A2D0C]/70">Property:</span>
-                  <span className="font-semibold text-[#5A2D0C]">{selectedProperty.name}</span>
+                  <span className="text-[#72451F]">Property:</span>
+                  <span className="font-semibold text-[#432006]">{selectedProperty.name}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-[#5A2D0C]/70">Room:</span>
-                  <span className="font-semibold text-[#5A2D0C]">{roomName || 'Pending'} ({floorName})</span>
+                  <span className="text-[#72451F]">Room:</span>
+                  <span className="font-semibold text-[#432006]">{roomName || 'Pending'} ({floorName})</span>
                 </div>
-                <div className="flex justify-between pt-1 border-t border-[#5A2D0C]/10">
-                  <span className="text-[#5A2D0C]/70">Monthly Commitment:</span>
-                  <span className="font-bold text-[#B77620]">
+                <div className="flex justify-between pt-1 border-t border-[#DDB985]">
+                  <span className="text-[#72451F]">Monthly Commitment:</span>
+                  <span className="font-bold text-[#9F520B]">
                     ₦{selectedProperty.monthlyCommitment.toLocaleString()}
                   </span>
                 </div>
@@ -390,7 +390,7 @@ export const RegistrationModal: React.FC<RegistrationModalProps> = ({
                 <button
                   type="button"
                   onClick={() => setStep(2)}
-                  className="inline-flex items-center gap-2 px-3 py-2 text-xs font-medium text-[#5A2D0C] hover:bg-[#5A2D0C]/10 rounded-lg transition-colors"
+                  className="inline-flex items-center gap-2 px-3 py-2 text-xs font-medium text-[#72451F] hover:bg-[#E8BF88] rounded-lg transition-colors"
                 >
                   <ArrowLeft className="w-3.5 h-3.5" /> Back
                 </button>
@@ -398,7 +398,7 @@ export const RegistrationModal: React.FC<RegistrationModalProps> = ({
                   id="reg-submit-btn"
                   type="button"
                   onClick={handleSubmit}
-                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#C88D3A] text-white rounded-lg text-sm font-semibold hover:bg-[#B77620] shadow-xs transition-colors"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#C46F18] text-white rounded-lg text-sm font-semibold hover:bg-[#9F520B] shadow-xs transition-colors"
                 >
                   Submit Membership Request
                 </button>
@@ -412,14 +412,14 @@ export const RegistrationModal: React.FC<RegistrationModalProps> = ({
               <div className="w-14 h-14 bg-emerald-100 text-emerald-700 rounded-full flex items-center justify-center mx-auto">
                 <CheckCircle className="w-8 h-8" />
               </div>
-              <h3 className="font-serif text-lg font-bold text-[#5A2D0C]">
+              <h3 className="font-serif text-lg font-bold text-[#432006]">
                 Membership Request Submitted Successfully
               </h3>
-              <p className="text-xs text-[#5A2D0C]/80 max-w-md mx-auto leading-relaxed">
+              <p className="text-xs text-[#5A3013] max-w-md mx-auto leading-relaxed">
                 Your request has been routed to the <strong>L2E Accommodation Fellows Coordinator</strong> for
                 verification. A Room Captain may be delegated to confirm your room occupancy.
               </p>
-              <div className="p-3 bg-[#F7F1E7] rounded-xl text-xs font-mono text-[#5A2D0C] max-w-sm mx-auto">
+              <div className="p-3 bg-[#FAE5C5] rounded-xl text-xs font-mono text-[#432006] max-w-sm mx-auto border border-[#CF9F68]">
                 Reference ID: <strong>{submittedRequestId}</strong>
               </div>
               <div className="pt-2">
@@ -427,7 +427,7 @@ export const RegistrationModal: React.FC<RegistrationModalProps> = ({
                   id="reg-close-done-btn"
                   type="button"
                   onClick={handleReset}
-                  className="px-5 py-2 bg-[#5A2D0C] text-[#FFF9EE] rounded-lg text-sm font-medium hover:bg-[#2F1707] transition-colors"
+                  className="px-5 py-2 bg-[#432006] text-[#FFF0D6] rounded-lg text-sm font-medium hover:bg-[#341905] transition-colors"
                 >
                   Done
                 </button>

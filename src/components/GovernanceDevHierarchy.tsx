@@ -109,37 +109,37 @@ export const GovernanceDevHierarchy: React.FC<GovernanceDevHierarchyProps> = ({
     <div
       className="rounded-2xl border-2 border-b-4 p-4 sm:p-5 transition-all duration-200 shadow-md backdrop-blur-md"
       style={{
-        backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : 'rgba(255, 253, 248, 0.75)',
-        borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : 'rgba(90, 45, 12, 0.25)',
+        backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : '#FAE5C5',
+        borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : '#CF9F68',
       }}
     >
       {/* Dev Hierarchy Header */}
       <div
         className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 mb-4 border-b"
-        style={{ borderColor: isDark ? 'rgba(200, 141, 58, 0.25)' : 'rgba(90, 45, 12, 0.15)' }}
+        style={{ borderColor: isDark ? 'rgba(200, 141, 58, 0.25)' : '#CF9F68' }}
       >
         <div>
           <div className="flex items-center gap-2">
             <span
               className="px-2.5 py-1 rounded-full text-[10px] font-bold font-mono tracking-wide uppercase border shadow-xs"
               style={{
-                backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : 'rgba(247, 241, 231, 0.7)',
-                color: isDark ? '#E5A955' : '#B77620',
-                borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : 'rgba(90, 45, 12, 0.2)',
+                backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : '#FFF0D6',
+                color: isDark ? '#E5A955' : '#C46F18',
+                borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : '#CF9F68',
               }}
             >
               SCOPED GOVERNANCE MODEL
             </span>
             <span
               className="text-xs font-bold"
-              style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+              style={{ color: isDark ? '#FFF9EE' : '#432006' }}
             >
               Development Tools &amp; Seed Fixtures
             </span>
           </div>
           <p
             className="text-[11px] mt-0.5"
-            style={{ color: isDark ? '#EAD6C0' : '#8A5D3B' }}
+            style={{ color: isDark ? '#EAD6C0' : '#5A3013' }}
           >
             Institution → Campus → Responsibility Category → Assigned Person / Room → Dev Preview
           </p>
@@ -152,12 +152,12 @@ export const GovernanceDevHierarchy: React.FC<GovernanceDevHierarchyProps> = ({
               onClick={handleBack}
               className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-xl border transition-colors cursor-pointer shadow-xs"
               style={{
-                backgroundColor: isDark ? 'rgba(30, 27, 24, 0.6)' : 'rgba(247, 241, 231, 0.8)',
-                borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : 'rgba(90, 45, 12, 0.2)',
-                color: isDark ? '#FFF9EE' : '#5A2D0C',
+                backgroundColor: isDark ? 'rgba(30, 27, 24, 0.6)' : '#FFF0D6',
+                borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : '#CF9F68',
+                color: isDark ? '#FFF9EE' : '#432006',
               }}
             >
-              <ArrowLeft className="w-3.5 h-3.5 text-[#C88D3A]" />
+              <ArrowLeft className="w-3.5 h-3.5 text-[#C46F18] dark:text-[#C88D3A]" />
               <span>Back</span>
             </button>
           )}
@@ -169,12 +169,12 @@ export const GovernanceDevHierarchy: React.FC<GovernanceDevHierarchyProps> = ({
               title="Return to Sign In"
               className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-xl border transition-colors cursor-pointer shadow-xs"
               style={{
-                backgroundColor: isDark ? 'rgba(30, 27, 24, 0.6)' : 'rgba(255, 253, 248, 0.8)',
-                borderColor: isDark ? 'rgba(200, 141, 58, 0.4)' : 'rgba(90, 45, 12, 0.25)',
-                color: isDark ? '#FFF9EE' : '#5A2D0C',
+                backgroundColor: isDark ? 'rgba(30, 27, 24, 0.6)' : '#FFF0D6',
+                borderColor: isDark ? 'rgba(200, 141, 58, 0.4)' : '#CF9F68',
+                color: isDark ? '#FFF9EE' : '#432006',
               }}
             >
-              <Home className="w-3.5 h-3.5 text-[#C88D3A]" />
+              <Home className="w-3.5 h-3.5 text-[#C46F18] dark:text-[#C88D3A]" />
               <span className="hidden sm:inline">Sign In Entry</span>
             </button>
           )}
@@ -188,13 +188,13 @@ export const GovernanceDevHierarchy: React.FC<GovernanceDevHierarchyProps> = ({
             <button
               type="button"
               onClick={onReturnToSignIn}
-              className="text-[#C88D3A] hover:text-[#B77620] hover:underline cursor-pointer transition-colors flex items-center gap-1"
+              className="text-[#C46F18] hover:text-[#A55708] dark:text-[#C88D3A] dark:hover:text-[#E2AB5D] hover:underline cursor-pointer transition-colors flex items-center gap-1"
               title="Return to Sign In"
             >
               <Home className="w-3 h-3" />
               <span>Sign In</span>
             </button>
-            <ChevronRight className="w-3.5 h-3.5 text-stone-400" />
+            <ChevronRight className="w-3.5 h-3.5 text-[#C27622]/50 dark:text-[#E5D3BA]/50" />
           </>
         )}
         <button
@@ -205,8 +205,8 @@ export const GovernanceDevHierarchy: React.FC<GovernanceDevHierarchyProps> = ({
           }}
           className={`hover:underline cursor-pointer transition-colors ${
             drillLevel === 'INSTITUTIONS'
-              ? 'font-bold text-[#5A2D0C] dark:text-[#FFF9EE]'
-              : 'text-[#C88D3A] hover:text-[#B77620]'
+              ? 'font-bold text-[#432006] dark:text-[#FFF9EE]'
+              : 'text-[#C46F18] hover:text-[#A55708] dark:text-[#C88D3A] dark:hover:text-[#E2AB5D]'
           }`}
         >
           Institutions
@@ -214,7 +214,7 @@ export const GovernanceDevHierarchy: React.FC<GovernanceDevHierarchyProps> = ({
 
         {selectedInstitution && drillLevel !== 'INSTITUTIONS' && (
           <>
-            <ChevronRight className="w-3.5 h-3.5 text-stone-400" />
+            <ChevronRight className="w-3.5 h-3.5 text-[#C27622]/50 dark:text-[#E5D3BA]/50" />
             <button
               type="button"
               onClick={() => {
@@ -223,8 +223,8 @@ export const GovernanceDevHierarchy: React.FC<GovernanceDevHierarchyProps> = ({
               }}
               className={`hover:underline cursor-pointer transition-colors ${
                 drillLevel === 'CAMPUSES'
-                  ? 'font-bold text-[#5A2D0C] dark:text-[#FFF9EE]'
-                  : 'text-[#C88D3A] hover:text-[#B77620]'
+                  ? 'font-bold text-[#432006] dark:text-[#FFF9EE]'
+                  : 'text-[#C46F18] hover:text-[#A55708] dark:text-[#C88D3A] dark:hover:text-[#E2AB5D]'
               }`}
             >
               {selectedInstitution.name}
@@ -234,14 +234,14 @@ export const GovernanceDevHierarchy: React.FC<GovernanceDevHierarchyProps> = ({
 
         {selectedCampus && (drillLevel === 'CATEGORIES' || drillLevel === 'ROOM_CAPTAINS' || drillLevel === 'COORDINATOR' || drillLevel === 'ADMINISTRATION') && (
           <>
-            <ChevronRight className="w-3.5 h-3.5 text-stone-400" />
+            <ChevronRight className="w-3.5 h-3.5 text-[#C27622]/50 dark:text-[#E5D3BA]/50" />
             <button
               type="button"
               onClick={() => setDrillLevel('CATEGORIES')}
               className={`hover:underline cursor-pointer transition-colors ${
                 drillLevel === 'CATEGORIES'
-                  ? 'font-bold text-[#5A2D0C] dark:text-[#FFF9EE]'
-                  : 'text-[#C88D3A] hover:text-[#B77620]'
+                  ? 'font-bold text-[#432006] dark:text-[#FFF9EE]'
+                  : 'text-[#C46F18] hover:text-[#A55708] dark:text-[#C88D3A] dark:hover:text-[#E2AB5D]'
               }`}
             >
               {selectedCampus.name}
@@ -251,8 +251,8 @@ export const GovernanceDevHierarchy: React.FC<GovernanceDevHierarchyProps> = ({
 
         {drillLevel === 'ROOM_CAPTAINS' && (
           <>
-            <ChevronRight className="w-3.5 h-3.5 text-stone-400" />
-            <span className="font-bold text-[#5A2D0C] dark:text-[#FFF9EE]">
+            <ChevronRight className="w-3.5 h-3.5 text-[#C27622]/50 dark:text-[#E5D3BA]/50" />
+            <span className="font-bold text-[#432006] dark:text-[#FFF9EE]">
               Room Captains
             </span>
           </>
@@ -260,8 +260,8 @@ export const GovernanceDevHierarchy: React.FC<GovernanceDevHierarchyProps> = ({
 
         {drillLevel === 'COORDINATOR' && (
           <>
-            <ChevronRight className="w-3.5 h-3.5 text-stone-400" />
-            <span className="font-bold text-[#5A2D0C] dark:text-[#FFF9EE]">
+            <ChevronRight className="w-3.5 h-3.5 text-[#C27622]/50 dark:text-[#E5D3BA]/50" />
+            <span className="font-bold text-[#432006] dark:text-[#FFF9EE]">
               Fellow Accommodation Coordinator
             </span>
           </>
@@ -269,8 +269,8 @@ export const GovernanceDevHierarchy: React.FC<GovernanceDevHierarchyProps> = ({
 
         {drillLevel === 'ADMINISTRATION' && (
           <>
-            <ChevronRight className="w-3.5 h-3.5 text-stone-400" />
-            <span className="font-bold text-[#5A2D0C] dark:text-[#FFF9EE]">
+            <ChevronRight className="w-3.5 h-3.5 text-[#C27622]/50 dark:text-[#E5D3BA]/50" />
+            <span className="font-bold text-[#432006] dark:text-[#FFF9EE]">
               Accommodation Administration
             </span>
           </>
@@ -281,13 +281,13 @@ export const GovernanceDevHierarchy: React.FC<GovernanceDevHierarchyProps> = ({
       <div
         className="mb-4 p-3.5 rounded-xl border text-[11px] leading-relaxed transition-colors duration-200 shadow-xs"
         style={{
-          backgroundColor: isDark ? 'rgba(30, 27, 24, 0.45)' : 'rgba(247, 241, 231, 0.50)',
-          borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : 'rgba(90, 45, 12, 0.15)',
-          color: isDark ? '#EAD6C0' : '#5A2D0C',
+          backgroundColor: isDark ? 'rgba(30, 27, 24, 0.45)' : '#FFF0D6',
+          borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : '#CF9F68',
+          color: isDark ? '#EAD6C0' : '#5A3013',
         }}
       >
         <div className="flex items-center gap-2 mb-1">
-          <Shield className="w-3.5 h-3.5 text-[#C88D3A] shrink-0" />
+          <Shield className="w-3.5 h-3.5 text-[#C46F18] dark:text-[#C88D3A] shrink-0" />
           <span className="font-bold">Principle: Capability is Not Authority</span>
         </div>
         <p className="opacity-90">
@@ -307,7 +307,7 @@ export const GovernanceDevHierarchy: React.FC<GovernanceDevHierarchyProps> = ({
        * ============================================================ */}
       {drillLevel === 'INSTITUTIONS' && (
         <div className="space-y-3">
-          <div className="text-xs font-bold text-[#5A2D0C] dark:text-[#FFF9EE] flex items-center justify-between">
+          <div className="text-xs font-bold text-[#432006] dark:text-[#FFF9EE] flex items-center justify-between">
             <span>Select Institution</span>
             <span className="text-[11px] font-normal opacity-75">4 Ecosystems Configured</span>
           </div>
@@ -317,21 +317,21 @@ export const GovernanceDevHierarchy: React.FC<GovernanceDevHierarchyProps> = ({
               <div
                 key={inst.id}
                 onClick={() => handleSelectInstitution(inst)}
-                className="p-4 rounded-xl border-2 border-b-4 hover:border-[#5A2D0C] dark:hover:border-[#C88D3A] transition-all cursor-pointer shadow-md hover:-translate-y-0.5 flex flex-col justify-between"
+                className="p-4 rounded-xl border-2 border-b-4 hover:border-[#C46F18] dark:hover:border-[#C88D3A] transition-all cursor-pointer shadow-md hover:-translate-y-0.5 flex flex-col justify-between"
                 style={{
-                  backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : 'rgba(255, 253, 248, 0.65)',
-                  borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : 'rgba(90, 45, 12, 0.25)',
+                  backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : '#FFF0D6',
+                  borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : '#CF9F68',
                 }}
               >
                 <div>
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-2">
-                      <span className="w-7 h-7 rounded-lg bg-[#5A2D0C] text-[#FFF9EE] flex items-center justify-center font-bold text-xs shadow-inner">
+                      <span className="w-7 h-7 rounded-lg bg-[#C46F18] dark:bg-[#5A2D0C] text-[#FFF0D6] dark:text-[#FFF9EE] flex items-center justify-center font-bold text-xs shadow-inner">
                         {inst.logoBadge}
                       </span>
                       <span
                         className="font-bold text-sm"
-                        style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+                        style={{ color: isDark ? '#FFF9EE' : '#432006' }}
                       >
                         {inst.name}
                       </span>
@@ -339,21 +339,21 @@ export const GovernanceDevHierarchy: React.FC<GovernanceDevHierarchyProps> = ({
                     <span
                       className="text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full border shadow-xs"
                       style={{
-                        backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : 'rgba(247, 241, 231, 0.7)',
-                        color: isDark ? '#E5A955' : '#B77620',
-                        borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : 'rgba(90, 45, 12, 0.2)',
+                        backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : '#FAE5C5',
+                        color: isDark ? '#E5A955' : '#C46F18',
+                        borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : '#CF9F68',
                       }}
                     >
                       {inst.campusesCount} {inst.campusesCount === 1 ? 'Campus' : 'Campuses'}
                     </span>
                   </div>
 
-                  <p className="text-[11px] font-semibold text-[#B77620] mb-1">
+                  <p className="text-[11px] font-semibold text-[#C46F18] dark:text-[#E2AB5D] mb-1">
                     {inst.tagline}
                   </p>
                   <p
                     className="text-[11px] leading-relaxed"
-                    style={{ color: isDark ? '#EAD6C0' : '#5A2D0C' }}
+                    style={{ color: isDark ? '#EAD6C0' : '#5A3013' }}
                   >
                     {inst.description}
                   </p>
@@ -362,12 +362,12 @@ export const GovernanceDevHierarchy: React.FC<GovernanceDevHierarchyProps> = ({
                 <div
                   className="mt-3.5 pt-2.5 border-t flex items-center justify-between text-xs font-bold"
                   style={{
-                    borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : 'rgba(90, 45, 12, 0.15)',
-                    color: isDark ? '#FFF9EE' : '#5A2D0C',
+                    borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : '#CF9F68',
+                    color: isDark ? '#FFF9EE' : '#432006',
                   }}
                 >
                   <span>Explore Campuses</span>
-                  <ArrowRight className="w-3.5 h-3.5 text-[#C88D3A]" />
+                  <ArrowRight className="w-3.5 h-3.5 text-[#C46F18] dark:text-[#C88D3A]" />
                 </div>
               </div>
             ))}
@@ -380,7 +380,7 @@ export const GovernanceDevHierarchy: React.FC<GovernanceDevHierarchyProps> = ({
        * ============================================================ */}
       {drillLevel === 'CAMPUSES' && selectedInstitution && (
         <div className="space-y-3">
-          <div className="text-xs font-bold text-[#5A2D0C] dark:text-[#FFF9EE] flex items-center justify-between">
+          <div className="text-xs font-bold text-[#432006] dark:text-[#FFF9EE] flex items-center justify-between">
             <span>
               {selectedInstitution.name} — Campuses ({campuses.length})
             </span>
@@ -392,31 +392,31 @@ export const GovernanceDevHierarchy: React.FC<GovernanceDevHierarchyProps> = ({
               <div
                 key={campus.id}
                 onClick={() => handleSelectCampus(campus)}
-                className="p-4 rounded-xl border-2 border-b-4 hover:border-[#5A2D0C] dark:hover:border-[#C88D3A] transition-all cursor-pointer shadow-md hover:-translate-y-0.5 flex flex-col justify-between"
+                className="p-4 rounded-xl border-2 border-b-4 hover:border-[#C46F18] dark:hover:border-[#C88D3A] transition-all cursor-pointer shadow-md hover:-translate-y-0.5 flex flex-col justify-between"
                 style={{
-                  backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : 'rgba(255, 253, 248, 0.65)',
-                  borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : 'rgba(90, 45, 12, 0.25)',
+                  backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : '#FFF0D6',
+                  borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : '#CF9F68',
                 }}
               >
                 <div>
                   <div className="flex items-center justify-between mb-1">
                     <div className="flex items-center gap-1.5">
-                      <MapPin className="w-3.5 h-3.5 text-[#C88D3A]" />
+                      <MapPin className="w-3.5 h-3.5 text-[#C46F18] dark:text-[#C88D3A]" />
                       <span
                         className="font-bold text-xs"
-                        style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+                        style={{ color: isDark ? '#FFF9EE' : '#432006' }}
                       >
                         {campus.name}
                       </span>
                     </div>
-                    <span className="text-[10px] font-mono text-stone-500 dark:text-stone-400">
+                    <span className="text-[10px] font-mono text-[#5A3013] dark:text-[#E5D3BA]/75">
                       {campus.stateOrRegion}
                     </span>
                   </div>
 
                   <p
                     className="text-[11px] line-clamp-2 mt-1 leading-relaxed"
-                    style={{ color: isDark ? '#EAD6C0' : '#5A2D0C' }}
+                    style={{ color: isDark ? '#EAD6C0' : '#5A3013' }}
                   >
                     {campus.description}
                   </p>
@@ -425,9 +425,9 @@ export const GovernanceDevHierarchy: React.FC<GovernanceDevHierarchyProps> = ({
                     <span
                       className="px-2 py-0.5 rounded-full border shadow-xs"
                       style={{
-                        backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : 'rgba(247, 241, 231, 0.7)',
-                        color: isDark ? '#E5A955' : '#B77620',
-                        borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : 'rgba(90, 45, 12, 0.2)',
+                        backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : '#FAE5C5',
+                        color: isDark ? '#E5A955' : '#C46F18',
+                        borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : '#CF9F68',
                       }}
                     >
                       {campus.accommodationSpacesCount} Spaces
@@ -435,9 +435,9 @@ export const GovernanceDevHierarchy: React.FC<GovernanceDevHierarchyProps> = ({
                     <span
                       className="px-2 py-0.5 rounded-full border shadow-xs"
                       style={{
-                        backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : 'rgba(247, 241, 231, 0.7)',
-                        color: isDark ? '#E5A955' : '#B77620',
-                        borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : 'rgba(90, 45, 12, 0.2)',
+                        backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : '#FAE5C5',
+                        color: isDark ? '#E5A955' : '#C46F18',
+                        borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : '#CF9F68',
                       }}
                     >
                       {campus.activeCaptainsCount} Captains
@@ -457,12 +457,12 @@ export const GovernanceDevHierarchy: React.FC<GovernanceDevHierarchyProps> = ({
                 <div
                   className="mt-3.5 pt-2 border-t flex items-center justify-between text-xs font-bold"
                   style={{
-                    borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : 'rgba(90, 45, 12, 0.15)',
-                    color: isDark ? '#FFF9EE' : '#5A2D0C',
+                    borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : '#CF9F68',
+                    color: isDark ? '#FFF9EE' : '#432006',
                   }}
                 >
                   <span>Open Responsibilities</span>
-                  <ArrowRight className="w-3.5 h-3.5 text-[#C88D3A]" />
+                  <ArrowRight className="w-3.5 h-3.5 text-[#C46F18] dark:text-[#C88D3A]" />
                 </div>
               </div>
             ))}
@@ -479,7 +479,7 @@ export const GovernanceDevHierarchy: React.FC<GovernanceDevHierarchyProps> = ({
        * ============================================================ */}
       {drillLevel === 'CATEGORIES' && selectedCampus && (
         <div className="space-y-4">
-          <div className="text-xs font-bold text-[#5A2D0C] dark:text-[#FFF9EE] flex items-center justify-between">
+          <div className="text-xs font-bold text-[#432006] dark:text-[#FFF9EE] flex items-center justify-between">
             <span>
               {selectedInstitution?.name} • {selectedCampus.name} — Responsibility Categories
             </span>
@@ -490,23 +490,23 @@ export const GovernanceDevHierarchy: React.FC<GovernanceDevHierarchyProps> = ({
             {/* Category 1: Room Captains */}
             <div
               onClick={() => setDrillLevel('ROOM_CAPTAINS')}
-              className="p-4 rounded-xl border-2 border-b-4 hover:border-[#5A2D0C] dark:hover:border-[#C88D3A] transition-all cursor-pointer shadow-md hover:-translate-y-0.5 flex flex-col justify-between"
+              className="p-4 rounded-xl border-2 border-b-4 hover:border-[#C46F18] dark:hover:border-[#C88D3A] transition-all cursor-pointer shadow-md hover:-translate-y-0.5 flex flex-col justify-between"
               style={{
-                backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : 'rgba(255, 253, 248, 0.65)',
-                borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : 'rgba(90, 45, 12, 0.25)',
+                backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : '#FFF0D6',
+                borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : '#CF9F68',
               }}
             >
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <div className="w-8 h-8 rounded-lg bg-[#5A2D0C] text-[#FFF9EE] flex items-center justify-center shadow-inner">
-                    <Home className="w-4 h-4 text-[#C88D3A]" />
+                  <div className="w-8 h-8 rounded-lg bg-[#C46F18] dark:bg-[#5A2D0C] text-[#FFF0D6] dark:text-[#FFF9EE] flex items-center justify-center shadow-inner">
+                    <Home className="w-4 h-4 text-[#FFF0D6] dark:text-[#C88D3A]" />
                   </div>
                   <span
                     className="text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full border shadow-xs"
                     style={{
-                      backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : 'rgba(247, 241, 231, 0.7)',
-                      color: isDark ? '#E5A955' : '#B77620',
-                      borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : 'rgba(90, 45, 12, 0.2)',
+                      backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : '#FAE5C5',
+                      color: isDark ? '#E5A955' : '#C46F18',
+                      borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : '#CF9F68',
                     }}
                   >
                     {roomCaptains.length} Rooms
@@ -514,13 +514,13 @@ export const GovernanceDevHierarchy: React.FC<GovernanceDevHierarchyProps> = ({
                 </div>
                 <h3
                   className="font-bold text-xs"
-                  style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+                  style={{ color: isDark ? '#FFF9EE' : '#432006' }}
                 >
                   1. Room Captains
                 </h3>
                 <p
                   className="text-[11px] mt-1 leading-relaxed"
-                  style={{ color: isDark ? '#EAD6C0' : '#5A2D0C' }}
+                  style={{ color: isDark ? '#EAD6C0' : '#5A3013' }}
                 >
                   Fellows with room-scoped delegated responsibility. Grouped by property and room assignment.
                 </p>
@@ -529,35 +529,35 @@ export const GovernanceDevHierarchy: React.FC<GovernanceDevHierarchyProps> = ({
               <div
                 className="mt-3.5 pt-2.5 border-t flex items-center justify-between text-xs font-bold"
                 style={{
-                  borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : 'rgba(90, 45, 12, 0.15)',
-                  color: isDark ? '#FFF9EE' : '#5A2D0C',
+                  borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : '#CF9F68',
+                  color: isDark ? '#FFF9EE' : '#432006',
                 }}
               >
                 <span>Inspect Room Assignments</span>
-                <ChevronRight className="w-3.5 h-3.5 text-[#C88D3A]" />
+                <ChevronRight className="w-3.5 h-3.5 text-[#C46F18] dark:text-[#C88D3A]" />
               </div>
             </div>
 
             {/* Category 2: Fellow Accommodation Coordinator */}
             <div
               onClick={() => setDrillLevel('COORDINATOR')}
-              className="p-4 rounded-xl border-2 border-b-4 hover:border-[#5A2D0C] dark:hover:border-[#C88D3A] transition-all cursor-pointer shadow-md hover:-translate-y-0.5 flex flex-col justify-between"
+              className="p-4 rounded-xl border-2 border-b-4 hover:border-[#C46F18] dark:hover:border-[#C88D3A] transition-all cursor-pointer shadow-md hover:-translate-y-0.5 flex flex-col justify-between"
               style={{
-                backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : 'rgba(255, 253, 248, 0.65)',
-                borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : 'rgba(90, 45, 12, 0.25)',
+                backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : '#FFF0D6',
+                borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : '#CF9F68',
               }}
             >
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <div className="w-8 h-8 rounded-lg bg-[#5A2D0C] text-[#FFF9EE] flex items-center justify-center shadow-inner">
-                    <Users className="w-4 h-4 text-[#C88D3A]" />
+                  <div className="w-8 h-8 rounded-lg bg-[#C46F18] dark:bg-[#5A2D0C] text-[#FFF0D6] dark:text-[#FFF9EE] flex items-center justify-center shadow-inner">
+                    <Users className="w-4 h-4 text-[#FFF0D6] dark:text-[#C88D3A]" />
                   </div>
                   <span
                     className="text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full border shadow-xs"
                     style={{
-                      backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : 'rgba(247, 241, 231, 0.7)',
-                      color: isDark ? '#E5A955' : '#B77620',
-                      borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : 'rgba(90, 45, 12, 0.2)',
+                      backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : '#FAE5C5',
+                      color: isDark ? '#E5A955' : '#C46F18',
+                      borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : '#CF9F68',
                     }}
                   >
                     {coordinator ? 'Assigned' : 'Vacant'}
@@ -565,13 +565,13 @@ export const GovernanceDevHierarchy: React.FC<GovernanceDevHierarchyProps> = ({
                 </div>
                 <h3
                   className="font-bold text-xs"
-                  style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+                  style={{ color: isDark ? '#FFF9EE' : '#432006' }}
                 >
                   2. Fellow Accommodation Coordinator
                 </h3>
                 <p
                   className="text-[11px] mt-1 leading-relaxed"
-                  style={{ color: isDark ? '#EAD6C0' : '#5A2D0C' }}
+                  style={{ color: isDark ? '#EAD6C0' : '#5A3013' }}
                 >
                   Campus-wide coordinator responsible for onboarding, delegations, and fellow oversight.
                 </p>
@@ -580,35 +580,35 @@ export const GovernanceDevHierarchy: React.FC<GovernanceDevHierarchyProps> = ({
               <div
                 className="mt-3.5 pt-2.5 border-t flex items-center justify-between text-xs font-bold"
                 style={{
-                  borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : 'rgba(90, 45, 12, 0.15)',
-                  color: isDark ? '#FFF9EE' : '#5A2D0C',
+                  borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : '#CF9F68',
+                  color: isDark ? '#FFF9EE' : '#432006',
                 }}
               >
                 <span>Inspect Coordinator</span>
-                <ChevronRight className="w-3.5 h-3.5 text-[#C88D3A]" />
+                <ChevronRight className="w-3.5 h-3.5 text-[#C46F18] dark:text-[#C88D3A]" />
               </div>
             </div>
 
             {/* Category 3: Accommodation Administration */}
             <div
               onClick={() => setDrillLevel('ADMINISTRATION')}
-              className="p-4 rounded-xl border-2 border-b-4 hover:border-[#5A2D0C] dark:hover:border-[#C88D3A] transition-all cursor-pointer shadow-md hover:-translate-y-0.5 flex flex-col justify-between"
+              className="p-4 rounded-xl border-2 border-b-4 hover:border-[#C46F18] dark:hover:border-[#C88D3A] transition-all cursor-pointer shadow-md hover:-translate-y-0.5 flex flex-col justify-between"
               style={{
-                backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : 'rgba(255, 253, 248, 0.65)',
-                borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : 'rgba(90, 45, 12, 0.25)',
+                backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : '#FFF0D6',
+                borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : '#CF9F68',
               }}
             >
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <div className="w-8 h-8 rounded-lg bg-[#5A2D0C] text-[#FFF9EE] flex items-center justify-center shadow-inner">
-                    <ShieldCheck className="w-4 h-4 text-[#C88D3A]" />
+                  <div className="w-8 h-8 rounded-lg bg-[#C46F18] dark:bg-[#5A2D0C] text-[#FFF0D6] dark:text-[#FFF9EE] flex items-center justify-center shadow-inner">
+                    <ShieldCheck className="w-4 h-4 text-[#FFF0D6] dark:text-[#C88D3A]" />
                   </div>
                   <span
                     className="text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full border shadow-xs"
                     style={{
-                      backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : 'rgba(247, 241, 231, 0.7)',
-                      color: isDark ? '#E5A955' : '#B77620',
-                      borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : 'rgba(90, 45, 12, 0.2)',
+                      backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : '#FAE5C5',
+                      color: isDark ? '#E5A955' : '#C46F18',
+                      borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : '#CF9F68',
                     }}
                   >
                     {administration.length} Roles
@@ -616,13 +616,13 @@ export const GovernanceDevHierarchy: React.FC<GovernanceDevHierarchyProps> = ({
                 </div>
                 <h3
                   className="font-bold text-xs"
-                  style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+                  style={{ color: isDark ? '#FFF9EE' : '#432006' }}
                 >
                   3. Accommodation Administration
                 </h3>
                 <p
                   className="text-[11px] mt-1 leading-relaxed"
-                  style={{ color: isDark ? '#EAD6C0' : '#5A2D0C' }}
+                  style={{ color: isDark ? '#EAD6C0' : '#5A3013' }}
                 >
                   Financial Admin accountability &amp; Accommodation Welfare &amp; Mediation Officer.
                 </p>
@@ -631,12 +631,12 @@ export const GovernanceDevHierarchy: React.FC<GovernanceDevHierarchyProps> = ({
               <div
                 className="mt-3.5 pt-2.5 border-t flex items-center justify-between text-xs font-bold"
                 style={{
-                  borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : 'rgba(90, 45, 12, 0.15)',
-                  color: isDark ? '#FFF9EE' : '#5A2D0C',
+                  borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : '#CF9F68',
+                  color: isDark ? '#FFF9EE' : '#432006',
                 }}
               >
                 <span>Inspect Administration</span>
-                <ChevronRight className="w-3.5 h-3.5 text-[#C88D3A]" />
+                <ChevronRight className="w-3.5 h-3.5 text-[#C46F18] dark:text-[#C88D3A]" />
               </div>
             </div>
           </div>
@@ -648,7 +648,7 @@ export const GovernanceDevHierarchy: React.FC<GovernanceDevHierarchyProps> = ({
        * ============================================================ */}
       {drillLevel === 'ROOM_CAPTAINS' && selectedCampus && (
         <div className="space-y-3">
-          <div className="text-xs font-bold text-[#5A2D0C] dark:text-[#FFF9EE] flex items-center justify-between">
+          <div className="text-xs font-bold text-[#432006] dark:text-[#FFF9EE] flex items-center justify-between">
             <span>
               Room Captain Assignments — {selectedCampus.name} ({roomCaptains.length})
             </span>
@@ -656,12 +656,12 @@ export const GovernanceDevHierarchy: React.FC<GovernanceDevHierarchyProps> = ({
           </div>
 
           {roomCaptains.length === 0 ? (
-            <div className="p-6 text-center rounded-xl bg-white dark:bg-[#1E0D03] border border-[#C88D3A]/30">
-              <Home className="w-6 h-6 text-[#C88D3A] mx-auto mb-2 opacity-60" />
-              <p className="text-xs font-semibold text-[#5A2D0C] dark:text-[#FFF9EE]">
+            <div className="p-6 text-center rounded-xl bg-[#FFF0D6] dark:bg-[#2F1707] border border-[#CF9F68] dark:border-[#623416]">
+              <Home className="w-6 h-6 text-[#C46F18] dark:text-[#C27622] mx-auto mb-2 opacity-60" />
+              <p className="text-xs font-semibold text-[#432006] dark:text-[#FFF9EE]">
                 No Room Captains currently assigned for {selectedCampus.name}.
               </p>
-              <p className="text-[11px] text-stone-500 mt-1">
+              <p className="text-[11px] text-[#5A3013] dark:text-[#E5D3BA]/75 mt-1">
                 Room Captains are delegated per room by the Fellow Accommodation Coordinator.
               </p>
             </div>
@@ -672,17 +672,17 @@ export const GovernanceDevHierarchy: React.FC<GovernanceDevHierarchyProps> = ({
                   key={rc.id}
                   className="p-4 rounded-xl border-2 border-b-4 shadow-md flex flex-col justify-between"
                   style={{
-                    backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : 'rgba(255, 253, 248, 0.65)',
-                    borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : 'rgba(90, 45, 12, 0.25)',
+                    backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : '#FFF0D6',
+                    borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : '#CF9F68',
                   }}
                 >
                   <div>
                     <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center gap-1.5">
-                        <Home className="w-3.5 h-3.5 text-[#C88D3A]" />
+                        <Home className="w-3.5 h-3.5 text-[#C46F18] dark:text-[#C88D3A]" />
                         <span
                           className="font-bold text-xs"
-                          style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+                          style={{ color: isDark ? '#FFF9EE' : '#432006' }}
                         >
                           {rc.roomNumber} ({rc.accommodationSpaceName})
                         </span>
@@ -690,9 +690,9 @@ export const GovernanceDevHierarchy: React.FC<GovernanceDevHierarchyProps> = ({
                       <span
                         className="text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full border shadow-xs"
                         style={{
-                          backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : 'rgba(247, 241, 231, 0.7)',
-                          color: isDark ? '#E5A955' : '#B77620',
-                          borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : 'rgba(90, 45, 12, 0.2)',
+                          backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : '#FAE5C5',
+                          color: isDark ? '#E5A955' : '#C46F18',
+                          borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : '#CF9F68',
                         }}
                       >
                         ROOM CAPTAIN
@@ -702,23 +702,23 @@ export const GovernanceDevHierarchy: React.FC<GovernanceDevHierarchyProps> = ({
                     <div
                       className="mt-2 p-2.5 rounded-lg border text-xs shadow-xs"
                       style={{
-                        backgroundColor: isDark ? 'rgba(30, 27, 24, 0.45)' : 'rgba(247, 241, 231, 0.50)',
-                        borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : 'rgba(90, 45, 12, 0.15)',
+                        backgroundColor: isDark ? 'rgba(30, 27, 24, 0.45)' : '#FAE5C5',
+                        borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : '#CF9F68',
                       }}
                     >
                       <div
                         className="font-bold"
-                        style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+                        style={{ color: isDark ? '#FFF9EE' : '#432006' }}
                       >
                         {rc.memberName}
                       </div>
-                      <div className="text-[11px] text-stone-500 dark:text-stone-400">
+                      <div className="text-[11px] text-[#5A3013] dark:text-[#E5D3BA]/75">
                         {rc.memberEmail}
                       </div>
-                      <div className="text-[10px] text-[#B77620] font-mono mt-1">
+                      <div className="text-[10px] text-[#C46F18] dark:text-[#E5A955] font-mono mt-1">
                         Scope: {rc.accommodationSpaceName} • {rc.floor} • {rc.roomNumber}
                       </div>
-                      <div className="text-[10px] text-stone-500 mt-0.5">
+                      <div className="text-[10px] text-[#5A3013] dark:text-[#E5D3BA]/75 mt-0.5">
                         Delegated by: {rc.delegatedBy}
                       </div>
                     </div>
@@ -727,7 +727,7 @@ export const GovernanceDevHierarchy: React.FC<GovernanceDevHierarchyProps> = ({
                   <div
                     className="mt-3.5 pt-2.5 border-t"
                     style={{
-                      borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : 'rgba(90, 45, 12, 0.15)',
+                      borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : '#CF9F68',
                     }}
                   >
                     <button
@@ -740,9 +740,9 @@ export const GovernanceDevHierarchy: React.FC<GovernanceDevHierarchyProps> = ({
                           `${rc.memberName} (${rc.roomNumber} Captain Scope)`
                         )
                       }
-                      className="w-full py-2 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 bg-[#5A2D0C] text-[#FFF9EE] hover:bg-[#723B12] transition-colors cursor-pointer shadow-sm disabled:opacity-50"
+                      className="w-full py-2 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 bg-[#C46F18] text-[#FFF0D6] hover:bg-[#A55708] dark:bg-[#5A2D0C] dark:text-[#FFF9EE] dark:hover:bg-[#723B12] transition-colors cursor-pointer shadow-sm disabled:opacity-50"
                     >
-                      <UserCheck className="w-3.5 h-3.5 text-[#C88D3A]" />
+                      <UserCheck className="w-3.5 h-3.5 text-[#FFF0D6] dark:text-[#C88D3A]" />
                       <span>Development Preview: Room Captain ({rc.roomNumber})</span>
                     </button>
                   </div>
@@ -758,7 +758,7 @@ export const GovernanceDevHierarchy: React.FC<GovernanceDevHierarchyProps> = ({
        * ============================================================ */}
       {drillLevel === 'COORDINATOR' && selectedCampus && (
         <div className="space-y-3">
-          <div className="text-xs font-bold text-[#5A2D0C] dark:text-[#FFF9EE] flex items-center justify-between">
+          <div className="text-xs font-bold text-[#432006] dark:text-[#FFF9EE] flex items-center justify-between">
             <span>
               Fellow Accommodation Coordinator — {selectedCampus.name}
             </span>
@@ -769,23 +769,23 @@ export const GovernanceDevHierarchy: React.FC<GovernanceDevHierarchyProps> = ({
             <div
               className="p-4 rounded-xl border-2 border-b-4 shadow-md"
               style={{
-                backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : 'rgba(255, 253, 248, 0.65)',
-                borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : 'rgba(90, 45, 12, 0.25)',
+                backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : '#FFF0D6',
+                borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : '#CF9F68',
               }}
             >
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2">
-                  <div className="w-7 h-7 rounded-lg bg-[#5A2D0C] text-[#FFF9EE] flex items-center justify-center shadow-inner">
-                    <Users className="w-3.5 h-3.5 text-[#C88D3A]" />
+                  <div className="w-7 h-7 rounded-lg bg-[#C46F18] dark:bg-[#5A2D0C] text-[#FFF0D6] dark:text-[#FFF9EE] flex items-center justify-center shadow-inner">
+                    <Users className="w-3.5 h-3.5 text-[#FFF0D6] dark:text-[#C88D3A]" />
                   </div>
                   <div>
                     <h4
                       className="font-bold text-xs"
-                      style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+                      style={{ color: isDark ? '#FFF9EE' : '#432006' }}
                     >
                       {coordinator.memberName}
                     </h4>
-                    <p className="text-[11px] text-stone-500 dark:text-stone-400">
+                    <p className="text-[11px] text-[#5A3013] dark:text-[#E5D3BA]/75">
                       {coordinator.memberEmail}
                     </p>
                   </div>
@@ -793,9 +793,9 @@ export const GovernanceDevHierarchy: React.FC<GovernanceDevHierarchyProps> = ({
                 <span
                   className="text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full border shadow-xs"
                   style={{
-                    backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : 'rgba(247, 241, 231, 0.7)',
-                    color: isDark ? '#E5A955' : '#B77620',
-                    borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : 'rgba(90, 45, 12, 0.2)',
+                    backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : '#FAE5C5',
+                    color: isDark ? '#E5A955' : '#C46F18',
+                    borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : '#CF9F68',
                   }}
                 >
                   COORDINATOR
@@ -805,23 +805,23 @@ export const GovernanceDevHierarchy: React.FC<GovernanceDevHierarchyProps> = ({
               <div
                 className="mt-3 p-3 rounded-lg border text-xs space-y-1 shadow-xs"
                 style={{
-                  backgroundColor: isDark ? 'rgba(30, 27, 24, 0.45)' : 'rgba(247, 241, 231, 0.50)',
-                  borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : 'rgba(90, 45, 12, 0.15)',
+                  backgroundColor: isDark ? 'rgba(30, 27, 24, 0.45)' : '#FAE5C5',
+                  borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : '#CF9F68',
                 }}
               >
                 <div
                   className="font-semibold"
-                  style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+                  style={{ color: isDark ? '#FFF9EE' : '#432006' }}
                 >
                   {coordinator.title} ({selectedCampus.name})
                 </div>
                 <p
                   className="text-[11px] leading-relaxed"
-                  style={{ color: isDark ? '#EAD6C0' : '#5A2D0C' }}
+                  style={{ color: isDark ? '#EAD6C0' : '#5A3013' }}
                 >
                   {coordinator.scopeDescription}
                 </p>
-                <div className="text-[10px] text-stone-500 pt-1 font-mono">
+                <div className="text-[10px] text-[#5A3013] dark:text-[#E5D3BA]/75 pt-1 font-mono">
                   Invariant: Emmanuel Ukom is Coordinator for Lagos Yaba ONLY. Authority does not leak to other campuses.
                 </div>
               </div>
@@ -829,7 +829,7 @@ export const GovernanceDevHierarchy: React.FC<GovernanceDevHierarchyProps> = ({
               <div
                 className="mt-4 pt-3 border-t"
                 style={{
-                  borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : 'rgba(90, 45, 12, 0.15)',
+                  borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : '#CF9F68',
                 }}
               >
                 <button
@@ -842,9 +842,9 @@ export const GovernanceDevHierarchy: React.FC<GovernanceDevHierarchyProps> = ({
                       `${coordinator.memberName} (L2E Lagos Yaba Coordinator)`
                     )
                   }
-                  className="w-full py-2 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 bg-[#5A2D0C] text-[#FFF9EE] hover:bg-[#723B12] transition-colors cursor-pointer shadow-sm disabled:opacity-50"
+                  className="w-full py-2 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 bg-[#C46F18] text-[#FFF0D6] hover:bg-[#A55708] dark:bg-[#C27622] dark:hover:bg-[#D5A04B] dark:text-[#2F1707] transition-colors cursor-pointer shadow-sm disabled:opacity-50"
                 >
-                  <UserCheck className="w-3.5 h-3.5 text-[#C88D3A]" />
+                  <UserCheck className="w-3.5 h-3.5 text-[#FFF0D6] dark:text-[#C88D3A]" />
                   <span>Development Preview: Coordinator Workspace</span>
                 </button>
               </div>
@@ -853,18 +853,18 @@ export const GovernanceDevHierarchy: React.FC<GovernanceDevHierarchyProps> = ({
             <div
               className="p-6 text-center rounded-xl border-2 shadow-sm"
               style={{
-                backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : 'rgba(255, 253, 248, 0.65)',
-                borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : 'rgba(90, 45, 12, 0.25)',
+                backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : '#FFF0D6',
+                borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : '#CF9F68',
               }}
             >
-              <Users className="w-6 h-6 text-[#C88D3A] mx-auto mb-2 opacity-60" />
+              <Users className="w-6 h-6 text-[#C46F18] dark:text-[#C88D3A] mx-auto mb-2 opacity-60" />
               <p
                 className="text-xs font-semibold"
-                style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+                style={{ color: isDark ? '#FFF9EE' : '#432006' }}
               >
                 No Coordinator currently assigned for {selectedCampus.name}.
               </p>
-              <p className="text-[11px] text-stone-500 mt-1">
+              <p className="text-[11px] text-[#5A3013] dark:text-[#E5D3BA]/75 mt-1">
                 Emmanuel Ukom coordinates Lagos Yaba only. Independent coordinator assignments apply per campus.
               </p>
             </div>
@@ -880,7 +880,7 @@ export const GovernanceDevHierarchy: React.FC<GovernanceDevHierarchyProps> = ({
        * ============================================================ */}
       {drillLevel === 'ADMINISTRATION' && selectedCampus && (
         <div className="space-y-3">
-          <div className="text-xs font-bold text-[#5A2D0C] dark:text-[#FFF9EE] flex items-center justify-between">
+          <div className="text-xs font-bold text-[#432006] dark:text-[#FFF9EE] flex items-center justify-between">
             <span>
               Accommodation Administration — {selectedCampus.name} ({administration.length})
             </span>
@@ -893,28 +893,28 @@ export const GovernanceDevHierarchy: React.FC<GovernanceDevHierarchyProps> = ({
                 key={adm.id}
                 className="p-4 rounded-xl border-2 border-b-4 shadow-md flex flex-col justify-between"
                 style={{
-                  backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : 'rgba(255, 253, 248, 0.65)',
-                  borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : 'rgba(90, 45, 12, 0.25)',
+                  backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : '#FFF0D6',
+                  borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : '#CF9F68',
                 }}
               >
                 <div>
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-2">
-                      <div className="w-7 h-7 rounded-lg bg-[#5A2D0C] text-[#FFF9EE] flex items-center justify-center shadow-inner">
+                      <div className="w-7 h-7 rounded-lg bg-[#C46F18] dark:bg-[#5A2D0C] text-[#FFF0D6] dark:text-[#FFF9EE] flex items-center justify-center shadow-inner">
                         {adm.responsibilityType === 'FINANCIAL_ADMIN' ? (
-                          <ShieldCheck className="w-3.5 h-3.5 text-[#C88D3A]" />
+                          <ShieldCheck className="w-3.5 h-3.5 text-[#FFF0D6] dark:text-[#C88D3A]" />
                         ) : (
-                          <Scale className="w-3.5 h-3.5 text-[#C88D3A]" />
+                          <Scale className="w-3.5 h-3.5 text-[#FFF0D6] dark:text-[#C88D3A]" />
                         )}
                       </div>
                       <div>
                         <h4
                           className="font-bold text-xs"
-                          style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+                          style={{ color: isDark ? '#FFF9EE' : '#432006' }}
                         >
                           {adm.memberName}
                         </h4>
-                        <p className="text-[11px] text-stone-500 dark:text-stone-400">
+                        <p className="text-[11px] text-[#5A3013] dark:text-[#E5D3BA]/75">
                           {adm.memberEmail}
                         </p>
                       </div>
@@ -922,9 +922,9 @@ export const GovernanceDevHierarchy: React.FC<GovernanceDevHierarchyProps> = ({
                     <span
                       className="text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full border shadow-xs"
                       style={{
-                        backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : 'rgba(247, 241, 231, 0.7)',
-                        color: isDark ? '#E5A955' : '#B77620',
-                        borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : 'rgba(90, 45, 12, 0.2)',
+                        backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : '#FAE5C5',
+                        color: isDark ? '#E5A955' : '#C46F18',
+                        borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : '#CF9F68',
                       }}
                     >
                       {adm.responsibilityType === 'FINANCIAL_ADMIN' ? 'FINANCIAL' : 'WELFARE'}
@@ -934,19 +934,19 @@ export const GovernanceDevHierarchy: React.FC<GovernanceDevHierarchyProps> = ({
                   <div
                     className="p-3 rounded-lg border text-xs space-y-1 shadow-xs"
                     style={{
-                      backgroundColor: isDark ? 'rgba(30, 27, 24, 0.45)' : 'rgba(247, 241, 231, 0.50)',
-                      borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : 'rgba(90, 45, 12, 0.15)',
+                      backgroundColor: isDark ? 'rgba(30, 27, 24, 0.45)' : '#FAE5C5',
+                      borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : '#CF9F68',
                     }}
                   >
                     <div
                       className="font-semibold"
-                      style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+                      style={{ color: isDark ? '#FFF9EE' : '#432006' }}
                     >
                       {adm.roleTitle}
                     </div>
                     <p
                       className="text-[11px] leading-relaxed"
-                      style={{ color: isDark ? '#EAD6C0' : '#5A2D0C' }}
+                      style={{ color: isDark ? '#EAD6C0' : '#5A3013' }}
                     >
                       {adm.description}
                     </p>
@@ -956,7 +956,7 @@ export const GovernanceDevHierarchy: React.FC<GovernanceDevHierarchyProps> = ({
                 <div
                   className="mt-4 pt-3 border-t"
                   style={{
-                    borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : 'rgba(90, 45, 12, 0.15)',
+                    borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : '#CF9F68',
                   }}
                 >
                   {adm.responsibilityType === 'FINANCIAL_ADMIN' ? (
@@ -970,9 +970,9 @@ export const GovernanceDevHierarchy: React.FC<GovernanceDevHierarchyProps> = ({
                           `${adm.memberName} (Financial Admin Command Center)`
                         )
                       }
-                      className="w-full py-2 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 bg-[#5A2D0C] text-[#FFF9EE] hover:bg-[#723B12] transition-colors cursor-pointer shadow-sm disabled:opacity-50"
+                      className="w-full py-2 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 bg-[#C46F18] text-[#FFF0D6] hover:bg-[#A55708] dark:bg-[#5A2D0C] dark:text-[#FFF9EE] dark:hover:bg-[#723B12] transition-colors cursor-pointer shadow-sm disabled:opacity-50"
                     >
-                      <UserCheck className="w-3.5 h-3.5 text-[#C88D3A]" />
+                      <UserCheck className="w-3.5 h-3.5 text-[#FFF0D6] dark:text-[#C88D3A]" />
                       <span>Development Preview: Financial Admin Command Center</span>
                     </button>
                   ) : (
@@ -986,9 +986,9 @@ export const GovernanceDevHierarchy: React.FC<GovernanceDevHierarchyProps> = ({
                           `${adm.memberName} (${adm.roleTitle})`
                         )
                       }
-                      className="w-full py-2 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 bg-[#5A2D0C] text-[#FFF9EE] hover:bg-[#723B12] transition-colors cursor-pointer shadow-sm disabled:opacity-50"
+                      className="w-full py-2 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 bg-[#C46F18] text-[#FFF0D6] hover:bg-[#A55708] dark:bg-[#5A2D0C] dark:text-[#FFF9EE] dark:hover:bg-[#723B12] transition-colors cursor-pointer shadow-sm disabled:opacity-50"
                     >
-                      <UserCheck className="w-3.5 h-3.5 text-[#C88D3A]" />
+                      <UserCheck className="w-3.5 h-3.5 text-[#FFF0D6] dark:text-[#C88D3A]" />
                       <span>Development Preview: Welfare &amp; Mediation View</span>
                     </button>
                   )}
