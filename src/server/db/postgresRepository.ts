@@ -770,9 +770,9 @@ export class PostgresReconciliationRepository implements IPaymentReconciliationR
   async findByProviderEventId(provider: string, providerEventId: string): Promise<PaymentReconciliationRecord | null> {
     // Return VERIFIED record if present, else return the latest attempt
     const res = await this.client.query(
-      `SELECT * FROM payment_reconciliations
-       WHERE provider = $1 AND provider_event_id = $2
-       ORDER BY CASE WHEN reconciliation_status = 'VERIFIED' THEN 1 ELSE 2 END ASC, created_at DESC
+      `SELECT * FROM payment_reconciliations 
+       WHERE provider = $1 AND provider_event_id = $2 
+       ORDER BY CASE WHEN reconciliation_status = 'VERIFIED' THEN 1 ELSE 2 END ASC, created_at DESC 
        LIMIT 1`,
       [provider, providerEventId]
     );
@@ -782,8 +782,8 @@ export class PostgresReconciliationRepository implements IPaymentReconciliationR
 
   async findVerifiedByProviderEventId(provider: string, providerEventId: string): Promise<PaymentReconciliationRecord | null> {
     const res = await this.client.query(
-      `SELECT * FROM payment_reconciliations
-       WHERE provider = $1 AND provider_event_id = $2 AND reconciliation_status = 'VERIFIED'
+      `SELECT * FROM payment_reconciliations 
+       WHERE provider = $1 AND provider_event_id = $2 AND reconciliation_status = 'VERIFIED' 
        LIMIT 1`,
       [provider, providerEventId]
     );
@@ -793,8 +793,8 @@ export class PostgresReconciliationRepository implements IPaymentReconciliationR
 
   async listByProviderEventId(provider: string, providerEventId: string): Promise<PaymentReconciliationRecord[]> {
     const res = await this.client.query(
-      `SELECT * FROM payment_reconciliations
-       WHERE provider = $1 AND provider_event_id = $2
+      `SELECT * FROM payment_reconciliations 
+       WHERE provider = $1 AND provider_event_id = $2 
        ORDER BY created_at ASC`,
       [provider, providerEventId]
     );

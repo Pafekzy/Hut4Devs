@@ -369,3 +369,4 @@ export const TrustTrailFeed: React.FC<TrustTrailFeedProps> = ({ trailEvents, ava
     </div>
   );
 };
+

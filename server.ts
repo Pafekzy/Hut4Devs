@@ -585,7 +585,10 @@ export async function handleAdminProviderEventsRequest(
   );
 }
 
-/** H4D-FUNC-013: Accommodation Admin reconciliation audit. */
+/**
+ * Request handler for GET /api/accommodation/admin/reconciliations (H4D-FUNC-013)
+ * Restricts to authenticated ACCOMMODATION_ADMIN role.
+ */
 export async function handleAdminReconciliationsRequest(
   req: http.IncomingMessage,
   res: http.ServerResponse,
@@ -614,7 +617,10 @@ export async function handleAdminReconciliationsRequest(
   );
 }
 
-/** H4D-FUNC-013: Deterministic reconciliation retry/recovery. */
+/**
+ * Request handler for POST /api/accommodation/admin/reconcile (H4D-FUNC-013)
+ * Restricts to authenticated ACCOMMODATION_ADMIN role.
+ */
 export async function handleAdminReconcileRequest(
   req: http.IncomingMessage,
   res: http.ServerResponse,
@@ -835,106 +841,12 @@ export function createDeployableServer(options: ServerOptions = {}): http.Server
     const parsedUrl = new URL(rawUrl, 'http://localhost');
     const pathname = parsedUrl.pathname;
 
-    // 1. API: POST /api/payments/proposal
-    if (pathname === '/api/payments/proposal' && req.method === 'POST') {
-      return handlePaymentProposalRequest(
-        req,
-        res,
-        options.customProvider,
-        options.repos,
-        options.publisher
-      );
-    }
-
-    // 2. API: GET /api/accommodation/responsibility
-    if (pathname === '/api/accommodation/responsibility' && req.method === 'GET') {
-      return handleAccommodationRequest(req, res, options.repos);
-    }
-
-    // 3. API: POST /api/payments/intents
-    if (pathname === '/api/payments/intents' && req.method === 'POST') {
-      return handleSaveIntentRequest(req, res, options.repos, options.publisher);
-    }
-
-    // 4. API: GET /api/accommodation/admin/stream (SSE Real-Time Stream - H4D-FUNC-010 & H4D-FUNC-011)
-    if (pathname === '/api/accommodation/admin/stream' && req.method === 'GET') {
-      return handleAdminStreamRequest(req, res, options.repos, options.publisher);
-    }
-
-    // 5. API: GET /api/accommodation/admin/overview (H4D-FUNC-011)
-    if (pathname === '/api/accommodation/admin/overview' && req.method === 'GET') {
-      return handleAdminOverviewRequest(req, res, options.repos);
-    }
-
-    // 6. API: GET /api/accommodation/outbox (Outbox Audit - H4D-FUNC-010 & H4D-FUNC-011)
-    if (pathname === '/api/accommodation/outbox' && req.method === 'GET') {
-      return handleOutboxListRequest(req, res, options.repos);
-    }
-
-    // 7. API: GET /api/auth/session (H4D-FUNC-011)
-    if (pathname === '/api/auth/session' && req.method === 'GET') {
-      return handleGetSessionRequest(req, res, options.repos);
-    }
-
-    // 8. API: POST /api/auth/dev-session (H4D-FUNC-011)
-    if (pathname === '/api/auth/dev-session' && req.method === 'POST') {
-      return handleDevSessionRequest(req, res, options.repos);
-    }
-
-    // 9. API: GET /api/auth/dev-identities (H4D-FUNC-011)
-    if (pathname === '/api/auth/dev-identities' && req.method === 'GET') {
-      return handleDevIdentitiesRequest(req, res);
-    }
-
-    // 10. API: POST /api/auth/logout (H4D-FUNC-011)
-    if (pathname === '/api/auth/logout' && req.method === 'POST') {
-      return handleLogoutRequest(req, res, options.repos);
-    }
-
-    // 11. API: POST /api/webhooks/bmoni (BMONI Webhook Ingestion - H4D-FUNC-012)
-    // Machine-to-machine endpoint: authenticated via raw-body HMAC-SHA256 signature, NOT browser session
-    if (pathname === '/api/webhooks/bmoni' && req.method === 'POST') {
-      return handleBmoniWebhookRequest(
-        req,
-        res,
-        options.repos,
-        options.publisher,
-        options.bmoniWebhookSecret
-      );
-    }
-
-    // 12. API: GET /api/accommodation/admin/provider-events (H4D-FUNC-012)
-    if (pathname === '/api/accommodation/admin/provider-events' && req.method === 'GET') {
-      return handleAdminProviderEventsRequest(req, res, options.repos);
-    }
-
-    // 6. API: GET /api/health
-    if (pathname === '/api/health' && req.method === 'GET') {
-      res.statusCode = 200;
-      res.setHeader('Content-Type', 'application/json; charset=utf-8');
-      res.setHeader('X-Content-Type-Options', 'nosniff');
-      res.end(
-        JSON.stringify({
-          status: 'ok',
-          server: 'hut4devs-deployable',
-          database: 'postgresql',
-          endpoint: '/api/payments/proposal',
-          timestamp: new Date().toISOString(),
-        })
-      );
-      return;
-    }
-
-    // Reject unknown /api routes with 404 JSON
+    // Dispatch API requests
     if (pathname.startsWith('/api/')) {
-      res.statusCode = 404;
-      res.setHeader('Content-Type', 'application/json; charset=utf-8');
-      res.setHeader('X-Content-Type-Options', 'nosniff');
-      res.end(JSON.stringify({ error: 'Endpoint not found.' }));
-      return;
+      return handleApiRequest(req, res, options);
     }
 
-    // 5. Static frontend serving from dist/
+    // Static frontend serving from dist/
     if (req.method === 'GET' || req.method === 'HEAD') {
       try {
         const resolvedDist = path.resolve(distDir);
@@ -1032,12 +944,12 @@ export function startDeployableServer(
   });
 }
 
-// Auto-start if executed directly via Node
-if (
-  typeof require !== 'undefined' &&
-  typeof module !== 'undefined' &&
-  require.main === module
-) {
+// Auto-start if executed directly via Node (supports both CommonJS bundle and direct execution)
+const isDirectRun =
+  (typeof require !== 'undefined' && typeof module !== 'undefined' && require.main === module) ||
+  (Boolean(process.argv[1]) && (process.argv[1].endsWith('server.ts') || process.argv[1].endsWith('server.cjs')));
+
+if (isDirectRun) {
   startDeployableServer().catch((err) => {
     console.error('[Hut4Devs] Failed to start server:', err);
     process.exit(1);

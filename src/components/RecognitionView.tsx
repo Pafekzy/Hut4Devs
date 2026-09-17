@@ -250,3 +250,4 @@ export const RecognitionView: React.FC<RecognitionViewProps> = ({
     </div>
   );
 };
+

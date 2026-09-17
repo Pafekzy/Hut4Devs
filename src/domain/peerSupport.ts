@@ -1,11 +1,11 @@
 /**
  * Hut4Devs Peer-to-Peer Support Domain Model (H4D-DEMO-003)
- *
+ * 
  * Core Direction:
  * Coordinate -> Support -> Account -> Grow
- *
+ * 
  * "Turning everyday collaboration into trails of trust built by us and for us-all."
- *
+ * 
  * Rules:
  * 1. A GIFT has no repayment obligation. Once an obligation is converted into a Gift,
  *    Gift cannot later become Debt.
@@ -47,18 +47,18 @@ export interface PeerSupportAgreement {
   amount: number;
   currency: string;
   purpose: string;
-
+  
   // Loan-specific fields
   repaymentPeriod?: string; // e.g. "2 weeks", "End of month (Sept 30)", "1 month"
   repaymentDate?: string;
   amountRepaid: number;
   status: PeerLoanStatus;
-
+  
   // Contribution-specific fields
   title?: string;
   targetAmount?: number;
   contributors?: CampaignContributor[];
-
+  
   // Conversion & Audit fields
   forgivenDate?: string;
   forgivenByMemberId?: string;

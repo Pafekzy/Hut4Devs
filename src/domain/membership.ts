@@ -310,3 +310,4 @@ export function getDefaultModeForMember(member: Member): ActiveMode {
   const modes = getAvailableModesForMember(member);
   return modes[0] || 'FELLOW';
 }
+

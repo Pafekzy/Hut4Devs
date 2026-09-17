@@ -18,8 +18,8 @@ CREATE TABLE payment_reconciliations (
 );
 
 -- Partial unique index: at most ONE VERIFIED reconciliation record per provider event (H4D-FUNC-013 hardening)
-CREATE UNIQUE INDEX uq_payment_reconciliations_verified_event
-ON payment_reconciliations (provider, provider_event_id)
+CREATE UNIQUE INDEX uq_payment_reconciliations_verified_event 
+ON payment_reconciliations (provider, provider_event_id) 
 WHERE reconciliation_status = 'VERIFIED';
 
 CREATE INDEX idx_payment_reconciliations_event ON payment_reconciliations(provider, provider_event_id);
