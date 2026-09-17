@@ -181,36 +181,36 @@ export const FulfilmentFlow: React.FC<FulfilmentFlowProps> = ({
       <div
         className="w-full max-w-xl rounded-2xl p-6 sm:p-8 border-2 shadow-2xl transition-colors duration-200 relative animate-in fade-in zoom-in-95 duration-150"
         style={{
-          backgroundColor: isDark ? '#3E200C' : '#FFF9EE',
-          borderColor: isDark ? '#C88D3A' : '#5A2D0C',
-          color: isDark ? '#FFF9EE' : '#5A2D0C',
+          backgroundColor: isDark ? '#3E200C' : '#FAE5C5',
+          borderColor: isDark ? '#C88D3A' : '#CF9F68',
+          color: isDark ? '#FFF9EE' : '#432006',
         }}
       >
         {/* STEP 1: CHOOSE FULFILMENT */}
         {step === 'select' && (
           <div>
             {/* Header / Subtitle */}
-            <div className="border-b pb-4 mb-6" style={{ borderColor: isDark ? '#4B2710' : '#EAE0D0' }}>
+            <div className="border-b pb-4 mb-6" style={{ borderColor: isDark ? '#4B2710' : '#CF9F68' }}>
               <span
                 className="text-xs font-semibold uppercase tracking-wider block mb-1"
-                style={{ color: isDark ? '#C88D3A' : '#B77620' }}
+                style={{ color: isDark ? '#C88D3A' : '#C46F18' }}
               >
                 Fulfilment Preparation
               </span>
               <h2
                 id="fulfilment-flow-title"
                 className="font-serif text-2xl font-semibold tracking-tight"
-                style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+                style={{ color: isDark ? '#FFF9EE' : '#432006' }}
               >
                 {responsibility.title}
               </h2>
               <div className="mt-3 flex items-baseline gap-2">
-                <span className="text-xs" style={{ color: isDark ? '#A67B54' : '#8A5D3B' }}>
+                <span className="text-xs" style={{ color: isDark ? '#A67B54' : '#72451F' }}>
                   Remaining:
                 </span>
                 <span
                   className="font-bold text-lg sm:text-xl font-mono"
-                  style={{ color: isDark ? '#E2AB5D' : '#B77620' }}
+                  style={{ color: isDark ? '#E2AB5D' : '#C46F18' }}
                 >
                   {formatNaira(currentRemaining)}
                 </span>
@@ -221,7 +221,7 @@ export const FulfilmentFlow: React.FC<FulfilmentFlowProps> = ({
             <div className="space-y-4 mb-6">
               <label
                 className="text-xs font-semibold uppercase tracking-wider block"
-                style={{ color: isDark ? '#A67B54' : '#8A5D3B' }}
+                style={{ color: isDark ? '#A67B54' : '#72451F' }}
               >
                 Choose fulfilment:
               </label>
@@ -231,21 +231,21 @@ export const FulfilmentFlow: React.FC<FulfilmentFlowProps> = ({
                 type="button"
                 id="option-full-amount"
                 onClick={() => handleSelectType(FulfilmentType.FULL)}
-                className={`w-full p-4 rounded-xl border text-left flex items-center justify-between transition-all cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C88D3A] ${
+                className={`w-full p-4 rounded-xl border text-left flex items-center justify-between transition-all cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C46F18] ${
                   fulfilmentType === FulfilmentType.FULL
                     ? isDark
                       ? 'bg-[#4B2710] border-[#C88D3A] ring-1 ring-[#C88D3A]'
-                      : 'bg-[#F4E8D6] border-[#B77620] ring-1 ring-[#B77620]'
+                      : 'bg-[#FFF0D6] border-[#C46F18] ring-1 ring-[#C46F18]'
                     : isDark
                       ? 'bg-[#2F1707] border-[#4B2710] hover:border-[#623416]'
-                      : 'bg-[#F7F1E7] border-[#E7D6C1] hover:border-[#D0BA9D]'
+                      : 'bg-[#FAE5C5] border-[#CF9F68] hover:border-[#C46F18]/50'
                 }`}
               >
                 <div>
-                  <span className="font-semibold text-sm sm:text-base block" style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}>
+                  <span className="font-semibold text-sm sm:text-base block" style={{ color: isDark ? '#FFF9EE' : '#432006' }}>
                     Full Amount — {formatNaira(currentRemaining)}
                   </span>
-                  <span className="text-xs" style={{ color: isDark ? '#A67B54' : '#8A5D3B' }}>
+                  <span className="text-xs" style={{ color: isDark ? '#A67B54' : '#72451F' }}>
                     Prepares complete fulfilment for this cycle
                   </span>
                 </div>
@@ -267,21 +267,21 @@ export const FulfilmentFlow: React.FC<FulfilmentFlowProps> = ({
                 type="button"
                 id="option-partial-amount"
                 onClick={() => handleSelectType(FulfilmentType.PARTIAL)}
-                className={`w-full p-4 rounded-xl border text-left flex items-center justify-between transition-all cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C88D3A] ${
+                className={`w-full p-4 rounded-xl border text-left flex items-center justify-between transition-all cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C46F18] ${
                   fulfilmentType === FulfilmentType.PARTIAL
                     ? isDark
                       ? 'bg-[#4B2710] border-[#C88D3A] ring-1 ring-[#C88D3A]'
-                      : 'bg-[#F4E8D6] border-[#B77620] ring-1 ring-[#B77620]'
+                      : 'bg-[#FFF0D6] border-[#C46F18] ring-1 ring-[#C46F18]'
                     : isDark
                       ? 'bg-[#2F1707] border-[#4B2710] hover:border-[#623416]'
-                      : 'bg-[#F7F1E7] border-[#E7D6C1] hover:border-[#D0BA9D]'
+                      : 'bg-[#FAE5C5] border-[#CF9F68] hover:border-[#C46F18]/50'
                 }`}
               >
                 <div>
-                  <span className="font-semibold text-sm sm:text-base block" style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}>
+                  <span className="font-semibold text-sm sm:text-base block" style={{ color: isDark ? '#FFF9EE' : '#432006' }}>
                     Partial Amount
                   </span>
-                  <span className="text-xs" style={{ color: isDark ? '#A67B54' : '#8A5D3B' }}>
+                  <span className="text-xs" style={{ color: isDark ? '#A67B54' : '#72451F' }}>
                     Specify a custom portion to prepare
                   </span>
                 </div>
@@ -304,21 +304,21 @@ export const FulfilmentFlow: React.FC<FulfilmentFlowProps> = ({
               <div
                 className="p-4 sm:p-5 rounded-xl border mb-6 space-y-3 transition-colors"
                 style={{
-                  backgroundColor: isDark ? '#2F1707' : '#F7F1E7',
-                  borderColor: isDark ? '#4B2710' : '#E7D6C1',
+                  backgroundColor: isDark ? '#2F1707' : '#FFF0D6',
+                  borderColor: isDark ? '#4B2710' : '#CF9F68',
                 }}
               >
                 <label
                   htmlFor="partial-amount-input"
                   className="text-xs font-semibold uppercase tracking-wider block"
-                  style={{ color: isDark ? '#A67B54' : '#8A5D3B' }}
+                  style={{ color: isDark ? '#A67B54' : '#72451F' }}
                 >
                   Enter Partial Amount:
                 </label>
 
                 <div className="relative rounded-lg shadow-sm">
                   <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                    <span className="font-semibold font-mono" style={{ color: isDark ? '#C88D3A' : '#B77620' }}>
+                    <span className="font-semibold font-mono" style={{ color: isDark ? '#C88D3A' : '#C46F18' }}>
                       ₦
                     </span>
                   </div>
@@ -330,18 +330,18 @@ export const FulfilmentFlow: React.FC<FulfilmentFlowProps> = ({
                     value={partialAmountInput}
                     onChange={handlePartialAmountChange}
                     placeholder="e.g. 20000"
-                    className="w-full pl-8 pr-4 py-3 rounded-lg border text-base sm:text-lg font-mono font-medium focus:outline-none focus:ring-2 focus:ring-[#C88D3A] transition-colors"
+                    className="w-full pl-8 pr-4 py-3 rounded-lg border text-base sm:text-lg font-mono font-medium focus:outline-none focus:ring-2 focus:ring-[#C46F18] transition-colors"
                     style={{
-                      backgroundColor: isDark ? '#3E200C' : '#FFF9EE',
-                      borderColor: errorMessage ? '#DC2626' : isDark ? '#623416' : '#D0BA9D',
-                      color: isDark ? '#FFF9EE' : '#5A2D0C',
+                      backgroundColor: isDark ? '#3E200C' : '#FAE5C5',
+                      borderColor: errorMessage ? '#DC2626' : isDark ? '#623416' : '#CF9F68',
+                      color: isDark ? '#FFF9EE' : '#432006',
                     }}
                   />
                 </div>
 
                 {/* Quick Presets */}
                 <div className="flex items-center gap-2 pt-1 flex-wrap">
-                  <span className="text-[11px]" style={{ color: isDark ? '#A67B54' : '#8A5D3B' }}>
+                  <span className="text-[11px]" style={{ color: isDark ? '#A67B54' : '#72451F' }}>
                     Examples:
                   </span>
                   {presetAmounts.map((amt) => (
@@ -351,9 +351,9 @@ export const FulfilmentFlow: React.FC<FulfilmentFlowProps> = ({
                       onClick={() => handleApplyPreset(amt)}
                       className="px-2.5 py-1 rounded text-xs font-mono font-medium border transition-colors cursor-pointer hover:opacity-80"
                       style={{
-                        backgroundColor: isDark ? '#3E200C' : '#FFF9EE',
-                        borderColor: isDark ? '#623416' : '#EAE0D0',
-                        color: isDark ? '#C88D3A' : '#B77620',
+                        backgroundColor: isDark ? '#3E200C' : '#FAE5C5',
+                        borderColor: isDark ? '#623416' : '#CF9F68',
+                        color: isDark ? '#C88D3A' : '#C46F18',
                       }}
                     >
                       {formatNaira(amt)}
@@ -376,13 +376,13 @@ export const FulfilmentFlow: React.FC<FulfilmentFlowProps> = ({
             )}
 
             {/* Action Buttons */}
-            <div className="flex items-center justify-between pt-4 border-t" style={{ borderColor: isDark ? '#4B2710' : '#EAE0D0' }}>
+            <div className="flex items-center justify-between pt-4 border-t" style={{ borderColor: isDark ? '#4B2710' : '#CF9F68' }}>
               <button
                 type="button"
                 id="cancel-fulfilment-btn"
                 onClick={onClose}
                 className={`px-4 py-2.5 min-h-[44px] rounded-xl text-xs sm:text-sm font-medium transition-colors cursor-pointer ${
-                  isDark ? 'text-[#E5D3BA] hover:bg-[#2F1707]' : 'text-[#6D4223] hover:bg-[#F2E8D8]'
+                  isDark ? 'text-[#E5D3BA] hover:bg-[#2F1707]' : 'text-[#5A3013] hover:bg-[#F3D5AB]'
                 }`}
               >
                 Back to Responsibility
@@ -395,7 +395,7 @@ export const FulfilmentFlow: React.FC<FulfilmentFlowProps> = ({
                 className={`inline-flex items-center gap-2 px-6 py-2.5 min-h-[44px] rounded-xl text-sm font-semibold transition-all cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 ${
                   isDark
                     ? 'bg-[#C88D3A] text-[#2F1707] hover:bg-[#DDA250] focus-visible:ring-[#C88D3A]'
-                    : 'bg-[#5A2D0C] text-[#FFF9EE] hover:bg-[#432108] focus-visible:ring-[#5A2D0C]'
+                    : 'bg-[#432006] text-[#FFF0D6] hover:bg-[#341905] focus-visible:ring-[#432006]'
                 }`}
               >
                 <span>Continue to Review</span>
@@ -408,17 +408,17 @@ export const FulfilmentFlow: React.FC<FulfilmentFlowProps> = ({
         {/* STEP 2: REVIEW FULFILMENT */}
         {step === 'review' && (
           <div>
-            <div className="border-b pb-4 mb-6" style={{ borderColor: isDark ? '#4B2710' : '#EAE0D0' }}>
+            <div className="border-b pb-4 mb-6" style={{ borderColor: isDark ? '#4B2710' : '#CF9F68' }}>
               <span
                 className="text-xs font-semibold uppercase tracking-wider block mb-1"
-                style={{ color: isDark ? '#C88D3A' : '#B77620' }}
+                style={{ color: isDark ? '#C88D3A' : '#C46F18' }}
               >
                 Step 2 of 2
               </span>
               <h2
                 id="review-fulfilment-heading"
                 className="font-serif text-2xl font-semibold tracking-tight"
-                style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+                style={{ color: isDark ? '#FFF9EE' : '#432006' }}
               >
                 REVIEW FULFILMENT
               </h2>
@@ -428,58 +428,58 @@ export const FulfilmentFlow: React.FC<FulfilmentFlowProps> = ({
             <div
               className="p-5 rounded-xl border mb-6 space-y-3.5 text-sm"
               style={{
-                backgroundColor: isDark ? '#2F1707' : '#F7F1E7',
-                borderColor: isDark ? '#4B2710' : '#E7D6C1',
+                backgroundColor: isDark ? '#2F1707' : '#FFF0D6',
+                borderColor: isDark ? '#4B2710' : '#CF9F68',
               }}
             >
               {/* Responsibility */}
               <div className="flex justify-between items-center">
-                <span style={{ color: isDark ? '#A67B54' : '#8A5D3B' }}>Responsibility:</span>
-                <span className="font-semibold" style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}>
+                <span style={{ color: isDark ? '#A67B54' : '#72451F' }}>Responsibility:</span>
+                <span className="font-semibold" style={{ color: isDark ? '#FFF9EE' : '#432006' }}>
                   {responsibility.title}
                 </span>
               </div>
 
               {/* Fulfilment Type */}
               <div className="flex justify-between items-center">
-                <span style={{ color: isDark ? '#A67B54' : '#8A5D3B' }}>Fulfilment Type:</span>
-                <span className="font-semibold" style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}>
+                <span style={{ color: isDark ? '#A67B54' : '#72451F' }}>Fulfilment Type:</span>
+                <span className="font-semibold" style={{ color: isDark ? '#FFF9EE' : '#432006' }}>
                   {fulfilmentType === FulfilmentType.FULL ? 'Full' : 'Partial'}
                 </span>
               </div>
 
               {/* Amount */}
-              <div className="flex justify-between items-center border-t pt-3" style={{ borderColor: isDark ? '#4B2710' : '#EAE0D0' }}>
-                <span className="font-medium" style={{ color: isDark ? '#C88D3A' : '#B77620' }}>
+              <div className="flex justify-between items-center border-t pt-3" style={{ borderColor: isDark ? '#4B2710' : '#CF9F68' }}>
+                <span className="font-medium" style={{ color: isDark ? '#C88D3A' : '#C46F18' }}>
                   Amount:
                 </span>
-                <span className="font-mono font-bold text-lg" style={{ color: isDark ? '#E2AB5D' : '#B77620' }}>
+                <span className="font-mono font-bold text-lg" style={{ color: isDark ? '#E2AB5D' : '#C46F18' }}>
                   {formatNaira(targetAmount)}
                 </span>
               </div>
 
               {/* Current Verified */}
               <div className="flex justify-between items-center">
-                <span style={{ color: isDark ? '#A67B54' : '#8A5D3B' }}>Current Verified:</span>
-                <span className="font-mono" style={{ color: isDark ? '#D9C4AC' : '#704728' }}>
+                <span style={{ color: isDark ? '#A67B54' : '#72451F' }}>Current Verified:</span>
+                <span className="font-mono" style={{ color: isDark ? '#D9C4AC' : '#5A3013' }}>
                   {formatNaira(responsibility.verifiedAmount)}
                 </span>
               </div>
 
               {/* Current Remaining */}
               <div className="flex justify-between items-center">
-                <span style={{ color: isDark ? '#A67B54' : '#8A5D3B' }}>Current Remaining:</span>
-                <span className="font-mono font-medium" style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}>
+                <span style={{ color: isDark ? '#A67B54' : '#72451F' }}>Current Remaining:</span>
+                <span className="font-mono font-medium" style={{ color: isDark ? '#FFF9EE' : '#432006' }}>
                   {formatNaira(currentRemaining)}
                 </span>
               </div>
 
               {/* Expected Remaining IF payment is eventually verified */}
-              <div className="flex justify-between items-center border-t pt-3" style={{ borderColor: isDark ? '#4B2710' : '#EAE0D0' }}>
-                <span className="text-xs sm:text-sm" style={{ color: isDark ? '#A67B54' : '#8A5D3B' }}>
+              <div className="flex justify-between items-center border-t pt-3" style={{ borderColor: isDark ? '#4B2710' : '#CF9F68' }}>
+                <span className="text-xs sm:text-sm" style={{ color: isDark ? '#A67B54' : '#72451F' }}>
                   Expected Remaining IF payment is eventually verified:
                 </span>
-                <span className="font-mono font-bold" style={{ color: isDark ? '#C88D3A' : '#B77620' }}>
+                <span className="font-mono font-bold" style={{ color: isDark ? '#C88D3A' : '#C46F18' }}>
                   {formatNaira(expectedRemaining)}
                 </span>
               </div>
@@ -489,12 +489,12 @@ export const FulfilmentFlow: React.FC<FulfilmentFlowProps> = ({
             <div
               className="p-4 rounded-xl border mb-6 text-xs leading-relaxed space-y-1.5"
               style={{
-                backgroundColor: isDark ? '#3A1E0B' : '#F2E8D8',
-                borderColor: isDark ? '#4B2710' : '#E7D6C1',
-                color: isDark ? '#D9C4AC' : '#704728',
+                backgroundColor: isDark ? '#3A1E0B' : '#FFF0D6',
+                borderColor: isDark ? '#4B2710' : '#CF9F68',
+                color: isDark ? '#D9C4AC' : '#5A3013',
               }}
             >
-              <div className="flex items-center gap-1.5 font-semibold" style={{ color: isDark ? '#E2AB5D' : '#5A2D0C' }}>
+              <div className="flex items-center gap-1.5 font-semibold" style={{ color: isDark ? '#E2AB5D' : '#432006' }}>
                 <ShieldAlert className="w-4 h-4 shrink-0" aria-hidden="true" />
                 <span>Notice</span>
               </div>
@@ -507,13 +507,13 @@ export const FulfilmentFlow: React.FC<FulfilmentFlowProps> = ({
             </div>
 
             {/* Action Buttons */}
-            <div className="flex items-center justify-between pt-4 border-t" style={{ borderColor: isDark ? '#4B2710' : '#EAE0D0' }}>
+            <div className="flex items-center justify-between pt-4 border-t" style={{ borderColor: isDark ? '#4B2710' : '#CF9F68' }}>
               <button
                 type="button"
                 id="review-back-btn"
                 onClick={() => setStep('select')}
                 className={`inline-flex items-center gap-1.5 px-4 py-2.5 min-h-[44px] rounded-xl text-xs sm:text-sm font-medium transition-colors cursor-pointer ${
-                  isDark ? 'text-[#E5D3BA] hover:bg-[#2F1707]' : 'text-[#6D4223] hover:bg-[#F2E8D8]'
+                  isDark ? 'text-[#E5D3BA] hover:bg-[#2F1707]' : 'text-[#5A3013] hover:bg-[#F3D5AB]'
                 }`}
               >
                 <ArrowLeft className="w-4 h-4" aria-hidden="true" />
@@ -527,7 +527,7 @@ export const FulfilmentFlow: React.FC<FulfilmentFlowProps> = ({
                 className={`inline-flex items-center gap-2 px-6 py-2.5 min-h-[44px] rounded-xl text-sm font-semibold transition-all cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 ${
                   isDark
                     ? 'bg-[#C88D3A] text-[#2F1707] hover:bg-[#DDA250] focus-visible:ring-[#C88D3A]'
-                    : 'bg-[#5A2D0C] text-[#FFF9EE] hover:bg-[#432108] focus-visible:ring-[#5A2D0C]'
+                    : 'bg-[#432006] text-[#FFF0D6] hover:bg-[#341905] focus-visible:ring-[#432006]'
                 }`}
               >
                 <span>Confirm Preparation</span>
@@ -543,9 +543,9 @@ export const FulfilmentFlow: React.FC<FulfilmentFlowProps> = ({
             <div
               className="w-14 h-14 mx-auto mb-4 rounded-full flex items-center justify-center border"
               style={{
-                backgroundColor: isDark ? '#2F1707' : '#F7F1E7',
-                borderColor: isDark ? '#C88D3A' : '#B77620',
-                color: isDark ? '#C88D3A' : '#B77620',
+                backgroundColor: isDark ? '#2F1707' : '#FFF0D6',
+                borderColor: isDark ? '#C88D3A' : '#C46F18',
+                color: isDark ? '#C88D3A' : '#C46F18',
               }}
             >
               <span className="text-2xl" aria-hidden="true">🛖</span>
@@ -554,7 +554,7 @@ export const FulfilmentFlow: React.FC<FulfilmentFlowProps> = ({
             <h2
               id="fulfilment-prepared-title"
               className="font-serif text-2xl sm:text-3xl font-semibold tracking-tight mb-4"
-              style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+              style={{ color: isDark ? '#FFF9EE' : '#432006' }}
             >
               FULFILMENT PREPARED
             </h2>
@@ -563,25 +563,25 @@ export const FulfilmentFlow: React.FC<FulfilmentFlowProps> = ({
             <div
               className="p-5 rounded-xl border mb-6 max-w-md mx-auto text-left space-y-2.5 text-sm"
               style={{
-                backgroundColor: isDark ? '#2F1707' : '#F7F1E7',
-                borderColor: isDark ? '#4B2710' : '#E7D6C1',
+                backgroundColor: isDark ? '#2F1707' : '#FFF0D6',
+                borderColor: isDark ? '#4B2710' : '#CF9F68',
               }}
             >
               <div className="flex justify-between items-center">
-                <span style={{ color: isDark ? '#A67B54' : '#8A5D3B' }}>Amount:</span>
-                <span className="font-mono font-bold text-lg" style={{ color: isDark ? '#E2AB5D' : '#B77620' }}>
+                <span style={{ color: isDark ? '#A67B54' : '#72451F' }}>Amount:</span>
+                <span className="font-mono font-bold text-lg" style={{ color: isDark ? '#E2AB5D' : '#C46F18' }}>
                   {formatNaira(preparedIntent.amount)}
                 </span>
               </div>
 
               <div className="flex justify-between items-center">
-                <span style={{ color: isDark ? '#A67B54' : '#8A5D3B' }}>Status:</span>
+                <span style={{ color: isDark ? '#A67B54' : '#72451F' }}>Status:</span>
                 <span
                   className="px-2.5 py-0.5 rounded-full text-xs font-semibold uppercase tracking-wider border font-mono"
                   style={{
-                    backgroundColor: isDark ? '#4B2710' : '#FFF9EE',
-                    borderColor: isDark ? '#623416' : '#EAE0D0',
-                    color: isDark ? '#C88D3A' : '#B77620',
+                    backgroundColor: isDark ? '#4B2710' : '#FAE5C5',
+                    borderColor: isDark ? '#623416' : '#CF9F68',
+                    color: isDark ? '#C88D3A' : '#C46F18',
                   }}
                 >
                   Prepared
@@ -592,7 +592,7 @@ export const FulfilmentFlow: React.FC<FulfilmentFlowProps> = ({
             {/* Supporting Text */}
             <div
               className="mb-6 text-xs sm:text-sm leading-relaxed max-w-md mx-auto space-y-2"
-              style={{ color: isDark ? '#D9C4AC' : '#704728' }}
+              style={{ color: isDark ? '#D9C4AC' : '#5A3013' }}
             >
               <p className="font-medium">
                 No payment has been executed yet.
@@ -617,7 +617,7 @@ export const FulfilmentFlow: React.FC<FulfilmentFlowProps> = ({
                   <ShieldAlert className="w-5 h-5 shrink-0" aria-hidden="true" />
                   <span>BMONI Sandbox Not Configured</span>
                 </div>
-                <p className="font-semibold text-xs" style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}>
+                <p className="font-semibold text-xs" style={{ color: isDark ? '#FFF9EE' : '#432006' }}>
                   No request was sent.
                 </p>
                 <p className="text-xs text-[#784A28] dark:text-[#E5D3BA]/75 leading-relaxed">
@@ -641,7 +641,7 @@ export const FulfilmentFlow: React.FC<FulfilmentFlowProps> = ({
                   <AlertCircle className="w-4 h-4 shrink-0" aria-hidden="true" />
                   <span>We couldn't prepare this payment with BMONI.</span>
                 </div>
-                <p className="text-xs leading-relaxed" style={{ color: isDark ? '#D9C4AC' : '#704728' }}>
+                <p className="text-xs leading-relaxed" style={{ color: isDark ? '#D9C4AC' : '#5A3013' }}>
                   No payment has been executed.
                 </p>
                 <p className="text-xs text-[#784A28] dark:text-[#E5D3BA]/75 leading-relaxed">
@@ -665,7 +665,7 @@ export const FulfilmentFlow: React.FC<FulfilmentFlowProps> = ({
                   <AlertCircle className="w-4 h-4 shrink-0" aria-hidden="true" />
                   <span>Unresolved Proposal Attempt</span>
                 </div>
-                <p className="font-semibold text-xs leading-relaxed" style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}>
+                <p className="font-semibold text-xs leading-relaxed" style={{ color: isDark ? '#FFF9EE' : '#432006' }}>
                   A network timeout or connection failure occurred while contacting BMONI. It is unknown whether BMONI accepted the proposal.
                 </p>
                 <p className="text-xs text-[#784A28] dark:text-[#E5D3BA]/75 leading-relaxed">
@@ -707,7 +707,7 @@ export const FulfilmentFlow: React.FC<FulfilmentFlowProps> = ({
                 className={`w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3 min-h-[44px] rounded-xl text-sm font-medium transition-all cursor-pointer border ${
                   isDark
                     ? 'border-[#623416] text-[#E5D3BA] hover:bg-[#2F1707]'
-                    : 'border-[#EAE0D0] text-[#6D4223] hover:bg-[#F2E8D8]'
+                    : 'border-[#CF9F68] text-[#5A3013] hover:bg-[#F3D5AB]'
                 }`}
               >
                 <ArrowLeft className="w-4 h-4 shrink-0" aria-hidden="true" />
@@ -723,9 +723,9 @@ export const FulfilmentFlow: React.FC<FulfilmentFlowProps> = ({
             <div
               className="w-14 h-14 mx-auto mb-4 rounded-full flex items-center justify-center border"
               style={{
-                backgroundColor: isDark ? '#2F1707' : '#F7F1E7',
-                borderColor: isDark ? '#C88D3A' : '#B77620',
-                color: isDark ? '#C88D3A' : '#B77620',
+                backgroundColor: isDark ? '#2F1707' : '#FFF0D6',
+                borderColor: isDark ? '#C88D3A' : '#C46F18',
+                color: isDark ? '#C88D3A' : '#C46F18',
               }}
             >
               <span className="text-2xl" aria-hidden="true">🛖</span>
@@ -734,7 +734,7 @@ export const FulfilmentFlow: React.FC<FulfilmentFlowProps> = ({
             <h2
               id="payment-preparation-title"
               className="font-serif text-2xl sm:text-3xl font-semibold tracking-tight mb-6"
-              style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+              style={{ color: isDark ? '#FFF9EE' : '#432006' }}
             >
               PAYMENT PREPARATION
             </h2>
@@ -743,15 +743,15 @@ export const FulfilmentFlow: React.FC<FulfilmentFlowProps> = ({
             <div
               className="p-5 rounded-xl border mb-6 max-w-md mx-auto text-left space-y-3.5 text-sm"
               style={{
-                backgroundColor: isDark ? '#2F1707' : '#F7F1E7',
-                borderColor: isDark ? '#4B2710' : '#E7D6C1',
+                backgroundColor: isDark ? '#2F1707' : '#FFF0D6',
+                borderColor: isDark ? '#4B2710' : '#CF9F68',
               }}
             >
               {/* STATE A — SIMULATION */}
               {createdProposal?.isSimulated || createdProposal?.provider === 'SIMULATED' ? (
                 <>
-                  <div className="flex justify-between items-center border-b pb-3" style={{ borderColor: isDark ? '#4B2710' : '#EAE0D0' }}>
-                    <span className="font-bold text-xs uppercase tracking-wider" style={{ color: isDark ? '#E2AB5D' : '#B77620' }}>
+                  <div className="flex justify-between items-center border-b pb-3" style={{ borderColor: isDark ? '#4B2710' : '#CF9F68' }}>
+                    <span className="font-bold text-xs uppercase tracking-wider" style={{ color: isDark ? '#E2AB5D' : '#C46F18' }}>
                       SIMULATED PROVIDER
                     </span>
                     <span
@@ -769,9 +769,9 @@ export const FulfilmentFlow: React.FC<FulfilmentFlowProps> = ({
                   <div
                     className="p-3 rounded-lg text-xs font-medium border"
                     style={{
-                      backgroundColor: isDark ? '#261407' : '#FFF9EE',
-                      borderColor: isDark ? '#4B2710' : '#E7D6C1',
-                      color: isDark ? '#D9C4AC' : '#704728',
+                      backgroundColor: isDark ? '#261407' : '#FAE5C5',
+                      borderColor: isDark ? '#4B2710' : '#CF9F68',
+                      color: isDark ? '#D9C4AC' : '#5A3013',
                     }}
                   >
                     No request was sent to BMONI.
@@ -780,8 +780,8 @@ export const FulfilmentFlow: React.FC<FulfilmentFlowProps> = ({
               ) : (
                 /* STATE C — REAL BMONI PROPOSAL CREATED */
                 <>
-                  <div className="flex justify-between items-center border-b pb-3" style={{ borderColor: isDark ? '#4B2710' : '#EAE0D0' }}>
-                    <span className="font-bold text-xs uppercase tracking-wider" style={{ color: isDark ? '#E2AB5D' : '#B77620' }}>
+                  <div className="flex justify-between items-center border-b pb-3" style={{ borderColor: isDark ? '#4B2710' : '#CF9F68' }}>
+                    <span className="font-bold text-xs uppercase tracking-wider" style={{ color: isDark ? '#E2AB5D' : '#C46F18' }}>
                       BMONI
                     </span>
                     <span
@@ -797,7 +797,7 @@ export const FulfilmentFlow: React.FC<FulfilmentFlowProps> = ({
                   </div>
 
                   <div className="flex justify-between items-center">
-                    <span style={{ color: isDark ? '#A67B54' : '#8A5D3B' }}>Provider Status:</span>
+                    <span style={{ color: isDark ? '#A67B54' : '#72451F' }}>Provider Status:</span>
                     <span
                       className="px-2.5 py-0.5 rounded-full text-xs font-semibold font-mono border"
                       style={{
@@ -812,8 +812,8 @@ export const FulfilmentFlow: React.FC<FulfilmentFlowProps> = ({
 
                   {createdProposal?.providerProposalId && (
                     <div className="flex justify-between items-center text-xs">
-                      <span style={{ color: isDark ? '#A67B54' : '#8A5D3B' }}>Provider Proposal Reference:</span>
-                      <span className="font-mono text-xs font-medium" style={{ color: isDark ? '#E5D3BA' : '#5A2D0C' }}>
+                      <span style={{ color: isDark ? '#A67B54' : '#72451F' }}>Provider Proposal Reference:</span>
+                      <span className="font-mono text-xs font-medium" style={{ color: isDark ? '#E5D3BA' : '#432006' }}>
                         {createdProposal.providerProposalId}
                       </span>
                     </div>
@@ -822,9 +822,9 @@ export const FulfilmentFlow: React.FC<FulfilmentFlowProps> = ({
               )}
 
               {/* Amount */}
-              <div className="flex justify-between items-center border-t pt-3" style={{ borderColor: isDark ? '#4B2710' : '#EAE0D0' }}>
-                <span style={{ color: isDark ? '#A67B54' : '#8A5D3B' }}>Amount:</span>
-                <span className="font-mono font-bold text-lg" style={{ color: isDark ? '#E2AB5D' : '#B77620' }}>
+              <div className="flex justify-between items-center border-t pt-3" style={{ borderColor: isDark ? '#4B2710' : '#CF9F68' }}>
+                <span style={{ color: isDark ? '#A67B54' : '#72451F' }}>Amount:</span>
+                <span className="font-mono font-bold text-lg" style={{ color: isDark ? '#E2AB5D' : '#C46F18' }}>
                   {formatNaira(createdProposal?.amount || preparedIntent.amount)}
                 </span>
               </div>
@@ -833,7 +833,7 @@ export const FulfilmentFlow: React.FC<FulfilmentFlowProps> = ({
             {/* Invariant Messages */}
             <div
               className="mb-8 text-xs sm:text-sm leading-relaxed max-w-md mx-auto space-y-2 text-center"
-              style={{ color: isDark ? '#D9C4AC' : '#704728' }}
+              style={{ color: isDark ? '#D9C4AC' : '#5A3013' }}
             >
               <p className="font-medium">
                 No money has moved yet.
@@ -851,7 +851,7 @@ export const FulfilmentFlow: React.FC<FulfilmentFlowProps> = ({
               className={`w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3 min-h-[44px] rounded-xl text-sm font-semibold transition-all cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 ${
                 isDark
                   ? 'bg-[#C88D3A] text-[#2F1707] hover:bg-[#DDA250] focus-visible:ring-[#C88D3A]'
-                  : 'bg-[#5A2D0C] text-[#FFF9EE] hover:bg-[#432108] focus-visible:ring-[#5A2D0C]'
+                  : 'bg-[#432006] text-[#FFF0D6] hover:bg-[#341905] focus-visible:ring-[#432006]'
               }`}
             >
               <ArrowLeft className="w-4 h-4 shrink-0" aria-hidden="true" />

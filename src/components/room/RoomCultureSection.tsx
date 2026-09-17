@@ -26,30 +26,30 @@ export const RoomCultureSection: React.FC<RoomCultureSectionProps> = ({
       <div
         className="h4d-card-static p-5 sm:p-6 rounded-2xl border-2 border-b-4 shadow-xs backdrop-blur-md flex flex-col sm:flex-row sm:items-center justify-between gap-4"
         style={{
-          backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : 'rgba(255, 253, 248, 0.75)',
-          borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : 'rgba(90, 45, 12, 0.20)',
+          backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : '#FFF0D6',
+          borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : '#CF9F68',
         }}
       >
         <div className="flex items-center gap-3.5">
           <div
             className="w-11 h-11 rounded-xl border-2 border-b-3 flex items-center justify-center shrink-0 shadow-xs"
             style={{
-              backgroundColor: isDark ? 'rgba(42, 34, 28, 0.7)' : 'rgba(247, 241, 231, 0.9)',
-              borderColor: isDark ? 'rgba(200, 141, 58, 0.4)' : 'rgba(90, 45, 12, 0.25)',
+              backgroundColor: isDark ? 'rgba(42, 34, 28, 0.7)' : '#FAE5C5',
+              borderColor: isDark ? 'rgba(200, 141, 58, 0.4)' : '#CF9F68',
             }}
           >
-            <Sparkles className="w-5 h-5 text-[#B77620] dark:text-[#C88D3A]" />
+            <Sparkles className="w-5 h-5 text-[#C46F18] dark:text-[#C88D3A]" />
           </div>
           <div>
             <h3
               className="font-serif font-bold text-base sm:text-lg"
-              style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+              style={{ color: isDark ? '#FFF9EE' : '#432006' }}
             >
               Room Culture &amp; Shared Life &bull; {cultureGuide.roomNumber}
             </h3>
             <p
               className="text-xs mt-0.5"
-              style={{ color: isDark ? '#D9C4AC' : '#704728' }}
+              style={{ color: isDark ? '#D9C4AC' : '#5A3013' }}
             >
               How we share this co-living space &bull; Agreed living rhythms, care habits, and study protocols
             </p>
@@ -59,9 +59,9 @@ export const RoomCultureSection: React.FC<RoomCultureSectionProps> = ({
         <span
           className="text-[10px] font-mono uppercase px-2.5 py-1 rounded-md font-semibold border self-start sm:self-auto"
           style={{
-            backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : 'rgba(247, 241, 231, 0.7)',
-            borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : 'rgba(90, 45, 12, 0.15)',
-            color: isDark ? '#C88D3A' : '#B77620',
+            backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : '#FAE5C5',
+            borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : '#CF9F68',
+            color: isDark ? '#C88D3A' : '#C46F18',
           }}
         >
           Shared Stewardship
@@ -72,22 +72,22 @@ export const RoomCultureSection: React.FC<RoomCultureSectionProps> = ({
       <div
         className="h4d-card-static p-5 rounded-2xl border-2 border-b-3 shadow-xs"
         style={{
-          backgroundColor: isDark ? 'rgba(30, 27, 24, 0.55)' : 'rgba(255, 253, 248, 0.85)',
-          borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : 'rgba(90, 45, 12, 0.20)',
+          backgroundColor: isDark ? 'rgba(30, 27, 24, 0.55)' : '#FFF8EE',
+          borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : '#CF9F68',
         }}
       >
         <div className="flex items-center gap-2 mb-2">
-          <Heart className="w-4 h-4 text-[#B77620] dark:text-[#C88D3A]" />
+          <Heart className="w-4 h-4 text-[#C46F18] dark:text-[#C88D3A]" />
           <h4
             className="text-xs font-bold uppercase tracking-wider"
-            style={{ color: isDark ? '#C88D3A' : '#B77620' }}
+            style={{ color: isDark ? '#C88D3A' : '#C46F18' }}
           >
             Room 304 Living Pledge
           </h4>
         </div>
         <p
           className="text-sm font-medium leading-relaxed italic"
-          style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+          style={{ color: isDark ? '#FFF9EE' : '#432006' }}
         >
           &ldquo;{cultureGuide.communityPledge}&rdquo;
         </p>
@@ -99,8 +99,8 @@ export const RoomCultureSection: React.FC<RoomCultureSectionProps> = ({
         <div
           className="h4d-card-static p-5 rounded-2xl border-2 border-b-4 shadow-xs flex flex-col justify-between"
           style={{
-            backgroundColor: isDark ? 'rgba(30, 27, 24, 0.55)' : 'rgba(255, 253, 248, 0.85)',
-            borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : 'rgba(90, 45, 12, 0.20)',
+            backgroundColor: isDark ? 'rgba(30, 27, 24, 0.55)' : '#FFF8EE',
+            borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : '#CF9F68',
           }}
         >
           <div>
@@ -108,7 +108,7 @@ export const RoomCultureSection: React.FC<RoomCultureSectionProps> = ({
               <Moon className="w-4 h-4 text-purple-600 dark:text-purple-400" />
               <h4
                 className="font-bold text-sm"
-                style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+                style={{ color: isDark ? '#FFF9EE' : '#432006' }}
               >
                 Quiet Hours &amp; Rest
               </h4>
@@ -118,14 +118,14 @@ export const RoomCultureSection: React.FC<RoomCultureSectionProps> = ({
               <div
                 className="p-2.5 rounded-xl border text-xs"
                 style={{
-                  backgroundColor: isDark ? 'rgba(42, 34, 28, 0.5)' : 'rgba(247, 241, 231, 0.6)',
-                  borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : 'rgba(90, 45, 12, 0.12)',
+                  backgroundColor: isDark ? 'rgba(42, 34, 28, 0.5)' : '#FAE5C5',
+                  borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : '#CF9F68',
                 }}
               >
                 <div className="font-semibold text-[11px] text-purple-700 dark:text-purple-300">
                   Weekdays (Mon – Fri)
                 </div>
-                <div className="font-mono font-bold text-xs" style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}>
+                <div className="font-mono font-bold text-xs" style={{ color: isDark ? '#FFF9EE' : '#432006' }}>
                   {cultureGuide.quietHours.weekdays}
                 </div>
               </div>
@@ -133,14 +133,14 @@ export const RoomCultureSection: React.FC<RoomCultureSectionProps> = ({
               <div
                 className="p-2.5 rounded-xl border text-xs"
                 style={{
-                  backgroundColor: isDark ? 'rgba(42, 34, 28, 0.5)' : 'rgba(247, 241, 231, 0.6)',
-                  borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : 'rgba(90, 45, 12, 0.12)',
+                  backgroundColor: isDark ? 'rgba(42, 34, 28, 0.5)' : '#FAE5C5',
+                  borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : '#CF9F68',
                 }}
               >
                 <div className="font-semibold text-[11px] text-purple-700 dark:text-purple-300">
                   Weekends (Sat – Sun)
                 </div>
-                <div className="font-mono font-bold text-xs" style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}>
+                <div className="font-mono font-bold text-xs" style={{ color: isDark ? '#FFF9EE' : '#432006' }}>
                   {cultureGuide.quietHours.weekends}
                 </div>
               </div>
@@ -148,7 +148,7 @@ export const RoomCultureSection: React.FC<RoomCultureSectionProps> = ({
 
             <p
               className="text-xs leading-relaxed"
-              style={{ color: isDark ? '#E5D6C5' : '#704728' }}
+              style={{ color: isDark ? '#E5D6C5' : '#5A3013' }}
             >
               {cultureGuide.quietHours.guideline}
             </p>
@@ -157,7 +157,7 @@ export const RoomCultureSection: React.FC<RoomCultureSectionProps> = ({
           <div
             className="pt-3 mt-4 border-t text-[10px] font-mono"
             style={{
-              borderColor: isDark ? 'rgba(200, 141, 58, 0.20)' : 'rgba(90, 45, 12, 0.12)',
+              borderColor: isDark ? 'rgba(200, 141, 58, 0.20)' : '#CF9F68',
               color: isDark ? '#A98F77' : '#8A5D3B',
             }}
           >
@@ -169,8 +169,8 @@ export const RoomCultureSection: React.FC<RoomCultureSectionProps> = ({
         <div
           className="h4d-card-static p-5 rounded-2xl border-2 border-b-4 shadow-xs flex flex-col justify-between"
           style={{
-            backgroundColor: isDark ? 'rgba(30, 27, 24, 0.55)' : 'rgba(255, 253, 248, 0.85)',
-            borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : 'rgba(90, 45, 12, 0.20)',
+            backgroundColor: isDark ? 'rgba(30, 27, 24, 0.55)' : '#FFF8EE',
+            borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : '#CF9F68',
           }}
         >
           <div>
@@ -178,7 +178,7 @@ export const RoomCultureSection: React.FC<RoomCultureSectionProps> = ({
               <CheckSquare className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
               <h4
                 className="font-bold text-sm"
-                style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+                style={{ color: isDark ? '#FFF9EE' : '#432006' }}
               >
                 Cleaning &amp; Chore Roster
               </h4>
@@ -187,14 +187,14 @@ export const RoomCultureSection: React.FC<RoomCultureSectionProps> = ({
             <div
               className="p-2.5 rounded-xl border text-xs mb-3"
               style={{
-                backgroundColor: isDark ? 'rgba(42, 34, 28, 0.5)' : 'rgba(247, 241, 231, 0.6)',
-                borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : 'rgba(90, 45, 12, 0.12)',
+                backgroundColor: isDark ? 'rgba(42, 34, 28, 0.5)' : '#FAE5C5',
+                borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : '#CF9F68',
               }}
             >
               <div className="font-semibold text-[11px] text-emerald-700 dark:text-emerald-300">
                 Weekly Schedule
               </div>
-              <div className="font-bold text-xs" style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}>
+              <div className="font-bold text-xs" style={{ color: isDark ? '#FFF9EE' : '#432006' }}>
                 {cultureGuide.cleaningRhythm.schedule}
               </div>
             </div>
@@ -204,7 +204,7 @@ export const RoomCultureSection: React.FC<RoomCultureSectionProps> = ({
                 <div
                   key={i}
                   className="flex items-center gap-2 text-xs"
-                  style={{ color: isDark ? '#E5D6C5' : '#5A2D0C' }}
+                  style={{ color: isDark ? '#E5D6C5' : '#432006' }}
                 >
                   <div className="w-1.5 h-1.5 rounded-full bg-emerald-600 shrink-0" />
                   <span>{area}</span>
@@ -214,7 +214,7 @@ export const RoomCultureSection: React.FC<RoomCultureSectionProps> = ({
 
             <p
               className="text-xs italic"
-              style={{ color: isDark ? '#D9C4AC' : '#704728' }}
+              style={{ color: isDark ? '#D9C4AC' : '#5A3013' }}
             >
               {cultureGuide.cleaningRhythm.notes}
             </p>
@@ -223,7 +223,7 @@ export const RoomCultureSection: React.FC<RoomCultureSectionProps> = ({
           <div
             className="pt-3 mt-4 border-t text-[10px] font-mono"
             style={{
-              borderColor: isDark ? 'rgba(200, 141, 58, 0.20)' : 'rgba(90, 45, 12, 0.12)',
+              borderColor: isDark ? 'rgba(200, 141, 58, 0.20)' : '#CF9F68',
               color: isDark ? '#A98F77' : '#8A5D3B',
             }}
           >
@@ -235,8 +235,8 @@ export const RoomCultureSection: React.FC<RoomCultureSectionProps> = ({
         <div
           className="h4d-card-static p-5 rounded-2xl border-2 border-b-4 shadow-xs flex flex-col justify-between"
           style={{
-            backgroundColor: isDark ? 'rgba(30, 27, 24, 0.55)' : 'rgba(255, 253, 248, 0.85)',
-            borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : 'rgba(90, 45, 12, 0.20)',
+            backgroundColor: isDark ? 'rgba(30, 27, 24, 0.55)' : '#FFF8EE',
+            borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : '#CF9F68',
           }}
         >
           <div>
@@ -244,7 +244,7 @@ export const RoomCultureSection: React.FC<RoomCultureSectionProps> = ({
               <Zap className="w-4 h-4 text-amber-600 dark:text-amber-400" />
               <h4
                 className="font-bold text-sm"
-                style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+                style={{ color: isDark ? '#FFF9EE' : '#432006' }}
               >
                 Inverter Power Protocol
               </h4>
@@ -253,21 +253,21 @@ export const RoomCultureSection: React.FC<RoomCultureSectionProps> = ({
             <div
               className="p-2.5 rounded-xl border text-xs mb-3"
               style={{
-                backgroundColor: isDark ? 'rgba(42, 34, 28, 0.5)' : 'rgba(247, 241, 231, 0.6)',
-                borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : 'rgba(90, 45, 12, 0.12)',
+                backgroundColor: isDark ? 'rgba(42, 34, 28, 0.5)' : '#FAE5C5',
+                borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : '#CF9F68',
               }}
             >
               <div className="font-semibold text-[11px] text-amber-700 dark:text-amber-300">
                 Protected Sub-Line
               </div>
-              <div className="font-bold text-xs" style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}>
+              <div className="font-bold text-xs" style={{ color: isDark ? '#FFF9EE' : '#432006' }}>
                 {cultureGuide.powerAndInverterProtocol.summary}
               </div>
             </div>
 
             <p
               className="text-xs leading-relaxed"
-              style={{ color: isDark ? '#E5D6C5' : '#704728' }}
+              style={{ color: isDark ? '#E5D6C5' : '#5A3013' }}
             >
               {cultureGuide.powerAndInverterProtocol.guideline}
             </p>
@@ -276,7 +276,7 @@ export const RoomCultureSection: React.FC<RoomCultureSectionProps> = ({
           <div
             className="pt-3 mt-4 border-t text-[10px] font-mono"
             style={{
-              borderColor: isDark ? 'rgba(200, 141, 58, 0.20)' : 'rgba(90, 45, 12, 0.12)',
+              borderColor: isDark ? 'rgba(200, 141, 58, 0.20)' : '#CF9F68',
               color: isDark ? '#A98F77' : '#8A5D3B',
             }}
           >
@@ -289,15 +289,15 @@ export const RoomCultureSection: React.FC<RoomCultureSectionProps> = ({
       <div
         className="h4d-card-static p-5 sm:p-6 rounded-2xl border-2 border-b-4 shadow-xs"
         style={{
-          backgroundColor: isDark ? 'rgba(30, 27, 24, 0.55)' : 'rgba(255, 253, 248, 0.85)',
-          borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : 'rgba(90, 45, 12, 0.20)',
+          backgroundColor: isDark ? 'rgba(30, 27, 24, 0.55)' : '#FFF8EE',
+          borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : '#CF9F68',
         }}
       >
         <div className="flex items-center gap-2 mb-4">
-          <Coffee className="w-4 h-4 text-[#B77620] dark:text-[#C88D3A]" />
+          <Coffee className="w-4 h-4 text-[#C46F18] dark:text-[#C88D3A]" />
           <h4
             className="font-bold text-sm"
-            style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+            style={{ color: isDark ? '#FFF9EE' : '#432006' }}
           >
             Room 304 Living Traditions
           </h4>
@@ -309,24 +309,24 @@ export const RoomCultureSection: React.FC<RoomCultureSectionProps> = ({
               key={idx}
               className="h4d-card-static p-4 rounded-xl border flex flex-col justify-between"
               style={{
-                backgroundColor: isDark ? 'rgba(42, 34, 28, 0.5)' : 'rgba(247, 241, 231, 0.75)',
-                borderColor: isDark ? 'rgba(200, 141, 58, 0.25)' : 'rgba(90, 45, 12, 0.18)',
+                backgroundColor: isDark ? 'rgba(42, 34, 28, 0.5)' : '#FAE5C5',
+                borderColor: isDark ? 'rgba(200, 141, 58, 0.25)' : '#CF9F68',
               }}
             >
               <div>
                 <div className="flex items-center justify-between gap-2 mb-2">
                   <h5
                     className="font-bold text-xs"
-                    style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+                    style={{ color: isDark ? '#FFF9EE' : '#432006' }}
                   >
                     {tradition.title}
                   </h5>
                   <span
                     className="text-[10px] font-mono font-bold px-2 py-0.5 rounded border shrink-0 shadow-2xs"
                     style={{
-                      backgroundColor: isDark ? 'rgba(42, 34, 28, 0.9)' : '#FFFDF8',
-                      borderColor: isDark ? 'rgba(200, 141, 58, 0.40)' : 'rgba(90, 45, 12, 0.25)',
-                      color: isDark ? '#FCD34D' : '#5A2D0C',
+                      backgroundColor: isDark ? 'rgba(42, 34, 28, 0.9)' : '#FFF0D6',
+                      borderColor: isDark ? 'rgba(200, 141, 58, 0.40)' : '#CF9F68',
+                      color: isDark ? '#FCD34D' : '#432006',
                     }}
                   >
                     {tradition.cadence}
@@ -334,7 +334,7 @@ export const RoomCultureSection: React.FC<RoomCultureSectionProps> = ({
                 </div>
                 <p
                   className="text-xs leading-relaxed"
-                  style={{ color: isDark ? '#E5D6C5' : '#5A2D0C' }}
+                  style={{ color: isDark ? '#E5D6C5' : '#432006' }}
                 >
                   {tradition.description}
                 </p>

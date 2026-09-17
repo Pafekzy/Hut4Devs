@@ -145,9 +145,9 @@ export const LandingStoryCarousel: React.FC<LandingStoryCarouselProps> = ({
               <span
                 className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-mono font-bold tracking-wider uppercase border shadow-xs backdrop-blur-xs"
                 style={{
-                  backgroundColor: isDark ? 'rgba(47, 23, 7, 0.85)' : 'rgba(255, 249, 238, 0.92)',
-                  borderColor: isDark ? '#623416' : '#C88D3A40',
-                  color: isDark ? '#C88D3A' : '#5A2D0C',
+                  backgroundColor: isDark ? 'rgba(47, 23, 7, 0.85)' : 'rgba(255, 240, 214, 0.92)',
+                  borderColor: isDark ? '#623416' : '#CF9F68',
+                  color: isDark ? '#C88D3A' : '#432006',
                 }}
               >
                 <StoryIcon className="w-3.5 h-3.5 text-[#C88D3A]" aria-hidden="true" />
@@ -170,9 +170,9 @@ export const LandingStoryCarousel: React.FC<LandingStoryCarouselProps> = ({
               <span
                 className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-mono font-bold tracking-wider uppercase border shadow-xs"
                 style={{
-                  backgroundColor: isDark ? 'rgba(47, 23, 7, 0.85)' : 'rgba(255, 249, 238, 0.9)',
-                  borderColor: isDark ? '#623416' : '#C88D3A40',
-                  color: isDark ? '#C88D3A' : '#5A2D0C',
+                  backgroundColor: isDark ? 'rgba(47, 23, 7, 0.85)' : 'rgba(255, 240, 214, 0.9)',
+                  borderColor: isDark ? '#623416' : '#CF9F68',
+                  color: isDark ? '#C88D3A' : '#432006',
                 }}
               >
                 <StoryIcon className="w-3.5 h-3.5 text-[#C88D3A]" aria-hidden="true" />
@@ -183,7 +183,7 @@ export const LandingStoryCarousel: React.FC<LandingStoryCarouselProps> = ({
                 className="text-[10px] font-medium tracking-wide uppercase px-2 py-0.5 rounded-md"
                 style={{
                   color: isDark ? '#A67B54' : '#8A5D3B',
-                  backgroundColor: isDark ? 'rgba(47, 23, 7, 0.4)' : 'rgba(90, 45, 12, 0.05)',
+                  backgroundColor: isDark ? 'rgba(47, 23, 7, 0.4)' : 'rgba(67, 32, 6, 0.06)',
                 }}
               >
                 16:9 Cinematic Frame

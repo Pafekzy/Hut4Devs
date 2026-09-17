@@ -662,8 +662,8 @@ export const WelfareMediationWorkspaceView: React.FC<WelfareMediationWorkspaceVi
                     }
                     className="px-3.5 py-2 min-h-[44px] rounded-xl text-xs font-bold flex items-center gap-2 border-2 border-b-3 active:border-b active:translate-y-[1px] shadow-xs transition-all duration-150 cursor-pointer disabled:opacity-50"
                     style={{
-                      backgroundColor: isDark ? '#2A1A0F' : '#F3D5AB',
-                      borderColor: isDark ? '#5A2D0C' : '#CF9F68',
+                      backgroundColor: isDark ? '#2A1A0F' : '#FFF0D6',
+                      borderColor: isDark ? '#623416' : '#CF9F68',
                       color: isDark ? '#FFF9EE' : '#432006',
                     }}
                   >

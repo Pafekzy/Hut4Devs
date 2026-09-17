@@ -120,7 +120,7 @@ export const SharedRoomWorkspace: React.FC<SharedRoomWorkspaceProps> = ({
       {/* 1. Header & Navigation Context Bar */}
       <div
         className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b-2"
-        style={{ borderColor: isDark ? 'rgba(200, 141, 58, 0.20)' : 'rgba(90, 45, 12, 0.12)' }}
+        style={{ borderColor: isDark ? 'rgba(200, 141, 58, 0.20)' : '#CF9F68' }}
       >
         <div className="flex items-center gap-3">
           {onBack && (
@@ -130,9 +130,9 @@ export const SharedRoomWorkspace: React.FC<SharedRoomWorkspaceProps> = ({
               onClick={onBack}
               className="px-3 py-1.5 text-xs font-bold rounded-xl border-2 border-b-3 transition-all duration-150 cursor-pointer flex items-center gap-1.5 active:translate-y-[1px] hover:-translate-y-0.5 shadow-xs"
               style={{
-                backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : 'rgba(255, 253, 248, 0.8)',
-                borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : 'rgba(90, 45, 12, 0.2)',
-                color: isDark ? '#FFF9EE' : '#5A2D0C',
+                backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : '#FFF0D6',
+                borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : '#CF9F68',
+                color: isDark ? '#FFF9EE' : '#432006',
               }}
             >
               <ArrowLeft className="w-3.5 h-3.5" />
@@ -146,9 +146,9 @@ export const SharedRoomWorkspace: React.FC<SharedRoomWorkspaceProps> = ({
             </button>
           )}
 
-          <div className="text-xs font-medium" style={{ color: isDark ? '#D9C4AC' : '#704728' }}>
+          <div className="text-xs font-medium" style={{ color: isDark ? '#D9C4AC' : '#5A3013' }}>
             <span>{room.campus}</span> &bull; <span>{room.propertyName}</span> &bull;{' '}
-            <strong className="font-bold text-[#B77620] dark:text-[#C88D3A] text-sm">
+            <strong className="font-bold text-[#C46F18] dark:text-[#C88D3A] text-sm">
               {room.roomNumber}
             </strong>
           </div>
@@ -178,9 +178,9 @@ export const SharedRoomWorkspace: React.FC<SharedRoomWorkspaceProps> = ({
           <span
             className="text-[10px] font-mono font-semibold px-2.5 py-1 rounded-md border"
             style={{
-              backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : 'rgba(247, 241, 231, 0.7)',
-              borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : 'rgba(90, 45, 12, 0.15)',
-              color: isDark ? '#FFF9EE' : '#5A2D0C',
+              backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : '#FAE5C5',
+              borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : '#CF9F68',
+              color: isDark ? '#FFF9EE' : '#432006',
             }}
           >
             {room.occupiedBeds} / {room.totalBeds} Bunks
@@ -192,7 +192,7 @@ export const SharedRoomWorkspace: React.FC<SharedRoomWorkspaceProps> = ({
       <nav
         aria-label="Shared Room Navigation Tabs"
         className="flex flex-wrap gap-2 border-b-2 pb-2.5"
-        style={{ borderColor: isDark ? 'rgba(200, 141, 58, 0.20)' : 'rgba(90, 45, 12, 0.12)' }}
+        style={{ borderColor: isDark ? 'rgba(200, 141, 58, 0.20)' : '#CF9F68' }}
       >
         {availableTabs.map((tab) => {
           const isActive = activeTab === tab.id;
@@ -207,10 +207,10 @@ export const SharedRoomWorkspace: React.FC<SharedRoomWorkspaceProps> = ({
                 isActive
                   ? isDark
                     ? 'bg-[#C88D3A] text-[#241104] border-[#915B15] shadow-xs'
-                    : 'bg-[#5A2D0C] text-[#FFF9EE] border-[#381B07] shadow-xs'
+                    : 'bg-[#432006] text-[#FFF0D6] border-[#381B07] shadow-xs'
                   : isDark
                   ? 'bg-[rgba(30,27,24,0.5)] text-[#D9C4AC] border-[rgba(200,141,58,0.2)] hover:border-[rgba(200,141,58,0.4)]'
-                  : 'bg-[rgba(255,253,248,0.7)] text-[#704728] border-[rgba(90,45,12,0.15)] hover:border-[rgba(90,45,12,0.3)]'
+                  : 'bg-[#FAE5C5] text-[#5A3013] border-[#CF9F68] hover:border-[#C46F18]'
               }`}
             >
               {tab.icon}

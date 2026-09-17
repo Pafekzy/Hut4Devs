@@ -92,28 +92,28 @@ export const RoomTrail: React.FC<RoomTrailProps> = ({ room, isDark = false }) =>
         aria-labelledby="room-trail-heading"
         className="h4d-card-static rounded-2xl p-5 sm:p-7 border-2 border-b-4 shadow-md backdrop-blur-md"
         style={{
-          backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : 'rgba(255, 253, 248, 0.65)',
-          borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : 'rgba(90, 45, 12, 0.25)',
+          backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : '#FFF0D6',
+          borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : '#CF9F68',
         }}
       >
         <div
           className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 mb-5 border-b-2 gap-3"
-          style={{ borderColor: isDark ? 'rgba(200, 141, 58, 0.20)' : 'rgba(90, 45, 12, 0.12)' }}
+          style={{ borderColor: isDark ? 'rgba(200, 141, 58, 0.20)' : '#CF9F68' }}
         >
           <div>
             <div className="flex items-center gap-2">
-              <History className="w-4 h-4 text-[#B77620] dark:text-[#C88D3A]" />
+              <History className="w-4 h-4 text-[#C46F18] dark:text-[#C88D3A]" />
               <h2
                 id="room-trail-heading"
                 className="text-xs sm:text-sm font-semibold uppercase tracking-wider"
-                style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+                style={{ color: isDark ? '#FFF9EE' : '#432006' }}
               >
                 Room Operations Trail &bull; {room.roomNumber}
               </h2>
             </div>
             <p
               className="text-xs mt-0.5"
-              style={{ color: isDark ? '#D9C4AC' : '#704728' }}
+              style={{ color: isDark ? '#D9C4AC' : '#5A3013' }}
             >
               Immutable, append-only chronological log of room decisions, verifications, and delegations.
             </p>
@@ -131,10 +131,10 @@ export const RoomTrail: React.FC<RoomTrailProps> = ({ room, isDark = false }) =>
                   filterType === f
                     ? isDark
                       ? 'bg-[#C88D3A] text-[#241104] border-[#915B15]'
-                      : 'bg-[#5A2D0C] text-[#FFF9EE] border-[#381B07]'
+                      : 'bg-[#432006] text-[#FFF0D6] border-[#381B07]'
                     : isDark
                     ? 'bg-[rgba(30,27,24,0.5)] text-[#D9C4AC] border-[rgba(200,141,58,0.2)]'
-                    : 'bg-[rgba(255,253,248,0.7)] text-[#704728] border-[rgba(90,45,12,0.15)]'
+                    : 'bg-[#FAE5C5] text-[#5A3013] border-[#CF9F68]'
                 }`}
               >
                 {f}
@@ -149,7 +149,7 @@ export const RoomTrail: React.FC<RoomTrailProps> = ({ room, isDark = false }) =>
             <div className="py-8 text-center">
               <p
                 className="text-xs"
-                style={{ color: isDark ? '#D9C4AC' : '#704728' }}
+                style={{ color: isDark ? '#D9C4AC' : '#5A3013' }}
               >
                 No trail events match this filter.
               </p>
@@ -164,13 +164,13 @@ export const RoomTrail: React.FC<RoomTrailProps> = ({ room, isDark = false }) =>
                   id={`trail-event-${evt.id}`}
                   className="h4d-card-static p-4 sm:p-5 rounded-xl border-2 border-b-3 shadow-xs backdrop-blur-xs"
                   style={{
-                    backgroundColor: isDark ? 'rgba(30, 27, 24, 0.45)' : 'rgba(247, 241, 231, 0.50)',
-                    borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : 'rgba(90, 45, 12, 0.20)',
+                    backgroundColor: isDark ? 'rgba(30, 27, 24, 0.45)' : '#FFF8EE',
+                    borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : '#CF9F68',
                   }}
                 >
                   <div
                     className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 mb-2 border-b"
-                    style={{ borderColor: isDark ? 'rgba(200, 141, 58, 0.15)' : 'rgba(90, 45, 12, 0.10)' }}
+                    style={{ borderColor: isDark ? 'rgba(200, 141, 58, 0.15)' : '#CF9F68' }}
                   >
                     <div className="flex items-center gap-2">
                       <span
@@ -181,13 +181,13 @@ export const RoomTrail: React.FC<RoomTrailProps> = ({ room, isDark = false }) =>
                       </span>
                       <h3
                         className="font-bold text-xs sm:text-sm"
-                        style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+                        style={{ color: isDark ? '#FFF9EE' : '#432006' }}
                       >
                         {evt.title}
                       </h3>
                     </div>
 
-                    <div className="flex items-center gap-1 text-[11px] font-mono text-[#B77620] dark:text-[#C88D3A]">
+                    <div className="flex items-center gap-1 text-[11px] font-mono text-[#C46F18] dark:text-[#C88D3A]">
                       <Clock className="w-3 h-3" />
                       <span>{new Date(evt.timestamp).toLocaleString('en-GB')}</span>
                     </div>
@@ -195,14 +195,14 @@ export const RoomTrail: React.FC<RoomTrailProps> = ({ room, isDark = false }) =>
 
                   <p
                     className="text-xs sm:text-sm leading-relaxed"
-                    style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+                    style={{ color: isDark ? '#FFF9EE' : '#432006' }}
                   >
                     {evt.description}
                   </p>
 
                   <div
                     className="mt-3 text-[11px] font-medium"
-                    style={{ color: isDark ? '#D9C4AC' : '#704728' }}
+                    style={{ color: isDark ? '#D9C4AC' : '#5A3013' }}
                   >
                     Actor: <strong className="font-semibold">{evt.actorName}</strong> &bull;{' '}
                     <span className="opacity-90">{evt.actorCapacity}</span>

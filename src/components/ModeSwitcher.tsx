@@ -294,7 +294,7 @@ export const ModeSwitcher: React.FC<ModeSwitcherProps> = ({
                         ? 'bg-[#C88D3A] text-[#2F1707] font-semibold'
                         : 'bg-[#C46F18]/25 text-[#432006] font-semibold'
                       : isDark
-                        ? 'text-[#FFF9EE] hover:bg-[#5A2D0C] focus:bg-[#5A2D0C]'
+                        ? 'text-[#FFF9EE] hover:bg-[#432006] focus:bg-[#432006]'
                         : 'text-[#432006] hover:bg-[#C46F18]/15 focus:bg-[#C46F18]/15'
                   }`}
                 >

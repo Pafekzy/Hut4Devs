@@ -78,30 +78,30 @@ export const RoomStorySection: React.FC<RoomStorySectionProps> = ({
       <div
         className="h4d-card-static p-5 sm:p-6 rounded-2xl border-2 border-b-4 shadow-xs backdrop-blur-md flex flex-col sm:flex-row sm:items-center justify-between gap-4"
         style={{
-          backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : 'rgba(255, 253, 248, 0.75)',
-          borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : 'rgba(90, 45, 12, 0.20)',
+          backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : '#FFF0D6',
+          borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : '#CF9F68',
         }}
       >
         <div className="flex items-center gap-3.5">
           <div
             className="w-11 h-11 rounded-xl border-2 border-b-3 flex items-center justify-center shrink-0 shadow-xs"
             style={{
-              backgroundColor: isDark ? 'rgba(42, 34, 28, 0.7)' : 'rgba(247, 241, 231, 0.9)',
-              borderColor: isDark ? 'rgba(200, 141, 58, 0.4)' : 'rgba(90, 45, 12, 0.25)',
+              backgroundColor: isDark ? 'rgba(42, 34, 28, 0.7)' : '#FAE5C5',
+              borderColor: isDark ? 'rgba(200, 141, 58, 0.4)' : '#CF9F68',
             }}
           >
-            <BookOpen className="w-5 h-5 text-[#B77620] dark:text-[#C88D3A]" />
+            <BookOpen className="w-5 h-5 text-[#C46F18] dark:text-[#C88D3A]" />
           </div>
           <div>
             <h3
               className="font-serif font-bold text-base sm:text-lg"
-              style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+              style={{ color: isDark ? '#FFF9EE' : '#432006' }}
             >
               Our Room Story &bull; {roomNumber}
             </h3>
             <p
               className="text-xs mt-0.5"
-              style={{ color: isDark ? '#D9C4AC' : '#704728' }}
+              style={{ color: isDark ? '#D9C4AC' : '#5A3013' }}
             >
               Documented milestones, care history, and communal living memory across fellowship cohorts
             </p>
@@ -111,9 +111,9 @@ export const RoomStorySection: React.FC<RoomStorySectionProps> = ({
         <span
           className="text-[10px] font-mono uppercase px-2.5 py-1 rounded-md font-semibold border self-start sm:self-auto"
           style={{
-            backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : 'rgba(247, 241, 231, 0.7)',
-            borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : 'rgba(90, 45, 12, 0.15)',
-            color: isDark ? '#C88D3A' : '#B77620',
+            backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : '#FAE5C5',
+            borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : '#CF9F68',
+            color: isDark ? '#C88D3A' : '#C46F18',
           }}
         >
           Community Memory
@@ -130,10 +130,10 @@ export const RoomStorySection: React.FC<RoomStorySectionProps> = ({
             selectedCategory === 'ALL'
               ? isDark
                 ? 'bg-[#C88D3A] text-[#241104] border-[#915B15] shadow-xs'
-                : 'bg-[#5A2D0C] text-[#FFF9EE] border-[#381B07] shadow-xs'
+                : 'bg-[#432006] text-[#FFF0D6] border-[#381B07] shadow-xs'
               : isDark
               ? 'bg-[rgba(30,27,24,0.5)] text-[#D9C4AC] border-[rgba(200,141,58,0.2)] hover:border-[rgba(200,141,58,0.4)]'
-              : 'bg-[rgba(255,253,248,0.7)] text-[#704728] border-[rgba(90,45,12,0.15)] hover:border-[rgba(90,45,12,0.3)]'
+              : 'bg-[#FFF0D6] text-[#5A3013] border-[#CF9F68] hover:border-[#C46F18]'
           }`}
         >
           <span>All Milestones ({safeFacts.length})</span>
@@ -154,10 +154,10 @@ export const RoomStorySection: React.FC<RoomStorySectionProps> = ({
                 isSelected
                   ? isDark
                     ? 'bg-[#C88D3A] text-[#241104] border-[#915B15] shadow-xs'
-                    : 'bg-[#5A2D0C] text-[#FFF9EE] border-[#381B07] shadow-xs'
+                    : 'bg-[#432006] text-[#FFF0D6] border-[#381B07] shadow-xs'
                   : isDark
                   ? 'bg-[rgba(30,27,24,0.5)] text-[#D9C4AC] border-[rgba(200,141,58,0.2)] hover:border-[rgba(200,141,58,0.4)]'
-                  : 'bg-[rgba(255,253,248,0.7)] text-[#704728] border-[rgba(90,45,12,0.15)] hover:border-[rgba(90,45,12,0.3)]'
+                  : 'bg-[#FFF0D6] text-[#5A3013] border-[#CF9F68] hover:border-[#C46F18]'
               }`}
             >
               {meta.icon}
@@ -174,9 +174,9 @@ export const RoomStorySection: React.FC<RoomStorySectionProps> = ({
           <div
             className="p-8 rounded-2xl border-2 border-dashed text-center"
             style={{
-              backgroundColor: isDark ? 'rgba(30, 27, 24, 0.4)' : 'rgba(255, 253, 248, 0.6)',
-              borderColor: isDark ? 'rgba(200, 141, 58, 0.25)' : 'rgba(90, 45, 12, 0.15)',
-              color: isDark ? '#D9C4AC' : '#704728',
+              backgroundColor: isDark ? 'rgba(30, 27, 24, 0.4)' : '#FAE5C5',
+              borderColor: isDark ? 'rgba(200, 141, 58, 0.25)' : '#CF9F68',
+              color: isDark ? '#D9C4AC' : '#5A3013',
             }}
           >
             <p className="text-sm font-medium">No recorded facts in this category yet.</p>
@@ -191,8 +191,8 @@ export const RoomStorySection: React.FC<RoomStorySectionProps> = ({
                 id={`story-fact-${fact.id}`}
                 className="h4d-card-static p-5 sm:p-6 rounded-2xl border-2 border-b-4 shadow-xs flex flex-col justify-between"
                 style={{
-                  backgroundColor: isDark ? 'rgba(30, 27, 24, 0.55)' : 'rgba(255, 253, 248, 0.85)',
-                  borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : 'rgba(90, 45, 12, 0.20)',
+                  backgroundColor: isDark ? 'rgba(30, 27, 24, 0.55)' : '#FFF8EE',
+                  borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : '#CF9F68',
                 }}
               >
                 <div>
@@ -211,9 +211,9 @@ export const RoomStorySection: React.FC<RoomStorySectionProps> = ({
                         <span
                           className="text-[10px] font-mono font-semibold px-2 py-0.5 rounded-md border"
                           style={{
-                            backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : 'rgba(247, 241, 231, 0.8)',
-                            borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : 'rgba(90, 45, 12, 0.15)',
-                            color: isDark ? '#C88D3A' : '#B77620',
+                            backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : '#FAE5C5',
+                            borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : '#CF9F68',
+                            color: isDark ? '#C88D3A' : '#C46F18',
                           }}
                         >
                           {fact.badgeLabel}
@@ -223,7 +223,7 @@ export const RoomStorySection: React.FC<RoomStorySectionProps> = ({
 
                     <div
                       className="flex items-center gap-1.5 text-xs font-mono font-semibold"
-                      style={{ color: isDark ? '#C88D3A' : '#B77620' }}
+                      style={{ color: isDark ? '#C88D3A' : '#C46F18' }}
                     >
                       <Calendar className="w-3.5 h-3.5" />
                       <span>{fact.dateOrPeriod}</span>
@@ -232,14 +232,14 @@ export const RoomStorySection: React.FC<RoomStorySectionProps> = ({
 
                   <h4
                     className="font-serif font-bold text-base sm:text-lg mb-1.5"
-                    style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+                    style={{ color: isDark ? '#FFF9EE' : '#432006' }}
                   >
                     {fact.title}
                   </h4>
 
                   <p
                     className="text-xs sm:text-sm leading-relaxed mb-2"
-                    style={{ color: isDark ? '#E5D6C5' : '#5A2D0C' }}
+                    style={{ color: isDark ? '#E5D6C5' : '#432006' }}
                   >
                     {fact.summary}
                   </p>
@@ -248,9 +248,9 @@ export const RoomStorySection: React.FC<RoomStorySectionProps> = ({
                     <p
                       className="text-xs leading-relaxed p-3 rounded-xl border"
                       style={{
-                        backgroundColor: isDark ? 'rgba(42, 34, 28, 0.4)' : 'rgba(247, 241, 231, 0.5)',
-                        borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : 'rgba(90, 45, 12, 0.12)',
-                        color: isDark ? '#D9C4AC' : '#704728',
+                        backgroundColor: isDark ? 'rgba(42, 34, 28, 0.4)' : '#FAE5C5',
+                        borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : '#CF9F68',
+                        color: isDark ? '#D9C4AC' : '#5A3013',
                       }}
                     >
                       {fact.details}
@@ -262,7 +262,7 @@ export const RoomStorySection: React.FC<RoomStorySectionProps> = ({
                   <div
                     className="pt-3 mt-4 border-t flex items-center justify-between text-[11px]"
                     style={{
-                      borderColor: isDark ? 'rgba(200, 141, 58, 0.20)' : 'rgba(90, 45, 12, 0.12)',
+                      borderColor: isDark ? 'rgba(200, 141, 58, 0.20)' : '#CF9F68',
                       color: isDark ? '#A98F77' : '#8A5D3B',
                     }}
                   >
