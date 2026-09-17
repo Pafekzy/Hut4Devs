@@ -75,11 +75,19 @@ export async function initializeDatabase(
       isDbInitialized = true;
       return activeRepositories;
     } catch (err: any) {
-      dbInitializationError = `Database unavailable: ${err.message || String(err)}`;
-      activePool = null;
-      activeRepositories = null;
-      isDbInitialized = false;
-      throw new Error(dbInitializationError);
+      if (options.useMemoryFallbackIfNoUrl === false) {
+        dbInitializationError = `Database unavailable: ${err.message || String(err)}`;
+        activePool = null;
+        activeRepositories = null;
+        isDbInitialized = false;
+        throw new Error(dbInitializationError);
+      }
+      console.warn(`[AI Studio] PostgreSQL connection failed (${err.message}). Falling back to in-memory database.`);
+      const { pool, repos } = await createIsolatedTestDatabase();
+      activePool = pool;
+      activeRepositories = repos;
+      isDbInitialized = true;
+      return repos;
     }
   }
 

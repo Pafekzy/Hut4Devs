@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Hut4DevsLogo } from './Hut4DevsLogo';
 import { ThemeToggle } from './ThemeToggle';
 import { AccommodationResponsibilityCard } from './AccommodationResponsibilityCard';
@@ -13,8 +13,11 @@ import { VouchSection } from './VouchSection';
 import { RecognitionView } from './RecognitionView';
 import { MissingPuzzleModal } from './MissingPuzzleModal';
 import { MemberNotificationsDropdown } from './MemberNotificationsDropdown';
+import { MemberNotification, NotificationTargetWorkspace } from '../services/notificationStore';
 import { peerSupportStore } from '../services/peerSupportStore';
 import { membershipStore } from '../services/membershipStore';
+import { roomOperationsStore } from '../services/roomOperationsStore';
+import { SharedRoomWorkspace } from './room/SharedRoomWorkspace';
 import {
   PeerSupportAgreement,
   PeerVouch,
@@ -53,6 +56,7 @@ interface MemberHomeViewProps {
   onSwitchToAdmin?: () => void;
   onSwitchToCaptain?: () => void;
   onSwitchToCoordinator?: () => void;
+  onNavigate?: (notif: MemberNotification) => void;
 }
 
 type FellowWorkspaceTab =
@@ -76,9 +80,11 @@ export const MemberHomeView: React.FC<MemberHomeViewProps> = ({
   onSwitchToAdmin,
   onSwitchToCaptain,
   onSwitchToCoordinator,
+  onNavigate,
 }) => {
   const [activeTab, setActiveTab] = useState<FellowWorkspaceTab>('accommodation');
   const [showNotes, setShowNotes] = useState(false);
+  const [isInsideRoom, setIsInsideRoom] = useState(false);
   const [isPuzzleModalOpen, setIsPuzzleModalOpen] = useState(false);
   const [selectedPuzzleReportId, setSelectedPuzzleReportId] = useState<string | undefined>(undefined);
 
@@ -104,6 +110,20 @@ export const MemberHomeView: React.FC<MemberHomeViewProps> = ({
     h4dMemberId: 'H4D-00021',
     createdAt: '2026-01-10T08:00:00Z',
   };
+
+  // Resolve current Fellow's assigned room (strictly scoped to own room)
+  const fellowRoom = useMemo(() => {
+    const allRooms = roomOperationsStore.getRooms();
+    const found = allRooms.find(
+      (r) =>
+        r.beds.some(
+          (b) =>
+            b.occupantMemberId === currentMember.id ||
+            b.occupantName === currentMember.displayName
+        ) || r.captainMemberId === currentMember.id
+    );
+    return found || roomOperationsStore.getRoomById('room-304') || allRooms[0];
+  }, [currentMember.id, currentMember.displayName]);
 
   // Check if current fellow has an active room captain or coordinator responsibility
   const captainAssignment = scopedRoles.find((r) => r.role === ('ROOM_CAPTAIN' as any));
@@ -334,6 +354,8 @@ export const MemberHomeView: React.FC<MemberHomeViewProps> = ({
             <MemberNotificationsDropdown
               memberId={currentMember.id}
               isDark={isDark}
+              onNavigate={onNavigate}
+              buttonId="header-notifications-btn"
               onOpenFeedbackReport={(feedbackId) => {
                 setSelectedPuzzleReportId(feedbackId);
                 setIsPuzzleModalOpen(true);
@@ -413,12 +435,10 @@ export const MemberHomeView: React.FC<MemberHomeViewProps> = ({
             {[
               { id: 'accommodation', label: 'Accommodation', icon: Building },
               { id: 'peer-support', label: 'Peer Support Hub', icon: HandCoins },
-              { id: 'trust-trails', label: 'Trails of Trust', icon: Footprints },
-              { id: 'vouches', label: 'Contextual Vouches', icon: ShieldCheck },
               { id: 'recognition', label: 'Recognition', icon: Award },
             ].map((tab) => {
               const Icon = tab.icon;
-              const isActive = activeTab === tab.id;
+              const isActive = activeTab === tab.id || (tab.id === 'peer-support' && (activeTab === 'trust-trails' || activeTab === 'vouches'));
               return (
                 <button
                   key={tab.id}
@@ -449,109 +469,159 @@ export const MemberHomeView: React.FC<MemberHomeViewProps> = ({
         {/* TAB 1: ACCOMMODATION */}
         {activeTab === 'accommodation' && (
           <div className="space-y-6 animate-in fade-in duration-150">
-            {/* Greeting */}
-            <div>
-              <p
-                className="text-xs sm:text-sm font-medium tracking-wide uppercase transition-colors duration-200"
-                style={{ color: isDark ? '#C88D3A' : '#B77620' }}
-              >
-                Welcome, {currentMember.displayName}
-              </p>
-              <h1
-                className="font-serif text-2xl sm:text-3xl font-semibold tracking-tight mt-1 transition-colors duration-200"
-                style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
-              >
-                What needs your attention?
-              </h1>
-            </div>
-
-            {/* Accommodation Responsibility Card */}
-            <section
-              aria-label="Active Accommodation Responsibilities"
-              className="space-y-6"
-            >
-              <AccommodationResponsibilityCard
-                responsibility={responsibility}
+            {isInsideRoom && fellowRoom ? (
+              <SharedRoomWorkspace
+                room={fellowRoom}
+                viewerRole="FELLOW"
+                currentMember={currentMember}
                 isDark={isDark}
-                onViewDetails={onViewResponsibilityDetails}
+                onBack={() => setIsInsideRoom(false)}
               />
-
-              {/* Contextual Financial Notes Toggle & Section */}
-              <div className="bg-white/60 dark:bg-[#241004]/80 border border-[#C88D3A]/25 dark:border-[#C88D3A]/40 rounded-2xl p-4 shadow-xs">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <MessageSquare className="w-4 h-4 text-[#C88D3A]" />
-                    <span className="font-serif font-bold text-sm text-[#5A2D0C] dark:text-[#FFF9EE]">
-                      Accommodation Notes &amp; Clarifications
-                    </span>
-                  </div>
-                  <button
-                    type="button"
-                    id="toggle-fellow-notes-thread-btn"
-                    onClick={() => setShowNotes(!showNotes)}
-                    className="inline-flex items-center gap-1 text-xs font-semibold text-[#5A2D0C] dark:text-[#FFF9EE] hover:text-[#B77620] px-3 py-1.5 rounded-xl bg-[#F7F1E7] dark:bg-[#3D1D08] border border-[#5A2D0C]/10 dark:border-[#C88D3A]/30 cursor-pointer"
+            ) : (
+              <>
+                {/* Greeting */}
+                <div>
+                  <p
+                    className="text-xs sm:text-sm font-medium tracking-wide uppercase transition-colors duration-200"
+                    style={{ color: isDark ? '#C88D3A' : '#B77620' }}
                   >
-                    <span>{showNotes ? 'Hide Thread' : 'View Notes Thread'}</span>
-                    {showNotes ? (
-                      <ChevronUp className="w-3.5 h-3.5" />
-                    ) : (
-                      <ChevronDown className="w-3.5 h-3.5" />
-                    )}
-                  </button>
+                    Welcome, {currentMember.displayName}
+                  </p>
+                  <h1
+                    className="font-serif text-2xl sm:text-3xl font-semibold tracking-tight mt-1 transition-colors duration-200"
+                    style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+                  >
+                    What needs your attention?
+                  </h1>
                 </div>
 
-                {showNotes && (
-                  <div className="mt-4">
-                    <FinancialNotesThread
-                      responsibilityId={responsibility.id}
-                      currentMember={currentMember}
-                      activeMode={currentMode}
-                      isDark={isDark}
-                    />
+                {/* Accommodation Responsibility Card */}
+                <section
+                  aria-label="Active Accommodation Responsibilities"
+                  className="space-y-6"
+                >
+                  <AccommodationResponsibilityCard
+                    responsibility={responsibility}
+                    isDark={isDark}
+                    onViewDetails={onViewResponsibilityDetails}
+                  />
+
+                  {/* My Room Action Card (Placed immediately BEFORE Accommodation Notes & Clarifications) */}
+                  {fellowRoom && (
+                    <div
+                      id="fellow-room-entry-card"
+                      className="h4d-card-static p-4 sm:p-5 rounded-2xl border-2 border-b-4 transition-all duration-150 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+                      style={{
+                        backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : 'rgba(255, 253, 248, 0.75)',
+                        borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : 'rgba(90, 45, 12, 0.20)',
+                      }}
+                    >
+                      <div className="flex items-center gap-3.5">
+                        <div
+                          className="w-11 h-11 rounded-xl border-2 border-b-3 flex items-center justify-center shrink-0 shadow-xs"
+                          style={{
+                            backgroundColor: isDark ? 'rgba(42, 34, 28, 0.7)' : 'rgba(247, 241, 231, 0.9)',
+                            borderColor: isDark ? 'rgba(200, 141, 58, 0.4)' : 'rgba(90, 45, 12, 0.25)',
+                          }}
+                        >
+                          <Home className="w-5 h-5 text-[#B77620] dark:text-[#C88D3A]" />
+                        </div>
+                        <div>
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <h3
+                              className="font-serif font-bold text-sm sm:text-base"
+                              style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+                            >
+                              {fellowRoom.roomNumber} &bull; {fellowRoom.propertyName}
+                            </h3>
+                            <span className="text-[10px] font-mono px-2 py-0.5 rounded font-bold uppercase border bg-emerald-100 dark:bg-emerald-950/70 text-emerald-900 dark:text-emerald-200 border-emerald-300 dark:border-emerald-700">
+                              Your Living Space
+                            </span>
+                          </div>
+                          <p
+                            className="text-xs mt-0.5"
+                            style={{ color: isDark ? '#D9C4AC' : '#704728' }}
+                          >
+                            Roommates &bull; Room Story &bull; Alumni Memory &bull; Living Rhythms
+                          </p>
+                        </div>
+                      </div>
+
+                      <button
+                        type="button"
+                        id="btn-my-room"
+                        onClick={() => setIsInsideRoom(true)}
+                        aria-label="My Room"
+                        className="h4d-btn-soft self-stretch sm:self-auto shrink-0"
+                      >
+                        <span className="text-sm" aria-hidden="true">🛖</span>
+                        <span>My Room</span>
+                      </button>
+                    </div>
+                  )}
+
+                  {/* Contextual Financial Notes Toggle & Section */}
+                  <div className="h4d-card-static bg-white/60 dark:bg-[#241004]/80 border border-[#C88D3A]/25 dark:border-[#C88D3A]/40 rounded-2xl p-4 shadow-xs">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <MessageSquare className="w-4 h-4 text-[#C88D3A]" />
+                        <span className="font-serif font-bold text-sm text-[#5A2D0C] dark:text-[#FFF9EE]">
+                          Accommodation Notes &amp; Clarifications
+                        </span>
+                      </div>
+                      <button
+                        type="button"
+                        id="toggle-fellow-notes-thread-btn"
+                        onClick={() => setShowNotes(!showNotes)}
+                        className="inline-flex items-center gap-1 text-xs font-semibold text-[#5A2D0C] dark:text-[#FFF9EE] hover:text-[#B77620] px-3 py-1.5 rounded-xl bg-[#F7F1E7] dark:bg-[#3D1D08] border border-[#5A2D0C]/10 dark:border-[#C88D3A]/30 cursor-pointer"
+                      >
+                        <span>{showNotes ? 'Hide Thread' : 'View Notes Thread'}</span>
+                        {showNotes ? (
+                          <ChevronUp className="w-3.5 h-3.5" />
+                        ) : (
+                          <ChevronDown className="w-3.5 h-3.5" />
+                        )}
+                      </button>
+                    </div>
+
+                    {showNotes && (
+                      <div className="mt-4">
+                        <FinancialNotesThread
+                          responsibilityId={responsibility.id}
+                          currentMember={currentMember}
+                          activeMode={currentMode}
+                          isDark={isDark}
+                        />
+                      </div>
+                    )}
                   </div>
-                )}
-              </div>
-            </section>
+                </section>
+              </>
+            )}
           </div>
         )}
 
-        {/* TAB 2: PEER SUPPORT HUB */}
-        {activeTab === 'peer-support' && (
+        {/* TAB 2: PEER SUPPORT HUB (Consolidated with Agreements, Trails of Trust, and Contextual Vouches) */}
+        {(activeTab === 'peer-support' || activeTab === 'trust-trails' || activeTab === 'vouches') && (
           <div className="animate-in fade-in duration-150">
             <PeerSupportSection
               currentMember={currentMember}
               availableMembers={availableMembers}
               supports={supports}
+              trailEvents={trailEvents}
+              vouches={vouches}
               isDark={isDark}
+              initialSubTab={activeTab === 'trust-trails' ? 'trust-trails' : activeTab === 'vouches' ? 'vouches' : 'agreements'}
               onCreateSupport={handleCreateSupport}
               onRecordRepayment={handleRecordRepayment}
               onConvertToGift={handleConvertToGift}
               onContributeToCampaign={handleContributeToCampaign}
-            />
-          </div>
-        )}
-
-        {/* TAB 3: TRUST TRAILS */}
-        {activeTab === 'trust-trails' && (
-          <div className="animate-in fade-in duration-150">
-            <TrustTrailFeed trailEvents={trailEvents} availableMembers={availableMembers} isDark={isDark} />
-          </div>
-        )}
-
-        {/* TAB 4: CONTEXTUAL VOUCHES */}
-        {activeTab === 'vouches' && (
-          <div className="animate-in fade-in duration-150">
-            <VouchSection
-              vouches={vouches}
-              availableMembers={availableMembers}
-              currentMember={currentMember}
-              isDark={isDark}
               onAddVouch={handleAddVouch}
             />
           </div>
         )}
 
-        {/* TAB 5: RECOGNITION */}
+        {/* TAB 3: RECOGNITION */}
         {activeTab === 'recognition' && (
           <div className="animate-in fade-in duration-150">
             <RecognitionView

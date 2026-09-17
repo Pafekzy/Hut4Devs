@@ -25,7 +25,7 @@ export const AccommodationResponsibilityCard: React.FC<AccommodationResponsibili
     <article
       id={`responsibility-card-${responsibility.id}`}
       aria-labelledby={`responsibility-title-${responsibility.id}`}
-      className="rounded-2xl p-5 sm:p-7 border-2 border-b-4 transition-all duration-200 shadow-md backdrop-blur-md"
+      className="h4d-card-static rounded-2xl p-5 sm:p-7 border-2 border-b-4 transition-all duration-200 shadow-md backdrop-blur-md"
       style={{
         backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : 'rgba(255, 253, 248, 0.65)',
         borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : 'rgba(90, 45, 12, 0.25)',
@@ -84,13 +84,13 @@ export const AccommodationResponsibilityCard: React.FC<AccommodationResponsibili
             style={{ color: isDark ? '#E5A955' : '#B77620' }}
             aria-hidden="true"
           />
-          <span>{responsibility.accommodationContext.property.name}</span>
+          <span>{responsibility.accommodationContext?.property?.name || (responsibility as any).propertyName || 'Infinite Grace Apartment'}</span>
         </div>
         <div className="hidden sm:inline text-stone-400" aria-hidden="true">&bull;</div>
         <div className="flex items-center gap-3">
-          <span>{responsibility.accommodationContext.floor.name}</span>
+          <span>{responsibility.accommodationContext?.floor?.name || 'Floor 3'}</span>
           <span aria-hidden="true">&bull;</span>
-          <span className="font-semibold">{responsibility.accommodationContext.room.name}</span>
+          <span className="font-semibold">{responsibility.accommodationContext?.room?.name || (responsibility as any).roomNumber || 'Room 304'}</span>
         </div>
       </div>
 

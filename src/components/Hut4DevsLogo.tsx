@@ -57,7 +57,7 @@ export const Hut4DevsLogo: React.FC<Hut4DevsLogoProps> = ({
     >
       {/* =====================================================
           HUT4DEVS MARK
-
+          
           Keycap  = Developers
           Roof    = Hut / Community
           "4"     = Hut4Devs

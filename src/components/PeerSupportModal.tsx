@@ -52,7 +52,7 @@ export const PeerSupportModal: React.FC<PeerSupportModalProps> = ({
   );
   const [amount, setAmount] = useState<number>(20000);
   const [purpose, setPurpose] = useState<string>('Support accommodation bridge during stipend transition');
-
+  
   // Loan-specific
   const [repaymentPeriod, setRepaymentPeriod] = useState<string>('2 weeks');
   const [repaymentDate, setRepaymentDate] = useState<string>('2026-09-30');
