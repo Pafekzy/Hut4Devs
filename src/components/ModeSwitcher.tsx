@@ -197,13 +197,13 @@ export const ModeSwitcher: React.FC<ModeSwitcherProps> = ({
         aria-controls="mode-switcher-menu"
         aria-label={`Active capacity: ${getShortModeLabel(currentMode)}. Switch active capacity`}
         title={`Active capacity: ${getShortModeLabel(currentMode)}`}
-        className={`inline-flex items-center gap-2 px-3 py-1.5 min-h-[40px] rounded-xl text-xs font-semibold border transition-all cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C88D3A] focus-visible:ring-offset-2 ${
+        className={`inline-flex items-center gap-2 px-3 py-1.5 min-h-[40px] rounded-xl text-xs font-semibold border transition-all cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C46F18] focus-visible:ring-offset-2 ${
           isDark
             ? 'bg-[#2F1707] hover:bg-[#3E200C] border-[#C88D3A] text-[#FFF9EE] shadow-xs'
-            : 'bg-[#FFF9EE] hover:bg-[#F7F1E7] border-[#C88D3A] text-[#5A2D0C] shadow-xs'
+            : 'bg-[#FFF0D6] hover:bg-[#E8BF88] border-[#CF9F68] text-[#432006] shadow-xs'
         }`}
       >
-        <span className="shrink-0 text-[#C88D3A]">
+        <span className="shrink-0 text-[#C46F18]">
           {getModeIcon(currentMode)}
         </span>
         <span className="font-semibold tracking-tight truncate max-w-[130px] sm:max-w-none">
@@ -211,7 +211,7 @@ export const ModeSwitcher: React.FC<ModeSwitcherProps> = ({
         </span>
         <ChevronDown
           className={`w-3.5 h-3.5 shrink-0 transition-transform duration-200 ${
-            isOpen ? 'rotate-180 text-[#C88D3A]' : isDark ? 'text-[#C88D3A]' : 'text-[#8A5D3B]'
+            isOpen ? 'rotate-180 text-[#C46F18]' : isDark ? 'text-[#C46F18]' : 'text-[#72451F]'
           }`}
           aria-hidden="true"
         />
@@ -227,19 +227,19 @@ export const ModeSwitcher: React.FC<ModeSwitcherProps> = ({
           className={`absolute right-0 top-full mt-1.5 w-72 max-w-[calc(100vw-32px)] z-50 rounded-xl border overflow-hidden shadow-2xl transition-all duration-150 ${
             isDark
               ? 'bg-[#2F1707] border-[#C88D3A] text-[#FFF9EE] shadow-black/70'
-              : 'bg-[#FFF9EE] border-[#C88D3A] text-[#5A2D0C] shadow-[#5A2D0C]/15'
+              : 'bg-[#FFF0D6] border-[#CF9F68] text-[#432006] shadow-[#432006]/15'
           }`}
         >
           {/* Member Identity Access Header (Section 25) */}
           <div
             className={`px-3.5 py-2.5 border-b ${
-              isDark ? 'border-[#C88D3A]/25 bg-[#3E200C]/70' : 'border-[#C88D3A]/25 bg-[#F7F1E7]'
+              isDark ? 'border-[#C88D3A]/25 bg-[#3E200C]/70' : 'border-[#CF9F68] bg-[#F3D5AB]'
             }`}
           >
             <div className="flex items-center gap-2.5">
               <div
                 className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs shrink-0 ${
-                  isDark ? 'bg-[#C88D3A] text-[#2F1707]' : 'bg-[#5A2D0C] text-[#FFF9EE]'
+                  isDark ? 'bg-[#C88D3A] text-[#2F1707]' : 'bg-[#432006] text-[#FFF0D6]'
                 }`}
               >
                 {member.displayName.charAt(0)}
@@ -247,14 +247,14 @@ export const ModeSwitcher: React.FC<ModeSwitcherProps> = ({
               <div className="min-w-0 flex-1">
                 <p
                   className={`text-xs font-bold truncate leading-tight ${
-                    isDark ? 'text-[#FFF9EE]' : 'text-[#5A2D0C]'
+                    isDark ? 'text-[#FFF9EE]' : 'text-[#432006]'
                   }`}
                 >
                   {member.displayName}
                 </p>
                 <p
                   className={`text-[10px] font-mono truncate ${
-                    isDark ? 'text-[#E2AB5D]' : 'text-[#8A5D3B]'
+                    isDark ? 'text-[#E2AB5D]' : 'text-[#72451F]'
                   }`}
                 >
                   {member.h4dMemberId || 'H4D-MEMBER'}
@@ -267,7 +267,7 @@ export const ModeSwitcher: React.FC<ModeSwitcherProps> = ({
           <div className="px-3.5 pt-2 pb-1">
             <span
               className={`text-[10px] font-bold uppercase tracking-wider ${
-                isDark ? 'text-[#C88D3A]' : 'text-[#B77620]'
+                isDark ? 'text-[#C88D3A]' : 'text-[#9F520B]'
               }`}
             >
               Active Acting Capacity
@@ -292,10 +292,10 @@ export const ModeSwitcher: React.FC<ModeSwitcherProps> = ({
                     isSelected
                       ? isDark
                         ? 'bg-[#C88D3A] text-[#2F1707] font-semibold'
-                        : 'bg-[#C88D3A]/25 text-[#5A2D0C] font-semibold'
+                        : 'bg-[#C46F18]/25 text-[#432006] font-semibold'
                       : isDark
                         ? 'text-[#FFF9EE] hover:bg-[#5A2D0C] focus:bg-[#5A2D0C]'
-                        : 'text-[#5A2D0C] hover:bg-[#C88D3A]/15 focus:bg-[#C88D3A]/15'
+                        : 'text-[#432006] hover:bg-[#C46F18]/15 focus:bg-[#C46F18]/15'
                   }`}
                 >
                   <span
@@ -303,8 +303,8 @@ export const ModeSwitcher: React.FC<ModeSwitcherProps> = ({
                       isSelected
                         ? isDark
                           ? 'text-[#2F1707]'
-                          : 'text-[#5A2D0C]'
-                        : 'text-[#C88D3A]'
+                          : 'text-[#432006]'
+                        : 'text-[#C46F18]'
                     }`}
                   >
                     {getModeIcon(mode)}
@@ -317,7 +317,7 @@ export const ModeSwitcher: React.FC<ModeSwitcherProps> = ({
                       {isSelected && (
                         <Check
                           className={`w-3.5 h-3.5 shrink-0 ${
-                            isDark ? 'text-[#2F1707]' : 'text-[#5A2D0C]'
+                            isDark ? 'text-[#2F1707]' : 'text-[#432006]'
                           }`}
                           aria-hidden="true"
                         />
@@ -328,10 +328,10 @@ export const ModeSwitcher: React.FC<ModeSwitcherProps> = ({
                         isSelected
                           ? isDark
                             ? 'text-[#2F1707]/85'
-                            : 'text-[#5A2D0C]/85'
+                            : 'text-[#432006]/85'
                           : isDark
                             ? 'text-[#E2AB5D]/80'
-                            : 'text-[#8A5D3B]'
+                            : 'text-[#72451F]'
                       }`}
                     >
                       {getModeDescription(mode)}

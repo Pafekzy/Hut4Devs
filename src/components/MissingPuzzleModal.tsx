@@ -181,13 +181,13 @@ const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
         className={`w-full px-3.5 py-2.5 rounded-xl border text-xs font-semibold flex items-center justify-between transition-all cursor-pointer outline-hidden active:scale-[0.99] ${
           isDark
             ? 'bg-[#180A02] text-[#FFF9EE] border-[#C88D3A]/40 hover:border-[#C88D3A] focus-visible:ring-2 focus-visible:ring-[#C88D3A]'
-            : 'bg-white text-[#5A2D0C] border-[#EAE0D0] hover:border-[#C88D3A] focus-visible:ring-2 focus-visible:ring-[#C88D3A]'
-        } ${isOpen ? 'ring-2 ring-[#C88D3A] border-[#C88D3A]' : ''}`}
+            : 'bg-[#FFF8EE] text-[#432006] border-[#CF9F68] hover:border-[#C46F18] focus-visible:ring-2 focus-visible:ring-[#C46F18]'
+        } ${isOpen ? 'ring-2 ring-[#C46F18] border-[#C46F18]' : ''}`}
       >
         <span className="truncate">{value}</span>
         <ChevronDown
           className={`w-4 h-4 shrink-0 transition-transform duration-200 ${
-            isOpen ? 'rotate-180 text-[#C88D3A]' : isDark ? 'text-[#C88D3A]' : 'text-[#8A5D3B]'
+            isOpen ? 'rotate-180 text-[#C46F18]' : isDark ? 'text-[#C46F18]' : 'text-[#72451F]'
           }`}
           aria-hidden="true"
         />
@@ -201,8 +201,8 @@ const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
           aria-label="Issue categories"
           className={`absolute left-0 right-0 top-full mt-1.5 z-50 rounded-xl border overflow-hidden shadow-xl transition-all duration-150 p-1 ${
             isDark
-              ? 'bg-[#2F1707] border-[#C88D3A] text-[#FFF9EE] shadow-black/80'
-              : 'bg-[#FFF9EE] border-[#C88D3A] text-[#5A2D0C] shadow-[#5A2D0C]/15'
+              ? 'bg-[#2F1707] border-[#C46F18] text-[#FFF9EE] shadow-black/80'
+              : 'bg-[#FFF0D6] border-[#C46F18] text-[#432006] shadow-[#432006]/15'
           }`}
         >
           {categories.map((cat) => {
@@ -220,18 +220,18 @@ const CategoryDropdown: React.FC<CategoryDropdownProps> = ({
                 className={`w-full text-left px-3 py-2 rounded-lg text-xs font-semibold flex items-center justify-between transition-colors cursor-pointer ${
                   isSelected
                     ? isDark
-                      ? 'bg-[#C88D3A] text-[#2F1707] font-bold'
-                      : 'bg-[#C88D3A]/25 text-[#5A2D0C] font-bold'
+                      ? 'bg-[#C46F18] text-[#241104] font-bold'
+                      : 'bg-[#C46F18]/25 text-[#432006] font-bold'
                     : isDark
-                    ? 'text-[#FFF9EE] hover:bg-[#5A2D0C] focus:bg-[#5A2D0C]'
-                    : 'text-[#5A2D0C] hover:bg-[#C88D3A]/15 focus:bg-[#C88D3A]/15'
+                    ? 'text-[#FFF9EE] hover:bg-[#432006] focus:bg-[#432006]'
+                    : 'text-[#432006] hover:bg-[#C46F18]/15 focus:bg-[#C46F18]/15'
                 }`}
               >
                 <span>{cat}</span>
                 {isSelected && (
                   <Check
                     className={`w-3.5 h-3.5 shrink-0 ${
-                      isDark ? 'text-[#2F1707]' : 'text-[#5A2D0C]'
+                      isDark ? 'text-[#241104]' : 'text-[#432006]'
                     }`}
                   />
                 )}
@@ -533,40 +533,40 @@ export const MissingPuzzleModal: React.FC<MissingPuzzleModalProps> = ({
       case 'OPEN':
         return {
           label: 'Pending Review',
-          className: 'bg-amber-500/15 text-amber-700 dark:text-amber-400 border border-amber-500/30',
-          dotClass: 'bg-amber-500',
+          className: 'bg-[#FBF0DD] text-[#9F520B] dark:text-amber-400 border border-[#CF9F68]',
+          dotClass: 'bg-[#9F520B]',
         };
       case 'UNDER_REVIEW':
       case 'ACKNOWLEDGED':
         return {
           label: 'Under Review',
-          className: 'bg-blue-500/15 text-blue-700 dark:text-blue-400 border border-blue-500/30',
-          dotClass: 'bg-blue-500',
+          className: 'bg-[#EAF1F8] text-[#2B4C6F] dark:text-blue-400 border border-[#9AB5D0]',
+          dotClass: 'bg-[#2B4C6F]',
         };
       case 'IN_PROGRESS':
         return {
           label: 'In Progress',
-          className: 'bg-purple-500/15 text-purple-700 dark:text-purple-400 border border-purple-500/30',
-          dotClass: 'bg-purple-500',
+          className: 'bg-[#F3EBF0] text-[#7A3E54] dark:text-purple-400 border border-[#C8A4B6]',
+          dotClass: 'bg-[#7A3E54]',
         };
       case 'IMPLEMENTED':
       case 'RESOLVED':
         return {
           label: 'Implemented',
-          className: 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30',
-          dotClass: 'bg-emerald-500',
+          className: 'bg-[#EBF2DD] text-[#3D5A1E] dark:text-emerald-400 border border-[#A8C782]',
+          dotClass: 'bg-[#3D5A1E]',
         };
       case 'CLOSED':
         return {
           label: 'Closed',
-          className: 'bg-stone-500/15 text-stone-700 dark:text-stone-400 border border-stone-500/30',
-          dotClass: 'bg-stone-500',
+          className: 'bg-[#F3D5AB] text-[#72451F] dark:text-[#E5D3BA] border border-[#CF9F68]',
+          dotClass: 'bg-[#72451F]',
         };
       default:
         return {
           label: status,
-          className: 'bg-stone-500/15 text-stone-700 dark:text-stone-400 border border-stone-500/30',
-          dotClass: 'bg-stone-500',
+          className: 'bg-[#F3D5AB] text-[#72451F] dark:text-[#E5D3BA] border border-[#CF9F68]',
+          dotClass: 'bg-[#72451F]',
         };
     }
   };
@@ -624,25 +624,25 @@ export const MissingPuzzleModal: React.FC<MissingPuzzleModalProps> = ({
         className={`w-full max-w-3xl rounded-3xl border-2 transition-all duration-200 overflow-hidden shadow-2xl my-auto ${
           isDark
             ? 'bg-[#2F1707] text-[#FFF9EE] border-[#C88D3A]/60 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.8),0_0_0_1px_rgba(200,141,58,0.2)]'
-            : 'bg-[#FFFDF9] text-[#5A2D0C] border-[#5A2D0C]/30 shadow-[0_20px_50px_-15px_rgba(90,45,12,0.35),0_0_0_1px_rgba(200,141,58,0.25)]'
+            : 'bg-[#FAE5C5] text-[#432006] border-[#CF9F68] shadow-[0_20px_50px_-15px_rgba(67,32,6,0.35),0_0_0_1px_rgba(196,111,24,0.25)]'
         }`}
       >
         {/* Top Header Bar */}
         <div
           className={`px-5 sm:px-6 py-4 border-b flex items-center justify-between ${
-            isDark ? 'bg-[#231004] border-[#3E200C]' : 'bg-[#F7F1E7] border-[#EAE0D0]'
+            isDark ? 'bg-[#231004] border-[#3E200C]' : 'bg-[#FFF0D6] border-[#DDB985]'
           }`}
         >
           <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-[#5A2D0C] border border-[#C88D3A] flex items-center justify-center shadow-inner shrink-0">
-              <Puzzle className="w-5 h-5 text-[#C88D3A]" />
+            <div className="w-9 h-9 rounded-xl bg-[#432006] border border-[#C46F18] flex items-center justify-center shadow-inner shrink-0">
+              <Puzzle className="w-5 h-5 text-[#C46F18]" />
             </div>
             <div>
               <div className="flex items-center gap-2 flex-wrap">
                 <h2 id="missing-puzzle-title" className="font-serif font-bold text-base sm:text-lg">
                   Fix a Puzzle
                 </h2>
-                <span className="text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 rounded-full border bg-[#C88D3A]/15 border-[#C88D3A]/40 text-[#B77620] dark:text-[#E2AB5D] font-semibold">
+                <span className="text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 rounded-full border bg-[#C46F18]/15 border-[#C46F18]/40 text-[#9F520B] dark:text-[#E5A857] font-semibold">
                   Community Improvement System
                 </span>
               </div>
@@ -656,7 +656,7 @@ export const MissingPuzzleModal: React.FC<MissingPuzzleModalProps> = ({
             type="button"
             onClick={onClose}
             aria-label="Close modal"
-            className="p-1.5 rounded-xl border border-transparent hover:border-[#C88D3A]/40 hover:bg-[#C88D3A]/10 transition-colors cursor-pointer"
+            className="p-1.5 rounded-xl border border-transparent hover:border-[#C46F18]/40 hover:bg-[#C46F18]/10 transition-colors cursor-pointer"
           >
             <X className="w-5 h-5 opacity-70 hover:opacity-100" />
           </button>
@@ -668,10 +668,10 @@ export const MissingPuzzleModal: React.FC<MissingPuzzleModalProps> = ({
             3. My Reports & Community Trail */}
         <div
           className={`px-5 sm:px-6 pt-3 pb-2 border-b flex flex-wrap items-center justify-between gap-2 text-xs ${
-            isDark ? 'bg-[#2B1406] border-[#3E200C]' : 'bg-[#FFF9EE] border-[#EAE0D0]'
+            isDark ? 'bg-[#2B1406] border-[#3E200C]' : 'bg-[#F3D5AB] border-[#DDB985]'
           }`}
         >
-          <div className="inline-flex p-1 rounded-xl bg-black/10 dark:bg-black/25 border border-[#C88D3A]/20 gap-1 flex-wrap sm:flex-nowrap">
+          <div className="inline-flex p-1 rounded-xl bg-black/10 dark:bg-black/25 border border-[#C46F18]/20 gap-1 flex-wrap sm:flex-nowrap">
             {/* 1. Community Puzzle Board (Default) */}
             <button
               type="button"
@@ -679,13 +679,13 @@ export const MissingPuzzleModal: React.FC<MissingPuzzleModalProps> = ({
               onClick={() => setActiveView('COMMUNITY_BOARD')}
               className={`px-3 py-1.5 rounded-lg font-bold transition-all flex items-center gap-1.5 cursor-pointer text-xs ${
                 activeView === 'COMMUNITY_BOARD'
-                  ? 'bg-[#5A2D0C] text-white shadow-xs'
-                  : 'opacity-70 hover:opacity-100'
+                  ? 'bg-[#432006] text-[#FFF0D6] shadow-xs'
+                  : 'text-[#72451F] dark:text-[#D9C4AC] hover:text-[#432006] dark:hover:text-[#FFF9EE]'
               }`}
             >
-              <Layers className="w-3.5 h-3.5 text-[#C88D3A]" />
+              <Layers className="w-3.5 h-3.5 text-[#C46F18]" />
               <span>Community Puzzle Board</span>
-              <span className="px-1.5 py-0.2 rounded-full text-[10px] bg-[#C88D3A]/25 text-[#C88D3A] dark:text-[#FFF9EE] font-mono font-bold">
+              <span className="px-1.5 py-0.2 rounded-full text-[10px] bg-[#C46F18]/25 text-[#432006] dark:text-[#FFF9EE] font-mono font-bold">
                 {allReports.length}
               </span>
             </button>
@@ -701,11 +701,11 @@ export const MissingPuzzleModal: React.FC<MissingPuzzleModalProps> = ({
               }}
               className={`px-3 py-1.5 rounded-lg font-bold transition-all flex items-center gap-1.5 cursor-pointer text-xs ${
                 activeView === 'SPOT_AND_LOG'
-                  ? 'bg-[#5A2D0C] text-white shadow-xs'
-                  : 'opacity-70 hover:opacity-100'
+                  ? 'bg-[#432006] text-[#FFF0D6] shadow-xs'
+                  : 'text-[#72451F] dark:text-[#D9C4AC] hover:text-[#432006] dark:hover:text-[#FFF9EE]'
               }`}
             >
-              <Puzzle className="w-3.5 h-3.5 text-[#C88D3A]" />
+              <Puzzle className="w-3.5 h-3.5 text-[#C46F18]" />
               <span>Spot &amp; Log</span>
             </button>
 
@@ -717,13 +717,13 @@ export const MissingPuzzleModal: React.FC<MissingPuzzleModalProps> = ({
               onClick={() => setActiveView('MY_TRAIL')}
               className={`px-3 py-1.5 rounded-lg font-bold transition-all flex items-center gap-1.5 cursor-pointer text-xs ${
                 activeView === 'MY_TRAIL'
-                  ? 'bg-[#5A2D0C] text-white shadow-xs'
-                  : 'opacity-70 hover:opacity-100'
+                  ? 'bg-[#432006] text-[#FFF0D6] shadow-xs'
+                  : 'text-[#72451F] dark:text-[#D9C4AC] hover:text-[#432006] dark:hover:text-[#FFF9EE]'
               }`}
             >
-              <Clock className="w-3.5 h-3.5 text-[#C88D3A]" />
+              <Clock className="w-3.5 h-3.5 text-[#C46F18]" />
               <span>My Reports &amp; Community Trail</span>
-              <span className="px-1.5 py-0.2 rounded-full text-[10px] bg-[#C88D3A] text-white font-mono font-bold">
+              <span className="px-1.5 py-0.2 rounded-full text-[10px] bg-[#C46F18] text-[#241104] font-mono font-bold">
                 {myReports.length}
               </span>
             </button>
@@ -742,12 +742,12 @@ export const MissingPuzzleModal: React.FC<MissingPuzzleModalProps> = ({
             {/* Context & Action Banner */}
             <div
               className={`p-4 rounded-2xl border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 ${
-                isDark ? 'bg-[#231004] border-[#C88D3A]/30' : 'bg-[#FDFBF7] border-[#5A2D0C]/15 shadow-xs'
+                isDark ? 'bg-[#231004] border-[#C88D3A]/30' : 'bg-[#FFF0D6] border-[#CF9F68] shadow-xs'
               }`}
             >
               <div className="space-y-1 max-w-lg">
-                <div className="flex items-center gap-1.5 text-xs font-bold text-[#C88D3A]">
-                  <Layers className="w-4 h-4" />
+                <div className="flex items-center gap-1.5 text-xs font-bold text-[#9F520B] dark:text-[#E5A857]">
+                  <Layers className="w-4 h-4 text-[#C46F18]" />
                   <span>See What Is Already Being Solved</span>
                 </div>
                 <p className="text-xs opacity-75 leading-snug">
@@ -761,9 +761,9 @@ export const MissingPuzzleModal: React.FC<MissingPuzzleModalProps> = ({
                   setActiveView('SPOT_AND_LOG');
                   setSubmittedReport(null);
                 }}
-                className="px-4 py-2 text-xs font-bold rounded-xl bg-[#5A2D0C] text-[#FFF9EE] border border-[#C88D3A] hover:bg-[#3D1E08] active:translate-y-[1px] transition-all flex items-center gap-1.5 shrink-0 cursor-pointer shadow-sm"
+                className="px-4 py-2 text-xs font-bold rounded-xl bg-[#432006] text-[#FFF0D6] border border-[#C46F18] hover:bg-[#341905] active:translate-y-[1px] transition-all flex items-center gap-1.5 shrink-0 cursor-pointer shadow-sm"
               >
-                <PlusCircle className="w-4 h-4 text-[#C88D3A]" />
+                <PlusCircle className="w-4 h-4 text-[#C46F18]" />
                 <span>Spot &amp; Log a New Puzzle</span>
               </button>
             </div>
@@ -771,26 +771,26 @@ export const MissingPuzzleModal: React.FC<MissingPuzzleModalProps> = ({
             {/* Lifecycle Stages Indicator */}
             <div
               className={`px-3.5 py-2.5 rounded-xl border text-[11px] flex flex-wrap items-center justify-between gap-2 ${
-                isDark ? 'bg-[#180A02] border-[#C88D3A]/20' : 'bg-white border-[#5A2D0C]/10'
+                isDark ? 'bg-[#180A02] border-[#C88D3A]/20' : 'bg-[#FFF8EE] border-[#CF9F68]'
               }`}
             >
-              <span className="font-bold text-[#C88D3A] uppercase tracking-wider text-[10px]">
+              <span className="font-bold text-[#9F520B] dark:text-[#E5A857] uppercase tracking-wider text-[10px]">
                 Technical Lifecycle:
               </span>
               <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
-                <span className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-amber-500/15 text-amber-700 dark:text-amber-400 border border-amber-500/30">
+                <span className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-[#FBF0DD] text-[#9F520B] dark:text-amber-400 border border-[#CF9F68]">
                   1. Pending Review
                 </span>
                 <span className="opacity-40">→</span>
-                <span className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-blue-500/15 text-blue-700 dark:text-blue-400 border border-blue-500/30">
+                <span className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-[#EAF1F8] text-[#2B4C6F] dark:text-blue-400 border border-[#9AB5D0]">
                   2. Under Review
                 </span>
                 <span className="opacity-40">→</span>
-                <span className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-purple-500/15 text-purple-700 dark:text-purple-400 border border-purple-500/30">
+                <span className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-[#F3EBF0] text-[#7A3E54] dark:text-purple-400 border border-[#C8A4B6]">
                   3. In Progress
                 </span>
                 <span className="opacity-40">→</span>
-                <span className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30">
+                <span className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-[#EBF2DD] text-[#3D5A1E] dark:text-emerald-400 border border-[#A8C782]">
                   4. Implemented
                 </span>
               </div>
@@ -811,7 +811,7 @@ export const MissingPuzzleModal: React.FC<MissingPuzzleModalProps> = ({
                     className={`w-full pl-8 pr-3 py-2 rounded-xl border text-xs outline-hidden transition-all ${
                       isDark
                         ? 'bg-[#180A02] border-[#C88D3A]/30 text-[#FFF9EE] focus:border-[#C88D3A]'
-                        : 'bg-white border-[#EAE0D0] text-[#5A2D0C] focus:border-[#5A2D0C]'
+                        : 'bg-[#FFF8EE] border-[#CF9F68] text-[#432006] focus:border-[#C46F18]'
                     }`}
                   />
                   {boardSearch && (
@@ -834,7 +834,7 @@ export const MissingPuzzleModal: React.FC<MissingPuzzleModalProps> = ({
                   className={`px-3 py-2 rounded-xl border text-xs outline-hidden cursor-pointer ${
                     isDark
                       ? 'bg-[#180A02] border-[#C88D3A]/30 text-[#FFF9EE] focus:border-[#C88D3A]'
-                      : 'bg-white border-[#EAE0D0] text-[#5A2D0C] focus:border-[#5A2D0C]'
+                      : 'bg-[#FFF8EE] border-[#CF9F68] text-[#432006] focus:border-[#C46F18]'
                   }`}
                 >
                   <option value="ALL">All Categories</option>
@@ -863,8 +863,8 @@ export const MissingPuzzleModal: React.FC<MissingPuzzleModalProps> = ({
                     onClick={() => setBoardStatusFilter(st.id)}
                     className={`px-2.5 py-1 text-[11px] font-bold rounded-lg transition-all cursor-pointer ${
                       boardStatusFilter === st.id
-                        ? 'bg-[#5A2D0C] text-white shadow-xs'
-                        : 'bg-black/5 dark:bg-white/5 opacity-70 hover:opacity-100'
+                        ? 'bg-[#432006] text-[#FFF0D6] shadow-xs'
+                        : 'bg-[#FFF0D6] dark:bg-white/5 border border-[#DDB985] dark:border-transparent text-[#72451F] dark:text-[#D9C4AC] hover:border-[#CF9F68]'
                     }`}
                   >
                     {st.label}
@@ -877,13 +877,13 @@ export const MissingPuzzleModal: React.FC<MissingPuzzleModalProps> = ({
             {filteredBoardReports.length === 0 ? (
               <div
                 className={`py-12 text-center rounded-2xl border ${
-                  isDark ? 'bg-[#231004]/50 border-[#C88D3A]/20' : 'bg-[#FDFBF7] border-[#5A2D0C]/10'
+                  isDark ? 'bg-[#231004]/50 border-[#C88D3A]/20' : 'bg-[#FFF0D6] border-[#CF9F68]'
                 }`}
               >
-                <div className="w-10 h-10 rounded-xl bg-[#C88D3A]/10 text-[#C88D3A] flex items-center justify-center mx-auto mb-2">
-                  <Puzzle className="w-5 h-5" />
+                <div className="w-10 h-10 rounded-xl bg-[#C46F18]/15 text-[#9F520B] flex items-center justify-center mx-auto mb-2">
+                  <Puzzle className="w-5 h-5 text-[#C46F18]" />
                 </div>
-                <p className="text-xs font-bold text-[#5A2D0C] dark:text-[#FFF9EE]">
+                <p className="text-xs font-bold text-[#432006] dark:text-[#FFF9EE]">
                   No matching community puzzle pieces found
                 </p>
                 <p className="text-[11px] opacity-70 mt-1 max-w-sm mx-auto">
@@ -897,7 +897,7 @@ export const MissingPuzzleModal: React.FC<MissingPuzzleModalProps> = ({
                     setActiveView('SPOT_AND_LOG');
                     setSubmittedReport(null);
                   }}
-                  className="mt-3 px-4 py-1.5 text-xs font-bold rounded-lg bg-[#C88D3A] text-white hover:bg-[#B77620] cursor-pointer"
+                  className="mt-3 px-4 py-1.5 text-xs font-bold rounded-lg bg-[#C46F18] text-[#241104] hover:bg-[#9F520B] cursor-pointer"
                 >
                   Spot &amp; Log This Piece →
                 </button>
@@ -916,14 +916,14 @@ export const MissingPuzzleModal: React.FC<MissingPuzzleModalProps> = ({
                       className={`p-4 rounded-2xl border transition-all ${
                         isDark
                           ? 'bg-[#231004] border-[#C88D3A]/30 text-[#FFF9EE] hover:border-[#C88D3A]/60'
-                          : 'bg-white border-[#5A2D0C]/15 text-[#5A2D0C] hover:border-[#C88D3A]/50 shadow-xs'
+                          : 'bg-[#FFF0D6] border-[#CF9F68] text-[#432006] hover:border-[#C46F18] shadow-xs'
                       }`}
                     >
                       <div className="flex items-start justify-between gap-3">
                         <div className="space-y-1.5 flex-1 min-w-0">
                           {/* Top Badges */}
                           <div className="flex flex-wrap items-center gap-2">
-                            <span className="px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-[#C88D3A]/15 text-[#C88D3A]">
+                            <span className="px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-[#C46F18]/15 text-[#9F520B] dark:text-[#E5A857]">
                               {item.category}
                             </span>
                             <span
@@ -933,14 +933,14 @@ export const MissingPuzzleModal: React.FC<MissingPuzzleModalProps> = ({
                               {statusInfo.label}
                             </span>
                             {isReporter && (
-                              <span className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-[#5A2D0C] text-[#FFF9EE] border border-[#C88D3A]">
+                              <span className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-[#432006] text-[#FFF0D6] border border-[#C46F18]">
                                 My Report
                               </span>
                             )}
                           </div>
 
                           {/* Title */}
-                          <h4 className="font-serif font-bold text-sm text-[#5A2D0C] dark:text-[#FFF9EE] leading-tight">
+                          <h4 className="font-serif font-bold text-sm text-[#432006] dark:text-[#FFF9EE] leading-tight">
                             {item.title}
                           </h4>
 
@@ -952,14 +952,14 @@ export const MissingPuzzleModal: React.FC<MissingPuzzleModalProps> = ({
                           {/* Context & Metadata (Strictly preserving privacy: no email or private IDs exposed) */}
                           <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] opacity-75 pt-1">
                             <span className="flex items-center gap-1">
-                              <Compass className="w-3.5 h-3.5 text-[#C88D3A]" />
+                              <Compass className="w-3.5 h-3.5 text-[#C46F18]" />
                               <strong>Context:</strong> {item.locationContext || item.pageContext}
                             </span>
                             <span>
                               <strong>Logged:</strong> {new Date(item.createdAt).toLocaleDateString()}
                             </span>
                             {item.involvementPreference && (
-                              <span className="text-[10px] px-2 py-0.5 rounded bg-black/5 dark:bg-white/5 font-medium">
+                              <span className="text-[10px] px-2 py-0.5 rounded bg-[#FAE5C5] dark:bg-white/5 border border-[#DDB985] dark:border-transparent font-medium text-[#72451F] dark:text-[#D9C4AC]">
                                 {formatInvolvementLabel(item.involvementPreference)}
                               </span>
                             )}
@@ -971,11 +971,11 @@ export const MissingPuzzleModal: React.FC<MissingPuzzleModalProps> = ({
                               className={`mt-2 p-2 rounded-lg text-[11px] border ${
                                 isDark
                                   ? 'bg-[#180A02] border-[#C88D3A]/20 text-[#FFF9EE]/90'
-                                  : 'bg-[#FFF9EE] border-[#C88D3A]/25 text-[#5A2D0C]/90'
+                                  : 'bg-[#FFF8EE] border-[#CF9F68] text-[#432006]/90'
                               }`}
                             >
                               <div className="flex items-center justify-between text-[10px] opacity-75 mb-0.5">
-                                <span className="font-bold text-[#C88D3A]">
+                                <span className="font-bold text-[#9F520B] dark:text-[#E5A857]">
                                   Latest Progress: {formatEventName(latestEvent.eventType)}
                                 </span>
                                 <span>{new Date(latestEvent.timestamp).toLocaleDateString()}</span>
@@ -1009,11 +1009,11 @@ export const MissingPuzzleModal: React.FC<MissingPuzzleModalProps> = ({
                   className={`p-4 sm:p-5 rounded-2xl border-2 transition-all ${
                     isDark
                       ? 'bg-[#231004] border-[#C88D3A]/30'
-                      : 'bg-[#FDFBF7] border-[#5A2D0C]/15 shadow-inner'
+                      : 'bg-[#FFF0D6] border-[#CF9F68] shadow-inner'
                   }`}
                 >
                   <div className="text-center space-y-1 mb-4">
-                    <h3 className="font-serif font-semibold text-sm sm:text-base text-[#5A2D0C] dark:text-[#FFF9EE]">
+                    <h3 className="font-serif font-semibold text-sm sm:text-base text-[#432006] dark:text-[#FFF9EE]">
                       {isSlotted ? 'Puzzle Piece Slotted in Place' : 'Drag or Click the Missing Piece to Slot It'}
                     </h3>
                     <p className="text-[11px] opacity-70">
@@ -1032,24 +1032,24 @@ export const MissingPuzzleModal: React.FC<MissingPuzzleModalProps> = ({
                       title="Chamber puzzle slot"
                       className={`w-36 h-28 rounded-2xl border-2 border-dashed flex flex-col items-center justify-center gap-1 transition-all cursor-pointer ${
                         isSlotted
-                          ? 'border-emerald-500 bg-emerald-500/10 shadow-[0_0_15px_rgba(16,185,129,0.2)]'
+                          ? 'border-[#557A2B] bg-[#EBF2DD] shadow-[0_0_15px_rgba(85,122,43,0.2)]'
                           : isDragging
-                          ? 'border-[#C88D3A] bg-[#C88D3A]/15 scale-105'
-                          : 'border-[#C88D3A]/40 bg-black/5 dark:bg-black/20 hover:border-[#C88D3A]'
+                          ? 'border-[#C46F18] bg-[#C46F18]/15 scale-105'
+                          : 'border-[#CF9F68] bg-[#FFF8EE] dark:bg-black/20 hover:border-[#C46F18]'
                       }`}
                     >
                       {isSlotted ? (
                         <>
-                          <div className="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center shadow-md">
+                          <div className="w-10 h-10 rounded-xl bg-[#3D5A1E] text-white flex items-center justify-center shadow-md">
                             <CheckCircle2 className="w-6 h-6" />
                           </div>
-                          <span className="text-[11px] font-bold text-emerald-600 dark:text-emerald-400">
+                          <span className="text-[11px] font-bold text-[#3D5A1E] dark:text-emerald-400">
                             Piece Slotted
                           </span>
                         </>
                       ) : (
                         <>
-                          <div className="w-10 h-10 rounded-xl border border-dashed border-[#C88D3A]/60 flex items-center justify-center text-[#C88D3A]">
+                          <div className="w-10 h-10 rounded-xl border border-dashed border-[#C46F18]/60 flex items-center justify-center text-[#C46F18]">
                             <Puzzle className="w-5 h-5 opacity-40" />
                           </div>
                           <span className="text-[10px] font-semibold opacity-60 text-center px-2">
@@ -1078,11 +1078,11 @@ export const MissingPuzzleModal: React.FC<MissingPuzzleModalProps> = ({
                           }}
                           id="draggable-puzzle-piece"
                           title="Click, drag, or press Enter to slot into place"
-                          className="w-28 h-24 rounded-2xl bg-[#5A2D0C] text-[#FFF9EE] border-2 border-[#C88D3A] flex flex-col items-center justify-center gap-1 shadow-lg shadow-[#5A2D0C]/30 hover:scale-105 active:scale-95 transition-all cursor-grab active:cursor-grabbing hover:ring-2 hover:ring-[#C88D3A] focus:outline-hidden focus:ring-2 focus:ring-[#C88D3A] animate-pulse"
+                          className="w-28 h-24 rounded-2xl bg-[#432006] text-[#FFF0D6] border-2 border-[#C46F18] flex flex-col items-center justify-center gap-1 shadow-lg shadow-[#432006]/30 hover:scale-105 active:scale-95 transition-all cursor-grab active:cursor-grabbing hover:ring-2 hover:ring-[#C46F18] focus:outline-hidden focus:ring-2 focus:ring-[#C46F18] animate-pulse"
                         >
-                          <Puzzle className="w-6 h-6 text-[#C88D3A]" />
+                          <Puzzle className="w-6 h-6 text-[#C46F18]" />
                           <span className="text-[11px] font-bold">Missing Piece</span>
-                          <span className="text-[9px] opacity-75 text-[#C88D3A]">Drag or Click</span>
+                          <span className="text-[9px] opacity-75 text-[#E5A857]">Drag or Click</span>
                         </div>
                         <span className="text-[10px] opacity-70 italic text-center max-w-[140px]">
                           Drifting gap found in community experience
@@ -1090,7 +1090,7 @@ export const MissingPuzzleModal: React.FC<MissingPuzzleModalProps> = ({
                       </div>
                     ) : (
                       <div className="text-xs opacity-75 flex items-center gap-2">
-                        <Sparkles className="w-4 h-4 text-[#C88D3A]" />
+                        <Sparkles className="w-4 h-4 text-[#C46F18]" />
                         <span>Great! Now describe the piece below.</span>
                       </div>
                     )}
@@ -1110,7 +1110,7 @@ export const MissingPuzzleModal: React.FC<MissingPuzzleModalProps> = ({
                   <div>
                     <label
                       htmlFor="puzzle-issue-title"
-                      className="block text-xs font-bold uppercase tracking-wider mb-1 text-[#B77620] dark:text-[#E2AB5D]"
+                      className="block text-xs font-bold uppercase tracking-wider mb-1 text-[#9F520B] dark:text-[#E5A857]"
                     >
                       Issue Title *
                     </label>
@@ -1123,8 +1123,8 @@ export const MissingPuzzleModal: React.FC<MissingPuzzleModalProps> = ({
                       onChange={(e) => setTitle(e.target.value)}
                       className={`w-full px-3.5 py-2.5 rounded-xl border text-xs outline-hidden transition-all ${
                         isDark
-                          ? 'bg-[#180A02] border-[#C88D3A]/40 text-[#FFF9EE] focus:border-[#C88D3A] focus:ring-1 focus:ring-[#C88D3A]'
-                          : 'bg-white border-[#EAE0D0] text-stone-900 focus:border-[#5A2D0C] focus:ring-1 focus:ring-[#5A2D0C]'
+                          ? 'bg-[#2F1707] border-[#623416] text-[#FFF9EE] focus:border-[#C46F18] focus:ring-1 focus:ring-[#C46F18]'
+                          : 'bg-[#FFF8EE] border-[#CF9F68] text-[#432006] focus:border-[#C46F18] focus:ring-1 focus:ring-[#C46F18]'
                       }`}
                     />
                   </div>
@@ -1135,7 +1135,7 @@ export const MissingPuzzleModal: React.FC<MissingPuzzleModalProps> = ({
                     <div>
                       <label
                         htmlFor="puzzle-issue-category"
-                        className="block text-xs font-bold uppercase tracking-wider mb-1 text-[#B77620] dark:text-[#E2AB5D]"
+                        className="block text-xs font-bold uppercase tracking-wider mb-1 text-[#9F520B] dark:text-[#E5A857]"
                       >
                         Category *
                       </label>
@@ -1151,7 +1151,7 @@ export const MissingPuzzleModal: React.FC<MissingPuzzleModalProps> = ({
                     <div>
                       <label
                         htmlFor="puzzle-issue-location"
-                        className="block text-xs font-bold uppercase tracking-wider mb-1 text-[#B77620] dark:text-[#E2AB5D]"
+                        className="block text-xs font-bold uppercase tracking-wider mb-1 text-[#9F520B] dark:text-[#E5A857]"
                       >
                         App Location / Context *
                       </label>
@@ -1164,8 +1164,8 @@ export const MissingPuzzleModal: React.FC<MissingPuzzleModalProps> = ({
                         onChange={(e) => setLocationContext(e.target.value)}
                         className={`w-full px-3.5 py-2.5 rounded-xl border text-xs outline-hidden transition-all ${
                           isDark
-                            ? 'bg-[#180A02] border-[#C88D3A]/40 text-[#FFF9EE] focus:border-[#C88D3A] focus:ring-1 focus:ring-[#C88D3A]'
-                            : 'bg-white border-[#EAE0D0] text-stone-900 focus:border-[#5A2D0C] focus:ring-1 focus:ring-[#5A2D0C]'
+                            ? 'bg-[#2F1707] border-[#623416] text-[#FFF9EE] focus:border-[#C46F18] focus:ring-1 focus:ring-[#C46F18]'
+                            : 'bg-[#FFF8EE] border-[#CF9F68] text-[#432006] focus:border-[#C46F18] focus:ring-1 focus:ring-[#C46F18]'
                         }`}
                       />
                       <span className="text-[10px] opacity-60 block mt-0.5">
@@ -1178,7 +1178,7 @@ export const MissingPuzzleModal: React.FC<MissingPuzzleModalProps> = ({
                   <div>
                     <label
                       htmlFor="puzzle-issue-description"
-                      className="block text-xs font-bold uppercase tracking-wider mb-1 text-[#B77620] dark:text-[#E2AB5D]"
+                      className="block text-xs font-bold uppercase tracking-wider mb-1 text-[#9F520B] dark:text-[#E5A857]"
                     >
                       Description &amp; Observations *
                     </label>
@@ -1191,8 +1191,8 @@ export const MissingPuzzleModal: React.FC<MissingPuzzleModalProps> = ({
                       onChange={(e) => setDescription(e.target.value)}
                       className={`w-full px-3.5 py-2.5 rounded-xl border text-xs outline-hidden transition-all ${
                         isDark
-                          ? 'bg-[#180A02] border-[#C88D3A]/40 text-[#FFF9EE] focus:border-[#C88D3A] focus:ring-1 focus:ring-[#C88D3A]'
-                          : 'bg-white border-[#EAE0D0] text-stone-900 focus:border-[#5A2D0C] focus:ring-1 focus:ring-[#5A2D0C]'
+                          ? 'bg-[#2F1707] border-[#623416] text-[#FFF9EE] focus:border-[#C46F18] focus:ring-1 focus:ring-[#C46F18]'
+                          : 'bg-[#FFF8EE] border-[#CF9F68] text-[#432006] focus:border-[#C46F18] focus:ring-1 focus:ring-[#C46F18]'
                       }`}
                     />
                   </div>
@@ -1202,7 +1202,7 @@ export const MissingPuzzleModal: React.FC<MissingPuzzleModalProps> = ({
                     <button
                       type="button"
                       onClick={() => setActiveView('COMMUNITY_BOARD')}
-                      className="px-4 py-2 text-xs font-semibold rounded-xl border border-[#5A2D0C]/20 hover:bg-[#5A2D0C]/5 transition-colors cursor-pointer"
+                      className="px-4 py-2 text-xs font-semibold rounded-xl border border-[#CF9F68] hover:bg-[#C46F18]/10 text-[#72451F] transition-colors cursor-pointer"
                     >
                       ← Back to Community Board
                     </button>
@@ -1210,7 +1210,7 @@ export const MissingPuzzleModal: React.FC<MissingPuzzleModalProps> = ({
                       type="submit"
                       id="submit-missing-puzzle-btn"
                       disabled={isSubmitting}
-                      className="px-6 py-2.5 text-xs font-bold rounded-xl bg-[#5A2D0C] text-[#FFF9EE] border-2 border-[#C88D3A] hover:bg-[#3D1E08] active:translate-y-[1px] transition-all shadow-md cursor-pointer disabled:opacity-50"
+                      className="px-6 py-2.5 text-xs font-bold rounded-xl bg-[#432006] text-[#FFF0D6] border-2 border-[#C46F18] hover:bg-[#341905] active:translate-y-[1px] transition-all shadow-md cursor-pointer disabled:opacity-50"
                     >
                       {isSubmitting ? 'Logging Piece...' : 'Record Missing Puzzle Piece →'}
                     </button>
@@ -1221,10 +1221,10 @@ export const MissingPuzzleModal: React.FC<MissingPuzzleModalProps> = ({
               /* Success & Involvement Screen */
               <div className="space-y-6 py-2">
                 <div className="text-center space-y-2">
-                  <div className="w-14 h-14 rounded-2xl bg-emerald-600 text-white mx-auto flex items-center justify-center shadow-lg shadow-emerald-900/30">
+                  <div className="w-14 h-14 rounded-2xl bg-[#3D5A1E] text-white mx-auto flex items-center justify-center shadow-lg shadow-[#3D5A1E]/30">
                     <CheckCircle2 className="w-8 h-8" />
                   </div>
-                  <h3 className="font-serif font-bold text-xl text-[#5A2D0C] dark:text-[#FFF9EE]">
+                  <h3 className="font-serif font-bold text-xl text-[#432006] dark:text-[#FFF9EE]">
                     Missing Puzzle Placed &amp; Recorded
                   </h3>
                   <p className="text-xs opacity-80 max-w-md mx-auto">
@@ -1236,8 +1236,8 @@ export const MissingPuzzleModal: React.FC<MissingPuzzleModalProps> = ({
                     <span
                       className={`inline-block px-2.5 py-1 rounded-md text-[10px] font-bold tracking-wide border ${
                         persistenceStatus === 'SHARED_OPERATIONAL_PERSISTENCE'
-                          ? 'bg-emerald-500/15 border-emerald-500/30 text-emerald-600 dark:text-emerald-400'
-                          : 'bg-amber-500/15 border-amber-500/30 text-amber-600 dark:text-amber-400'
+                          ? 'bg-[#EBF2DD] border-[#A8C782] text-[#3D5A1E]'
+                          : 'bg-[#FBF0DD] border-[#CF9F68] text-[#9F520B]'
                       }`}
                     >
                       {persistenceStatus === 'SHARED_OPERATIONAL_PERSISTENCE'
@@ -1250,11 +1250,11 @@ export const MissingPuzzleModal: React.FC<MissingPuzzleModalProps> = ({
                 {/* Involvement Preference Question */}
                 <div
                   className={`p-5 rounded-2xl border ${
-                    isDark ? 'bg-[#231004] border-[#C88D3A]/40' : 'bg-[#FDFBF7] border-[#5A2D0C]/15 shadow-xs'
+                    isDark ? 'bg-[#231004] border-[#C88D3A]/40' : 'bg-[#FFF0D6] border-[#CF9F68] shadow-xs'
                   }`}
                 >
                   <div className="mb-4 text-center sm:text-left space-y-1">
-                    <h4 className="font-serif font-bold text-sm sm:text-base text-[#5A2D0C] dark:text-[#FFF9EE]">
+                    <h4 className="font-serif font-bold text-sm sm:text-base text-[#432006] dark:text-[#FFF9EE]">
                       How would you like to participate in the solution?
                     </h4>
                     <p className="text-xs opacity-80">
@@ -1280,28 +1280,28 @@ export const MissingPuzzleModal: React.FC<MissingPuzzleModalProps> = ({
                             isSelected
                               ? isDark
                                 ? 'bg-[#2F1707] text-[#FFF9EE] border-[#C88D3A] ring-2 ring-[#C88D3A] shadow-md'
-                                : 'bg-[#FFF9EE] text-[#5A2D0C] border-[#C88D3A] ring-2 ring-[#C88D3A] shadow-md'
+                                : 'bg-[#FFF8EE] text-[#432006] border-[#C46F18] ring-2 ring-[#C46F18] shadow-md'
                               : isDark
                               ? 'bg-[#180A02] border-[#C88D3A]/20 hover:border-[#C88D3A]/50 text-[#FFF9EE]'
-                              : 'bg-white border-[#5A2D0C]/15 hover:border-[#C88D3A]/60 text-[#5A2D0C] shadow-xs'
+                              : 'bg-[#FFF8EE] border-[#DDB985] hover:border-[#C46F18] text-[#432006] shadow-xs'
                           }`}
                         >
                           <div
                             className={`p-2 rounded-lg shrink-0 transition-colors ${
                               isSelected
-                                ? 'bg-[#C88D3A] text-white shadow-xs'
-                                : 'bg-[#C88D3A]/10 text-[#C88D3A]'
+                                ? 'bg-[#C46F18] text-[#241104] shadow-xs'
+                                : 'bg-[#C46F18]/10 text-[#C46F18]'
                             }`}
                           >
                             <Icon className="w-4 h-4" />
                           </div>
                           <div className="space-y-0.5 flex-1 min-w-0">
                             <div className="flex items-center justify-between gap-2">
-                              <span className="font-bold text-xs text-[#5A2D0C] dark:text-[#FFF9EE]">
+                              <span className="font-bold text-xs text-[#432006] dark:text-[#FFF9EE]">
                                 {opt.title}
                               </span>
                               {isSelected && (
-                                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#C88D3A]/20 text-[#B77620] dark:text-[#E2AB5D] border border-[#C88D3A]/40 shrink-0">
+                                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#C46F18]/20 text-[#9F520B] dark:text-[#E5A857] border border-[#C46F18]/40 shrink-0">
                                   Selected
                                 </span>
                               )}
@@ -1321,7 +1321,7 @@ export const MissingPuzzleModal: React.FC<MissingPuzzleModalProps> = ({
                   <button
                     type="button"
                     onClick={handleResetForAnother}
-                    className="text-xs font-semibold text-[#B77620] dark:text-[#E2AB5D] hover:underline cursor-pointer order-2 sm:order-1"
+                    className="text-xs font-semibold text-[#9F520B] dark:text-[#E5A857] hover:underline cursor-pointer order-2 sm:order-1"
                   >
                     + Log another missing piece
                   </button>
@@ -1330,7 +1330,7 @@ export const MissingPuzzleModal: React.FC<MissingPuzzleModalProps> = ({
                     type="button"
                     id="save-participation-btn"
                     onClick={handleSaveAndNavigateToBoard}
-                    className="w-full sm:w-auto px-6 py-2.5 text-xs font-bold rounded-xl bg-[#5A2D0C] text-[#FFF9EE] border-2 border-[#C88D3A] hover:bg-[#3D1E08] active:translate-y-[1px] transition-all shadow-md cursor-pointer flex items-center justify-center gap-2 order-1 sm:order-2"
+                    className="w-full sm:w-auto px-6 py-2.5 text-xs font-bold rounded-xl bg-[#432006] text-[#FFF0D6] border-2 border-[#C46F18] hover:bg-[#341905] active:translate-y-[1px] transition-all shadow-md cursor-pointer flex items-center justify-center gap-2 order-1 sm:order-2"
                   >
                     <span>Save Participation &amp; View Community Puzzle Board →</span>
                   </button>
@@ -1346,9 +1346,9 @@ export const MissingPuzzleModal: React.FC<MissingPuzzleModalProps> = ({
         {activeView === 'MY_TRAIL' && (
           <div className="p-5 sm:p-6 space-y-4 max-h-[75vh] overflow-y-auto">
             {/* Context Header */}
-            <div className="flex items-center justify-between gap-2 border-b border-[#C88D3A]/20 pb-3">
+            <div className="flex items-center justify-between gap-2 border-b border-[#DDB985] pb-3">
               <div>
-                <h3 className="text-xs font-bold uppercase tracking-wider text-[#5A2D0C] dark:text-[#FFF9EE]">
+                <h3 className="text-xs font-bold uppercase tracking-wider text-[#432006] dark:text-[#FFF9EE]">
                   My Submitted Puzzle Reports ({myReports.length})
                 </h3>
                 <p className="text-[11px] opacity-60">
@@ -1363,13 +1363,13 @@ export const MissingPuzzleModal: React.FC<MissingPuzzleModalProps> = ({
             {myReports.length === 0 ? (
               <div
                 className={`py-12 text-center rounded-2xl border ${
-                  isDark ? 'bg-[#231004]/50 border-[#C88D3A]/20' : 'bg-[#FDFBF7] border-[#5A2D0C]/10'
+                  isDark ? 'bg-[#231004]/50 border-[#C88D3A]/20' : 'bg-[#FFF0D6] border-[#CF9F68]'
                 }`}
               >
-                <div className="w-10 h-10 rounded-xl bg-[#C88D3A]/10 text-[#C88D3A] flex items-center justify-center mx-auto mb-2">
+                <div className="w-10 h-10 rounded-xl bg-[#C46F18]/15 text-[#9F520B] dark:text-[#E5A857] flex items-center justify-center mx-auto mb-2">
                   <Clock className="w-5 h-5" />
                 </div>
-                <p className="text-xs font-bold text-[#5A2D0C] dark:text-[#FFF9EE]">
+                <p className="text-xs font-bold text-[#432006] dark:text-[#FFF9EE]">
                   You haven't logged any missing puzzle pieces yet.
                 </p>
                 <p className="text-[11px] opacity-70 mt-1 max-w-sm mx-auto">
@@ -1381,7 +1381,7 @@ export const MissingPuzzleModal: React.FC<MissingPuzzleModalProps> = ({
                     setActiveView('SPOT_AND_LOG');
                     setSubmittedReport(null);
                   }}
-                  className="mt-3 px-4 py-1.5 text-xs font-bold rounded-lg bg-[#C88D3A] text-white hover:bg-[#B77620] cursor-pointer"
+                  className="mt-3 px-4 py-1.5 text-xs font-bold rounded-lg bg-[#C46F18] text-[#241104] hover:bg-[#9F520B] cursor-pointer"
                 >
                   Spot &amp; Log Your First Piece →
                 </button>
@@ -1398,13 +1398,13 @@ export const MissingPuzzleModal: React.FC<MissingPuzzleModalProps> = ({
                     className={`p-4 rounded-2xl border transition-all ${
                       isDark
                         ? 'bg-[#231004] border-[#C88D3A]/30 text-[#FFF9EE]'
-                        : 'bg-white border-[#5A2D0C]/15 text-[#5A2D0C] shadow-xs'
+                        : 'bg-[#FFF0D6] border-[#CF9F68] text-[#432006] shadow-xs'
                     }`}
                   >
                     <div className="flex items-start justify-between gap-3">
                       <div className="space-y-1 flex-1 min-w-0">
                         <div className="flex flex-wrap items-center gap-2">
-                          <span className="px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-[#C88D3A]/15 text-[#C88D3A]">
+                          <span className="px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-[#C46F18]/15 text-[#9F520B] dark:text-[#E5A857]">
                             {item.category}
                           </span>
                           <span
@@ -1420,7 +1420,7 @@ export const MissingPuzzleModal: React.FC<MissingPuzzleModalProps> = ({
                           )}
                         </div>
 
-                        <h4 className="font-serif font-bold text-sm text-[#5A2D0C] dark:text-[#FFF9EE]">
+                        <h4 className="font-serif font-bold text-sm text-[#432006] dark:text-[#FFF9EE]">
                           {item.title}
                         </h4>
                         <p className="text-xs opacity-80 line-clamp-2">{item.description}</p>
@@ -1443,9 +1443,9 @@ export const MissingPuzzleModal: React.FC<MissingPuzzleModalProps> = ({
 
                     {/* Expanded Factual Trail & Actions */}
                     {isExpanded && (
-                      <div className="mt-4 pt-4 border-t border-[#C88D3A]/20 space-y-3">
+                      <div className="mt-4 pt-4 border-t border-[#DDB985] space-y-3">
                         <div className="flex items-center justify-between">
-                          <span className="text-xs font-serif font-bold flex items-center gap-1.5 text-[#C88D3A]">
+                          <span className="text-xs font-serif font-bold flex items-center gap-1.5 text-[#9F520B] dark:text-[#E5A857]">
                             <ShieldCheck className="w-3.5 h-3.5" />
                             Factual Audit History ({item.events?.length || 0} events)
                           </span>
@@ -1455,16 +1455,16 @@ export const MissingPuzzleModal: React.FC<MissingPuzzleModalProps> = ({
                         {/* Events List */}
                         <div
                           className={`p-3 rounded-xl border space-y-2 max-h-48 overflow-y-auto ${
-                            isDark ? 'bg-[#180A02] border-[#C88D3A]/20' : 'bg-[#FDFBF7] border-[#5A2D0C]/10'
+                            isDark ? 'bg-[#180A02] border-[#C88D3A]/20' : 'bg-[#FFF8EE] border-[#DDB985]'
                           }`}
                         >
                           {item.events?.map((evt, idx) => (
                             <div
                               key={evt.eventId || idx}
-                              className="text-xs space-y-0.5 border-b border-[#C88D3A]/10 pb-2 last:border-b-0 last:pb-0"
+                              className="text-xs space-y-0.5 border-b border-[#DDB985]/40 pb-2 last:border-b-0 last:pb-0"
                             >
                               <div className="flex items-center justify-between gap-1 text-[11px]">
-                                <span className="font-bold text-[#C88D3A]">
+                                <span className="font-bold text-[#9F520B] dark:text-[#E5A857]">
                                   {formatEventName(evt.eventType)}
                                 </span>
                                 <span className="text-[10px] opacity-60">
@@ -1483,10 +1483,10 @@ export const MissingPuzzleModal: React.FC<MissingPuzzleModalProps> = ({
                         {item.status !== 'IMPLEMENTED' && item.status !== 'RESOLVED' && item.status !== 'CLOSED' && (
                           <div
                             className={`p-3 rounded-xl border space-y-2 ${
-                              isDark ? 'bg-[#2F1707] border-[#C88D3A]/30' : 'bg-[#FFF9EE] border-[#C88D3A]/30'
+                              isDark ? 'bg-[#2F1707] border-[#C88D3A]/30' : 'bg-[#FFF8EE] border-[#CF9F68]'
                             }`}
                           >
-                            <label className="block text-xs font-bold text-[#C88D3A]">
+                            <label className="block text-xs font-bold text-[#9F520B] dark:text-[#E5A857]">
                               Reply or Provide Clarification to Coordinator:
                             </label>
                             {replySuccess[item.id] && (
@@ -1513,13 +1513,13 @@ export const MissingPuzzleModal: React.FC<MissingPuzzleModalProps> = ({
                                 className={`flex-1 px-3 py-1.5 text-xs rounded-lg border ${
                                   isDark
                                     ? 'bg-[#180A02] border-[#C88D3A]/30 text-[#FFF9EE]'
-                                    : 'bg-white border-[#5A2D0C]/15 text-[#5A2D0C]'
+                                    : 'bg-[#FFF0D6] border-[#CF9F68] text-[#432006]'
                                 }`}
                               />
                               <button
                                 type="button"
                                 onClick={() => handleSendClarificationReply(item.id)}
-                                className="px-3 py-1.5 text-xs font-bold rounded-lg bg-[#C88D3A] text-white hover:bg-[#B77620] flex items-center gap-1 shrink-0 cursor-pointer"
+                                className="px-3 py-1.5 text-xs font-bold rounded-lg bg-[#C46F18] text-[#241104] hover:bg-[#9F520B] flex items-center gap-1 shrink-0 cursor-pointer"
                               >
                                 <Send className="w-3 h-3" />
                                 <span>Reply</span>
@@ -1547,7 +1547,7 @@ export const MissingPuzzleModal: React.FC<MissingPuzzleModalProps> = ({
                                 onClick={() => handleUpdateInvolvementInLedger(item.id, inv)}
                                 className={`px-2.5 py-1 rounded-md text-[10px] font-bold transition-all cursor-pointer ${
                                   item.involvementPreference === inv
-                                    ? 'bg-[#C88D3A] text-white shadow-xs'
+                                    ? 'bg-[#C46F18] text-[#241104] shadow-xs'
                                     : 'bg-black/5 dark:bg-white/5 opacity-70 hover:opacity-100'
                                 }`}
                               >

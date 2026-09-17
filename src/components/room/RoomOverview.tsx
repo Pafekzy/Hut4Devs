@@ -297,7 +297,7 @@ export const RoomOverview: React.FC<RoomOverviewProps> = ({
                   )}
 
                   {isVacant && (
-                    <div className="mt-2 text-xs text-stone-600 dark:text-stone-300">
+                    <div className="mt-2 text-xs text-[#784A28] dark:text-[#E5D3BA]">
                       <p>Open bunk space ready for assignment or captain-scoped candidate delegation.</p>
                     </div>
                   )}

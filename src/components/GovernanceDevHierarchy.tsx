@@ -194,7 +194,7 @@ export const GovernanceDevHierarchy: React.FC<GovernanceDevHierarchyProps> = ({
               <Home className="w-3 h-3" />
               <span>Sign In</span>
             </button>
-            <ChevronRight className="w-3.5 h-3.5 text-stone-400" />
+            <ChevronRight className="w-3.5 h-3.5 text-[#C27622]/50 dark:text-[#E5D3BA]/50" />
           </>
         )}
         <button
@@ -214,7 +214,7 @@ export const GovernanceDevHierarchy: React.FC<GovernanceDevHierarchyProps> = ({
 
         {selectedInstitution && drillLevel !== 'INSTITUTIONS' && (
           <>
-            <ChevronRight className="w-3.5 h-3.5 text-stone-400" />
+            <ChevronRight className="w-3.5 h-3.5 text-[#C27622]/50 dark:text-[#E5D3BA]/50" />
             <button
               type="button"
               onClick={() => {
@@ -234,7 +234,7 @@ export const GovernanceDevHierarchy: React.FC<GovernanceDevHierarchyProps> = ({
 
         {selectedCampus && (drillLevel === 'CATEGORIES' || drillLevel === 'ROOM_CAPTAINS' || drillLevel === 'COORDINATOR' || drillLevel === 'ADMINISTRATION') && (
           <>
-            <ChevronRight className="w-3.5 h-3.5 text-stone-400" />
+            <ChevronRight className="w-3.5 h-3.5 text-[#C27622]/50 dark:text-[#E5D3BA]/50" />
             <button
               type="button"
               onClick={() => setDrillLevel('CATEGORIES')}
@@ -251,7 +251,7 @@ export const GovernanceDevHierarchy: React.FC<GovernanceDevHierarchyProps> = ({
 
         {drillLevel === 'ROOM_CAPTAINS' && (
           <>
-            <ChevronRight className="w-3.5 h-3.5 text-stone-400" />
+            <ChevronRight className="w-3.5 h-3.5 text-[#C27622]/50 dark:text-[#E5D3BA]/50" />
             <span className="font-bold text-[#5A2D0C] dark:text-[#FFF9EE]">
               Room Captains
             </span>
@@ -260,7 +260,7 @@ export const GovernanceDevHierarchy: React.FC<GovernanceDevHierarchyProps> = ({
 
         {drillLevel === 'COORDINATOR' && (
           <>
-            <ChevronRight className="w-3.5 h-3.5 text-stone-400" />
+            <ChevronRight className="w-3.5 h-3.5 text-[#C27622]/50 dark:text-[#E5D3BA]/50" />
             <span className="font-bold text-[#5A2D0C] dark:text-[#FFF9EE]">
               Fellow Accommodation Coordinator
             </span>
@@ -269,7 +269,7 @@ export const GovernanceDevHierarchy: React.FC<GovernanceDevHierarchyProps> = ({
 
         {drillLevel === 'ADMINISTRATION' && (
           <>
-            <ChevronRight className="w-3.5 h-3.5 text-stone-400" />
+            <ChevronRight className="w-3.5 h-3.5 text-[#C27622]/50 dark:text-[#E5D3BA]/50" />
             <span className="font-bold text-[#5A2D0C] dark:text-[#FFF9EE]">
               Accommodation Administration
             </span>
@@ -409,7 +409,7 @@ export const GovernanceDevHierarchy: React.FC<GovernanceDevHierarchyProps> = ({
                         {campus.name}
                       </span>
                     </div>
-                    <span className="text-[10px] font-mono text-stone-500 dark:text-stone-400">
+                    <span className="text-[10px] font-mono text-[#784A28] dark:text-[#E5D3BA]/75">
                       {campus.stateOrRegion}
                     </span>
                   </div>
@@ -656,12 +656,12 @@ export const GovernanceDevHierarchy: React.FC<GovernanceDevHierarchyProps> = ({
           </div>
 
           {roomCaptains.length === 0 ? (
-            <div className="p-6 text-center rounded-xl bg-white dark:bg-[#1E0D03] border border-[#C88D3A]/30">
-              <Home className="w-6 h-6 text-[#C88D3A] mx-auto mb-2 opacity-60" />
-              <p className="text-xs font-semibold text-[#5A2D0C] dark:text-[#FFF9EE]">
+            <div className="p-6 text-center rounded-xl bg-[#FFF2DE] dark:bg-[#2F1707] border border-[#D6B587] dark:border-[#623416]">
+              <Home className="w-6 h-6 text-[#C27622] mx-auto mb-2 opacity-60" />
+              <p className="text-xs font-semibold text-[#4A230B] dark:text-[#FFF9EE]">
                 No Room Captains currently assigned for {selectedCampus.name}.
               </p>
-              <p className="text-[11px] text-stone-500 mt-1">
+              <p className="text-[11px] text-[#784A28] dark:text-[#E5D3BA]/75 mt-1">
                 Room Captains are delegated per room by the Fellow Accommodation Coordinator.
               </p>
             </div>
@@ -712,13 +712,13 @@ export const GovernanceDevHierarchy: React.FC<GovernanceDevHierarchyProps> = ({
                       >
                         {rc.memberName}
                       </div>
-                      <div className="text-[11px] text-stone-500 dark:text-stone-400">
+                      <div className="text-[11px] text-[#784A28] dark:text-[#E5D3BA]/75">
                         {rc.memberEmail}
                       </div>
-                      <div className="text-[10px] text-[#B77620] font-mono mt-1">
+                      <div className="text-[10px] text-[#A45A12] dark:text-[#E5A955] font-mono mt-1">
                         Scope: {rc.accommodationSpaceName} • {rc.floor} • {rc.roomNumber}
                       </div>
-                      <div className="text-[10px] text-stone-500 mt-0.5">
+                      <div className="text-[10px] text-[#784A28] dark:text-[#E5D3BA]/75 mt-0.5">
                         Delegated by: {rc.delegatedBy}
                       </div>
                     </div>
@@ -785,7 +785,7 @@ export const GovernanceDevHierarchy: React.FC<GovernanceDevHierarchyProps> = ({
                     >
                       {coordinator.memberName}
                     </h4>
-                    <p className="text-[11px] text-stone-500 dark:text-stone-400">
+                    <p className="text-[11px] text-[#784A28] dark:text-[#E5D3BA]/75">
                       {coordinator.memberEmail}
                     </p>
                   </div>
@@ -821,7 +821,7 @@ export const GovernanceDevHierarchy: React.FC<GovernanceDevHierarchyProps> = ({
                 >
                   {coordinator.scopeDescription}
                 </p>
-                <div className="text-[10px] text-stone-500 pt-1 font-mono">
+                <div className="text-[10px] text-[#784A28] dark:text-[#E5D3BA]/75 pt-1 font-mono">
                   Invariant: Emmanuel Ukom is Coordinator for Lagos Yaba ONLY. Authority does not leak to other campuses.
                 </div>
               </div>
@@ -842,7 +842,7 @@ export const GovernanceDevHierarchy: React.FC<GovernanceDevHierarchyProps> = ({
                       `${coordinator.memberName} (L2E Lagos Yaba Coordinator)`
                     )
                   }
-                  className="w-full py-2 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 bg-[#5A2D0C] text-[#FFF9EE] hover:bg-[#723B12] transition-colors cursor-pointer shadow-sm disabled:opacity-50"
+                  className="w-full py-2 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 bg-[#4A230B] text-[#FFF9EE] hover:bg-[#381B07] dark:bg-[#C27622] dark:hover:bg-[#D5A04B] dark:text-[#2F1707] transition-colors cursor-pointer shadow-sm disabled:opacity-50"
                 >
                   <UserCheck className="w-3.5 h-3.5 text-[#C88D3A]" />
                   <span>Development Preview: Coordinator Workspace</span>
@@ -864,7 +864,7 @@ export const GovernanceDevHierarchy: React.FC<GovernanceDevHierarchyProps> = ({
               >
                 No Coordinator currently assigned for {selectedCampus.name}.
               </p>
-              <p className="text-[11px] text-stone-500 mt-1">
+              <p className="text-[11px] text-[#784A28] dark:text-[#E5D3BA]/75 mt-1">
                 Emmanuel Ukom coordinates Lagos Yaba only. Independent coordinator assignments apply per campus.
               </p>
             </div>
@@ -914,7 +914,7 @@ export const GovernanceDevHierarchy: React.FC<GovernanceDevHierarchyProps> = ({
                         >
                           {adm.memberName}
                         </h4>
-                        <p className="text-[11px] text-stone-500 dark:text-stone-400">
+                        <p className="text-[11px] text-[#784A28] dark:text-[#E5D3BA]/75">
                           {adm.memberEmail}
                         </p>
                       </div>

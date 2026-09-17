@@ -115,18 +115,18 @@ export const LandingStoryCarousel: React.FC<LandingStoryCarouselProps> = ({
       onMouseLeave={() => setIsHovered(false)}
       onFocus={() => setIsFocused(true)}
       onBlur={() => setIsFocused(false)}
-      className="w-full rounded-2xl sm:rounded-3xl border transition-all duration-200 outline-none focus-visible:ring-2 focus-visible:ring-[#C88D3A] focus-visible:ring-offset-2 overflow-hidden shadow-xs"
+      className="w-full rounded-2xl sm:rounded-3xl border transition-all duration-200 outline-none focus-visible:ring-2 focus-visible:ring-[#C46F18] focus-visible:ring-offset-2 overflow-hidden shadow-xs"
       style={{
-        backgroundColor: isDark ? '#341905' : '#FFF9EE',
-        borderColor: isDark ? '#4B2710' : '#E7D6C1',
+        backgroundColor: isDark ? '#341905' : '#FAE5C5',
+        borderColor: isDark ? '#4B2710' : '#CF9F68',
       }}
     >
       {/* 1. CINEMATIC 16:9 IMAGE / STORY FRAME */}
       <div
         className="relative w-full aspect-[16/9] overflow-hidden border-b transition-colors duration-200 flex items-center justify-center select-none"
         style={{
-          borderColor: isDark ? '#4B2710' : '#EAE0D0',
-          backgroundColor: isDark ? '#261103' : '#F7F1E7',
+          borderColor: isDark ? '#4B2710' : '#DDB985',
+          backgroundColor: isDark ? '#261103' : '#F3D5AB',
         }}
         role="group"
         aria-roledescription="slide"
@@ -195,25 +195,25 @@ export const LandingStoryCarousel: React.FC<LandingStoryCarouselProps> = ({
               <div
                 className="inline-block p-2.5 sm:p-3.5 rounded-xl border backdrop-blur-xs shadow-xs transition-colors duration-200"
                 style={{
-                  backgroundColor: isDark ? 'rgba(47, 23, 7, 0.75)' : 'rgba(255, 253, 248, 0.85)',
-                  borderColor: isDark ? '#4B2710' : '#E7D6C1',
+                  backgroundColor: isDark ? 'rgba(47, 23, 7, 0.75)' : 'rgba(255, 240, 214, 0.90)',
+                  borderColor: isDark ? '#4B2710' : '#CF9F68',
                 }}
               >
                 <p
                   className="text-[11px] sm:text-xs font-medium uppercase tracking-wider mb-1"
-                  style={{ color: '#C88D3A' }}
+                  style={{ color: '#C46F18' }}
                 >
                   {currentSlide.focus}
                 </p>
                 <p
                   className="text-xs sm:text-sm font-serif font-bold leading-snug"
-                  style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+                  style={{ color: isDark ? '#FFF9EE' : '#432006' }}
                 >
                   "{currentSlide.title}"
                 </p>
                 <p
                   className="text-[11px] sm:text-xs mt-1.5 opacity-75 leading-relaxed line-clamp-2"
-                  style={{ color: isDark ? '#F5E6D3' : '#4A2710' }}
+                  style={{ color: isDark ? '#F5E6D3' : '#5A3013' }}
                 >
                   {currentSlide.plannedSceneDescription}
                 </p>
@@ -224,7 +224,7 @@ export const LandingStoryCarousel: React.FC<LandingStoryCarouselProps> = ({
             <div className="w-full flex items-center justify-center z-10">
               <span
                 className="text-[10px] font-mono tracking-wider opacity-65"
-                style={{ color: isDark ? '#C88D3A' : '#8A5D3B' }}
+                style={{ color: isDark ? '#C46F18' : '#72451F' }}
               >
                 Photographic scene visual staged for Checkpoint 02
               </span>
@@ -240,7 +240,7 @@ export const LandingStoryCarousel: React.FC<LandingStoryCarouselProps> = ({
           <div className="flex items-center gap-2 mb-1.5">
             <span
               className="text-[11px] font-bold font-mono uppercase tracking-wider"
-              style={{ color: '#C88D3A' }}
+              style={{ color: '#C46F18' }}
             >
               {currentSlide.focus}
             </span>
@@ -249,7 +249,7 @@ export const LandingStoryCarousel: React.FC<LandingStoryCarouselProps> = ({
           {/* Story Title */}
           <h3
             className="font-serif text-lg sm:text-xl font-bold tracking-tight mb-1 transition-colors duration-150"
-            style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+            style={{ color: isDark ? '#FFF9EE' : '#432006' }}
           >
             {currentSlide.title}
           </h3>
@@ -257,7 +257,7 @@ export const LandingStoryCarousel: React.FC<LandingStoryCarouselProps> = ({
           {/* Story Supporting Message */}
           <p
             className="text-xs sm:text-sm leading-relaxed transition-colors duration-150"
-            style={{ color: isDark ? '#F5E6D3' : '#4A2710' }}
+            style={{ color: isDark ? '#F5E6D3' : '#5A3013' }}
           >
             {currentSlide.message}
           </p>
@@ -266,7 +266,7 @@ export const LandingStoryCarousel: React.FC<LandingStoryCarouselProps> = ({
         {/* 3. CAROUSEL CONTROLS BAR */}
         <div
           className="mt-4 pt-3.5 border-t flex items-center justify-between gap-2"
-          style={{ borderColor: isDark ? '#4B2710' : '#EAE0D0' }}
+          style={{ borderColor: isDark ? '#4B2710' : '#DDB985' }}
         >
           {/* Dots Indicator */}
           <div
@@ -285,12 +285,12 @@ export const LandingStoryCarousel: React.FC<LandingStoryCarouselProps> = ({
                   aria-selected={isActive}
                   aria-label={`Go to story ${slide.slideNumber}: ${slide.title}`}
                   onClick={() => goToSlide(idx)}
-                  className={`h-2 rounded-full transition-all duration-200 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C88D3A] ${
+                  className={`h-2 rounded-full transition-all duration-200 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C46F18] ${
                     isActive
-                      ? 'w-6 bg-[#C88D3A]'
+                      ? 'w-6 bg-[#C46F18]'
                       : isDark
                       ? 'w-2 bg-[#4B2710] hover:bg-[#623416]'
-                      : 'w-2 bg-[#E7D6C1] hover:bg-[#C88D3A]/60'
+                      : 'w-2 bg-[#CF9F68] hover:bg-[#C46F18]/60'
                   }`}
                 />
               );
@@ -307,9 +307,9 @@ export const LandingStoryCarousel: React.FC<LandingStoryCarouselProps> = ({
               aria-label={isPlaying ? 'Pause story slideshow' : 'Play story slideshow'}
               className="p-1.5 rounded-lg text-xs transition-colors cursor-pointer border flex items-center justify-center"
               style={{
-                backgroundColor: isDark ? '#261103' : '#FFFDF8',
-                borderColor: isDark ? '#4B2710' : '#E7D6C1',
-                color: isDark ? '#C88D3A' : '#5A2D0C',
+                backgroundColor: isDark ? '#261103' : '#FFF0D6',
+                borderColor: isDark ? '#4B2710' : '#CF9F68',
+                color: isDark ? '#C46F18' : '#432006',
               }}
               title={isPlaying ? 'Pause slideshow' : 'Play slideshow'}
             >
@@ -326,11 +326,11 @@ export const LandingStoryCarousel: React.FC<LandingStoryCarouselProps> = ({
               type="button"
               onClick={prevSlide}
               aria-label="Previous story"
-              className="p-1.5 rounded-lg text-xs transition-colors cursor-pointer border flex items-center justify-center hover:bg-[#C88D3A]/10 active:scale-95"
+              className="p-1.5 rounded-lg text-xs transition-colors cursor-pointer border flex items-center justify-center hover:bg-[#C46F18]/10 active:scale-95"
               style={{
-                backgroundColor: isDark ? '#261103' : '#FFFDF8',
-                borderColor: isDark ? '#4B2710' : '#E7D6C1',
-                color: isDark ? '#FFF9EE' : '#5A2D0C',
+                backgroundColor: isDark ? '#261103' : '#FFF0D6',
+                borderColor: isDark ? '#4B2710' : '#CF9F68',
+                color: isDark ? '#FFF9EE' : '#432006',
               }}
             >
               <ChevronLeft className="w-4 h-4" aria-hidden="true" />
@@ -342,11 +342,11 @@ export const LandingStoryCarousel: React.FC<LandingStoryCarouselProps> = ({
               type="button"
               onClick={nextSlide}
               aria-label="Next story"
-              className="p-1.5 rounded-lg text-xs transition-colors cursor-pointer border flex items-center justify-center hover:bg-[#C88D3A]/10 active:scale-95"
+              className="p-1.5 rounded-lg text-xs transition-colors cursor-pointer border flex items-center justify-center hover:bg-[#C46F18]/10 active:scale-95"
               style={{
-                backgroundColor: isDark ? '#261103' : '#FFFDF8',
-                borderColor: isDark ? '#4B2710' : '#E7D6C1',
-                color: isDark ? '#FFF9EE' : '#5A2D0C',
+                backgroundColor: isDark ? '#261103' : '#FFF0D6',
+                borderColor: isDark ? '#4B2710' : '#CF9F68',
+                color: isDark ? '#FFF9EE' : '#432006',
               }}
             >
               <ChevronRight className="w-4 h-4" aria-hidden="true" />

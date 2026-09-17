@@ -252,8 +252,8 @@ export const FulfilmentFlow: React.FC<FulfilmentFlowProps> = ({
                 <div
                   className={`w-5 h-5 rounded-full border flex items-center justify-center ${
                     fulfilmentType === FulfilmentType.FULL
-                      ? 'border-[#C88D3A] bg-[#C88D3A]'
-                      : 'border-stone-400'
+                      ? 'border-[#C27622] bg-[#C27622]'
+                      : 'border-[#D6B587] dark:border-[#623416]'
                   }`}
                 >
                   {fulfilmentType === FulfilmentType.FULL && (
@@ -288,8 +288,8 @@ export const FulfilmentFlow: React.FC<FulfilmentFlowProps> = ({
                 <div
                   className={`w-5 h-5 rounded-full border flex items-center justify-center ${
                     fulfilmentType === FulfilmentType.PARTIAL
-                      ? 'border-[#C88D3A] bg-[#C88D3A]'
-                      : 'border-stone-400'
+                      ? 'border-[#C27622] bg-[#C27622]'
+                      : 'border-[#D6B587] dark:border-[#623416]'
                   }`}
                 >
                   {fulfilmentType === FulfilmentType.PARTIAL && (
@@ -620,7 +620,7 @@ export const FulfilmentFlow: React.FC<FulfilmentFlowProps> = ({
                 <p className="font-semibold text-xs" style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}>
                   No request was sent.
                 </p>
-                <p className="text-xs text-stone-500 leading-relaxed">
+                <p className="text-xs text-[#784A28] dark:text-[#E5D3BA]/75 leading-relaxed">
                   Your accommodation balance has not changed.
                 </p>
               </div>
@@ -644,7 +644,7 @@ export const FulfilmentFlow: React.FC<FulfilmentFlowProps> = ({
                 <p className="text-xs leading-relaxed" style={{ color: isDark ? '#D9C4AC' : '#704728' }}>
                   No payment has been executed.
                 </p>
-                <p className="text-xs text-stone-500 leading-relaxed">
+                <p className="text-xs text-[#784A28] dark:text-[#E5D3BA]/75 leading-relaxed">
                   Your accommodation balance has not changed.
                 </p>
               </div>
@@ -668,7 +668,7 @@ export const FulfilmentFlow: React.FC<FulfilmentFlowProps> = ({
                 <p className="font-semibold text-xs leading-relaxed" style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}>
                   A network timeout or connection failure occurred while contacting BMONI. It is unknown whether BMONI accepted the proposal.
                 </p>
-                <p className="text-xs text-stone-500 leading-relaxed">
+                <p className="text-xs text-[#784A28] dark:text-[#E5D3BA]/75 leading-relaxed">
                   Investigation or reconciliation is required before retrying. Automatic retries are disabled to prevent duplicate proposals. Your accommodation balance has not changed.
                 </p>
               </div>

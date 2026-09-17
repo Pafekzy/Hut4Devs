@@ -58,11 +58,11 @@ export const TrustTrailFeed: React.FC<TrustTrailFeedProps> = ({ trailEvents, ava
       case 'contribution_completed':
         return <HeartHandshake className="w-4 h-4 text-purple-700" />;
       case 'vouch_issued':
-        return <Shield className="w-4 h-4 text-indigo-600" />;
+        return <Shield className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />;
       case 'repair_logged':
-        return <MessageSquareShare className="w-4 h-4 text-amber-700" />;
+        return <MessageSquareShare className="w-4 h-4 text-[#C27622]" />;
       default:
-        return <Footprints className="w-4 h-4 text-stone-600" />;
+        return <Footprints className="w-4 h-4 text-[#A45A12] dark:text-[#E5A955]" />;
     }
   };
 
@@ -135,8 +135,8 @@ export const TrustTrailFeed: React.FC<TrustTrailFeedProps> = ({ trailEvents, ava
       <section
         className="rounded-2xl p-5 sm:p-7 border-2 border-b-4 transition-all duration-200 shadow-md backdrop-blur-md"
         style={{
-          backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : 'rgba(255, 253, 248, 0.65)',
-          borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : 'rgba(90, 45, 12, 0.25)',
+          backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : '#FAE5C5',
+          borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : '#CF9F68',
         }}
       >
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -144,26 +144,26 @@ export const TrustTrailFeed: React.FC<TrustTrailFeedProps> = ({ trailEvents, ava
             <div className="flex items-center gap-2 mb-1">
               <span
                 className="text-xs font-bold uppercase tracking-wider block"
-                style={{ color: isDark ? '#E5A955' : '#B77620' }}
+                style={{ color: isDark ? '#C46F18' : '#9F520B' }}
               >
                 Append-Only Proof of Trust
               </span>
               <span
                 className="text-xs font-medium"
-                style={{ color: isDark ? '#C49B75' : '#8A5D3B' }}
+                style={{ color: isDark ? '#D9C4AC' : '#72451F' }}
               >
                 &bull; Human Accountability
               </span>
             </div>
             <h1
               className="font-serif text-xl sm:text-2xl font-bold tracking-tight"
-              style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+              style={{ color: isDark ? '#FFF9EE' : '#432006' }}
             >
               Trails of Trust Ledger
             </h1>
             <p
               className="text-xs mt-1.5 max-w-2xl leading-relaxed"
-              style={{ color: isDark ? '#EAD6C0' : '#5A2D0C' }}
+              style={{ color: isDark ? '#D9C4AC' : '#5A3013' }}
             >
               "People present narratives. The platform preserves facts." Every verified accommodation settlement,
               peer loan, voluntary gift, forgiven balance, and shared contribution creates an immutable trail of dignity and reliability.
@@ -173,15 +173,15 @@ export const TrustTrailFeed: React.FC<TrustTrailFeedProps> = ({ trailEvents, ava
           <div
             className="flex items-center gap-3 p-3.5 rounded-xl border shrink-0 shadow-xs"
             style={{
-              backgroundColor: isDark ? 'rgba(30, 27, 24, 0.45)' : 'rgba(247, 241, 231, 0.50)',
-              borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : 'rgba(90, 45, 12, 0.15)',
-              color: isDark ? '#FFF9EE' : '#5A2D0C',
+              backgroundColor: isDark ? 'rgba(30, 27, 24, 0.45)' : '#FFF0D6',
+              borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : '#CF9F68',
+              color: isDark ? '#FFF9EE' : '#432006',
             }}
           >
-            <Layers className="w-5 h-5 text-[#B77620] shrink-0" />
+            <Layers className="w-5 h-5 text-[#9F520B] shrink-0" />
             <div>
               <span className="font-bold block text-sm sm:text-base">{trailEvents.length} Verified Records</span>
-              <span className="text-xs font-medium" style={{ color: isDark ? '#C49B75' : '#8A5D3B' }}>
+              <span className="text-xs font-medium" style={{ color: isDark ? '#C49B75' : '#72451F' }}>
                 Append-only audit trail
               </span>
             </div>
@@ -191,10 +191,10 @@ export const TrustTrailFeed: React.FC<TrustTrailFeedProps> = ({ trailEvents, ava
         {/* Filters and Search Bar */}
         <div
           className="mt-6 pt-5 border-t-2 flex flex-col sm:flex-row gap-3"
-          style={{ borderColor: isDark ? '#421E06' : '#EAE0D0' }}
+          style={{ borderColor: isDark ? '#421E06' : '#DDB985' }}
         >
           <div className="relative flex-1">
-            <Search className="w-4 h-4 text-[#B77620] absolute left-3.5 top-3" />
+            <Search className="w-4 h-4 text-[#9F520B] absolute left-3.5 top-3" />
             <input
               type="text"
               placeholder="Search by fellow name, evidence hash, or event details..."
@@ -202,9 +202,9 @@ export const TrustTrailFeed: React.FC<TrustTrailFeedProps> = ({ trailEvents, ava
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full pl-10 pr-4 py-2.5 text-xs rounded-xl border outline-none font-medium transition-all"
               style={{
-                backgroundColor: isDark ? 'rgba(30, 27, 24, 0.6)' : 'rgba(255, 255, 255, 0.85)',
-                borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : 'rgba(90, 45, 12, 0.25)',
-                color: isDark ? '#FFF9EE' : '#5A2D0C',
+                backgroundColor: isDark ? 'rgba(30, 27, 24, 0.6)' : '#FFF8EE',
+                borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : '#CF9F68',
+                color: isDark ? '#FFF9EE' : '#432006',
               }}
             />
           </div>
@@ -212,8 +212,8 @@ export const TrustTrailFeed: React.FC<TrustTrailFeedProps> = ({ trailEvents, ava
           <div
             className="flex items-center gap-1 p-1 rounded-xl border text-xs"
             style={{
-              backgroundColor: isDark ? 'rgba(30, 27, 24, 0.45)' : 'rgba(247, 241, 231, 0.50)',
-              borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : 'rgba(90, 45, 12, 0.15)',
+              backgroundColor: isDark ? 'rgba(30, 27, 24, 0.45)' : '#FFF0D6',
+              borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : '#DDB985',
             }}
           >
             {[
@@ -228,11 +228,11 @@ export const TrustTrailFeed: React.FC<TrustTrailFeedProps> = ({ trailEvents, ava
                 className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                   filterType === tab.id
                     ? isDark
-                      ? 'bg-[#C88D3A] text-[#241104] shadow-xs'
-                      : 'bg-[#5A2D0C] text-[#FFF9EE] shadow-xs'
+                      ? 'bg-[#C46F18] text-[#241104] shadow-xs'
+                      : 'bg-[#432006] text-[#FFF0D6] shadow-xs'
                     : isDark
                     ? 'text-[#D9C4AC] hover:text-[#FFF9EE]'
-                    : 'text-[#6D4223] hover:text-[#5A2D0C]'
+                    : 'text-[#72451F] hover:text-[#432006]'
                 }`}
               >
                 {tab.label}
@@ -248,9 +248,9 @@ export const TrustTrailFeed: React.FC<TrustTrailFeedProps> = ({ trailEvents, ava
           <div
             className="text-center py-12 text-xs rounded-xl border border-dashed"
             style={{
-              backgroundColor: isDark ? 'rgba(30, 27, 24, 0.45)' : 'rgba(247, 241, 231, 0.50)',
-              borderColor: isDark ? 'rgba(200, 141, 58, 0.25)' : 'rgba(90, 45, 12, 0.2)',
-              color: isDark ? '#D9C4AC' : '#8A5D3B',
+              backgroundColor: isDark ? 'rgba(30, 27, 24, 0.45)' : '#FFF0D6',
+              borderColor: isDark ? 'rgba(200, 141, 58, 0.25)' : '#CF9F68',
+              color: isDark ? '#D9C4AC' : '#72451F',
             }}
           >
             No trust trail events matching your search filter.
@@ -263,16 +263,16 @@ export const TrustTrailFeed: React.FC<TrustTrailFeedProps> = ({ trailEvents, ava
                 id={`trail-event-${event.id}`}
                 className="rounded-2xl p-5 sm:p-6 border-2 border-b-4 transition-all duration-200 shadow-md flex flex-col sm:flex-row sm:items-center justify-between gap-4"
                 style={{
-                  backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : 'rgba(255, 253, 248, 0.65)',
-                  borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : 'rgba(90, 45, 12, 0.25)',
+                  backgroundColor: isDark ? 'rgba(23, 21, 19, 0.55)' : '#FAE5C5',
+                  borderColor: isDark ? 'rgba(200, 141, 58, 0.35)' : '#CF9F68',
                 }}
               >
                 <div className="flex items-start gap-3.5">
                   <div
                     className="p-2.5 rounded-xl border shrink-0 mt-0.5 shadow-xs"
                     style={{
-                      backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : 'rgba(247, 241, 231, 0.7)',
-                      borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : 'rgba(90, 45, 12, 0.2)',
+                      backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : '#FFF0D6',
+                      borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : '#DDB985',
                     }}
                   >
                     {getEventIcon(event.type)}
@@ -283,21 +283,21 @@ export const TrustTrailFeed: React.FC<TrustTrailFeedProps> = ({ trailEvents, ava
                       <span
                         className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wide uppercase border shadow-xs"
                         style={{
-                          backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : 'rgba(247, 241, 231, 0.7)',
-                          color: isDark ? '#F5C678' : '#8C4D11',
-                          borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : 'rgba(90, 45, 12, 0.2)',
+                          backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : '#FFF0D6',
+                          color: isDark ? '#E5A857' : '#9F520B',
+                          borderColor: isDark ? 'rgba(200, 141, 58, 0.3)' : '#CF9F68',
                         }}
                       >
                         <span
                           className="w-1.5 h-1.5 rounded-full mr-1.5 shadow-xs"
-                          style={{ backgroundColor: isDark ? '#C88D3A' : '#B77620' }}
+                          style={{ backgroundColor: isDark ? '#C46F18' : '#9F520B' }}
                           aria-hidden="true"
                         />
                         {getEventTypeLabel(event.type)}
                       </span>
                       <h3
                         className="font-serif font-bold text-sm sm:text-base"
-                        style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+                        style={{ color: isDark ? '#FFF9EE' : '#432006' }}
                       >
                         {event.title}
                       </h3>
@@ -305,28 +305,28 @@ export const TrustTrailFeed: React.FC<TrustTrailFeedProps> = ({ trailEvents, ava
 
                     <p
                       className="text-xs leading-relaxed"
-                      style={{ color: isDark ? '#EAD6C0' : '#5A2D0C' }}
+                      style={{ color: isDark ? '#D9C4AC' : '#5A3013' }}
                     >
                       {event.description}
                     </p>
 
                     <div
                       className="mt-2.5 flex flex-wrap items-center gap-2 text-xs font-medium"
-                      style={{ color: isDark ? '#C49B75' : '#8A5D3B' }}
+                      style={{ color: isDark ? '#C49B75' : '#72451F' }}
                     >
                       <span>
-                        Actor: <strong style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}>{event.actorName}</strong>
+                        Actor: <strong style={{ color: isDark ? '#FFF9EE' : '#432006' }}>{event.actorName}</strong>
                       </span>
                       {event.recipientName && (
                         <>
                           <span>&bull;</span>
                           <span>
-                            Recipient: <strong style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}>{event.recipientName}</strong>
+                            Recipient: <strong style={{ color: isDark ? '#FFF9EE' : '#432006' }}>{event.recipientName}</strong>
                           </span>
                         </>
                       )}
                       <span>&bull;</span>
-                      <span className="font-mono text-[11px]" style={{ color: isDark ? '#F5C678' : '#B77620' }}>
+                      <span className="font-mono text-[11px]" style={{ color: isDark ? '#E5A857' : '#9F520B' }}>
                         Ref: {event.evidenceRef}
                       </span>
                     </div>
@@ -335,12 +335,12 @@ export const TrustTrailFeed: React.FC<TrustTrailFeedProps> = ({ trailEvents, ava
 
                 <div
                   className="sm:text-right shrink-0 border-t sm:border-t-0 pt-2 sm:pt-0 flex sm:flex-col justify-between items-center sm:items-end"
-                  style={{ borderColor: isDark ? '#421E06' : '#EAE0D0' }}
+                  style={{ borderColor: isDark ? '#421E06' : '#DDB985' }}
                 >
                   {event.amount ? (
                     <span
                       className="text-base sm:text-lg font-bold"
-                      style={{ color: isDark ? '#F5C678' : '#5A2D0C' }}
+                      style={{ color: isDark ? '#E5A857' : '#432006' }}
                     >
                       {event.currency || '₦'}
                       {event.amount.toLocaleString()}
@@ -348,14 +348,14 @@ export const TrustTrailFeed: React.FC<TrustTrailFeedProps> = ({ trailEvents, ava
                   ) : (
                     <span
                       className="text-xs font-bold"
-                      style={{ color: isDark ? '#C49B75' : '#8A5D3B' }}
+                      style={{ color: isDark ? '#C49B75' : '#72451F' }}
                     >
                       Documented
                     </span>
                   )}
                   <span
                     className="text-xs font-medium mt-0.5 flex items-center gap-1"
-                    style={{ color: isDark ? '#C49B75' : '#8A5D3B' }}
+                    style={{ color: isDark ? '#C49B75' : '#72451F' }}
                   >
                     <Calendar className="w-3.5 h-3.5" />
                     {new Date(event.timestamp).toLocaleDateString()}

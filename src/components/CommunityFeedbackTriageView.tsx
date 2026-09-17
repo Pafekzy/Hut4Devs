@@ -264,12 +264,12 @@ export const CommunityFeedbackTriageView: React.FC<CommunityFeedbackTriageViewPr
       case 'CLOSED':
         return {
           label: 'Closed',
-          className: 'bg-zinc-500/20 text-zinc-700 dark:text-zinc-400 border border-zinc-500/30',
+          className: 'bg-[#C27622]/15 text-[#784A28] dark:text-[#E5D3BA] border border-[#C27622]/30',
         };
       default:
         return {
           label: status,
-          className: 'bg-zinc-500/20 text-zinc-700 dark:text-zinc-400',
+          className: 'bg-[#C27622]/15 text-[#784A28] dark:text-[#E5D3BA]',
         };
     }
   };

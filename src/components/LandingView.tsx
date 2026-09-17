@@ -22,15 +22,15 @@ export const LandingView: React.FC<LandingViewProps> = ({
   return (
     <div
       className={`min-h-screen flex flex-col justify-between transition-colors duration-200 ${
-        isDark ? 'bg-[#2F1707] text-[#FFF9EE]' : 'bg-[#F7F1E7] text-[#5A2D0C]'
+        isDark ? 'bg-[#2F1707] text-[#FFF9EE]' : 'bg-[#EFD3AD] text-[#432006]'
       }`}
     >
       {/* Sticky Top Navigation Bar */}
       <header
         className="sticky top-0 z-30 w-full border-b transition-colors duration-200"
         style={{
-          borderColor: isDark ? '#3E200C' : '#EAE0D0',
-          backgroundColor: isDark ? 'rgba(47, 23, 7, 0.88)' : 'rgba(247, 241, 231, 0.88)',
+          borderColor: isDark ? '#3E200C' : '#CF9F68',
+          backgroundColor: isDark ? 'rgba(47, 23, 7, 0.88)' : 'rgba(239, 211, 173, 0.88)',
           backdropFilter: 'blur(8px)',
         }}
       >
@@ -42,7 +42,7 @@ export const LandingView: React.FC<LandingViewProps> = ({
                 type="button"
                 id="landing-open-dev-auth-btn"
                 onClick={onOpenDevAuth}
-                className="text-xs font-medium px-3 py-1.5 rounded-lg border border-[#C88D3A]/40 text-[#5A2D0C] bg-[#FFF9EE] hover:bg-[#F7F1E7] transition-colors cursor-pointer shadow-xs"
+                className="text-xs font-medium px-3 py-1.5 rounded-lg border border-[#CF9F68] text-[#432006] bg-[#FFF0D6] hover:bg-[#FAE5C5] transition-colors cursor-pointer shadow-xs"
               >
                 Switch Identity
               </button>
@@ -71,7 +71,7 @@ export const LandingView: React.FC<LandingViewProps> = ({
             <h1
               className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold leading-snug tracking-tight mb-3 sm:mb-4 transition-colors duration-200"
               style={{
-                color: isDark ? '#FFF9EE' : '#5A2D0C',
+                color: isDark ? '#FFF9EE' : '#432006',
               }}
             >
               Turning everyday collaboration into trails of trust built by us and for us-all.
@@ -81,7 +81,7 @@ export const LandingView: React.FC<LandingViewProps> = ({
             <p
               className="text-xs sm:text-sm leading-relaxed max-w-lg mb-2 transition-colors duration-200 opacity-85"
               style={{
-                color: isDark ? '#F5E6D3' : '#4A2710',
+                color: isDark ? '#F5E6D3' : '#5A3013',
               }}
             >
               Accommodation is where we begin — community coordination, verified responsibilities,
@@ -104,8 +104,8 @@ export const LandingView: React.FC<LandingViewProps> = ({
                 onClick={onEnter}
                 className={`group w-full inline-flex items-center justify-center gap-2.5 px-6 py-3.5 min-h-[48px] rounded-xl text-base font-medium shadow-sm transition-all duration-150 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 ${
                   isDark
-                    ? 'bg-[#C88D3A] text-[#2F1707] hover:bg-[#DDA250] active:bg-[#B77620] focus-visible:ring-[#C88D3A] focus-visible:ring-offset-[#2F1707]'
-                    : 'bg-[#5A2D0C] text-[#FFF9EE] hover:bg-[#432108] active:bg-[#341905] focus-visible:ring-[#5A2D0C] focus-visible:ring-offset-[#F7F1E7]'
+                    ? 'bg-[#C46F18] text-[#2F1707] hover:bg-[#D18125] active:bg-[#9F520B] focus-visible:ring-[#C46F18] focus-visible:ring-offset-[#2F1707]'
+                    : 'bg-[#432006] text-[#FFF0D6] hover:bg-[#341905] active:bg-[#251203] focus-visible:ring-[#432006] focus-visible:ring-offset-[#EFD3AD]'
                 }`}
               >
                 <span>Enter Hut4Devs</span>
@@ -136,8 +136,8 @@ export const LandingView: React.FC<LandingViewProps> = ({
       <footer
         className="w-full py-6 text-center text-xs tracking-wider uppercase border-t transition-colors duration-200"
         style={{
-          borderColor: isDark ? '#3E200C' : '#EAE0D0',
-          color: isDark ? '#A67B54' : '#8A5D3B',
+          borderColor: isDark ? '#3E200C' : '#DDB985',
+          color: isDark ? '#A67B54' : '#72451F',
         }}
       >
         <p>Hut4Devs &bull; Canonical Application Foundation &bull; Build. Pay. Support. Thrive.</p>

@@ -214,9 +214,9 @@ export const MemberNotificationsDropdown: React.FC<MemberNotificationsDropdownPr
                   >
                     <div className="mt-1 shrink-0">
                       {!n.read ? (
-                        <div className="w-2.5 h-2.5 rounded-full bg-[#B77620] dark:bg-[#C88D3A] ring-2 ring-[#C88D3A]/30" />
+                        <div className="w-2.5 h-2.5 rounded-full bg-[#C27622] ring-2 ring-[#C27622]/30" />
                       ) : (
-                        <div className="w-2 h-2 rounded-full bg-stone-400/50" />
+                        <div className="w-2 h-2 rounded-full bg-[#C27622]/30 dark:bg-[#E5D3BA]/30" />
                       )}
                     </div>
 

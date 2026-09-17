@@ -131,10 +131,10 @@ export const ResponsibilityDetailView: React.FC<ResponsibilityDetailViewProps> =
             </span>
             <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-3">
               <div>
-                <span className="text-xs block text-stone-500 mb-0.5">Responsibility:</span>
+                <span className="text-xs block text-[#784A28] dark:text-[#E5D3BA]/75 mb-0.5">Responsibility:</span>
                 <h1
                   className="font-serif text-2xl sm:text-3xl font-semibold tracking-tight"
-                  style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}
+                  style={{ color: isDark ? '#FFF9EE' : '#4A230B' }}
                 >
                   {responsibility.title}
                 </h1>
@@ -142,18 +142,18 @@ export const ResponsibilityDetailView: React.FC<ResponsibilityDetailViewProps> =
 
               {/* Status Badge */}
               <div className="self-start sm:self-auto">
-                <span className="text-xs block text-stone-500 mb-0.5">Status:</span>
+                <span className="text-xs block text-[#784A28] dark:text-[#E5D3BA]/75 mb-0.5">Status:</span>
                 <span
                   className="inline-flex items-center px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wide uppercase shadow-xs"
                   style={{
-                    backgroundColor: isDark ? 'rgba(42, 34, 28, 0.6)' : 'rgba(247, 241, 231, 0.7)',
-                    color: isDark ? '#E2AB5D' : '#B77620',
-                    border: `1px solid ${isDark ? 'rgba(200, 141, 58, 0.3)' : 'rgba(90, 45, 12, 0.2)'}`,
+                    backgroundColor: isDark ? '#2F1707' : '#F8E4B8',
+                    color: isDark ? '#F8E4B8' : '#7B4708',
+                    border: `1px solid ${isDark ? '#C27622' : '#C27622'}`,
                   }}
                 >
                   <span
                     className="w-2 h-2 rounded-full mr-2"
-                    style={{ backgroundColor: isDark ? '#C88D3A' : '#B77620' }}
+                    style={{ backgroundColor: isDark ? '#C27622' : '#C27622' }}
                     aria-hidden="true"
                   />
                   {statusLabel}
@@ -320,14 +320,14 @@ export const ResponsibilityDetailView: React.FC<ResponsibilityDetailViewProps> =
               </div>
               <p className="text-sm">
                 Amount:{' '}
-                <strong className="font-mono text-base font-bold" style={{ color: isDark ? '#FFF9EE' : '#5A2D0C' }}>
+                <strong className="font-mono text-base font-bold" style={{ color: isDark ? '#FFF9EE' : '#4A230B' }}>
                   {formatNaira(preparedIntents[preparedIntents.length - 1].amount)}
                 </strong>{' '}
-                <span className="text-xs text-stone-500">
+                <span className="text-xs text-[#784A28] dark:text-[#E5D3BA]/75">
                   ({preparedIntents[preparedIntents.length - 1].fulfilmentType === FulfilmentType.FULL ? 'Full' : 'Partial'})
                 </span>
               </p>
-              <p className="text-xs text-stone-500 leading-relaxed">
+              <p className="text-xs text-[#784A28] dark:text-[#E5D3BA]/75 leading-relaxed">
                 Payment execution is not connected in this build. Verified accommodation balance remains unchanged until execution and verification.
               </p>
             </div>
@@ -339,14 +339,14 @@ export const ResponsibilityDetailView: React.FC<ResponsibilityDetailViewProps> =
               id="bmoni-proposal-summary"
               className="mb-8 p-5 rounded-xl border space-y-2.5 transition-colors backdrop-blur-xs"
               style={{
-                backgroundColor: isDark ? 'rgba(30, 27, 24, 0.45)' : 'rgba(247, 241, 231, 0.50)',
-                borderColor: isDark ? 'rgba(200, 141, 58, 0.2)' : 'rgba(90, 45, 12, 0.15)',
+                backgroundColor: isDark ? '#2F1707' : '#FFF8EC',
+                borderColor: isDark ? '#623416' : '#E5CBA7',
               }}
             >
               {latestProposal.isSimulated || latestProposal.provider === 'SIMULATED' ? (
                 <>
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold uppercase tracking-wider" style={{ color: isDark ? '#E2AB5D' : '#B77620' }}>
+                    <span className="text-xs font-bold uppercase tracking-wider" style={{ color: isDark ? '#E5A955' : '#A45A12' }}>
                       SIMULATED PROVIDER
                     </span>
                     <span
@@ -360,17 +360,17 @@ export const ResponsibilityDetailView: React.FC<ResponsibilityDetailViewProps> =
                       Proposal: Simulated
                     </span>
                   </div>
-                  <p className="text-xs font-medium" style={{ color: isDark ? '#E5D3BA' : '#5A2D0C' }}>
+                  <p className="text-xs font-medium" style={{ color: isDark ? '#E5D3BA' : '#4A230B' }}>
                     No request was sent to BMONI.
                   </p>
-                  <p className="text-xs text-stone-500 leading-relaxed">
+                  <p className="text-xs text-[#784A28] dark:text-[#E5D3BA]/75 leading-relaxed">
                     No money has moved yet. Your accommodation responsibility remains unverified.
                   </p>
                 </>
               ) : (
                 <>
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold uppercase tracking-wider" style={{ color: isDark ? '#E2AB5D' : '#B77620' }}>
+                    <span className="text-xs font-bold uppercase tracking-wider" style={{ color: isDark ? '#E5A955' : '#A45A12' }}>
                       BMONI
                     </span>
                     <span
@@ -378,14 +378,14 @@ export const ResponsibilityDetailView: React.FC<ResponsibilityDetailViewProps> =
                       style={{
                         backgroundColor: isDark ? '#382210' : '#EFF6FF',
                         borderColor: isDark ? '#5C381A' : '#BFDBFE',
-                        color: isDark ? '#E2AB5D' : '#1D4ED8',
+                        color: isDark ? '#E5A955' : '#1D4ED8',
                       }}
                     >
                       Proposal: Created
                     </span>
                   </div>
                   <div className="flex items-center justify-between text-xs">
-                    <span style={{ color: isDark ? '#A67B54' : '#8A5D3B' }}>Provider Status:</span>
+                    <span style={{ color: isDark ? '#E5D3BA' : '#784A28' }}>Provider Status:</span>
                     <span
                       className="px-2 py-0.5 rounded-full text-xs font-semibold font-mono border"
                       style={{
@@ -398,12 +398,12 @@ export const ResponsibilityDetailView: React.FC<ResponsibilityDetailViewProps> =
                     </span>
                   </div>
                   <div className="text-xs">
-                    <span style={{ color: isDark ? '#A67B54' : '#8A5D3B' }}>Provider Proposal Reference: </span>
-                    <span className="font-mono font-medium" style={{ color: isDark ? '#E5D3BA' : '#5A2D0C' }}>
+                    <span style={{ color: isDark ? '#E5D3BA' : '#784A28' }}>Provider Proposal Reference: </span>
+                    <span className="font-mono font-medium" style={{ color: isDark ? '#E5D3BA' : '#4A230B' }}>
                       {latestProposal.providerProposalId}
                     </span>
                   </div>
-                  <p className="text-xs text-stone-500 leading-relaxed">
+                  <p className="text-xs text-[#784A28] dark:text-[#E5D3BA]/75 leading-relaxed">
                     No money has moved yet. Your accommodation responsibility remains unverified.
                   </p>
                 </>
@@ -413,7 +413,7 @@ export const ResponsibilityDetailView: React.FC<ResponsibilityDetailViewProps> =
 
           {/* Action Footer: [ Fulfil Responsibility ] and [ Back to Home ] */}
           <div className="pt-6 border-t flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4"
-            style={{ borderColor: isDark ? '#4B2710' : '#EAE0D0' }}
+            style={{ borderColor: isDark ? '#623416' : '#E5CBA7' }}
           >
             <div className="flex items-center gap-3">
               <button
@@ -422,8 +422,8 @@ export const ResponsibilityDetailView: React.FC<ResponsibilityDetailViewProps> =
                 onClick={() => setIsFulfilmentOpen(true)}
                 className={`inline-flex items-center justify-center gap-2 px-6 py-3 min-h-[44px] rounded-xl text-sm font-semibold transition-all duration-150 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 ${
                   isDark
-                    ? 'bg-[#C88D3A] text-[#2F1707] hover:bg-[#DDA250] focus-visible:ring-[#C88D3A] focus-visible:ring-offset-[#3E200C]'
-                    : 'bg-[#5A2D0C] text-[#FFF9EE] hover:bg-[#432108] focus-visible:ring-[#5A2D0C] focus-visible:ring-offset-[#FFF9EE]'
+                    ? 'bg-[#C27622] text-[#2F1707] hover:bg-[#D5A04B] focus-visible:ring-[#C27622] focus-visible:ring-offset-[#3E200C]'
+                    : 'bg-[#4A230B] text-[#FFF9EE] hover:bg-[#381B07] focus-visible:ring-[#4A230B] focus-visible:ring-offset-[#FFF9EE]'
                 }`}
               >
                 <span>Fulfil Responsibility</span>
@@ -436,7 +436,7 @@ export const ResponsibilityDetailView: React.FC<ResponsibilityDetailViewProps> =
                 className={`inline-flex items-center justify-center gap-2 px-5 py-3 min-h-[44px] rounded-xl text-sm font-medium transition-all duration-150 cursor-pointer border ${
                   isDark
                     ? 'border-[#623416] text-[#E5D3BA] hover:bg-[#2F1707]'
-                    : 'border-[#EAE0D0] text-[#6D4223] hover:bg-[#F2E8D8]'
+                    : 'border-[#D6B587] text-[#784A28] hover:bg-[#F8E6CC]'
                 }`}
               >
                 <ArrowLeft className="w-4 h-4 shrink-0" aria-hidden="true" />
@@ -444,7 +444,7 @@ export const ResponsibilityDetailView: React.FC<ResponsibilityDetailViewProps> =
               </button>
             </div>
 
-            <p className="text-xs text-stone-500 italic">
+            <p className="text-xs text-[#784A28] dark:text-[#E5D3BA]/75 italic">
               * Payment intent preparation only. No money moves in this sequence.
             </p>
           </div>

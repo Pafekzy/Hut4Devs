@@ -84,7 +84,7 @@ export const AssignCandidateModal: React.FC<AssignCandidateModalProps> = ({
           <button
             type="button"
             onClick={onClose}
-            className="p-1 rounded-lg border border-transparent hover:border-stone-400 cursor-pointer"
+            className="p-1 rounded-lg border border-transparent hover:border-[#D6B587] cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
@@ -125,7 +125,7 @@ export const AssignCandidateModal: React.FC<AssignCandidateModalProps> = ({
             <div
               className="max-h-60 overflow-y-auto rounded-xl border-2 border-b-3 p-3 space-y-2"
               style={{
-                backgroundColor: isDark ? 'rgba(23, 21, 19, 0.70)' : 'rgba(255, 255, 255, 0.80)',
+                backgroundColor: isDark ? 'rgba(23, 21, 19, 0.70)' : '#FFF8EC',
                 borderColor: isDark ? 'rgba(200, 141, 58, 0.25)' : 'rgba(90, 45, 12, 0.15)',
               }}
             >
@@ -139,7 +139,7 @@ export const AssignCandidateModal: React.FC<AssignCandidateModalProps> = ({
                     className={`p-3 rounded-lg border-2 transition-all cursor-pointer flex items-center justify-between ${
                       isSelected
                         ? 'border-emerald-600 bg-emerald-50 dark:bg-emerald-950/40'
-                        : 'border-transparent hover:bg-stone-100 dark:hover:bg-stone-800/40'
+                        : 'border-transparent hover:bg-[#F8E6CC] dark:hover:bg-[#2F1707]'
                     }`}
                   >
                     <div>
@@ -154,7 +154,7 @@ export const AssignCandidateModal: React.FC<AssignCandidateModalProps> = ({
                       </div>
                     </div>
 
-                    <span className="text-[10px] font-mono text-stone-500">
+                    <span className="text-[10px] font-mono text-[#784A28] dark:text-[#E5D3BA]/75">
                       {cand.admissionNumber}
                     </span>
                   </div>

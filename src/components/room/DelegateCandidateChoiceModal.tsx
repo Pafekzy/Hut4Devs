@@ -106,7 +106,7 @@ export const DelegateCandidateChoiceModal: React.FC<DelegateCandidateChoiceModal
           <button
             type="button"
             onClick={onClose}
-            className="p-1 rounded-lg border border-transparent hover:border-stone-400 cursor-pointer"
+            className="p-1 rounded-lg border border-transparent hover:border-[#D6B587] cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
@@ -152,7 +152,7 @@ export const DelegateCandidateChoiceModal: React.FC<DelegateCandidateChoiceModal
             <div
               className="max-h-60 overflow-y-auto rounded-xl border-2 border-b-3 p-3 space-y-2"
               style={{
-                backgroundColor: isDark ? 'rgba(23, 21, 19, 0.70)' : 'rgba(255, 255, 255, 0.80)',
+                backgroundColor: isDark ? 'rgba(23, 21, 19, 0.70)' : '#FFF8EC',
                 borderColor: isDark ? 'rgba(200, 141, 58, 0.25)' : 'rgba(90, 45, 12, 0.15)',
               }}
             >
@@ -166,7 +166,7 @@ export const DelegateCandidateChoiceModal: React.FC<DelegateCandidateChoiceModal
                     className={`p-3 rounded-lg border-2 transition-all cursor-pointer flex items-center justify-between ${
                       isSelected
                         ? 'border-purple-600 bg-purple-50 dark:bg-purple-950/40'
-                        : 'border-transparent hover:bg-stone-100 dark:hover:bg-stone-800/40'
+                        : 'border-transparent hover:bg-[#F8E6CC] dark:hover:bg-[#2F1707]'
                     }`}
                   >
                     <div className="flex items-center gap-3">
@@ -174,10 +174,10 @@ export const DelegateCandidateChoiceModal: React.FC<DelegateCandidateChoiceModal
                         className={`w-4 h-4 rounded border flex items-center justify-center ${
                           isSelected
                             ? 'bg-purple-600 border-purple-600 text-white'
-                            : 'border-stone-400'
+                            : 'border-[#D6B587] dark:border-[#623416]'
                         }`}
                       >
-                        {isSelected && <Check className="w-3 h-3" />}
+                        {isSelected && <Check className="w-3.5 h-3.5" />}
                       </div>
                       <div>
                         <div
@@ -192,7 +192,7 @@ export const DelegateCandidateChoiceModal: React.FC<DelegateCandidateChoiceModal
                       </div>
                     </div>
 
-                    <span className="text-[10px] font-mono text-stone-500 dark:text-stone-400">
+                    <span className="text-[10px] font-mono text-[#784A28] dark:text-[#E5D3BA]/75">
                       {cand.admissionNumber}
                     </span>
                   </div>

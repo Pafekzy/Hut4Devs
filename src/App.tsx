@@ -546,8 +546,8 @@ export default function App() {
       document.body.style.color = '#FFF9EE';
     } else {
       document.documentElement.classList.remove('dark');
-      document.body.style.backgroundColor = '#F7F1E7';
-      document.body.style.color = '#5A2D0C';
+      document.body.style.backgroundColor = '#EFD3AD';
+      document.body.style.color = '#432006';
     }
   }, [theme]);
 
@@ -570,11 +570,11 @@ export default function App() {
 
       {/* Checking Membership Authorization Loading State */}
       {isCheckingMembership && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#F7F1E7]/90 dark:bg-[#2F1707]/90 backdrop-blur-xs text-[#5A2D0C] dark:text-[#FFF9EE]">
-          <div className="text-center space-y-3 p-6 rounded-2xl bg-white/80 dark:bg-[#3A1E0B]/80 shadow-lg border border-[#E7D6C1] dark:border-[#4B2710]">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#EFD3AD]/90 dark:bg-[#2F1707]/90 backdrop-blur-xs text-[#432006] dark:text-[#FFF9EE]">
+          <div className="text-center space-y-3 p-6 rounded-2xl bg-[#FAE5C5]/95 dark:bg-[#3E200C]/95 shadow-lg border border-[#CF9F68] dark:border-[#623416]">
             <Hut4DevsLogo isDark={isDark} size="md" showWordmark={true} />
-            <div className="flex items-center justify-center gap-2 text-xs font-mono opacity-90 pt-2 text-[#5A2D0C] dark:text-[#FFF9EE]">
-              <Loader2 className="w-4 h-4 animate-spin text-[#C88D3A]" />
+            <div className="flex items-center justify-center gap-2 text-xs font-mono opacity-90 pt-2 text-[#432006] dark:text-[#FFF9EE]">
+              <Loader2 className="w-4 h-4 animate-spin text-[#C46F18]" />
               <span>Checking your Hut4Devs membership...</span>
             </div>
             <p className="text-[11px] opacity-70 max-w-xs font-mono">
@@ -657,29 +657,29 @@ export default function App() {
       {view === 'coordinator' && member && (
         <div
           className={`min-h-screen transition-colors duration-200 ${
-            isDark ? 'bg-[#2F1707] text-[#FFF9EE]' : 'bg-[#F7F1E7] text-[#5A2D0C]'
+            isDark ? 'bg-[#2F1707] text-[#FFF9EE]' : 'bg-[#EFD3AD] text-[#432006]'
           }`}
         >
           {/* Suspended Sticky Top Application Shell Header */}
           <header
             className="sticky top-0 z-30 w-full pt-2.5 sm:pt-3 pb-2.5 sm:pb-3 px-4 sm:px-6 transition-colors duration-200"
             style={{
-              backgroundColor: isDark ? 'rgba(47, 23, 7, 0.88)' : 'rgba(247, 241, 231, 0.88)',
+              backgroundColor: isDark ? 'rgba(47, 23, 7, 0.88)' : 'rgba(239, 211, 173, 0.88)',
               backdropFilter: 'blur(12px)',
               WebkitBackdropFilter: 'blur(12px)',
             }}
           >
             <div
-              className={`max-w-6xl mx-auto px-4 sm:px-5 h-16 rounded-2xl border flex items-center justify-between gap-3 transition-all shadow-[0_4px_20px_-4px_rgba(90,45,12,0.08)] ${
+              className={`max-w-6xl mx-auto px-4 sm:px-5 h-16 rounded-2xl border flex items-center justify-between gap-3 transition-all shadow-[0_4px_20px_-4px_rgba(67,32,6,0.14)] ${
                 isDark
                   ? 'bg-[#3E200C]/95 border-[#623416] text-[#FFF9EE] shadow-[0_4px_24px_-4px_rgba(0,0,0,0.5)]'
-                  : 'bg-[#FFF9EE]/95 border-[#C88D3A]/25 text-[#5A2D0C]'
+                  : 'bg-[#FAE5C5]/95 border-[#CF9F68] text-[#432006]'
               }`}
             >
               <button
                 type="button"
                 onClick={() => setView('member-home')}
-                className="inline-flex items-center text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C88D3A] rounded-lg cursor-pointer shrink-0"
+                className="inline-flex items-center text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C46F18] rounded-lg cursor-pointer shrink-0"
                 title="Return to Member Home"
               >
                 <Hut4DevsLogo isDark={isDark} size="sm" showWordmark={true} />
@@ -706,7 +706,7 @@ export default function App() {
                   onClick={handleLogout}
                   aria-label="Log Out"
                   className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium transition-colors cursor-pointer ${
-                    isDark ? 'text-[#C88D3A] hover:text-[#FFF9EE]' : 'text-[#8A5D3B] hover:text-[#5A2D0C]'
+                    isDark ? 'text-[#C46F18] hover:text-[#FFF9EE]' : 'text-[#72451F] hover:text-[#432006]'
                   }`}
                 >
                   <LogOut className="w-4 h-4 shrink-0 sm:hidden" />
@@ -725,29 +725,29 @@ export default function App() {
       {view === 'room-captain' && member && (
         <div
           className={`min-h-screen transition-colors duration-200 ${
-            isDark ? 'bg-[#2F1707] text-[#FFF9EE]' : 'bg-[#F7F1E7] text-[#5A2D0C]'
+            isDark ? 'bg-[#2F1707] text-[#FFF9EE]' : 'bg-[#EFD3AD] text-[#432006]'
           }`}
         >
           {/* Suspended Sticky Top Application Shell Header */}
           <header
             className="sticky top-0 z-30 w-full pt-2.5 sm:pt-3 pb-2.5 sm:pb-3 px-4 sm:px-6 transition-colors duration-200"
             style={{
-              backgroundColor: isDark ? 'rgba(47, 23, 7, 0.88)' : 'rgba(247, 241, 231, 0.88)',
+              backgroundColor: isDark ? 'rgba(47, 23, 7, 0.88)' : 'rgba(239, 211, 173, 0.88)',
               backdropFilter: 'blur(12px)',
               WebkitBackdropFilter: 'blur(12px)',
             }}
           >
             <div
-              className={`max-w-6xl mx-auto px-4 sm:px-5 h-16 rounded-2xl border flex items-center justify-between gap-3 transition-all shadow-[0_4px_20px_-4px_rgba(90,45,12,0.08)] ${
+              className={`max-w-6xl mx-auto px-4 sm:px-5 h-16 rounded-2xl border flex items-center justify-between gap-3 transition-all shadow-[0_4px_20px_-4px_rgba(67,32,6,0.14)] ${
                 isDark
                   ? 'bg-[#3E200C]/95 border-[#623416] text-[#FFF9EE] shadow-[0_4px_24px_-4px_rgba(0,0,0,0.5)]'
-                  : 'bg-[#FFF9EE]/95 border-[#C88D3A]/25 text-[#5A2D0C]'
+                  : 'bg-[#FAE5C5]/95 border-[#CF9F68] text-[#432006]'
               }`}
             >
               <button
                 type="button"
                 onClick={() => setView('member-home')}
-                className="inline-flex items-center text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C88D3A] rounded-lg cursor-pointer shrink-0"
+                className="inline-flex items-center text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C46F18] rounded-lg cursor-pointer shrink-0"
                 title="Return to Member Home"
               >
                 <Hut4DevsLogo isDark={isDark} size="sm" showWordmark={true} />
@@ -774,7 +774,7 @@ export default function App() {
                   onClick={handleLogout}
                   aria-label="Log Out"
                   className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium transition-colors cursor-pointer ${
-                    isDark ? 'text-[#C88D3A] hover:text-[#FFF9EE]' : 'text-[#8A5D3B] hover:text-[#5A2D0C]'
+                    isDark ? 'text-[#C46F18] hover:text-[#FFF9EE]' : 'text-[#72451F] hover:text-[#432006]'
                   }`}
                 >
                   <LogOut className="w-4 h-4 shrink-0 sm:hidden" />
@@ -793,29 +793,29 @@ export default function App() {
       {view === 'welfare-workspace' && member && (
         <div
           className={`min-h-screen transition-colors duration-200 ${
-            isDark ? 'bg-[#2F1707] text-[#FFF9EE]' : 'bg-[#F7F1E7] text-[#5A2D0C]'
+            isDark ? 'bg-[#2F1707] text-[#FFF9EE]' : 'bg-[#EFD3AD] text-[#432006]'
           }`}
         >
           {/* Suspended Sticky Top Application Shell Header */}
           <header
             className="sticky top-0 z-30 w-full pt-2.5 sm:pt-3 pb-2.5 sm:pb-3 px-4 sm:px-6 transition-colors duration-200"
             style={{
-              backgroundColor: isDark ? 'rgba(47, 23, 7, 0.88)' : 'rgba(247, 241, 231, 0.88)',
+              backgroundColor: isDark ? 'rgba(47, 23, 7, 0.88)' : 'rgba(239, 211, 173, 0.88)',
               backdropFilter: 'blur(12px)',
               WebkitBackdropFilter: 'blur(12px)',
             }}
           >
             <div
-              className={`max-w-6xl mx-auto px-4 sm:px-5 h-16 rounded-2xl border flex items-center justify-between gap-3 transition-all shadow-[0_4px_20px_-4px_rgba(90,45,12,0.08)] ${
+              className={`max-w-6xl mx-auto px-4 sm:px-5 h-16 rounded-2xl border flex items-center justify-between gap-3 transition-all shadow-[0_4px_20px_-4px_rgba(67,32,6,0.14)] ${
                 isDark
                   ? 'bg-[#3E200C]/95 border-[#623416] text-[#FFF9EE] shadow-[0_4px_24px_-4px_rgba(0,0,0,0.5)]'
-                  : 'bg-[#FFF9EE]/95 border-[#C88D3A]/25 text-[#5A2D0C]'
+                  : 'bg-[#FAE5C5]/95 border-[#CF9F68] text-[#432006]'
               }`}
             >
               <button
                 type="button"
                 onClick={() => setView('member-home')}
-                className="inline-flex items-center text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C88D3A] rounded-lg cursor-pointer shrink-0"
+                className="inline-flex items-center text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C46F18] rounded-lg cursor-pointer shrink-0"
                 title="Return to Member Home"
               >
                 <Hut4DevsLogo isDark={isDark} size="sm" showWordmark={true} />
@@ -842,7 +842,7 @@ export default function App() {
                   onClick={handleLogout}
                   aria-label="Log Out"
                   className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium transition-colors cursor-pointer ${
-                    isDark ? 'text-[#C88D3A] hover:text-[#FFF9EE]' : 'text-[#8A5D3B] hover:text-[#5A2D0C]'
+                    isDark ? 'text-[#C46F18] hover:text-[#FFF9EE]' : 'text-[#72451F] hover:text-[#432006]'
                   }`}
                 >
                   <LogOut className="w-4 h-4 shrink-0 sm:hidden" />

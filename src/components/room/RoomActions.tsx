@@ -297,7 +297,7 @@ export const RoomActions: React.FC<RoomActionsProps> = ({
                                   className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
                                     isSelected
                                       ? 'border-purple-600 bg-purple-600 text-white'
-                                      : 'border-stone-400'
+                                      : 'border-[#D6B587] dark:border-[#623416]'
                                   }`}
                                 >
                                   {isSelected && <Check className="w-3.5 h-3.5" />}
@@ -317,7 +317,7 @@ export const RoomActions: React.FC<RoomActionsProps> = ({
                                 </div>
                               </div>
 
-                              <span className="text-[10px] font-mono px-2 py-0.5 rounded border border-stone-300 dark:border-stone-700 text-stone-600 dark:text-stone-400">
+                              <span className="text-[10px] font-mono px-2 py-0.5 rounded border border-[#D6B587] dark:border-[#623416] text-[#784A28] dark:text-[#E5D3BA]/75">
                                 {cand.admissionNumber}
                               </span>
                             </div>
@@ -329,7 +329,7 @@ export const RoomActions: React.FC<RoomActionsProps> = ({
                               {cand.candidateBio}
                             </p>
 
-                            <div className="mt-2.5 pl-8 flex items-center gap-4 text-[11px] font-mono text-stone-500 dark:text-stone-400">
+                            <div className="mt-2.5 pl-8 flex items-center gap-4 text-[11px] font-mono text-[#784A28] dark:text-[#E5D3BA]/75">
                               <span>GitHub: @{cand.githubHandle}</span>
                               <span>&bull;</span>
                               <span>{cand.phone}</span>

@@ -80,7 +80,7 @@ export const RoomTrail: React.FC<RoomTrailProps> = ({ room, isDark = false }) =>
       default:
         return {
           label: 'Operational Event',
-          className: 'bg-stone-100 text-stone-900 border-stone-300 dark:bg-stone-900 dark:text-stone-200 dark:border-stone-700',
+          className: 'bg-[#F5DFC1] text-[#4A230B] border-[#D6B587] dark:bg-[#3E200C] dark:text-[#FFF9EE] dark:border-[#623416]',
           icon: <History className="w-3 h-3" />,
         };
     }
