@@ -1,0 +1,6 @@
+{
+  "name": "Hut4Devs",
+  "description": "Open-source community coordination infrastructure for tech fellows and interns — accommodation, peer support, vouching, and trails of trust.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
